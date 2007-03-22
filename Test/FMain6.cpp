@@ -15,8 +15,8 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-  Please read the "readme" file in the root directory of this
-  package for more copyright and license information.
+  Please read the "Doc\License.txt" for more copyright and license
+  information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
 #include <vcl.h>
