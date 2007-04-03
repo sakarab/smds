@@ -23,7 +23,6 @@
 #define SM_DS_DATETIME_H
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
-#include <ssport.h>
 #include "dsStream.h"
 
 namespace ds

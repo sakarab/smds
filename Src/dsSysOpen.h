@@ -24,7 +24,6 @@
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
 #include <boost/scoped_array.hpp>
-#include <ssport.h>
 
 namespace ds
 {

@@ -23,7 +23,6 @@
 #define SM_DS_CONN_H
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
-#include <ssport.h>
 #include <windows.h>
 #include "dsConn_Intf.h"
 #include <dsTypes.h>

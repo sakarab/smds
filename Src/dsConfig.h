@@ -91,6 +91,10 @@
 
 /**********************************************************************************
 /* Don't touch below this
+/* Don't touch below this
+/* Don't touch below this
+/* Don't touch below this
+/* Don't touch below this
 /**********************************************************************************/
 
 #ifdef SM_DS_DEFAULT_SHARED_PTR
@@ -109,6 +113,25 @@
     #error  "No smart pointer selection"
 #endif
 
+/**********************************************************************************
+/* this is a part copied from <ssport.h> to remove the dependency 
+/**********************************************************************************/
+// check if already defined (for example <ssport.h> is included)
+#if ! defined( FASTCALL )
+    #ifdef	NO_FASTCALL
+        #define	FASTCALL
+    #else
+        #define	FASTCALL		__fastcall
+    #endif
+#endif
+
+#if ! defined( CDFASTCALL )
+    #ifdef	NO_CDFASTCALL
+        #define	CDFASTCALL
+    #else
+        #define	CDFASTCALL		__fastcall
+    #endif
+#endif
 
 #endif
 

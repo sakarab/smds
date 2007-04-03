@@ -25,7 +25,7 @@
     <USERDEFINES value=""/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT"/>
     <MAINSOURCE value="smDSb6lib.bpf"/>
-    <INCLUDEPATH value="Src;G:\Include;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl"/>
+    <INCLUDEPATH value="Src;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="Src;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w8092 -w8091 -w8090 -w8089 -w8087 -wprc -wuse -wucp -wstv -wstu -wsig 
       -wpin -wnod -wnak -w-8027 -w-8026 -wdef -wcln -wbbf -wasm -wamp -wamb"/>
@@ -33,8 +33,8 @@
     <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-ISrc -IG:\Include -I$(BOOST_INC) -I$(BCB)\include -I$(BCB)\include\vcl 
-      -src_suffix cpp -boa"/>
+    <IDLCFLAGS value="-ISrc -I$(BOOST_INC) -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp 
+      -boa"/>
     <CFLAG1 value="-Og -Ov -Q -Vx -Ve -X- -a8 -6 -b- -d -k- -y -v -vi -c -tW -tWM"/>
     <PFLAGS value="-N2OutC6lib -N0OutC6lib -$YD -$T -$C- -$A8 -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zd"/>

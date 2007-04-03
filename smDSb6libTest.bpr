@@ -31,15 +31,15 @@
     <USERDEFINES value=""/>
     <SYSDEFINES value="NO_STRICT;_RTLDLL;USEPACKAGES"/>
     <MAINSOURCE value="smDSb6libTest.cpp"/>
-    <INCLUDEPATH value="Src;Test;$(BOOST_INC);G:\Include;$(BCB)\include;$(BCB)\include\vcl"/>
+    <INCLUDEPATH value="Src;Test;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="Test;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w8092 -w8091 -w8090 -w8089 -w8087 -wprc -wuse -wucp -wstv -wstu -wsig 
       -wpin -w-par -wnod -wnak -w-8027 -w-8026 -wdef -wcln -wbbf -wasm -wamp -wamb"/>
     <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-ISrc -ITest -I$(BOOST_INC) -IG:\Include -I$(BCB)\include 
-      -I$(BCB)\include\vcl -src_suffix cpp -boa"/>
+    <IDLCFLAGS value="-ISrc -ITest -I$(BOOST_INC) -I$(BCB)\include -I$(BCB)\include\vcl 
+      -src_suffix cpp -boa"/>
     <CFLAG1 value="-Og -Ov -H=OutC6libTest\vcl.csm -Q -Vx -Ve -X- -a8 -6 -b- -d -k- -y -v -vi 
       -c -tW -tWM"/>
     <PFLAGS value="-N2OutC6libTest -N0OutC6libTest -$YD -$T -$C- -$A8 -v -JPHNE -M"/>

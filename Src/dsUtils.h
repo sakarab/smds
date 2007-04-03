@@ -22,7 +22,6 @@
 #define SM_DS_UTILS_H
 
 #include "dsConfig.h"
-#include <ssport.h>
 #include "dsTypes.h"
 #include "dsSysOpen.h"
 #include "dsVariant.h"
