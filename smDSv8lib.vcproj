@@ -20,7 +20,7 @@
 			OutputDirectory="$(ProjectDir)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\..\Dbg.vsprops"
+			InheritedPropertySheets=".\Dbg.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="Test;Src;\Include"
+				AdditionalIncludeDirectories="Test;Src;\Include;&quot;$(BOOST_INC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_HAS_ITERATOR_DEBUGGING=1;NO_CDFASTCALL"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
@@ -89,7 +89,7 @@
 			OutputDirectory="$(ProjectDir)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\..\Rel.vsprops"
+			InheritedPropertySheets=".\Rel.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
 			>

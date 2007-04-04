@@ -46,8 +46,8 @@ private:
 #endif
     {
     private:
-        NO_COPY_CTOR(cDbEngine_impl);
-        NO_COPY_OPER(cDbEngine_impl);
+        cDbEngine_impl( const cDbEngine_impl& src );
+        cDbEngine_impl& operator = ( const cDbEngine_impl& src );
     public:
         HMODULE                 mDLL;
         Database_Ctor           mDatabase_Ctor;
@@ -91,8 +91,8 @@ private:
 #endif
     {
     private:
-        NO_COPY_CTOR(cDatabase_impl);
-        NO_COPY_OPER(cDatabase_impl);
+        cDatabase_impl( const cDatabase_impl& src );
+        cDatabase_impl& operator = ( const cDatabase_impl& src );
     public:
         IDatabase           *mDatabase;
         cDbEngine           mDbEngine;
@@ -130,8 +130,8 @@ private:
 #endif
     {
     private:
-        NO_COPY_CTOR(cDataTransferData);
-        NO_COPY_OPER(cDataTransferData);
+        cDataTransferData( const cDataTransferData& src );
+        cDataTransferData& operator = ( const cDataTransferData& src );
     public:
         IDataProvider       *mTransfer;
         cDatabase           mDatabase;

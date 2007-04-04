@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="windows-1253"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="Rel"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		Optimization="2"
+		StringPooling="true"
+		RuntimeLibrary="2"
+		BufferSecurityCheck="false"
+		WarningLevel="4"
+		DebugInformationFormat="3"
+		CompileAs="0"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		LinkIncremental="1"
+		GenerateDebugInformation="true"
+	/>
+	<UserMacro
+		Name="BOOST_INC"
+		Value="G:\Src\boost_1_33_1"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="BOOST_LIB"
+		Value="G:\Lib\Vs80"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="WX"
+		Value="G:\Src\Libs\wxWidgets"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="WX_INC"
+		Value="$(WX)\include"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="WX_MSVC_INC"
+		Value="$(WX)\include\msvc"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="WX_LIB"
+		Value="G:\Lib\Vs80\dll"
+		PerformEnvironmentSet="true"
+	/>
+</VisualStudioPropertySheet>
