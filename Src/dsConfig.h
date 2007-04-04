@@ -62,17 +62,18 @@
 
 /**********************************************************************************
 /* Uncomment this line will make a library that uses COM compatible interfaces for
-/* communucation with the driver DLLs
+/* communucation with the driver DLLs. The DLLs must also be recompiled.
 /**********************************************************************************/
-#define SM_USE_COM_DELPHI_INTERFACE
+// #define SM_USE_COM_DELPHI_INTERFACE
 
 /**********************************************************************************
-/* Uncomment this to enable asserts in boost library
+/* Comment this to enable asserts in boost library
 /**********************************************************************************/
 #define BOOST_DISABLE_ASSERTS
 
 /**********************************************************************************
-/* Uncomment this to enable multithreading support in boost library
+/* Comment this to enable multithreading support in boost and specificaly
+/* in shared_ptr
 /**********************************************************************************/
 // #define BOOST_DISABLE_THREADS
 #define BOOST_SP_DISABLE_THREADS
@@ -90,12 +91,12 @@
 #endif
 
 /**********************************************************************************
-/* Don't touch below this
-/* Don't touch below this
-/* Don't touch below this
-/* Don't touch below this
-/* Don't touch below this
+/* Smart pointer selection
 /**********************************************************************************/
+
+#if defined(SM_DS_DEFAULT_SHARED_PTR) && (defined(SM_DS_USE_BOOST_SMART_PTR) || defined(SM_DS_USE_SMALL_SHARED_PTR) || defined(SM_DS_USE_LOKI_SHARED_PTR))
+    #error  "Error in smart pointer selection"
+#endif
 
 #ifdef SM_DS_DEFAULT_SHARED_PTR
 
