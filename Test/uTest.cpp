@@ -65,7 +65,7 @@ const char *BDE_SENDATA_Conn = "SENDATA"                            "\r\n"
                                "PASSWORD=s01000";
 
 const char *ADO_Dirdata_Conn =  "Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;"
-                                "Data Source=G:\\Data\\Dirdata82.mdb;Mode=Share Deny None;"
+                                "Data Source=Dirdata82.mdb;Mode=Share Deny None;"
                                 "Extended Properties="""";Persist Security Info=False;"
                                 "Jet OLEDB:System database="""";Jet OLEDB:Registry Path="""";"
                                 "Jet OLEDB:Database Password="""";Jet OLEDB:Engine Type=5;"
