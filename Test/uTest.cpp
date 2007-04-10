@@ -19,9 +19,11 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
+#ifndef __GNUG__
 #pragma hdrstop
+#endif
 
-#include <dsUtils.h>
+#include "dsUtils.h"
 #include "uTest.h"
 #include "dsIndex.h"
 #include "dsVariant.h"
@@ -65,7 +67,7 @@ const char *BDE_SENDATA_Conn = "SENDATA"                            "\r\n"
                                "PASSWORD=s01000";
 
 const char *ADO_Dirdata_Conn =  "Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;"
-                                "Data Source=Dirdata82.mdb;Mode=Share Deny None;"
+                                "Data Source=G:\\Data\\Dirdata82.mdb;Mode=Share Deny None;"
                                 "Extended Properties="""";Persist Security Info=False;"
                                 "Jet OLEDB:System database="""";Jet OLEDB:Registry Path="""";"
                                 "Jet OLEDB:Database Password="""";Jet OLEDB:Engine Type=5;"
@@ -80,7 +82,7 @@ const char *DAO_Dirdata_Conn =  "G:\\Data\\DirData82.mdb";
 };
 
 
-
+using namespace ds;
 
 //***********************************************************************
 //******    GetTblFiles
@@ -88,17 +90,17 @@ const char *DAO_Dirdata_Conn =  "G:\\Data\\DirData82.mdb";
 tblFiles_ptr GetTblFiles()
 {
 /*
-    ds::cDbEngine           transport = ds::SelectDbEngine( "BDE" );
-    ds::cDatabase           connection = transport.NewConnection( BDE_DirData_Conn );
+    cDbEngine       transport = SelectDbEngine( "BDE" );
+    cDatabase       connection = transport.NewConnection( BDE_DirData_Conn );
 */
 
-    ds::cDbEngine           transport = ds::SelectDbEngine( "ADO" );
-    ds::cDatabase           connection = transport.NewConnection( ADO_Dirdata_Conn );
+    cDbEngine       transport = SelectDbEngine( "ADO" );
+    cDatabase       connection = transport.NewConnection( ADO_Dirdata_Conn );
 /*
-    ds::cDbEngine           transport = ds::SelectDbEngine( "DAO" );
-    ds::cDatabase           connection = transport.NewConnection( DAO_Dirdata_Conn );
+    cDbEngine       transport = SelectDbEngine( "DAO" );
+    cDatabase       connection = transport.NewConnection( DAO_Dirdata_Conn );
 */
-    tblFiles_ptr            result( new tblFiles() );
+    tblFiles_ptr    result( new tblFiles() );
 
     result->Open( connection, 0 );
 
@@ -108,7 +110,7 @@ tblFiles_ptr GetTblFiles()
 //***********************************************************************
 //******    WhileLoop
 //***********************************************************************
-void FASTCALL WhileLoop( ds::cRecordIterator ptr )
+void FASTCALL WhileLoop( cRecordIterator ptr )
 {
     while ( ! ptr.eof() )
         ++ptr;
@@ -116,7 +118,7 @@ void FASTCALL WhileLoop( ds::cRecordIterator ptr )
 //***********************************************************************
 //******    ForLoop
 //***********************************************************************
-void FASTCALL ForLoop( ds::cRecordIterator ptr )
+void FASTCALL ForLoop( cRecordIterator ptr )
 {
     for ( int n = 0, end = ptr.RecordCount() ; n < end ; ++n )
         ++ptr;
@@ -146,13 +148,13 @@ int FASTCALL CountNulls( tblFiles::iterator ptr )
 //    }
 //};
 
-ds::cIndex_ptr FASTCALL CreateIndex_g1( ds::cTable_ptr uds )
+ds::cIndex_ptr FASTCALL CreateIndex_g1( cTable_ptr uds )
 //ds::cIndex_ptr FASTCALL CreateIndex_g1( tblFiles_ptr uds )
 {
-    return ( uds->NewIndex( ds::cIndexField( "PathID", ds::cIndexField::Descending ) ) );
+    return ( uds->NewIndex( cIndexField( "PathID", cIndexField::Descending ) ) );
 }
 
-int FASTCALL Check_Order_g1( ds::cRecordIterator ptr1 )
+int FASTCALL Check_Order_g1( cRecordIterator ptr1 )
 {
     int     result = 0;
 
@@ -173,16 +175,16 @@ int FASTCALL Check_Order_g1( ds::cRecordIterator ptr1 )
 
 ds::cIndex_ptr FASTCALL CreateIndex_g2( tblFiles_ptr uds )
 {
-    return ( uds->NewIndex( ds::OpenIndexFields( ds::cIndexField( "PathID" ), ds::cIndexField( "fSize" ) ) ) );
+    return ( uds->NewIndex( OpenIndexFields( cIndexField( "PathID" ), cIndexField( "fSize" ) ) ) );
 }
 
 ds::cIndex_ptr FASTCALL CreateIndex_g22( tblFiles_ptr uds )
 {
-    return ( uds->NewIndex( ds::cIndexSortCompareStd_ptr( new ds::cIndexSortCompareStd(
-        ds::OpenIndexFields( ds::cIndexField( "PathID" ), ds::cIndexField( "fSize" ) ) ) ) ) );
+    return ( uds->NewIndex( cIndexSortCompareStd_ptr( new cIndexSortCompareStd(
+        OpenIndexFields( cIndexField( "PathID" ), cIndexField( "fSize" ) ) ) ) ) );
 }
 
-int FASTCALL Check_Order_g2( ds::cRecordIterator ptr1 )
+int FASTCALL Check_Order_g2( cRecordIterator ptr1 )
 {
     int     result = 0;
 
@@ -225,7 +227,7 @@ public:
 
 tblFiles::index_ptr FASTCALL CreateIndex_f1( tblFiles_ptr uds )
 {
-    return ( uds->NewIndex( ds::cSortCompareBase_ptr( new idx_ByPathID() ) ) );
+    return ( uds->NewIndex( cSortCompareBase_ptr( new idx_ByPathID() ) ) );
 }
 
 int FASTCALL Check_Order_f1( tblFiles::iterator ptr1 )
@@ -303,16 +305,16 @@ void FASTCALL AddRecords( tblFiles_ptr ds )
 //***********************************************************************
 void FASTCALL LocateRecord( tblFiles_ptr ds )
 {
-    tblFiles::iterator  iter = ds->Locate( ds::OpenValues( 19999, 19998 ),
-                                           ds::OpenFindFields( "FileID", "PathID" ) );
+    tblFiles::iterator  iter = ds->Locate( OpenValues( 19999, 19998 ),
+                                           OpenFindFields( "FileID", "PathID" ) );
 }
 
 //***********************************************************************
 //******    FindRecord
 //***********************************************************************
-ds::cIndex::iterator FASTCALL FindRecord_g2( ds::cIndex_ptr idx )
+ds::cIndex::iterator FASTCALL FindRecord_g2( cIndex_ptr idx )
 {
-    return ( idx->Find( ds::OpenValues( ds::Variant( 18999 ), ds::Variant( 18999 ) ) ) );
+    return ( idx->Find( OpenValues( Variant( 18999 ), Variant( 18999 ) ) ) );
 }
 
 //***********************************************************************
@@ -336,16 +338,16 @@ void FASTCALL CompileTest( tblFiles_ptr ds )
 ds::Variant FASTCALL TestVariant()
 {
     //ds::Variant     a( static_cast<unsigned short>(sizeof(Variant)) );
-    ds::Variant     a( sizeof(ds::Variant) );
+    Variant         a( sizeof(Variant) );
     bool            b = a.AsBool();
     ds_string       ss = "22";
-    ds::Variant     c( ss );
+    Variant         c( ss );
 
     if ( c.AsBool() == true )
-        return ( ds::Variant( b ) );
+        return ( Variant( b ) );
 
     if ( false == c.AsBool() && b )
-        return ( ds::Variant( b ) );
+        return ( Variant( b ) );
 
     return ( a );
 }
@@ -360,7 +362,7 @@ void FASTCALL foo( int n )
 {
 }
 
-int FASTCALL foo( ds::cIndex::iterator iter )
+int FASTCALL foo( cIndex::iterator iter )
 {
     if ( ! iter.eof() )
         return ( iter.FieldByName( "PathID" )->AsInteger() + iter.FieldByName( "fSize" )->AsInteger() );
@@ -393,7 +395,12 @@ void Test( tblFiles_ptr ds )
     if ( unorder_count != 0 )
         foo();
 
-    tblFiles::index::range_iterator     riter = files_idx->GetRangeIterator( ds::cRangeValues( 54, 56 ) );
+#ifndef __GNUG__
+    tblFiles::index::range_iterator     riter = files_idx->GetRangeIterator( cRangeValues( 54, 56 ) );
+#else
+    cRangeValues                        aa( 54, 56 );
+    tblFiles::index::range_iterator     riter = files_idx->GetRangeIterator( aa );
+#endif
 
     int     n = 0;
 
@@ -436,9 +443,9 @@ void Test( tblFiles_ptr ds )
     CompileTest( ds );
     TestVariant();
 
-    ds::Variant     packet = ds::cTableReader::GetTablePacket( ds );
+    Variant     packet = cTableReader::GetTablePacket( ds );
 
-    ds::cTableWriter::SetTableData( ds, packet );
+    cTableWriter::SetTableData( ds, packet );
 }
 
 //void Test( tblLocation_ptr ds )

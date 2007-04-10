@@ -36,7 +36,7 @@
 #endif
 */
 
-#include <dsString.h>
+#include "dsString.h"
 
 typedef ds::string_tag     ds_sstring;
 typedef ds::wstring_tag    ds_wstring;
@@ -69,4 +69,3 @@ class SortControler;
 #endif
 
 
- 

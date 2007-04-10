@@ -24,7 +24,7 @@
 //---------------------------------------------------------------------------
 
 #include "dsConfig.h"
-#include <dsTypes.h>
+#include "dsTypes.h"
 #include "dsDateTime.h"
 #include <vector>
 #include "dsStream.h"

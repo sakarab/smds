@@ -118,7 +118,7 @@ public:
     typedef cuRangeIterator<RECORD>         range_iterator;
 private:
     typedef cIndex                          inherited;
-    template <class RECORD> friend class cuTable;
+    template <class RECORD_> friend class cuTable;
     // noncopyable
     CDFASTCALL cuIndex( const cuIndex& src );
     cuIndex& FASTCALL operator=( const cuIndex& src );
@@ -137,7 +137,7 @@ public:
     }
     iterator FASTCALL Locate( const Variant& value, const cFindField& field )
     {
-        return ( iterator( inherited::Locate( values, field ) ) );
+        return ( iterator( inherited::Locate( value, field ) ) );
     }
     iterator FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields )
     {
@@ -207,23 +207,27 @@ private:
     typedef cTable                      inherited;
     typedef RECORD                      record_type;
 
-    template <class RECORD> class cIndexSortCompare : public cSortCompareBase
+    template <class RECORD_> class cIndexSortCompare : public cSortCompareBase
     {
     protected:
-        virtual bool FASTCALL do_compare_2( const typename RECORD::raw& item1, const typename RECORD::raw& item2 ) = 0;
+        virtual bool FASTCALL do_compare_2( const typename RECORD_::raw& item1, const typename RECORD_::raw& item2 ) = 0;
         virtual bool FASTCALL do_compare_1( cRawBuffer *item1, cRawBuffer *item2 )
         {
-            return ( do_compare_2( RECORD::raw( *item1 ), RECORD::raw( *item2 ) ) );
+#ifdef __BORLANDC__
+            return ( do_compare_2( RECORD_::raw( *item1 ), RECORD_::raw( *item2 ) ) );
+#else
+            return ( do_compare_2( typename RECORD_::raw( *item1 ), typename RECORD_::raw( *item2 ) ) );
+#endif
         }
     };
 
-    template <class RECORD> class cFilterCompare : public cFilterCompareBase
+    template <class RECORD_> class cFilterCompare : public cFilterCompareBase
     {
     protected:
-        virtual bool FASTCALL do_compare_2( const typename RECORD::raw& item1 ) = 0;
+        virtual bool FASTCALL do_compare_2( const typename RECORD_::raw& item1 ) = 0;
         virtual bool FASTCALL do_compare_1( cRawBuffer *item1 )
         {
-            return ( do_compare_2( RECORD::raw( *item1 ) ) );
+            return ( do_compare_2( typename RECORD_::raw( *item1 ) ) );
         }
     };
 

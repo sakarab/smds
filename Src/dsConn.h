@@ -25,7 +25,7 @@
 #include "dsConfig.h"
 #include <windows.h>
 #include "dsConn_Intf.h"
-#include <dsTypes.h>
+#include "dsTypes.h"
 #include "dsSmartPtr.h"
 //---------------------------------------------------------------------------
 namespace ds

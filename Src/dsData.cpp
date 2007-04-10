@@ -18,9 +18,11 @@
   Please read the "Doc\License.txt" for more copyright and license
   information.
 ****************************************************************************/
+#ifndef __GNUG__
 #pragma hdrstop
+#endif
 
-#include <dsData.h>
+#include "dsData.h"
 #include "dsExceptions.h"
 #include "dsCompareControlers.h"
 #include <sstream>

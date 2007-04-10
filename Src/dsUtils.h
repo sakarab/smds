@@ -155,4 +155,3 @@ typedef detail::OpenArray<cRangeValues>     OpenRangeValues;
 };
 
 #endif
- 

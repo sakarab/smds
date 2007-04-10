@@ -361,8 +361,8 @@ private:
     typedef detail::cRawRecordProxy<typename RECORD::raw>      cOldValues;
     RECORD FASTCALL operator*(); //                     { return ( RECORD( *GetDoubleBuffer() ) ); }
 
-    template <class RECORD> friend class cuTable;
-    template <class RECORD> friend class cuIndex;
+    template <class RECORD_> friend class cuTable;
+    template <class RECORD_> friend class cuIndex;
 
 	CDFASTCALL cuRecordIterator( cData_ptr& container )
         : cRecordIterator(container)                                                {} // empty
@@ -448,8 +448,8 @@ private:
     typedef detail::cRawRecordProxy<typename RECORD::raw>      cOldValues;
     RECORD FASTCALL operator*(); //                     { return ( RECORD( *GetDoubleBuffer() ) ); }
 
-    template <class RECORD> friend class cuTable;
-    template <class RECORD> friend class cuIndex;
+    template <class RECORD_> friend class cuTable;
+    template <class RECORD_> friend class cuIndex;
 
     CDFASTCALL cuRangeIterator( const cRangeIterator& iter )
         : cRangeIterator(iter)                                                      {} // empty

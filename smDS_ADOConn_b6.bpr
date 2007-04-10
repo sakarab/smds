@@ -11,7 +11,7 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="adortl.lib dbrtl.lib rtl.lib vcl.lib"/>
+    <LIBRARIES value=""/>
     <SPARELIBS value="vcl.lib rtl.lib dbrtl.lib adortl.lib"/>
     <PACKAGES value="vcl.bpi rtl.bpi dbrtl.bpi adortl.bpi vcldb.bpi vclx.bpi bdertl.bpi 
       vcldbx.bpi ibxpress.bpi dsnap.bpi cds.bpi bdecds.bpi qrpt.bpi teeui.bpi 

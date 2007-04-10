@@ -19,7 +19,9 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
+#ifndef __GNUG__
 #pragma hdrstop
+#endif
 
 #include "dsRecord.h"
 #include "dsExceptions.h"
@@ -125,17 +127,17 @@ void FASTCALL cRecordPtr::WriteString( const cFieldDef_& field_def, const char *
 //******    cRecordIterator
 //***********************************************************************
 CDFASTCALL cRecordIterator::cRecordIterator( cData_ptr& container )
-    : mContainer(container), mIdx(0)
+    : mIdx(0), mContainer(container)
 {
 }
 
 CDFASTCALL cRecordIterator::cRecordIterator( cData_ptr& container, cData::size_type idx )
-    : mContainer(container), mIdx(idx)
+    : mIdx(idx), mContainer(container)
 {
 }
 
 CDFASTCALL cRecordIterator::cRecordIterator( const cRecordIterator& src )
-    : mContainer(src.mContainer), mIdx(src.mIdx)
+    : mIdx(src.mIdx), mContainer(src.mContainer)
 {
 }
 
