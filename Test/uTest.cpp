@@ -154,6 +154,28 @@ ds::cIndex_ptr FASTCALL CreateIndex_g1( cTable_ptr uds )
     return ( uds->NewIndex( cIndexField( "PathID", cIndexField::Descending ) ) );
 }
 
+int AdjusentCount( ds::cIndex::iterator ptr1 )
+{
+    int     result = 0;
+
+    if ( ptr1.RecordCount() <= 1 )
+        return result;
+
+    ptr1.First();
+
+    ds::cIndex::iterator    ptr2 = ptr1;
+
+    ptr2.Next();
+    while ( ! ptr2.eof() )
+    {
+        if ( ptr1.FieldByName( "PathID" )->AsInteger() == ptr2.FieldByName( "PathID" )->AsInteger() )
+            ++result;
+        ++ptr1;
+        ++ptr2;
+    }
+    return result;
+}
+
 int FASTCALL Check_Order_g1( cRecordIterator ptr1 )
 {
     int     result = 0;
@@ -395,12 +417,7 @@ void Test( tblFiles_ptr ds )
     if ( unorder_count != 0 )
         foo();
 
-#ifndef __GNUG__
     tblFiles::index::range_iterator     riter = files_idx->GetRangeIterator( cRangeValues( 54, 56 ) );
-#else
-    cRangeValues                        aa( 54, 56 );
-    tblFiles::index::range_iterator     riter = files_idx->GetRangeIterator( aa );
-#endif
 
     int     n = 0;
 

@@ -47,4 +47,10 @@ CDFASTCALL eExceptionBase::eExceptionBase( const eExceptionBase& src )
 {
 }
 
+#ifdef __GNUG__
+CDFASTCALL eExceptionBase::~eExceptionBase() throw()
+{
+}
+#endif
+
 };

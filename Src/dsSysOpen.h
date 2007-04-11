@@ -88,12 +88,15 @@ template<class T> class OpenArray
 private:
     boost::scoped_array<const T*>    Array;
     long Count;
+    // noncopyable
 #ifdef __GNUG__
 public:
 #endif
-    // noncopyable
     CDFASTCALL OpenArray( const OpenArray& src );
     OpenArray& FASTCALL operator =( const OpenArray& rhs );
+#ifdef __GNUG__
+private:
+#endif
 public:
     CDFASTCALL OpenArray( const T& arg0 )
         : Array(new const T*[Count = 1])

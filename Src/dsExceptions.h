@@ -38,7 +38,7 @@ public:
     CDFASTCALL eExceptionBase( const ds_string& message );
     CDFASTCALL eExceptionBase( const eExceptionBase& src );
 #ifdef __GNUG__
-    virtual CDFASTCALL ~eExceptionBase() throw();       // not implemented
+    virtual CDFASTCALL ~eExceptionBase() throw();
 #endif
     eExceptionBase& FASTCALL operator = ( const eExceptionBase& src );
 

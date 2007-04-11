@@ -91,8 +91,14 @@ class cRangeValues
 private:
     detail::OpenArray<Variant>      mDoubleValues;
     // non copyable
+#ifdef __GNUG__
+public:
+#endif
     CDFASTCALL cRangeValues( const cRangeValues& src );
     cRangeValues& FASTCALL operator=( const cRangeValues& src );
+#ifdef __GNUG__
+private:
+#endif
 public:
     CDFASTCALL cRangeValues( const Variant& start_value, const Variant& end_value );
 
