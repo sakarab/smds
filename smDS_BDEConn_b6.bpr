@@ -11,7 +11,7 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value=""/>
-    <LIBRARIES value=""/>
+    <LIBRARIES value="bdertl.lib dbrtl.lib rtl.lib vcl.lib"/>
     <SPARELIBS value="vcl.lib rtl.lib dbrtl.lib bdertl.lib"/>
     <PACKAGES value="vcl.bpi rtl.bpi dbrtl.bpi adortl.bpi vcldb.bpi vclx.bpi bdertl.bpi 
       vcldbx.bpi ibxpress.bpi dsnap.bpi cds.bpi bdecds.bpi qrpt.bpi teeui.bpi 
@@ -28,7 +28,7 @@
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="ilink32"/>
     <USERDEFINES value="BOOST_VARIANT_DETAIL_NO_SUBSTITUTE;BOOST_DISABLE_ASSERTS;BOOST_SP_DISABLE_THREADS"/>
-    <SYSDEFINES value="NO_STRICT;_RTLDLL;USEPACKAGES"/>
+    <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="smDS_BDEConn_b6.bpf"/>
     <INCLUDEPATH value="Src;$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="Src;$(BCB)\lib\obj;$(BCB)\lib"/>
@@ -49,9 +49,9 @@
     <OTHERFILES value=""/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0d32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0d32.obj sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
-    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
     <OTHERFILES value=""/>
   </LINKER>
   <FILELIST>
