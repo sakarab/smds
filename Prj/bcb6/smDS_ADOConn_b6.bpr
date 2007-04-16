@@ -90,32 +90,6 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 
-[HistoryLists\hlIncludePath]
-Count=2
-Item0=..\..\Src;$(BCB)\include;$(BCB)\include\vcl
-Item1=..\..\Src;Src;$(BCB)\include;$(BCB)\include\vcl
-
-[HistoryLists\hlLibraryPath]
-Count=2
-Item0=..\..\Src;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..\..\Src;Src;$(BCB)\lib\obj;$(BCB)\lib
-
-[HistoryLists\hlDebugSourcePath]
-Count=1
-Item0=$(BCB)\source\vcl
-
-[HistoryLists\hlConditionals]
-Count=1
-Item0=BOOST_VARIANT_DETAIL_NO_SUBSTITUTE;BOOST_DISABLE_ASSERTS;BOOST_SP_DISABLE_THREADS
-
-[HistoryLists\hlIntOutputDir]
-Count=1
-Item0=OutC6Conn
-
-[HistoryLists\hlFinalOutputDir]
-Count=1
-Item0=..\..\Bin
-
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
 

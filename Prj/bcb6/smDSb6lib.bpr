@@ -96,28 +96,6 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 
-[HistoryLists\hlIncludePath]
-Count=2
-Item0=..\..\Src;$(BOOST_INC);$(BCB)\include
-Item1=..\..\Src;Src;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl
-
-[HistoryLists\hlLibraryPath]
-Count=2
-Item0=..\..\Src;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..\..\Src;Src;$(BCB)\lib\obj;$(BCB)\lib
-
-[HistoryLists\hlDebugSourcePath]
-Count=1
-Item0=$(BCB)\source\vcl
-
-[HistoryLists\hlIntOutputDir]
-Count=1
-Item0=OutC6lib
-
-[HistoryLists\hlTlibPageSize]
-Count=1
-Item0=0x0040
-
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
 
