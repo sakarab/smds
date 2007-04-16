@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "smDSv8lib", "smDSv8lib.vcproj", "{F50B2B2E-2D19-4045-A560-36F69C34C0D1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "smDS_v8exe", "smDS_v8exe.vcproj", "{FE9B361B-A52B-4C7C-B05B-0BF5B3C662CA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F50B2B2E-2D19-4045-A560-36F69C34C0D1} = {F50B2B2E-2D19-4045-A560-36F69C34C0D1}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug8|Win32 = Debug8|Win32
+		Release8|Win32 = Release8|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F50B2B2E-2D19-4045-A560-36F69C34C0D1}.Debug8|Win32.ActiveCfg = Debug8|Win32
+		{F50B2B2E-2D19-4045-A560-36F69C34C0D1}.Debug8|Win32.Build.0 = Debug8|Win32
+		{F50B2B2E-2D19-4045-A560-36F69C34C0D1}.Release8|Win32.ActiveCfg = Release8|Win32
+		{F50B2B2E-2D19-4045-A560-36F69C34C0D1}.Release8|Win32.Build.0 = Release8|Win32
+		{FE9B361B-A52B-4C7C-B05B-0BF5B3C662CA}.Debug8|Win32.ActiveCfg = Debug8|Win32
+		{FE9B361B-A52B-4C7C-B05B-0BF5B3C662CA}.Debug8|Win32.Build.0 = Debug8|Win32
+		{FE9B361B-A52B-4C7C-B05B-0BF5B3C662CA}.Release8|Win32.ActiveCfg = Release8|Win32
+		{FE9B361B-A52B-4C7C-B05B-0BF5B3C662CA}.Release8|Win32.Build.0 = Release8|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

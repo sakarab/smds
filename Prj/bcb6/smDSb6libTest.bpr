@@ -3,14 +3,14 @@
 <PROJECT>
   <MACROS>
     <VERSION value="BCB.06.00"/>
-    <PROJECT value="smDSb6libTest.exe"/>
+    <PROJECT value="..\..\Bin\smDSb6libTest.exe"/>
     <OBJFILES value="OutC6libTest\smDSb6libTest.obj OutC6libTest\FMain6.obj 
       OutC6libTest\uTest.obj OutC6libTest\bcbTest.obj OutC6libTest\uTables.obj"/>
     <RESFILES value="smDSb6libTest.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
-    <RESDEPEN value="$(RESFILES) Test\FMain6.dfm"/>
+    <RESDEPEN value="$(RESFILES) ..\..\Test\FMain6.dfm"/>
     <LIBFILES value="smDSb6lib.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value="vcl.lib rtl.lib dbrtl.lib dsnap.lib vcldb.lib adortl.lib bdertl.lib"/>
@@ -21,7 +21,7 @@
       inetdbbde.bpi inetdbxpress.bpi inetdb.bpi nmfast.bpi webdsnap.bpi 
       bcbie.bpi websnap.bpi soaprtl.bpi dclocx.bpi dbexpress.bpi dbxcds.bpi 
       bcb2kaxserver.bpi"/>
-    <PATHCPP value=".;Test"/>
+    <PATHCPP value=".;..\..\Test"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -31,15 +31,15 @@
     <USERDEFINES value=""/>
     <SYSDEFINES value="NO_STRICT;_RTLDLL;USEPACKAGES"/>
     <MAINSOURCE value="smDSb6libTest.cpp"/>
-    <INCLUDEPATH value="Src;Test;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="Test;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..\Test;..\..\Src;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\..\Test;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w8092 -w8091 -w8090 -w8089 -w8087 -wprc -wuse -wucp -wstv -wstu -wsig 
       -wpin -w-par -wnod -wnak -w-8027 -w-8026 -wdef -wcln -wbbf -wasm -wamp -wamb"/>
     <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-ISrc -ITest -I$(BOOST_INC) -I$(BCB)\include -I$(BCB)\include\vcl 
-      -src_suffix cpp -boa"/>
+    <IDLCFLAGS value="-I..\..\Test -I..\..\Src -I$(BOOST_INC) -I$(BCB)\include 
+      -I$(BCB)\include\vcl -src_suffix cpp -boa"/>
     <CFLAG1 value="-Og -Ov -H=OutC6libTest\vcl.csm -Q -Vx -Ve -X- -a8 -6 -b- -d -k- -y -v -vi 
       -c -tW -tWM"/>
     <PFLAGS value="-N2OutC6libTest -N0OutC6libTest -$YD -$T -$C- -$A8 -v -JPHNE -M"/>
@@ -57,11 +57,11 @@
   <FILELIST>
       <FILE FILENAME="smDSb6libTest.res" FORMNAME="" UNITNAME="smDSb6libTest.res" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="smDSb6libTest.cpp" FORMNAME="" UNITNAME="smDSb6libTest" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Test\FMain6.cpp" FORMNAME="frmMain" UNITNAME="FMain6" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Test\uTest.cpp" FORMNAME="" UNITNAME="uTest.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Test\bcbTest.cpp" FORMNAME="" UNITNAME="bcbTest.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Test\FMain6.cpp" FORMNAME="frmMain" UNITNAME="FMain6" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Test\uTest.cpp" FORMNAME="" UNITNAME="uTest.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Test\bcbTest.cpp" FORMNAME="" UNITNAME="bcbTest.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="smDSb6lib.lib" FORMNAME="" UNITNAME="smDSb6lib.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Test\uTables.cpp" FORMNAME="" UNITNAME="uTables" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Test\uTables.cpp" FORMNAME="" UNITNAME="uTables" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
@@ -93,6 +93,30 @@ OriginalFilename=
 ProductName=
 ProductVersion=1.0.0.0
 Comments=
+
+[HistoryLists\hlIncludePath]
+Count=3
+Item0=..\..\Test;..\..\Src;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl
+Item1=..\..\Test;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl
+Item2=..\..\Test;Src;Test;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=2
+Item0=..\..\Test;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\..\Test;Test;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlIntOutputDir]
+Count=1
+Item0=OutC6libTest
+
+[HistoryLists\hlFinalOutputDir]
+Count=2
+Item0=..\..\Bin\
+Item1=..\..\Bin
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl

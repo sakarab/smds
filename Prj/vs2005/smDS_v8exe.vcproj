@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8,00"
-	Name="smDSv8lib"
-	ProjectGUID="{F50B2B2E-2D19-4045-A560-36F69C34C0D1}"
-	RootNamespace="smDSv8lib"
+	Name="smDS_v8exe"
+	ProjectGUID="{FE9B361B-A52B-4C7C-B05B-0BF5B3C662CA}"
+	RootNamespace="smDS_v8exe"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -17,9 +17,9 @@
 	<Configurations>
 		<Configuration
 			Name="Debug8|Win32"
-			OutputDirectory="$(ProjectDir)"
+			OutputDirectory="$(SolutionDir)..\..\Bin"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="4"
+			ConfigurationType="1"
 			InheritedPropertySheets=".\Dbg.vsprops"
 			CharacterSet="2"
 			>
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="Test;Src;G:\Include;&quot;$(BOOST_INC)&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_HAS_ITERATOR_DEBUGGING=1;NO_CDFASTCALL"
+				AdditionalIncludeDirectories="..\..\Test;..\..\Src;&quot;$(LOKI_INC)&quot;;&quot;$(BOOST_INC)&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;_HAS_ITERATOR_DEBUGGING=1;NO_CDFASTCALL"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -64,11 +64,19 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(IntDir)\$(ProjectName).lib"
+				Name="VCLinkerTool"
+				AdditionalDependencies="Loki80vs.lib"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="$(LOKI_LIB)"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -81,14 +89,20 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release8|Win32"
-			OutputDirectory="$(ProjectDir)"
+			OutputDirectory="$(SolutionDir)..\..\Bin"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="4"
+			ConfigurationType="1"
 			InheritedPropertySheets=".\Rel.vsprops"
 			CharacterSet="0"
 			WholeProgramOptimization="0"
@@ -110,8 +124,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="Src;G:\Include;&quot;$(BOOST_INC)&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_CPP_OVERLOAD_SECURE_NAMES=0;_SECURE_SCL=0;NO_CDFASTCALL"
+				AdditionalIncludeDirectories="..\..\Test;..\..\Src;&quot;$(LOKI_INC)&quot;;&quot;$(BOOST_INC)&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_CPP_OVERLOAD_SECURE_NAMES=0;_SECURE_SCL=0;NO_CDFASTCALL"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -128,11 +142,20 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(IntDir)\$(ProjectName).lib"
+				Name="VCLinkerTool"
+				AdditionalDependencies="Loki80vs.lib"
+				AdditionalLibraryDirectories="$(LOKI_LIB)"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -143,6 +166,12 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -158,55 +187,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Src\dsBuffer.cpp"
+				RelativePath="..\..\Test\main_exe.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Src\dsCompareControlers.cpp"
+				RelativePath="..\..\Test\uTables.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Src\dsConn.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsData.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsDateTime.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsExceptions.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsFields.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsIndex.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsRecord.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsStream.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsString.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsUtils.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsVariant.cpp"
+				RelativePath="..\..\Test\uTest.cpp"
 				>
 			</File>
 		</Filter>
@@ -216,79 +205,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Src\dsBuffer.h"
+				RelativePath="..\..\Test\uTables.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Src\dsCompareControlers.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsConfig.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsConn.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsConn_Intf.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsData.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsDateTime.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsExceptions.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsFields.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsIndex.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsRecord.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsSmartPtr.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsStream.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsString.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsSysOpen.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsTypes.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsUtils.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\dsVariant.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Src\shared_in_ptr.hpp"
+				RelativePath="..\..\Test\uTest.h"
 				>
 			</File>
 		</Filter>

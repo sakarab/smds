@@ -17,7 +17,7 @@
     <LIBFILES value=""/>
     <LIBRARIES value=""/>
     <PACKAGES value=""/>
-    <PATHCPP value=".;Src"/>
+    <PATHCPP value=".;..\..\Src"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -25,16 +25,15 @@
     <USERDEFINES value=""/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT"/>
     <MAINSOURCE value="smDSb6lib.bpf"/>
-    <INCLUDEPATH value="Src;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="Src;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..\Src;$(BOOST_INC);$(BCB)\include"/>
+    <LIBPATH value="..\..\Src;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w8092 -w8091 -w8090 -w8089 -w8087 -wprc -wuse -wucp -wstv -wstu -wsig 
       -wpin -wnod -wnak -w-8027 -w-8026 -wdef -wcln -wbbf -wasm -wamp -wamb"/>
     <LISTFILE value=""/>
     <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-ISrc -I$(BOOST_INC) -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp 
-      -boa"/>
+    <IDLCFLAGS value="-I..\..\Src -I$(BOOST_INC) -I$(BCB)\include -src_suffix cpp -boa"/>
     <CFLAG1 value="-Og -Ov -Q -Vx -Ve -X- -a8 -6 -b- -d -k- -y -v -vi -c -tW -tWM"/>
     <PFLAGS value="-N2OutC6lib -N0OutC6lib -$YD -$T -$C- -$A8 -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zd"/>
@@ -48,23 +47,23 @@
   </LINKER>
   <FILELIST>
       <FILE FILENAME="smDSb6lib.bpf" FORMNAME="" UNITNAME="smDSb6lib" CONTAINERID="BPF" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsString.cpp" FORMNAME="" UNITNAME="dsString.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsConn.cpp" FORMNAME="" UNITNAME="dsConn.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsData.cpp" FORMNAME="" UNITNAME="dsData.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsExceptions.cpp" FORMNAME="" UNITNAME="dsExceptions.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsFields.cpp" FORMNAME="" UNITNAME="dsFields.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsIndex.cpp" FORMNAME="" UNITNAME="dsIndex.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsBuffer.cpp" FORMNAME="" UNITNAME="dsBuffer.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsString.cpp" FORMNAME="" UNITNAME="dsString.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsConn.cpp" FORMNAME="" UNITNAME="dsConn.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsData.cpp" FORMNAME="" UNITNAME="dsData.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsExceptions.cpp" FORMNAME="" UNITNAME="dsExceptions.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsFields.cpp" FORMNAME="" UNITNAME="dsFields.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsIndex.cpp" FORMNAME="" UNITNAME="dsIndex.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsBuffer.cpp" FORMNAME="" UNITNAME="dsBuffer.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="smDSb6lib.todo" FORMNAME="" UNITNAME="smDSb6lib.todo" CONTAINERID="ToDo" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="Src\Notes.txt" FORMNAME="" UNITNAME="Notes.txt" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsRecord.cpp" FORMNAME="" UNITNAME="dsRecord" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsVariant.cpp" FORMNAME="" UNITNAME="dsVariant" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsDateTime.cpp" FORMNAME="" UNITNAME="dsDateTime" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsSmartPtr.cpp" FORMNAME="" UNITNAME="dsSmartPtr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsSysOpen.cpp" FORMNAME="" UNITNAME="dsSysOpen" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsCompareControlers.cpp" FORMNAME="" UNITNAME="dsCompareControlers" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsStream.cpp" FORMNAME="" UNITNAME="dsStream" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="Src\dsUtils.cpp" FORMNAME="" UNITNAME="dsUtils" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsRecord.cpp" FORMNAME="" UNITNAME="dsRecord" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsVariant.cpp" FORMNAME="" UNITNAME="dsVariant" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsDateTime.cpp" FORMNAME="" UNITNAME="dsDateTime" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsSmartPtr.cpp" FORMNAME="" UNITNAME="dsSmartPtr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsSysOpen.cpp" FORMNAME="" UNITNAME="dsSysOpen" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsCompareControlers.cpp" FORMNAME="" UNITNAME="dsCompareControlers" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsStream.cpp" FORMNAME="" UNITNAME="dsStream" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsUtils.cpp" FORMNAME="" UNITNAME="dsUtils" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
@@ -96,6 +95,28 @@ OriginalFilename=
 ProductName=
 ProductVersion=1.0.0.0
 Comments=
+
+[HistoryLists\hlIncludePath]
+Count=2
+Item0=..\..\Src;$(BOOST_INC);$(BCB)\include
+Item1=..\..\Src;Src;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=2
+Item0=..\..\Src;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\..\Src;Src;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlIntOutputDir]
+Count=1
+Item0=OutC6lib
+
+[HistoryLists\hlTlibPageSize]
+Count=1
+Item0=0x0040
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
