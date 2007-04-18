@@ -29,7 +29,7 @@
 #include <vector>
 #include "dsStream.h"
 
-namespace ds
+namespace smds
 {
 
 enum cVariantType   { vtNull, vtBool, vtChar, vtWChar, vtShort, vtInteger, vtLong, vtDouble, vtDateTime, vtString, vtWString, vtBlob };

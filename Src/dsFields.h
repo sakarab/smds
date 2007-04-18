@@ -29,7 +29,7 @@
 #include "dsSmartPtr.h"
 #include "dsStream.h"
 
-namespace ds
+namespace smds
 {
 
 // cFieldKind_sync

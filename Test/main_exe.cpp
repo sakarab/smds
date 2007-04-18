@@ -1,6 +1,10 @@
 #include <uTest.h>
 #include <iostream>
 #include <malloc.h>
+
+using namespace smds;
+
+
 /*
 class A
 {
@@ -85,9 +89,9 @@ void __fastcall dsDatasetModify( tblFiles::iterator ds, const ds_string& descr )
 
 void Output( tblFiles_ptr ds ) // const ds::cFieldDefs_& field_defs, tblFiles::record_ptr rec )
 {
-    const ds::cFieldDefs_ptr&   field_defs = ds->GetFieldDefs();
+    const cFieldDefs_ptr&   field_defs = ds->GetFieldDefs();
 
-    for ( ds::cFieldDefs::const_iterator n = field_defs->begin() ; n != field_defs->end() ; ++n )
+    for ( cFieldDefs::const_iterator n = field_defs->begin() ; n != field_defs->end() ; ++n )
         std::cout << n->Name().c_str();
     std::cout << std::endl;
 

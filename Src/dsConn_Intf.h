@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
 //---------------------------------------------------------------------------
-namespace ds
+namespace smds
 {
 
 // these must be in sync with "cFieldDataType" enum in "dsFields.h"

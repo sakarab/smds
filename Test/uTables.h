@@ -47,15 +47,15 @@ public:
 class tblLocation_data
 {
 protected:
-    static const ds::cFieldDef_     tblLocation_Fields[];
-    static const ds::cFieldDefs_    tblLocation_FieldDef;
+    static const smds::cFieldDef_   tblLocation_Fields[];
+    static const smds::cFieldDefs_  tblLocation_FieldDef;
 };
 
-class tblLocation_raw : public tblLocation_data, public ds::cRawRecordPtr
+class tblLocation_raw : public tblLocation_data, public smds::cRawRecordPtr
 {
 public:
-    CDFASTCALL tblLocation_raw( ds::cRawBuffer& raw_buffer )
-        : ds::cRawRecordPtr(raw_buffer)
+    CDFASTCALL tblLocation_raw( smds::cRawBuffer& raw_buffer )
+        : smds::cRawRecordPtr(raw_buffer)
     {
     }
     tblLocation_raw * FASTCALL operator->()                         { return ( this ); }
@@ -68,18 +68,18 @@ public:
     int FASTCALL GetSerialNo() const                                { return ( ReadInteger( tblLocation_Fields[3] ) ); }
 };
 
-class tblLocation_rec : public tblLocation_data, public ds::cRecordPtr
+class tblLocation_rec : public tblLocation_data, public smds::cRecordPtr
 {
 public:
     typedef tblLocation_raw    raw;
 public:
-    CDFASTCALL tblLocation_rec( ds::cDoubleBuffer& double_buffer )
-        : ds::cRecordPtr(double_buffer)
+    CDFASTCALL tblLocation_rec( smds::cDoubleBuffer& double_buffer )
+        : smds::cRecordPtr(double_buffer)
     {
     }
     tblLocation_rec * FASTCALL operator->()                         { return ( this ); }
     const tblLocation_rec * FASTCALL operator->() const             { return ( this ); }
-    static const ds::cFieldDefs_& FASTCALL GetFieldDefs();
+    static const smds::cFieldDefs_& FASTCALL GetFieldDefs();
 
     int FASTCALL GetLocationID() const                              { return ( ReadInteger( tblLocation_Fields[0] ) ); }
     short FASTCALL GetLocTypeID() const                             { return ( ReadShort( tblLocation_Fields[1] ) ); }
@@ -87,8 +87,8 @@ public:
     int FASTCALL GetSerialNo() const                                { return ( ReadInteger( tblLocation_Fields[3] ) ); }
 };
 
-typedef ds::cuTable<tblLocation_rec>        tblLocation;
-typedef ds::shared_ptr<tblLocation>         tblLocation_ptr;
+typedef smds::cuTable<tblLocation_rec>      tblLocation;
+typedef smds::shared_ptr<tblLocation>       tblLocation_ptr;
 //---------------------------------------------------------------------------
 
 //***********************************************************************
@@ -109,7 +109,7 @@ public:
     char            LongFileName_[255];
 #endif
     int             fSize_;
-    ds::cDateTime   fDate_;
+    smds::cDateTime fDate_;
 #ifdef SM_DS_STRING_AS_STRING
     ds_string       Description_;
 #else
@@ -121,17 +121,17 @@ public:
 class tblFiles_data
 {
 protected:
-    static const ds::cFieldDef_     tblFiles_Fields[];
-    static const ds::cFieldDefs_    tblFiles_FieldDef;
+    static const smds::cFieldDef_   tblFiles_Fields[];
+    static const smds::cFieldDefs_  tblFiles_FieldDef;
 public:
     enum FieldNames { FileID, PathID, LongFileName, fSize, fDate, Description, zipID };
 };
 
-class tblFiles_raw : public tblFiles_data, public ds::cRawRecordPtr
+class tblFiles_raw : public tblFiles_data, public smds::cRawRecordPtr
 {
 public:
-    CDFASTCALL tblFiles_raw( ds::cRawBuffer& raw_buffer )
-        : ds::cRawRecordPtr(raw_buffer)
+    CDFASTCALL tblFiles_raw( smds::cRawBuffer& raw_buffer )
+        : smds::cRawRecordPtr(raw_buffer)
     {
     }
     tblFiles_raw * FASTCALL operator->()                         { return ( this ); }
@@ -150,7 +150,7 @@ public:
     int  FASTCALL GetfSize() const                               { return ( ReadInteger( tblFiles_Fields[3] ) ); }
     bool FASTCALL fSize_IsNull() const                           { return ( IsNull( tblFiles_Fields[3] ) ); }
 
-    const ds::cDateTime FASTCALL GetfDate() const                { return ( ReadDate( tblFiles_Fields[4] ) ); }
+    const smds::cDateTime FASTCALL GetfDate() const              { return ( ReadDate( tblFiles_Fields[4] ) ); }
     bool FASTCALL fDate_IsNull() const                           { return ( IsNull( tblFiles_Fields[4] ) ); }
 
     ds_string FASTCALL GetDescription() const                    { return ( ReadString( tblFiles_Fields[5] ) ); }
@@ -160,18 +160,18 @@ public:
     bool FASTCALL zipID_IsNull() const                           { return ( IsNull( tblFiles_Fields[6] ) ); }
 };
 
-class tblFiles_rec : public tblFiles_data, public ds::cRecordPtr
+class tblFiles_rec : public tblFiles_data, public smds::cRecordPtr
 {
 public:
     typedef tblFiles_raw    raw;
 public:
-    CDFASTCALL tblFiles_rec( ds::cDoubleBuffer& double_buffer )
-        : ds::cRecordPtr(double_buffer)
+    CDFASTCALL tblFiles_rec( smds::cDoubleBuffer& double_buffer )
+        : smds::cRecordPtr(double_buffer)
     {
     }
     tblFiles_rec * FASTCALL operator->()                         { return ( this ); }
     const tblFiles_rec * FASTCALL operator->() const             { return ( this ); }
-    static const ds::cFieldDefs_& FASTCALL GetFieldDefs();
+    static const smds::cFieldDefs_& FASTCALL GetFieldDefs();
 
     int FASTCALL GetFileID() const                               { return ( ReadInteger( tblFiles_Fields[0] ) ); }
     void FASTCALL SetFileID( int value )                         { WriteInteger( tblFiles_Fields[0], value ); }
@@ -190,8 +190,8 @@ public:
     void FASTCALL SetfSize( int value )                          { WriteInteger( tblFiles_Fields[3], value ); }
     bool FASTCALL fSize_IsNull() const                           { return ( IsNull( tblFiles_Fields[3] ) ); }
 
-    ds::cDateTime FASTCALL GetfDate() const                      { return ( ReadDate( tblFiles_Fields[4] ) ); }
-    void FASTCALL SetfDate( const ds::cDateTime& value )         { WriteDate( tblFiles_Fields[4], value ); }
+    smds::cDateTime FASTCALL GetfDate() const                    { return ( ReadDate( tblFiles_Fields[4] ) ); }
+    void FASTCALL SetfDate( const smds::cDateTime& value )       { WriteDate( tblFiles_Fields[4], value ); }
     bool FASTCALL fDate_IsNull() const                           { return ( IsNull( tblFiles_Fields[4] ) ); }
 
     ds_string FASTCALL GetDescription() const                    { return ( ReadString( tblFiles_Fields[5] ) ); }
@@ -204,7 +204,7 @@ public:
     bool FASTCALL zipID_IsNull() const                           { return ( IsNull( tblFiles_Fields[6] ) ); }
 };
 
-typedef ds::cuTable<tblFiles_rec>                   tblFiles;
-typedef ds::shared_ptr<tblFiles>                    tblFiles_ptr;
+typedef smds::cuTable<tblFiles_rec>                 tblFiles;
+typedef smds::shared_ptr<tblFiles>                  tblFiles_ptr;
 //---------------------------------------------------------------------------
 #endif

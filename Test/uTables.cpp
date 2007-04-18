@@ -26,19 +26,21 @@
 #include "uTables.h"
 //---------------------------------------------------------------------------
 
+using namespace smds;
+
 //***********************************************************************
 //******    tblLocation
 //***********************************************************************
-const ds::cFieldDef_     tblLocation_data::tblLocation_Fields[] =
+const cFieldDef_     tblLocation_data::tblLocation_Fields[] =
 {
-    { 0, offsetof(tblLocation_map,LocationID_), "LocationID", ds::fkData, ds::ftInteger,  4 },
-    { 1, offsetof(tblLocation_map,LocTypeID_),  "LocTypeID",  ds::fkData, ds::ftShort,    2 },
-    { 2, offsetof(tblLocation_map,IsUser_),     "IsUser",     ds::fkData, ds::ftShort,    2 },
-    { 3, offsetof(tblLocation_map,SerialNo_),   "SerialNo",   ds::fkData, ds::ftInteger,  4 },
-    { 4, offsetof(tblLocation_map,Drive_),      "Drive",      ds::fkData, ds::ftString,   4 }
+    { 0, offsetof(tblLocation_map,LocationID_), "LocationID", fkData, ftInteger,  4 },
+    { 1, offsetof(tblLocation_map,LocTypeID_),  "LocTypeID",  fkData, ftShort,    2 },
+    { 2, offsetof(tblLocation_map,IsUser_),     "IsUser",     fkData, ftShort,    2 },
+    { 3, offsetof(tblLocation_map,SerialNo_),   "SerialNo",   fkData, ftInteger,  4 },
+    { 4, offsetof(tblLocation_map,Drive_),      "Drive",      fkData, ftString,   4 }
 };
 
-const ds::cFieldDefs_    tblLocation_data::tblLocation_FieldDef =
+const cFieldDefs_    tblLocation_data::tblLocation_FieldDef =
 {
     sizeof(tblLocation_map),
     sizeof(tblLocation_Fields)/sizeof(tblLocation_Fields[0]),
@@ -48,23 +50,23 @@ const ds::cFieldDefs_    tblLocation_data::tblLocation_FieldDef =
     tblLocation_Fields
 };
 
-const ds::cFieldDefs_& FASTCALL tblLocation_rec::GetFieldDefs()             { return ( tblLocation_FieldDef ); }
+const cFieldDefs_& FASTCALL tblLocation_rec::GetFieldDefs()             { return ( tblLocation_FieldDef ); }
 
 //***********************************************************************
 //******    tblFiles
 //***********************************************************************
-const ds::cFieldDef_     tblFiles_data::tblFiles_Fields[] =
+const cFieldDef_     tblFiles_data::tblFiles_Fields[] =
 {
-    { 0, offsetof(tblFiles_map,FileID_),       "FileID",       ds::fkData, ds::ftInteger,    4 },
-    { 1, offsetof(tblFiles_map,PathID_),       "PathID",       ds::fkData, ds::ftInteger,    4 },
-    { 2, offsetof(tblFiles_map,LongFileName_), "LongFileName", ds::fkData, ds::ftString,   255 },
-    { 3, offsetof(tblFiles_map,fSize_),        "fSize",        ds::fkData, ds::ftInteger,    4 },
-    { 4, offsetof(tblFiles_map,fDate_),        "fDate",        ds::fkData, ds::ftDateTime,   8 },
-    { 5, offsetof(tblFiles_map,Description_),  "Description",  ds::fkData, ds::ftString,   255 },
-    { 6, offsetof(tblFiles_map,zipID_),        "zipID",        ds::fkData, ds::ftInteger,    4 },
+    { 0, offsetof(tblFiles_map,FileID_),       "FileID",       fkData, ftInteger,    4 },
+    { 1, offsetof(tblFiles_map,PathID_),       "PathID",       fkData, ftInteger,    4 },
+    { 2, offsetof(tblFiles_map,LongFileName_), "LongFileName", fkData, ftString,   255 },
+    { 3, offsetof(tblFiles_map,fSize_),        "fSize",        fkData, ftInteger,    4 },
+    { 4, offsetof(tblFiles_map,fDate_),        "fDate",        fkData, ftDateTime,   8 },
+    { 5, offsetof(tblFiles_map,Description_),  "Description",  fkData, ftString,   255 },
+    { 6, offsetof(tblFiles_map,zipID_),        "zipID",        fkData, ftInteger,    4 },
 };
 
-const ds::cFieldDefs_    tblFiles_data::tblFiles_FieldDef =
+const cFieldDefs_    tblFiles_data::tblFiles_FieldDef =
 {
     sizeof(tblFiles_map),
     sizeof(tblFiles_Fields)/sizeof(tblFiles_Fields[0]),
@@ -74,7 +76,7 @@ const ds::cFieldDefs_    tblFiles_data::tblFiles_FieldDef =
     tblFiles_Fields
 };
 
-const ds::cFieldDefs_& FASTCALL tblFiles_rec::GetFieldDefs()                { return ( tblFiles_FieldDef ); }
+const cFieldDefs_& FASTCALL tblFiles_rec::GetFieldDefs()                    { return ( tblFiles_FieldDef ); }
 
 /*
 int FASTCALL tblFiles_rec::GetFileID() const                                { return ( ReadInteger( tblFiles_Fields[0] ) ); }

@@ -27,7 +27,7 @@
 #include "dsBuffer.h"
 #include "dsIndex.h"
 //---------------------------------------------------------------------------
-namespace ds
+namespace smds
 {
 
 namespace detail

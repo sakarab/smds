@@ -38,8 +38,8 @@
 
 #include "dsString.h"
 
-typedef ds::string_tag     ds_sstring;
-typedef ds::wstring_tag    ds_wstring;
+typedef smds::string_tag    ds_sstring;
+typedef smds::wstring_tag   ds_wstring;
 
 #if defined ( SM_UNICODE )
     typedef ds_wstring      ds_string;
@@ -49,7 +49,7 @@ typedef ds::wstring_tag    ds_wstring;
 
 // foward declaration of types
 
-namespace ds
+namespace smds
 {
 
 class cDoubleBuffer;

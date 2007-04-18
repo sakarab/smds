@@ -30,7 +30,7 @@
 
 #include "shared_in_ptr.hpp"
 
-namespace ds
+namespace smds
 {
 
 template <class T> class shared_ptr : public boost::shared_in_ptr<T>
@@ -49,7 +49,7 @@ public:
 namespace std
 {
 
-template<class T> inline void swap( ds::shared_ptr<T>& a, ds::shared_ptr<T>& b )
+template<class T> inline void swap( smds::shared_ptr<T>& a, smds::shared_ptr<T>& b )
 {
     a.swap( b );
 }
@@ -65,7 +65,7 @@ template<class T> inline void swap( ds::shared_ptr<T>& a, ds::shared_ptr<T>& b )
 
 #include <boost/smart_ptr.hpp>
 
-namespace ds
+namespace smds
 {
 
 template <class T> class shared_ptr : public boost::shared_ptr<T>
@@ -84,7 +84,7 @@ public:
 namespace std
 {
 
-template<class T> inline void swap( ds::shared_ptr<T>& a, ds::shared_ptr<T>& b )
+template<class T> inline void swap( smds::shared_ptr<T>& a, smds::shared_ptr<T>& b )
 {
     a.swap( b );
 }
@@ -100,7 +100,7 @@ template<class T> inline void swap( ds::shared_ptr<T>& a, ds::shared_ptr<T>& b )
 
 #include <loki/SmartPtr.h>
 
-namespace ds
+namespace smds
 {
 
 template <class T> class shared_ptr : public Loki::SmartPtr< T,
@@ -127,7 +127,7 @@ public:
 namespace std
 {
 
-template<class T> inline void swap( ds::shared_ptr<T>& a, ds::shared_ptr<T>& b )
+template<class T> inline void swap( smds::shared_ptr<T>& a, smds::shared_ptr<T>& b )
 {
     a.Swap( b );
 }

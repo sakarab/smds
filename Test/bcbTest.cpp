@@ -23,8 +23,9 @@
 #pragma hdrstop
 
 #include "bcbTest.h"
+
 //---------------------------------------------------------------------------
-void __fastcall FillList( TListView *lv, const ds::cFieldDefs_& field_defs, tblFiles_ptr dataset )
+void __fastcall FillList( TListView *lv, const smds::cFieldDefs_& field_defs, tblFiles_ptr dataset )
 {
     lv->Items->Clear();
     lv->Columns->Clear();
@@ -34,7 +35,7 @@ void __fastcall FillList( TListView *lv, const ds::cFieldDefs_& field_defs, tblF
         TListColumn    *col = lv->Columns->Add();
 
         col->Caption = field_defs.mFieldDefs[n].mName;
-        if ( field_defs.mFieldDefs[n].mDataType == ds::ftInteger )
+        if ( field_defs.mFieldDefs[n].mDataType == smds::ftInteger )
             col->Alignment = taRightJustify;
     }
 

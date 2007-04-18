@@ -29,7 +29,7 @@
 #include "dsFields.h"
 #include <boost/shared_array.hpp>
 
-namespace ds
+namespace smds
 {
 
 //***********************************************************************

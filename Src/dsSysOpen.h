@@ -25,7 +25,7 @@
 #include "dsConfig.h"
 #include <boost/scoped_array.hpp>
 
-namespace ds
+namespace smds
 {
 
 namespace detail

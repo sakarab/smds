@@ -28,7 +28,7 @@
 #include "dsTypes.h"
 #include "dsSmartPtr.h"
 //---------------------------------------------------------------------------
-namespace ds
+namespace smds
 {
 
 class cDatabase;

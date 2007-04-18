@@ -25,7 +25,7 @@
 
 #include "dsCompareControlers.h"
 //---------------------------------------------------------------------------
-namespace ds
+namespace smds
 {
 
 namespace detail

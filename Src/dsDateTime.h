@@ -25,7 +25,7 @@
 #include "dsConfig.h"
 #include "dsStream.h"
 
-namespace ds
+namespace smds
 {
 
 // Data types

@@ -31,6 +31,8 @@
 #include "dsExceptions.h"
 //---------------------------------------------------------------------------
 
+using namespace smds;
+
 namespace
 {
 
@@ -81,8 +83,6 @@ const char *DAO_Dirdata_Conn =  "G:\\Data\\DirData82.mdb";
 
 };
 
-
-using namespace ds;
 
 //***********************************************************************
 //******    GetTblFiles
@@ -148,13 +148,13 @@ int FASTCALL CountNulls( tblFiles::iterator ptr )
 //    }
 //};
 
-ds::cIndex_ptr FASTCALL CreateIndex_g1( cTable_ptr uds )
+cIndex_ptr FASTCALL CreateIndex_g1( cTable_ptr uds )
 //ds::cIndex_ptr FASTCALL CreateIndex_g1( tblFiles_ptr uds )
 {
     return ( uds->NewIndex( cIndexField( "PathID", cIndexField::Descending ) ) );
 }
 
-int AdjusentCount( ds::cIndex::iterator ptr1 )
+int AdjusentCount( cIndex::iterator ptr1 )
 {
     int     result = 0;
 
@@ -163,7 +163,7 @@ int AdjusentCount( ds::cIndex::iterator ptr1 )
 
     ptr1.First();
 
-    ds::cIndex::iterator    ptr2 = ptr1;
+    cIndex::iterator    ptr2 = ptr1;
 
     ptr2.Next();
     while ( ! ptr2.eof() )
@@ -182,7 +182,7 @@ int FASTCALL Check_Order_g1( cRecordIterator ptr1 )
 
     ptr1.First();
 
-    ds::cRecordIterator     ptr2 = ptr1;
+    cRecordIterator     ptr2 = ptr1;
 
     ptr2.Next();
     while ( ! ptr2.eof() )
@@ -195,12 +195,12 @@ int FASTCALL Check_Order_g1( cRecordIterator ptr1 )
     return ( result );
 }
 
-ds::cIndex_ptr FASTCALL CreateIndex_g2( tblFiles_ptr uds )
+cIndex_ptr FASTCALL CreateIndex_g2( tblFiles_ptr uds )
 {
     return ( uds->NewIndex( OpenIndexFields( cIndexField( "PathID" ), cIndexField( "fSize" ) ) ) );
 }
 
-ds::cIndex_ptr FASTCALL CreateIndex_g22( tblFiles_ptr uds )
+cIndex_ptr FASTCALL CreateIndex_g22( tblFiles_ptr uds )
 {
     return ( uds->NewIndex( cIndexSortCompareStd_ptr( new cIndexSortCompareStd(
         OpenIndexFields( cIndexField( "PathID" ), cIndexField( "fSize" ) ) ) ) ) );
@@ -212,7 +212,7 @@ int FASTCALL Check_Order_g2( cRecordIterator ptr1 )
 
     ptr1.First();
 
-    ds::cRecordIterator     ptr2 = ptr1;
+    cRecordIterator     ptr2 = ptr1;
 
     ptr2.Next();
 
@@ -334,7 +334,7 @@ void FASTCALL LocateRecord( tblFiles_ptr ds )
 //***********************************************************************
 //******    FindRecord
 //***********************************************************************
-ds::cIndex::iterator FASTCALL FindRecord_g2( cIndex_ptr idx )
+cIndex::iterator FASTCALL FindRecord_g2( cIndex_ptr idx )
 {
     return ( idx->Find( OpenValues( Variant( 18999 ), Variant( 18999 ) ) ) );
 }
@@ -357,7 +357,7 @@ void FASTCALL CompileTest( tblFiles_ptr ds )
 //***********************************************************************
 //******    TestVariant
 //***********************************************************************
-ds::Variant FASTCALL TestVariant()
+Variant FASTCALL TestVariant()
 {
     //ds::Variant     a( static_cast<unsigned short>(sizeof(Variant)) );
     Variant         a( sizeof(Variant) );
@@ -428,7 +428,7 @@ void Test( tblFiles_ptr ds )
     }
     foo ( n );
 
-    ds::cIndex_ptr  idx;
+    cIndex_ptr  idx;
 
     idx = CreateIndex_g1( ds );
     unorder_count = Check_Order_g1( idx->GetIterator() );

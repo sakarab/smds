@@ -29,7 +29,7 @@
 #include "dsFields.h"
 //---------------------------------------------------------------------------
 
-namespace ds
+namespace smds
 {
 
 class cRawBuffer;

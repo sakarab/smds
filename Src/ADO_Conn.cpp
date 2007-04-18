@@ -51,13 +51,15 @@
 #include <ADODB.hpp>
 //---------------------------------------------------------------------------
 
+using namespace smds;
+
 namespace
 {
 
 //***********************************************************************
 //******    cDataConnection
 //***********************************************************************
-class cDataConnection : public ds::IDatabase
+class cDataConnection : public IDatabase
 {
 private:
     std::auto_ptr<TADOConnection>       mDatabase;
@@ -72,8 +74,8 @@ protected:
     virtual ULONG __stdcall Release();
 #endif
     // IDatabase
-    virtual ds::IDataProvider * __stdcall CreateDataProvider();
-    virtual void                __stdcall DestroyDataProvider( ds::IDataProvider *connection );
+    virtual IDataProvider *     __stdcall CreateDataProvider();
+    virtual void                __stdcall DestroyDataProvider( IDataProvider *connection );
 public:
     cDataConnection( const char *connection_string );
     ~cDataConnection();
@@ -83,7 +85,7 @@ public:
 //***********************************************************************
 //******    cDataProvider
 //***********************************************************************
-class cDataProvider : public ds::IDataProvider
+class cDataProvider : public IDataProvider
 {
 private:
     typedef TField      native_field_type;
@@ -133,7 +135,7 @@ protected:
     virtual void __stdcall StepInitDataTransfer( const char *field_name, int field_data_size, int field_data_type, const void *data );
     virtual void __stdcall EndInitDataTransfer();
 
-    virtual bool __stdcall GetFieldValues( ds::IFieldValuesAcceptor *values_acceptor );
+    virtual bool __stdcall GetFieldValues( IFieldValuesAcceptor *values_acceptor );
     virtual void __stdcall EndDataTransfer();
 
     virtual void __stdcall StartTransaction();
@@ -176,12 +178,12 @@ ULONG __stdcall cDataConnection::Release()
 }
 #endif
 
-ds::IDataProvider * __stdcall cDataConnection::CreateDataProvider()
+IDataProvider * __stdcall cDataConnection::CreateDataProvider()
 {
     return ( new cDataProvider( this ) );
 }
 
-void __stdcall cDataConnection::DestroyDataProvider( ds::IDataProvider *connection )
+void __stdcall cDataConnection::DestroyDataProvider( IDataProvider *connection )
 {
     delete connection;
 }
@@ -258,7 +260,7 @@ void __stdcall cDataProvider::EndInitDataTransfer()
     std::sort( mFieldPairMap.begin(), mFieldPairMap.end(), SortCmpByFieldDef() );
 }
 
-bool __stdcall cDataProvider::GetFieldValues( ds::IFieldValuesAcceptor *values_acceptor )
+bool __stdcall cDataProvider::GetFieldValues( IFieldValuesAcceptor *values_acceptor )
 {
     bool        result = false;
     Variant     v;
@@ -271,67 +273,67 @@ bool __stdcall cDataProvider::GetFieldValues( ds::IFieldValuesAcceptor *values_a
             values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, 0, n->mFieldDataSize );
         else switch ( n->mFieldDataType )
         {
-            case ds::cFieldDataType_ftBool :
+            case cFieldDataType_ftBool :
                 {
                     bool    a = v;
 
                     result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &a, n->mFieldDataSize );
                 }
                 break;
-            case ds::cFieldDataType_ftChar :
+            case cFieldDataType_ftChar :
                 {
                     char    a = v;
 
                     result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &a, n->mFieldDataSize );
                 }
                 break;
-            case ds::cFieldDataType_ftWChar :
+            case cFieldDataType_ftWChar :
                 break;
-            case ds::cFieldDataType_ftShort :
+            case cFieldDataType_ftShort :
                 {
                     short    a = v;
 
                     result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &a, n->mFieldDataSize );
                 }
                 break;
-            case ds::cFieldDataType_ftInteger :
+            case cFieldDataType_ftInteger :
                 {
                     int    a = v;
 
                     result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &a, n->mFieldDataSize );
                 }
                 break;
-            case ds::cFieldDataType_ftLong :
+            case cFieldDataType_ftLong :
                 {
                     long    a = v;
 
                     result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &a, n->mFieldDataSize );
                 }
                 break;
-            case ds::cFieldDataType_ftDouble :
+            case cFieldDataType_ftDouble :
                 {
                     double    a = v;
 
                     result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &a, n->mFieldDataSize );
                 }
                 break;
-            case ds::cFieldDataType_ftDateTime :
+            case cFieldDataType_ftDateTime :
                 {
                     double    a = v;
 
                     result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &a, n->mFieldDataSize );
                 }
                 break;
-            case ds::cFieldDataType_ftString :
+            case cFieldDataType_ftString :
                 {
                     AnsiString    a = v;
 
                     result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, a.c_str(), n->mFieldDataSize );
                 }
                 break;
-            case ds::cFieldDataType_ftWString :
+            case cFieldDataType_ftWString :
                 break;
-            case ds::cFieldDataType_ftBlob :
+            case cFieldDataType_ftBlob :
                 break;
         }
     }
@@ -364,12 +366,12 @@ void __stdcall cDataProvider::ExecSql( const char *sql )
 extern "C"
 {
 
-__declspec(dllexport) ds::IDatabase * CreateDataConnection( const char *connection_string )
+__declspec(dllexport) IDatabase * CreateDataConnection( const char *connection_string )
 {
     return ( new cDataConnection( connection_string ) );
 }
 
-__declspec(dllexport) void DeleteDataConnection( ds::IDatabase *connection )
+__declspec(dllexport) void DeleteDataConnection( IDatabase *connection )
 {
     delete connection;
 }

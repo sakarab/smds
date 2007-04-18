@@ -25,7 +25,7 @@
 #include <exception>
 #include "dsTypes.h"
 
-namespace ds
+namespace smds
 {
 
 class eExceptionBase : public std::exception

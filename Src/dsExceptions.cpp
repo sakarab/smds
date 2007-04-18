@@ -24,7 +24,7 @@
 #endif
 #include "dsExceptions.h"
 //---------------------------------------------------------------------------
-namespace ds
+namespace smds
 {
 
 CDFASTCALL eExceptionBase::eExceptionBase()

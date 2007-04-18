@@ -28,7 +28,7 @@
 #include "dsDateTime.h"
 #include "dsVariant.h"
 
-namespace ds
+namespace smds
 {
 
 // cFieldDataType_sync

@@ -26,7 +26,7 @@
 #include "dsConn.h"
 #include "dsExceptions.h"
 //---------------------------------------------------------------------------
-namespace ds
+namespace smds
 {
 
 namespace

@@ -27,7 +27,7 @@
 #include "dsCompareControlers.h"
 #include <sstream>
 
-namespace ds
+namespace smds
 {
 //***********************************************************************
 //******    cTablebase
@@ -66,12 +66,12 @@ cTablebase::iterator FASTCALL cTablebase::Locate( const OpenValues& values, cons
 
 cTablebase::iterator FASTCALL cTablebase::Locate( const Variant& value, const cFindField& field )
 {
-    return ( Locate( ds::OpenValues( value ), ds::OpenFindFields( field ) ) );
+    return ( Locate( OpenValues( value ), OpenFindFields( field ) ) );
 }
 
 bool FASTCALL cTablebase::Locate( const Variant& value, const cFindField& field, iterator& iter )
 {
-    return ( Locate( ds::OpenValues( value ), ds::OpenFindFields( field ), iter ) );
+    return ( Locate( OpenValues( value ), OpenFindFields( field ), iter ) );
 }
 
 bool FASTCALL cTablebase::Locate( const OpenValues& values, const OpenFindFields& fields, iterator& iter )
@@ -90,7 +90,7 @@ bool FASTCALL cTablebase::Locate( const OpenValues& values, const OpenFindFields
 
 bool FASTCALL cTablebase::Locate( const Variant& value, const cFindField& field, range_iterator& iter )
 {
-    return ( Locate( ds::OpenValues( value ), ds::OpenFindFields( field ), iter ) );
+    return ( Locate( OpenValues( value ), OpenFindFields( field ), iter ) );
 }
 
 bool FASTCALL cTablebase::Locate( const OpenValues& values, const OpenFindFields& fields, range_iterator& iter )
@@ -143,7 +143,7 @@ ds_string FASTCALL cTable::ConstructSelectFromFields( const char *where_clause )
     qstr << "SELECT ";
     for ( cFieldDefs::const_iterator n = field_defs->begin(), eend = field_defs->end() ; n != eend ; ++n )
     {
-        if ( n->Kind() == ds::fkData )
+        if ( n->Kind() == fkData )
         {
             if ( ! first_field )
                 qstr << ", ";
@@ -200,7 +200,7 @@ cIndex * FASTCALL cTable::ConstructIndex( cIndex *index, const cIndexField& inde
 {
     std::auto_ptr<cIndex>   idx( index );
 
-    index->Construct( ds::cIndexSortCompareStd_ptr( new ds::cIndexSortCompareStd( index_field ) ), GetData() );
+    index->Construct( cIndexSortCompareStd_ptr( new cIndexSortCompareStd( index_field ) ), GetData() );
     return ( idx.release() );
 }
 
@@ -208,7 +208,7 @@ cIndex * FASTCALL cTable::ConstructIndex( cIndex *index, const OpenIndexFields& 
 {
     std::auto_ptr<cIndex>   idx( index );
 
-    index->Construct( ds::cIndexSortCompareStd_ptr( new ds::cIndexSortCompareStd( index_fields ) ), GetData() );
+    index->Construct( cIndexSortCompareStd_ptr( new cIndexSortCompareStd( index_fields ) ), GetData() );
     return ( idx.release() );
 }
 
@@ -393,7 +393,7 @@ cIndex::iterator FASTCALL cIndex::Find( const OpenValues& values )
 
 cIndex::iterator FASTCALL cIndex::Find( const Variant& value )
 {
-    return( Find( ds::OpenValues( value ) ) );
+    return( Find( OpenValues( value ) ) );
 }
 
 bool FASTCALL cIndex::Find( const Variant& value, iterator& iter )

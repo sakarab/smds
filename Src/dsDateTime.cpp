@@ -26,7 +26,7 @@
 #include "dsDateTime.h"
 //---------------------------------------------------------------------------
 
-namespace ds
+namespace smds
 {
 
 cStream& FASTCALL operator << ( cStream& st, const cDateTime a )
