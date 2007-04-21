@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1253">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 2.2  (Win32)">
+	<META NAME="CREATED" CONTENT="16010101;0">
+	<META NAME="CHANGED" CONTENT="16010101;0">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		P { margin-bottom: 0.21cm }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-GB" DIR="LTR">
+<P STYLE="margin-bottom: 0cm">Incomplete description of some main
+classes.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Table</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">A table (class smds::cTable) represents
+one table of in-memory relational data. The data is local to the
+application in which it resides, but can be populated from a database
+using the appropriate back end data provider.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The schema, or structure of a table is
+represented by columns (smds::cFieldDefs). You define the schema of a
+table using smds::cFieldDef objects. The columns in a table can map
+to columns in a database table or contain calculated values.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">In addition to a schema, a table must
+also have rows to contain and order data. The smds::cTable::iterator
+class represents the actual data contained in a table. You use the
+smds::cTable::iterator and its methods to retrieve, evaluate, and
+manipulate the data in a table. As you access and change the data
+within a row, the smds::cTable::iterator object maintains both its
+current and original state (field values).</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">A table has methods to add, locate
+(searches serially) and delete records. Adding field definitions is
+also done via the table class.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Index</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">A table can create ordered &ldquo;views&rdquo;
+of the data it contains, in effect creating indexes (class
+smds::cIndex). These indexes have the same schema and contain the
+same data as the generating table. Changes made to their data are
+reflected back to the table it created them.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The index class provides methods to
+find (binary search) a record. Navigation to the ordered data is done
+with the help of smds::cIndex::iterator objects.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Iterator</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">smds iterators are not exactly the same
+thing as STL iterators. They do fulfil the basic requirement to
+&ldquo;almost behave like a pointer&rdquo;, but their public
+interface is richer then the standard ones and cannot be used in most
+standard algorithms.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The general convention is that using
+the class member notation (.) someone has access to the iterator
+methods. Using the pointer notation (-&gt;) someone has access to row
+columns. Iterators have methods to relocate themselves
+(iterator.First(), iterator.Last()), switch to the original row data
+(iterator.OldValues()), get a field's value (iterator.FieldByName()),
+check for navigational end (iterator.eof()), provide the record count
+(iterator.RecordCount()) and provide checked methods of the increment
+and decrement operators (iterator.Prev(),  iterator.Next()).</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">See also Typed-Untyped.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Back end</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">A set of interfaces (classes with only
+pure virtual methods) define the way the library interacts with data
+providers. Data providers are separate code that implement the
+specifics of database connection and data retrieval.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Note: At this state (release 0.1.1), 
+not all  functionality described above is implemented.</P>
+</BODY>
+</HTML>
