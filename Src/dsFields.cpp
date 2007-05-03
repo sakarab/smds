@@ -31,6 +31,8 @@
 namespace smds
 {
 
+namespace detail
+{
 // cFieldDataType_sync
 unsigned short GetFieldDataSize( cFieldDataType data_type, unsigned short size )
 {
@@ -81,6 +83,8 @@ unsigned short GetFieldDataSize( cFieldDataType data_type, unsigned short size )
     return ( result );
 }
 
+}; // namespace detail
+
 //***********************************************************************
 //******    cFieldDef
 //***********************************************************************
@@ -88,7 +92,7 @@ CDFASTCALL cFieldDef::cFieldDef( unsigned short idx, int offset, const ds_string
                                  cFieldKind kind, cFieldDataType data_type, unsigned short size )
     : mIndex(idx), mOffset(offset), mName(name), mKind(kind), mDataType(data_type),
 #ifdef SM_DS_STRING_AS_STRING
-      mSize_(GetFieldDataSize( data_type, size )), mDataSize_(size)
+    mSize_(detail::GetFieldDataSize( data_type, size )), mDataSize_(size)
 #else
       mSize_(size)
 #endif
@@ -131,7 +135,7 @@ cStream& FASTCALL operator >> ( cStream& st, cFieldDef& a )
     st >> a.mIndex >> a.mOffset >> a.mName >> a.mKind >> a.mDataType
 #ifdef SM_DS_STRING_AS_STRING
        >> a.mDataSize_;
-       a.mSize_ = GetFieldDataSize( a.mDataType, 0 );
+    a.mSize_ = detail::GetFieldDataSize( a.mDataType, 0 );
 #else
        >> a.mSize_;
 #endif
@@ -155,13 +159,13 @@ public:
     }
 };
 
-CDFASTCALL cFieldDefs::cFieldDefs( const cFieldDefs_& field_defs )
+CDFASTCALL cFieldDefs::cFieldDefs( const detail::cFieldDefs_& field_defs )
     : mBufferSize(0), mFieldDefs(), mFieldDefSorted()
 {
     // mFieldDefs.reserve( field_defs.mCount );
     for ( int n = 0 ; n < field_defs.mCount ; ++n )
     {
-        const cFieldDef_&   field_def = field_defs.mFieldDefs[n];
+        const detail::cFieldDef_&   field_def = field_defs.mFieldDefs[n];
 
         mFieldDefs.push_back( cFieldDef( field_def.mIndex, field_def.mOffset, field_def.mName,
                                          field_def.mKind, field_def.mDataType, field_def.mSize ) );
@@ -235,7 +239,7 @@ const cFieldDef FASTCALL cFieldDefs::MakeFieldDef( const ds_string& name, cField
         offset = last.Offset() + last.Size_();
     }
     return ( cFieldDef( static_cast<unsigned short>(mFieldDefs.size()), offset, name,
-                        kind, data_type, GetFieldDataSize( data_type, size ) ) );
+                        kind, data_type, detail::GetFieldDataSize( data_type, size ) ) );
 }
 
 //void FASTCALL cFieldDefs::clear()
@@ -291,7 +295,7 @@ const cFieldDef& FASTCALL cFieldDefs::AddField( const cFieldDef& field )
 */
 
 //---------------------------------------------------------------------------
-};
+}; // namespace smds
 //---------------------------------------------------------------------------
 
 

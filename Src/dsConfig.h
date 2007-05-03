@@ -49,12 +49,6 @@
 //#define SM_DS_DEBUG_ITERATORS
 
 /**********************************************************************************
-** Uncomment this so that the library raises an exception when field values are
-** null instead of returning the default value for the field type
-***********************************************************************************/
-//#define SM_DS_NULL_VALUE_EXCEPTION
-
-/**********************************************************************************
 ** Uncomment this so that the raw record buffer class (cRawBuffer) holds strings
 ** as ds_string and not char arrays
 ***********************************************************************************/

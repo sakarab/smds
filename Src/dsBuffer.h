@@ -38,6 +38,17 @@
 namespace smds
 {
 
+class cTable;
+class cTableReader;
+
+enum cUpdateStatus { usUnmodified, usInserted, usModified, usDeleted };
+
+inline cStream& FASTCALL operator << ( cStream& st, const cUpdateStatus a )     { return ( st.WriteBuffer( &a, sizeof(cUpdateStatus) ) ); }
+inline cStream& FASTCALL operator >> ( cStream& st, cUpdateStatus& a )          { return ( st.ReadBuffer( &a, sizeof(cUpdateStatus) ) ); }
+
+namespace detail
+{
+
 //***********************************************************************
 //******    cRawBuffer
 //***********************************************************************
@@ -68,7 +79,7 @@ private:
     {
         std::memset( mNullBits, value ? -1 : 0, field_count/sizeof(quantum)+1 );
     }
-    void calc_pos_mask( std::size_t bit_idx, std::size_t& quantum_idx, quantum& mask ) const
+    void FASTCALL calc_pos_mask( std::size_t bit_idx, std::size_t& quantum_idx, quantum& mask ) const
     {
         quantum_idx = bit_idx / sizeof(quantum);
         mask = static_cast<quantum>(0x80 >> (bit_idx % sizeof(quantum)));
@@ -81,7 +92,7 @@ private:
         calc_pos_mask( bit_num, quantum_idx, mask );
         return ( (mNullBits[quantum_idx] & mask) != 0 );
     }
-    void SetBit( std::size_t bit_num, bool value )
+    void FASTCALL SetBit( std::size_t bit_num, bool value )
     {
         std::size_t     quantum_idx;
         quantum         mask;
@@ -113,7 +124,7 @@ private:
 #ifdef SM_DS_STRING_AS_STRING
     static ds_string& FASTCALL empty_string();
 #endif
-    void swap( cRawBuffer& other )
+    void FASTCALL swap( cRawBuffer& other )
     {
         mData.swap( other.mData );
         std::swap( mNullBits, other.mNullBits );
@@ -208,81 +219,49 @@ public:
     bool FASTCALL ReadBool( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( false );
-#endif
         return ( *(buffer_field_cast<bool *>(field_def.Offset())) );
     }
     char FASTCALL ReadChar( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( 0 );
-#endif
         return ( *(buffer_field_cast<char *>(field_def.Offset())) );
     }
     wchar_t FASTCALL ReadWChar( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( 0 );
-#endif
         return ( *(buffer_field_cast<wchar_t *>(field_def.Offset())) );
     }
     short FASTCALL ReadShort( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( 0 );
-#endif
         return ( *(buffer_field_cast<short *>(field_def.Offset())) );
     }
     int FASTCALL ReadInteger( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( 0 );
-#endif
         return ( *(buffer_field_cast<int *>(field_def.Offset())) );
     }
     long FASTCALL ReadLong( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( 0 );
-#endif
         return ( *(buffer_field_cast<long *>(field_def.Offset())) );
     }
     double FASTCALL ReadFloat( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( 0 );
-#endif
         return ( *(buffer_field_cast<double *>(field_def.Offset())) );
     }
     cDateTime FASTCALL ReadDate( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( cDateTime( 0 ) );
-#endif
         return ( cDateTime( *(buffer_field_cast<cDateTime *>(field_def.Offset())) ) );
     }
 
@@ -290,22 +269,14 @@ public:
     const ds_string& FASTCALL ReadString( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( empty_string() );
-#endif
         return ( *(buffer_field_cast<ds_string *>(field_def.Offset())) );
     }
 #else
     ds_string FASTCALL ReadString( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( ds_string() );
-#endif
         return ( ds_string( buffer_field_cast<const char *>(field_def.Offset()),
                             BufferStringLen( buffer_field_cast<const char *>(field_def.Offset()), field_def.Size_() ) ) );
     }
@@ -375,81 +346,49 @@ public:
     bool FASTCALL ReadBool( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( false );
-#endif
         return ( *(buffer_field_cast<bool *>(field_def.mOffset)) );
     }
     char FASTCALL ReadChar( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( 0 );
-#endif
         return ( *(buffer_field_cast<char *>(field_def.mOffset)) );
     }
     wchar_t FASTCALL ReadWChar( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( 0 );
-#endif
         return ( *(buffer_field_cast<wchar_t *>(field_def.mOffset)) );
     }
     short FASTCALL ReadShort( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( 0 );
-#endif
         return ( *(buffer_field_cast<short *>(field_def.mOffset)) );
     }
     int FASTCALL ReadInteger( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( 0 );
-#endif
         return ( *(buffer_field_cast<int *>(field_def.mOffset)) );
     }
     long FASTCALL ReadLong( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( 0 );
-#endif
         return ( *(buffer_field_cast<long *>(field_def.mOffset)) );
     }
     double FASTCALL ReadFloat( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( 0 );
-#endif
         return ( *(buffer_field_cast<double *>(field_def.mOffset)) );
     }
     cDateTime FASTCALL ReadDate( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( cDateTime( 0 ) );
-#endif
         return ( cDateTime( *(buffer_field_cast<cDateTime *>(field_def.mOffset)) ) );
     }
 
@@ -457,22 +396,14 @@ public:
     const ds_string& FASTCALL ReadString( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( empty_string() );
-#endif
         return ( *(buffer_field_cast<ds_string *>(field_def.mOffset)) );
     }
 #else
     ds_string FASTCALL ReadString( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-#else
-            return ( ds_string() );
-#endif
         return ( ds_string( buffer_field_cast<const char *>(field_def.mOffset),
                             BufferStringLen( buffer_field_cast<const char *>(field_def.mOffset), field_def.mSize ) ) );
     }
@@ -582,11 +513,6 @@ public:
     }
 #endif
 };
-
-enum cUpdateStatus { usUnmodified, usInserted, usModified, usDeleted };
-
-inline cStream& FASTCALL operator << ( cStream& st, const cUpdateStatus a )     { return ( st.WriteBuffer( &a, sizeof(cUpdateStatus) ) ); }
-inline cStream& FASTCALL operator >> ( cStream& st, cUpdateStatus& a )          { return ( st.ReadBuffer( &a, sizeof(cUpdateStatus) ) ); }
 
 //***********************************************************************
 //******    cDoubleBuffer
@@ -793,6 +719,9 @@ class cData
     : public boost::shared_in_base<long>
 #endif
 {
+private:
+    typedef shared_ptr< cDoubleBuffer >     cDoubleBuffer_ptr;
+    typedef cDoubleBuffer_ptr               cData_value_type;
 public:
     typedef std::vector< cDoubleBuffer_ptr >                    container;
     typedef container::value_type                               value_type;
@@ -800,7 +729,6 @@ public:
     typedef container::iterator                                 iterator;
     typedef std::pair<bool,size_type>                           locate_result;
     typedef std::pair<bool,std::pair<size_type,size_type> >     range_result;
-private:
 private:
     /* TODO -oSam : Change name to "mData" */
     container               mData;
@@ -831,7 +759,7 @@ public:
     const value_type& FASTCALL operator[]( size_type idx ) const    { return ( mData[idx] ); }
 
     cData_ptr FASTCALL Clone_All();
-    void FASTCALL Sort( const detail::SortControler& cmp );
+    void FASTCALL Sort( const SortControler& cmp );
 
     void FASTCALL Clear();
     void FASTCALL CommitUpdates();
@@ -851,6 +779,8 @@ public:
 
 //---------------------------------------------------------------------------
 
-};
+}; // namespace detail
+
+}; // namespace smds
 //---------------------------------------------------------------------------
 #endif

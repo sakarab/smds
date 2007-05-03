@@ -30,7 +30,10 @@
 //---------------------------------------------------------------------------
 namespace smds
 {
-//---------------------------------------------------------------------------
+
+namespace detail
+{
+
 //***********************************************************************
 //******    cSortCompareBase
 //***********************************************************************
@@ -53,9 +56,6 @@ int cSortCompareBase::CompareInvocationCount = 0;
 //***********************************************************************
 //******    Comparison functions
 //***********************************************************************
-
-namespace detail
-{
 
 int FASTCALL CmpBool( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
@@ -139,8 +139,6 @@ CompareFunction FASTCALL GetCompareFunction( const cFieldDef& field, cFindField:
     }
 }
 
-}; // namespace detail
-
 //***********************************************************************
 //******    cIndexSortCompareStd
 //***********************************************************************
@@ -174,7 +172,7 @@ void FASTCALL cIndexSortCompareStd::Initialize( const cFieldDefs_ptr& field_defs
         const cFieldDef&    field_def = field_defs->FieldByName( n->GetFieldName() );
 
         mFieldMap.push_back( cFieldMapItem( &(*n), field_def,
-                                            detail::GetCompareFunction( field_def, n->GetCaseOption() ) ) );
+                                            GetCompareFunction( field_def, n->GetCaseOption() ) ) );
     }
 }
 
@@ -232,7 +230,7 @@ void FASTCALL cFindCompareStd::Initialize( const cFieldDefs_ptr& field_defs )
         const cFieldDef&    field_def = field_defs->FieldByName( n->GetFieldName() );
 
         mFieldMap.push_back( cFieldMapItem( &(*n), field_def,
-                                            detail::GetCompareFunction( field_def, n->GetCaseOption() ) ) );
+                                            GetCompareFunction( field_def, n->GetCaseOption() ) ) );
     }
 }
 
@@ -267,105 +265,8 @@ void FASTCALL cFilterCompareBase::Initialize( const cFieldDefs_ptr& )
 }
 
 //---------------------------------------------------------------------------
-//void FASTCALL cIndex::Construct( cData_ptr& data )
-//{
-//    typedef std::multiset<cData::size_type, SortControler>       sorted_list;
-//
-//    SortControler    cc = SortControler( mCompare, data );
-//
-//    cc.Initialize( data->GetFieldDefs() );
-//
-//    std::vector<cData::size_type>   aa;
-//
-//    for ( cData::size_type n = 0, eend = data->size() ; n < eend ; ++n )
-//        aa.push_back( n );
-//
-//    sorted_list     list = sorted_list( aa.begin(), aa.end(), cc );
-//
-//    //list.insert( aa.begin(), aa.end() );
-//    for ( sorted_list::iterator n = list.begin(), eend = list.end() ; n != eend ; ++n )
-//        mContainer->push_back( (*data)[*n] );
-//
-//    //for ( cData::size_type n = 0, eend = data->size() ; n < eend ; ++n )
-//    //   list.insert( n );
-//    //for ( sorted_list::iterator n = list.begin(), eend = list.end() ; n != eend ; ++n )
-//    //   mContainer->push_back( (*data)[*n] );
-//}
-//---------------------------------------------------------------------------
+}; // namespace detail
 
-/*
-//***********************************************************************
-//******    cIndexes
-//***********************************************************************
-CDFASTCALL cIndexes::cIndexes()
-{
-}
-
-CDFASTCALL cIndexes::~cIndexes()
-{
-}
-
-void FASTCALL cIndexes::clear()
-{
-    mContainer.clear();
-}
-
-//---------------------------------------------------------------------------
-class SortCompareIndexBy_Name : public std::binary_function<const shared_ptr<cIndex>&, const shared_ptr<cIndex>&, bool>
-{
-public:
-    result_type FASTCALL operator()( first_argument_type idx1, second_argument_type idx2 )
-    {
-        return ( idx1->GetName() < idx2->GetName() );
-    }
-};
-
-class FindCompareIndexBy_Name : public std::binary_function<const shared_ptr<cIndex>&, const char * const, bool>
-{
-public:
-    result_type FASTCALL operator()( first_argument_type idx1, second_argument_type idx2 )
-    {
-        return ( idx1->GetName() < idx2 );
-    }
-};
-//---------------------------------------------------------------------------
-cIndex& FASTCALL cIndexes::AddIndex( const shared_ptr<cIndex>& index )
-{
-    iterator    idx_ptr = find_index( index->GetName() );
-
-    if ( idx_ptr != mContainer.end() && (*idx_ptr)->GetName() == index->GetName() )
-        throw eNameUnique();
-
-    mContainer.insert( idx_ptr, index );
-    return ( *index );
-}
-
-cIndexes::iterator FASTCALL cIndexes::find_index( const char *name )
-{
-    return ( std::lower_bound( mContainer.begin(), mContainer.end(), name, FindCompareIndexBy_Name() ) );
-}
-
-cIndexes::iterator FASTCALL cIndexes::find_index( const ds_string& name )
-{
-    return ( find_index( name.c_str() ) );
-}
-
-cIndex& FASTCALL cIndexes::index_by_name( const char *name )
-{
-    iterator    result = find_index( name );
-
-    if ( result == mContainer.end() )
-        throw eIndexNotFound();
-    return ( *(*result) );
-}
-
-cIndex& FASTCALL cIndexes::index_by_name( const ds_string& name )
-{
-    return ( index_by_name( name.c_str() ) );
-}
-*/
-
-//---------------------------------------------------------------------------
-};
+}; // namespace smds
 //---------------------------------------------------------------------------
 

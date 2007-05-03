@@ -111,53 +111,6 @@ typedef detail::OpenArray<cIndexField>      OpenIndexFields;
 typedef detail::OpenArray<Variant>          OpenValues;
 typedef detail::OpenArray<cRangeValues>     OpenRangeValues;
 
-//***********************************************************************
-//enum CaseOption     { CaseSensitive, CaseInsensitive };
-//enum OrderOptions   { Ascending, Descending };
-//
-////***********************************************************************
-////******    cLocateParam
-////***********************************************************************
-//class cLocateParam
-//{
-//private:
-//    Variant         mValue;
-//    ds_string       mFieldName;
-//    CaseOption      mCaseOption;
-//public:
-//    CDFASTCALL cLocateParam( const Variant& value, const ds_string& field_name );
-//    CDFASTCALL cLocateParam( const Variant& value, const ds_string& field_name, CaseOption case_option );
-//    CDFASTCALL cLocateParam( const Variant& value, const char *field_name );
-//    CDFASTCALL cLocateParam( const Variant& value, const char *field_name, CaseOption case_option );
-//
-//    const ds_string& GetFieldName() const               { return ( mFieldName ); }
-//    CaseOption GetCaseOption() const                    { return ( mCaseOption ); }
-//};
-//
-////***********************************************************************
-////******    cIndexParam
-////***********************************************************************
-//class cIndexParam
-//{
-//private:
-//    ds_string       mFieldName;
-//    CaseOption      mCaseOption;
-//    OrderOptions    mOrderOptions;
-//public:
-//    CDFASTCALL cIndexParam( const ds_string& field_name );
-//    CDFASTCALL cIndexParam( const ds_string& field_name, CaseOption case_option );
-//    CDFASTCALL cIndexParam( const ds_string& field_name, OrderOptions order_options );
-//    CDFASTCALL cIndexParam( const ds_string& field_name, CaseOption case_option, OrderOptions order_options );
-//    CDFASTCALL cIndexParam( const char *field_name );
-//    CDFASTCALL cIndexParam( const char *field_name, CaseOption case_option );
-//    CDFASTCALL cIndexParam( const char *field_name, OrderOptions order_options );
-//    CDFASTCALL cIndexParam( const char *field_name, CaseOption case_option, OrderOptions order_options );
-//
-//    const ds_string& GetFieldName() const               { return ( mFieldName ); }
-//    CaseOption GetCaseOption() const                    { return ( mCaseOption ); }
-//    OrderOptions GetOrderOptions() const                { return ( mOrderOptions ); }
-//};
-
-};
+}; // namespace smds
 
 #endif

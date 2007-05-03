@@ -41,27 +41,29 @@ class cTablebase
 #endif
 {
 public:
-    typedef cRecordIterator         iterator;
-    typedef cRangeIterator          range_iterator;
+    typedef cRecordIterator             iterator;
+    // typedef detail::cRangeIterator      range_iterator;
 private:
     friend class cTableWriter;
 
-    cData_ptr       mData;
+    detail::cData_ptr       mData;
     // noncopyable
     CDFASTCALL cTablebase( const cTablebase& src );
     cTablebase& FASTCALL operator=( const cTablebase& src );
 protected:
-    cData_ptr& FASTCALL GetData()                                               { return ( mData ); }
-    void FASTCALL SetData( const cData_ptr& data )                              { mData = data; }
-    cDoubleBuffer * FASTCALL GetDoubleBuffer( const cRecord& record )           { return ( record.GetDoubleBuffer() ); }
+    detail::cData_ptr& FASTCALL GetData()                                               { return ( mData ); }
+    void FASTCALL SetData( const detail::cData_ptr& data )                              { mData = data; }
+    detail::cDoubleBuffer * FASTCALL GetDoubleBuffer( const cRecord& record )           { return ( record.GetDoubleBuffer() ); }
     int FASTCALL AddBuffer_ptr( const cRecord& record )                         { return ( mData->AddBuffer_ptr( record.mRecord ) ); }
+
+    void FASTCALL ConstructIndex( cSortCompareBase_ptr& cmp_func, const detail::cData_ptr& data );
     CDFASTCALL cTablebase();
-    CDFASTCALL cTablebase( const cFieldDefs_& field_defs );
+    CDFASTCALL cTablebase( const detail::cFieldDefs_& field_defs );
 public:
     virtual CDFASTCALL ~cTablebase();
     const cFieldDefs_ptr& FASTCALL GetFieldDefs() const                         { return ( mData->GetFieldDefs() ); }
     int FASTCALL RecordCount()                                                  { return ( mData->size() ); }
-    iterator FASTCALL GetIterator()                                             { return ( iterator( mData ) ); }
+    cRecordIterator FASTCALL GetIterator()                                      { return ( cRecordIterator( mData ) ); }
 
     void FASTCALL Clear()                                                       { mData->Clear(); }
     void FASTCALL CommitUpdates()                                               { mData->CommitUpdates(); }
@@ -71,8 +73,6 @@ public:
     iterator FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields );
     bool FASTCALL Locate( const Variant& value, const cFindField& field, iterator& iter );
     bool FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields, iterator& iter );
-    bool FASTCALL Locate( const Variant& value, const cFindField& field, range_iterator& iter );
-    bool FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields, range_iterator& iter );
 };
 
 //***********************************************************************
@@ -80,8 +80,39 @@ public:
 //***********************************************************************
 class cIndex : public cTablebase
 {
+public:
+    class iterator : public cTablebase::iterator
+    {
+    private:
+        friend class cIndex;
+    protected:
+        CDFASTCALL iterator( detail::cData_ptr& container )
+            : cTablebase::iterator( container )                                            {} // empty
+        CDFASTCALL iterator( detail::cData_ptr& container, detail::cData::size_type idx )
+            : cTablebase::iterator( container, idx )                                       {} // empty
+    public:
+        CDFASTCALL iterator( const cTablebase::iterator& src )
+            : cTablebase::iterator(src)                                                    {} // empty
+        CDFASTCALL iterator( const iterator& src ) : cTablebase::iterator(src)             {} // empty
+        CDFASTCALL ~iterator()                                                  {} // empty
+        iterator& FASTCALL operator = ( const iterator& src )
+        {
+            cTablebase::iterator::operator=( src );
+            return *this;
+        }
+        iterator& FASTCALL operator++()
+        {
+            cTablebase::iterator::operator++();
+            return ( *this );
+        }
+        iterator& FASTCALL operator--()
+        {
+            cTablebase::iterator::operator--();
+            return ( *this );
+        }
+    };
 private:
-    typedef cData_ptr               container;
+    typedef detail::cData_ptr       container;
     friend class cTable;            // next to eliminate
 
     cSortCompareBase_ptr    mCompare;
@@ -90,7 +121,7 @@ private:
     CDFASTCALL cIndex( const cIndex& src );
     cIndex& FASTCALL operator=( const cIndex& src );
 protected:
-    void FASTCALL Construct( const cSortCompareBase_ptr& cmp_func, const cData_ptr& data );
+    void FASTCALL Construct( const cSortCompareBase_ptr& cmp_func, const detail::cData_ptr& data );
     CDFASTCALL cIndex();
 public:
     virtual CDFASTCALL ~cIndex();
@@ -98,66 +129,53 @@ public:
     iterator FASTCALL Find( const OpenValues& values );
     bool FASTCALL Find( const Variant& value, iterator& iter );
     bool FASTCALL Find( const OpenValues& values, iterator& iter );
-    bool FASTCALL Find( const Variant& value, range_iterator& iter );
-    bool FASTCALL Find( const OpenValues& values, range_iterator& iter );
-    iterator FASTCALL GetIterator()                                         { return ( iterator( GetData() ) ); }
-    range_iterator FASTCALL GetRangeIterator( const cRangeValues& values );
-    range_iterator FASTCALL GetRangeIterator( const OpenRangeValues& values );
+    // bool FASTCALL Find( const Variant& value, range_iterator& iter );
+    // bool FASTCALL Find( const OpenValues& values, range_iterator& iter );
+    iterator FASTCALL GetIterator()                                         { return cTablebase::GetIterator(); }
+    cIndex FASTCALL GetRange( const cRangeValues& values );
+    cIndex FASTCALL GetRange( const OpenRangeValues& values );
 };
 
 typedef shared_ptr<cIndex>      cIndex_ptr;
 
 //***********************************************************************
-//******    cuIndex<>
-//***********************************************************************
-template <class RECORD> class cuIndex : public cIndex
-{
-public:
-    typedef RECORD                          record_type;
-    typedef cuRecordIterator<RECORD>        iterator;
-    typedef cuRangeIterator<RECORD>         range_iterator;
-private:
-    typedef cIndex                          inherited;
-    template <class RECORD_> friend class cuTable;
-    // noncopyable
-    CDFASTCALL cuIndex( const cuIndex& src );
-    cuIndex& FASTCALL operator=( const cuIndex& src );
-protected:
-    CDFASTCALL cuIndex() : cIndex()                                         {} // empty
-public:
-    virtual CDFASTCALL ~cuIndex()                                           {} // empty
-    iterator FASTCALL GetIterator()                                         { return ( iterator( GetData() ) ); }
-    range_iterator FASTCALL GetRangeIterator( const cRangeValues& values )
-    {
-        return ( range_iterator( inherited::GetRangeIterator( values ) ) );
-    }
-    range_iterator FASTCALL GetRangeIterator( const OpenRangeValues& values )
-    {
-        return ( range_iterator( inherited::GetRangeIterator( values ) ) );
-    }
-    iterator FASTCALL Locate( const Variant& value, const cFindField& field )
-    {
-        return ( iterator( inherited::Locate( value, field ) ) );
-    }
-    iterator FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields )
-    {
-        return ( iterator( inherited::Locate( values, fields ) ) );
-    }
-    iterator FASTCALL Find( const Variant& value )                              { return ( iterator( inherited::Find( value ) ) ); }
-    iterator FASTCALL Find( const OpenValues& values )                          { return ( iterator( inherited::Find( values ) ) ); }
-    bool FASTCALL Find( const Variant& value, iterator& iter )                  { return ( inherited::Find( value, iter ) ); }
-    bool FASTCALL Find( const OpenValues& values, iterator& iter )              { return ( inherited::Find( values, iter ) ); }
-    bool FASTCALL Find( const Variant& value, range_iterator& iter )            { return ( inherited::Find( value, iter ) ); }
-    bool FASTCALL Find( const OpenValues& values, range_iterator& iter )        { return ( inherited::Find( values, iter ) ); }
-};
-
-//***********************************************************************
 //******    cTable
 //***********************************************************************
-typedef shared_ptr<cIndexSortCompareStd>        cIndexSortCompareStd_ptr;
+typedef shared_ptr<detail::cIndexSortCompareStd>        cIndexSortCompareStd_ptr;
 
 class cTable : public cTablebase
 {
+public:
+    class iterator : public cTablebase::iterator
+    {
+    private:
+        friend class cTable;
+    protected:
+        CDFASTCALL iterator( detail::cData_ptr& container )
+            : cTablebase::iterator( container )                                            {} // empty
+        CDFASTCALL iterator( detail::cData_ptr& container, detail::cData::size_type idx )
+            : cTablebase::iterator( container, idx )                                       {} // empty
+        CDFASTCALL iterator( const cTablebase::iterator& src )
+            : cTablebase::iterator(src)                                                    {} // empty
+    public:
+        CDFASTCALL iterator( const iterator& src ) : cTablebase::iterator(src)             {} // empty
+        CDFASTCALL ~iterator()                                                  {} // empty
+        iterator& FASTCALL operator = ( const iterator& src )
+        {
+            cTablebase::iterator::operator=( src );
+            return *this;
+        }
+        iterator& FASTCALL operator++()
+        {
+            cTablebase::iterator::operator++();
+            return ( *this );
+        }
+        iterator& FASTCALL operator--()
+        {
+            cTablebase::iterator::operator--();
+            return ( *this );
+        }
+    };
 private:
     ds_string               mSql;
     ds_string               mTableName;
@@ -165,18 +183,18 @@ private:
     ds_string FASTCALL ConstructSelectFromFields( const char *where_clause );
     ds_string FASTCALL ConstructSelectFromSql( const char *where_clause );
     ds_string FASTCALL ConstructSelect( const char *where_clause );
-    cData::value_type FASTCALL NewBuffer_usUnmodified();
+    detail::cData::value_type FASTCALL NewBuffer_usUnmodified();
     // noncopyable
     CDFASTCALL cTable( const cTable& src );
     cTable& FASTCALL operator=( const cTable& src );
 protected:
-    cData::value_type FASTCALL NewBuffer_usInserted();
+    detail::cData::value_type FASTCALL NewBuffer_usInserted();
 
     cIndex * FASTCALL ConstructIndex( cIndex *index, const cSortCompareBase_ptr& cmp_func );
     cIndex * FASTCALL ConstructIndex( cIndex *index, const cIndexField& index_field );
     cIndex * FASTCALL ConstructIndex( cIndex *index, const OpenIndexFields& index_fields );
 
-    CDFASTCALL cTable( const cFieldDefs_& field_defs );
+    CDFASTCALL cTable( const detail::cFieldDefs_& field_defs );
 public:
     CDFASTCALL cTable();
     CDFASTCALL cTable( const ds_string& table_name );
@@ -184,6 +202,16 @@ public:
     virtual CDFASTCALL ~cTable();
 
     const ds_string& GetTableName()                     { return ( mTableName ); }
+    iterator FASTCALL GetIterator()                     { return cTablebase::GetIterator(); }
+
+    iterator FASTCALL Locate( const Variant& value, const cFindField& field )
+    {
+        return iterator ( cTablebase::Locate( value, field ) );
+    }
+    iterator FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields )
+    {
+        return iterator ( cTablebase::Locate( values, fields ) );
+    }
 
     void FASTCALL AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size );
     void FASTCALL AddField( const char *name, cFieldKind kind, cFieldDataType data_type, unsigned short size );
@@ -199,19 +227,139 @@ public:
 typedef shared_ptr< cTable >    cTable_ptr;
 
 //***********************************************************************
+//******    cuIndex<>
+//***********************************************************************
+template <class RECORD> class cuIndex : public cIndex
+{
+public:
+/*
+    class iterator : public cuRecordIterator<RECORD, cIndex::iterator>
+    {
+    private:
+        typedef cIndex::iterator    BASE;
+    protected:
+	    CDFASTCALL iterator( detail::cData_ptr& container )
+            : BASE(container)                                                {} // empty
+        CDFASTCALL iterator( detail::cData_ptr& container, detail::cData::size_type idx )
+            : BASE(container, idx)                                           {} // empty
+        CDFASTCALL iterator( const BASE& iter )
+            : BASE(iter)                                                     {} // empty
+    public:
+        RECORD FASTCALL operator->()                    { return ( RECORD( *GetDoubleBuffer() ) ); }
+        iterator& FASTCALL operator++()
+        {
+            BASE::operator++();
+            return ( *this );
+        }
+        iterator& FASTCALL operator--()
+        {
+            BASE::operator--();
+            return ( *this );
+        }
+    };
+    // typedef detail::cuRangeIterator<RECORD>     range_iterator;
+*/
+    template <class RECORD> class cuRecordIterator : public cIndex::iterator
+    {
+    private:
+        typedef detail::cRawRecordProxy<typename RECORD::raw>      OldValuesProxy;
+
+        template <class RECORD_> friend class cuIndex;
+
+        CDFASTCALL cuRecordIterator( detail::cData_ptr& container )
+            : cIndex::iterator(container)                                                {} // empty
+        CDFASTCALL cuRecordIterator( detail::cData_ptr& container, detail::cData::size_type idx )
+            : cIndex::iterator(container, idx)                                           {} // empty
+        CDFASTCALL cuRecordIterator( const cIndex::iterator& iter )
+            : cIndex::iterator(iter)                                                     {} // empty
+    public:
+        const OldValuesProxy FASTCALL OldValues() const
+        {
+            return ( OldValuesProxy( GetDoubleBuffer()->GetOriginalData(), *GetData()->GetFieldDefs().get() ) );
+        }
+
+        RECORD FASTCALL operator->()                    { return ( RECORD( *GetDoubleBuffer() ) ); }
+        iterator& FASTCALL operator++()
+        {
+            cIndex::iterator::operator++();
+            return ( *this );
+        }
+        iterator& FASTCALL operator--()
+        {
+            cIndex::iterator::operator--();
+            return ( *this );
+        }
+    };
+    typedef cuRecordIterator<RECORD>    iterator;
+private:
+    template <class RECORD_> friend class cuTable;
+    // noncopyable
+    CDFASTCALL cuIndex( const cuIndex& src );
+    cuIndex& FASTCALL operator=( const cuIndex& src );
+protected:
+    CDFASTCALL cuIndex() : cIndex()                                         {} // empty
+public:
+    virtual CDFASTCALL ~cuIndex()                                           {} // empty
+    iterator FASTCALL GetIterator()                                         { return iterator( cIndex::GetIterator() ); }
+    iterator FASTCALL Locate( const Variant& value, const cFindField& field )
+    {
+        return ( iterator( cIndex::Locate( value, field ) ) );
+    }
+    iterator FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields )
+    {
+        return ( iterator( cIndex::Locate( values, fields ) ) );
+    }
+    iterator FASTCALL Find( const Variant& value )                              { return ( iterator( cIndex::Find( value ) ) ); }
+    iterator FASTCALL Find( const OpenValues& values )                          { return ( iterator( cIndex::Find( values ) ) ); }
+    bool FASTCALL Find( const Variant& value, iterator& iter )                  { return ( cIndex::Find( value, iter ) ); }
+    bool FASTCALL Find( const OpenValues& values, iterator& iter )              { return ( cIndex::Find( values, iter ) ); }
+};
+
+//***********************************************************************
 //******    cuTable<>
 //***********************************************************************
 template <class RECORD> class cuTable : public cTable
 {
+public:
+    template <class REC> class cuRecordIterator : public cTable::iterator
+    {
+    private:
+        typedef detail::cRawRecordProxy<typename RECORD::raw>      OldValuesProxy;
+
+        template <class RECORD> friend class cuTable;
+
+        CDFASTCALL cuRecordIterator( detail::cData_ptr& container )
+            : cTable::iterator(container)                                                {} // empty
+        CDFASTCALL cuRecordIterator( detail::cData_ptr& container, detail::cData::size_type idx )
+            : cTable::iterator(container, idx)                                           {} // empty
+        CDFASTCALL cuRecordIterator( const cTable::iterator& iter )
+            : cTable::iterator(iter)                                                     {} // empty
+    public:
+        const OldValuesProxy FASTCALL OldValues() const
+        {
+            return ( OldValuesProxy( GetDoubleBuffer()->GetOriginalData(), *GetData()->GetFieldDefs().get() ) );
+        }
+
+        REC FASTCALL operator->()                    { return ( REC( *GetDoubleBuffer() ) ); }
+        iterator& FASTCALL operator++()
+        {
+            cTable::iterator::operator++();
+            return ( *this );
+        }
+        iterator& FASTCALL operator--()
+        {
+            cTable::iterator::operator--();
+            return ( *this );
+        }
+    };
+    typedef cuRecordIterator<RECORD>    iterator;
 private:
-    typedef cTable                      inherited;
     typedef RECORD                      record_type;
 
-    template <class RECORD_> class cIndexSortCompare : public cSortCompareBase
+    template <class RECORD_> class cIndexSortCompare : public detail::cSortCompareBase
     {
-    protected:
-        virtual bool FASTCALL do_compare_2( const typename RECORD_::raw& item1, const typename RECORD_::raw& item2 ) = 0;
-        virtual bool FASTCALL do_compare_1( cRawBuffer *item1, cRawBuffer *item2 )
+    private:
+        virtual bool FASTCALL do_compare_1( detail::cRawBuffer *item1, detail::cRawBuffer *item2 )
         {
 #ifdef __BORLANDC__
             return ( do_compare_2( RECORD_::raw( *item1 ), RECORD_::raw( *item2 ) ) );
@@ -219,23 +367,24 @@ private:
             return ( do_compare_2( typename RECORD_::raw( *item1 ), typename RECORD_::raw( *item2 ) ) );
 #endif
         }
+    protected:
+        virtual bool FASTCALL do_compare_2( const typename RECORD_::raw& item1, const typename RECORD_::raw& item2 ) = 0;
     };
 
-    template <class RECORD_> class cFilterCompare : public cFilterCompareBase
+    template <class RECORD_> class cFilterCompare : public detail::cFilterCompareBase
     {
-    protected:
-        virtual bool FASTCALL do_compare_2( const typename RECORD_::raw& item1 ) = 0;
-        virtual bool FASTCALL do_compare_1( cRawBuffer *item1 )
+    private:
+        virtual bool FASTCALL do_compare_1( detail::cRawBuffer *item1 )
         {
             return ( do_compare_2( typename RECORD_::raw( *item1 ) ) );
         }
+    protected:
+        virtual bool FASTCALL do_compare_2( const typename RECORD_::raw& item1 ) = 0;
     };
-
 public:
 #ifndef __BORLANDC__
     using cTable::Locate;
 #endif
-    typedef cuRecordIterator<RECORD>            iterator;
     typedef cuRecord<RECORD>                    record;
     typedef cuIndex<RECORD>                     index;
     typedef shared_ptr< cuIndex<RECORD> >       index_ptr;
@@ -245,17 +394,17 @@ public:
 private:
     index * FASTCALL ConstructIndex( index *index, const cSortCompareBase_ptr& cmp_func )
     {
-        inherited::ConstructIndex( index, cmp_func );
+        cTable::ConstructIndex( index, cmp_func );
         return ( index );
     }
     index * FASTCALL ConstructIndex( index *index, const cIndexField& index_field )
     {
-        inherited::ConstructIndex( index, index_field );
+        cTable::ConstructIndex( index, index_field );
         return ( index );
     }
     index * FASTCALL ConstructIndex( index *index, const OpenIndexFields& index_fields )
     {
-        inherited::ConstructIndex( index, index_fields );
+        cTable::ConstructIndex( index, index_fields );
         return ( index );
     }
     // noncopyable
@@ -285,33 +434,25 @@ public:
         return ( index_ptr( ConstructIndex( new index(), index_fields ) ) );
     }
 
-    iterator FASTCALL GetIterator()                                             { return ( iterator( GetData() ) ); }
-    record FASTCALL NewRecord()                                                 { return ( record( NewBuffer_usInserted(), GetFieldDefs() ) ); }
-    iterator FASTCALL AddRecord( const record& rec )                            { return ( iterator( GetData(), AddBuffer_ptr( rec ) ) ); }
+    iterator FASTCALL GetIterator()                                             { return cTable::GetIterator(); }
+    record FASTCALL NewRecord()                                                 { return record( NewBuffer_usInserted(), GetFieldDefs() ); }
+    iterator FASTCALL AddRecord( const record& rec )                            { return iterator( GetData(), AddBuffer_ptr( rec ) ); }
     iterator FASTCALL Locate( const Variant& value, const cFindField& field )
     {
-        return ( iterator( inherited::Locate( value, field ) ) );
+        return ( iterator( cTable::Locate( value, field ) ) );
     }
     iterator FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields )
     {
-        return ( iterator( inherited::Locate( values, fields ) ) );
+        return ( iterator( cTable::Locate( values, fields ) ) );
     }
 #ifdef __BORLANDC__
     bool FASTCALL Locate( const Variant& value, const cFindField& field, iterator& iter )
     {
-        return ( inherited::Locate( value, field, iter ) );
+        return ( cTable::Locate( value, field, iter ) );
     }
     bool FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields, iterator& iter )
     {
-        return ( inherited::Locate( values, fields, iter ) );
-    }
-    bool FASTCALL Locate( const Variant& value, const cFindField& field, range_iterator& iter )
-    {
-        return ( inherited::Locate( value, field, iter ) );
-    }
-    bool FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields, range_iterator& iter )
-    {
-        return ( inherited::Locate( values, fields, iter ) );
+        return ( cTable::Locate( values, fields, iter ) );
     }
 #endif
 };
@@ -342,7 +483,7 @@ protected:
 class cTableReader : private cTableSerializingData
 {
 private:
-    static void FASTCALL ReadFieldValue( cStream& st, const cRawBuffer& rb, const cFieldDef& field );
+    static void FASTCALL ReadFieldValue( cStream& st, const detail::cRawBuffer& rb, const cFieldDef& field );
 public:
     /* TODO -oSam : parameter must be const */
     static Variant FASTCALL GetTablePacket( cTable& table );
@@ -365,7 +506,7 @@ private:
     static void FASTCALL ReadFieldDefs( cStream& st, cTable& tmp, bool is_typed );
     static void FASTCALL ReadData( cStream& st, cTable& tmp );
     static void FASTCALL ReadDataAssign( cStream& st, cTable& tmp, cTable& table );
-    static void FASTCALL ReadFieldValue( cStream& st, cRawBuffer& rb, const cFieldDef& field );
+    static void FASTCALL ReadFieldValue( cStream& st, detail::cRawBuffer& rb, const cFieldDef& field );
     static void FASTCALL ReadTheRest( cTable& tmp, cTable& table, Variant& variant, bool is_typed );
     static cTable_ptr FASTCALL CreateTemporaryTable();
 public:
@@ -378,7 +519,7 @@ public:
     }
 };
 
-};
+}; // namespace smds
 //---------------------------------------------------------------------------
 #endif
 

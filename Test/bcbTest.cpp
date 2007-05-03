@@ -25,7 +25,7 @@
 #include "bcbTest.h"
 
 //---------------------------------------------------------------------------
-void __fastcall FillList( TListView *lv, const smds::cFieldDefs_& field_defs, tblFiles_ptr dataset )
+void __fastcall FillList( TListView *lv, const smds::detail::cFieldDefs_& field_defs, tblFiles_ptr dataset )
 {
     lv->Items->Clear();
     lv->Columns->Clear();

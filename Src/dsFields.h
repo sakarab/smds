@@ -42,6 +42,9 @@ inline cStream& FASTCALL operator << ( cStream& st, const cFieldDataType a )    
 inline cStream& FASTCALL operator >> ( cStream& st, cFieldKind& a )             { return ( st.ReadBuffer( &a, sizeof(cFieldKind) ) ); }
 inline cStream& FASTCALL operator >> ( cStream& st, cFieldDataType& a )         { return ( st.ReadBuffer( &a, sizeof(cFieldDataType) ) ); }
 
+namespace detail
+{
+
 //***********************************************************************
 //******    cFieldDef_
 //***********************************************************************
@@ -71,6 +74,8 @@ struct cFieldDefs_
     //int                 mBlobCount;
     //const cFieldDef     *mBlobFieldDefs;
 };
+
+}; // namespace detail
 
 //***********************************************************************
 //******    cFieldDef
@@ -115,12 +120,12 @@ public:
 cStream& FASTCALL operator << ( cStream& st, const cFieldDef a );
 cStream& FASTCALL operator >> ( cStream& st, cFieldDef& a );
 
+namespace detail
+{
+
 //***********************************************************************
 //******    cFieldDefs
 //***********************************************************************
-
-namespace detail
-{
 
 class cFieldNameMap
 {
@@ -140,7 +145,7 @@ public:
     const cFieldDef& FASTCALL FieldDef() const       { return ( *mFieldDef ); }
 };
 
-};  // namespace detail
+}; // namespace detail
 
 class cFieldDefs
 #ifdef SM_DS_USE_SMALL_SHARED_PTR
@@ -148,8 +153,8 @@ class cFieldDefs
 #endif
 {
 private:
-    typedef std::list< cFieldDef >                      cFieldDefContainer;
-    typedef std::vector< detail::cFieldNameMap >        cFieldDefSortedContainer;
+    typedef std::list< cFieldDef >                  cFieldDefContainer;
+    typedef std::vector< detail::cFieldNameMap >    cFieldDefSortedContainer;
 private:
     int                         mBufferSize;
     cFieldDefContainer          mFieldDefs;
@@ -165,7 +170,7 @@ public:
     typedef cFieldDefContainer::const_iterator      const_iterator;
 public:
     CDFASTCALL cFieldDefs();
-    CDFASTCALL cFieldDefs( const cFieldDefs_& field_defs );
+    CDFASTCALL cFieldDefs( const detail::cFieldDefs_& field_defs );
     CDFASTCALL ~cFieldDefs();
     void FASTCALL swap( cFieldDefs& src );
 
@@ -183,9 +188,9 @@ public:
     const cFieldDef& FASTCALL FieldByName( const char *field_name ) const;
 };
 
-typedef shared_ptr<cFieldDefs>      cFieldDefs_ptr;                      
+typedef shared_ptr<cFieldDefs>      cFieldDefs_ptr;
 
-};
+}; // namespace smds
 
 //---------------------------------------------------------------------------
 #endif

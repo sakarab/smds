@@ -3,60 +3,8 @@
 #include <malloc.h>
 
 using namespace smds;
+using namespace smds::detail;
 
-
-/*
-class A
-{
-    friend class B;
-    int a;
-};
-
-class B
-{
-    friend class C;
-};
-
-class D : public B
-{
-    void f( A *p )
-    {
-        p->a++;
-    }
-};
-//--------------------------------------------------------------------
-class BaseClass
-{
-public:
-    void    BaseFunc( void ) {}
-};
-
-class DerivedClass: private BaseClass
-{
-    //using BaseClass::BaseFunc;	//* Make BaseFunc private!
-    friend class FriendClass;	//* But allow this class access
-};
-
-class FinalClass: public DerivedClass { };
-
-class FriendClass
-{
-    FinalClass *mpFinal;
-public:
-    FriendClass( FinalClass *ApDerived )    { mpFinal = ApDerived; }
-	//* Compiler Error: 'BaseClass::BaseFunc()' is not accessible
-	//* in function FriendClass::CallBaseFunc()
-	void CallBaseFunc( void ) { mpFinal->BaseFunc(); }
-};
-
-void testFunc( void )
-{
-	FinalClass final;
-	FriendClass friendOf( &final );
-
-	friendOf.CallBaseFunc();
-}
-*/
 //--------------------------------------------------------------------
 class InitOle
 {

@@ -32,6 +32,13 @@
 namespace smds
 {
 
+class cIndex;
+class cTablebase;
+
+namespace detail
+{
+
+class cData;
 class cRawBuffer;
 
 //***********************************************************************
@@ -49,10 +56,10 @@ private:
     // non copyable
     CDFASTCALL cSortCompareBase( const cSortCompareBase& src );
     cSortCompareBase& FASTCALL operator=( const cSortCompareBase& src );
+    virtual bool FASTCALL do_compare_1( cRawBuffer *item1, cRawBuffer *item2 ) = 0;
 protected:
     cFieldDefs              *mFieldDefs;
     virtual void FASTCALL Initialize( const cFieldDefs_ptr& field_defs );
-    virtual bool FASTCALL do_compare_1( cRawBuffer *item1, cRawBuffer *item2 ) = 0;
 public:
     CDFASTCALL cSortCompareBase()
         : mFieldDefs(0)                                             {}  // empty
@@ -185,11 +192,13 @@ public:
     }
 };
 
+}; // namespace detail
+
 //---------------------------------------------------------------------------
-typedef shared_ptr<cSortCompareBase>        cSortCompareBase_ptr;
-typedef shared_ptr<cFilterCompareBase>      cFilterCompareBase_ptr;
+typedef shared_ptr<detail::cSortCompareBase>        cSortCompareBase_ptr;
+typedef shared_ptr<detail::cFilterCompareBase>      cFilterCompareBase_ptr;
 //---------------------------------------------------------------------------
 
-};
+}; // namespace smds
 //---------------------------------------------------------------------------
 #endif

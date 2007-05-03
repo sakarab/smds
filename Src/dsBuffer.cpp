@@ -31,6 +31,9 @@
 namespace smds
 {
 
+namespace detail
+{
+
 //***********************************************************************
 //******    cRawBuffer
 //***********************************************************************
@@ -197,7 +200,7 @@ cData_ptr FASTCALL cData::Clone_All()
     return result;
 }
 
-void FASTCALL cData::Sort( const detail::SortControler& cmp )
+void FASTCALL cData::Sort( const SortControler& cmp )
 {
     std::sort( mData.begin(), mData.end(), cmp );
 }
@@ -216,7 +219,7 @@ void FASTCALL cData::Locate( const OpenValues& values, const OpenFindFields& fie
 
     cmp_func->Initialize( mFieldDefs );
 
-    cData::iterator     rslt = std::find_if( begin, end, detail::FindControler( cmp_func, tmp_rec->GetActiveData() ) );
+    cData::iterator     rslt = std::find_if( begin, end, FindControler( cmp_func, tmp_rec->GetActiveData() ) );
 
     result.first = rslt != mData.end();
     if ( result.first )
@@ -239,8 +242,8 @@ void FASTCALL cData::Locate( const OpenValues& values, const OpenFindFields& fie
 void FASTCALL cData::Find_0( const cData::value_type& double_buffer, cSortCompareBase_ptr& compare,
                              iterator begin, iterator end, locate_result& result )
 {
-    detail::SortControler   cc = detail::SortControler( compare );
-    cData::iterator         rslt = std::lower_bound( begin, end, double_buffer, cc );
+    SortControler       cc = SortControler( compare );
+    cData::iterator     rslt = std::lower_bound( begin, end, double_buffer, cc );
 
     result.first = ( rslt != mData.end() && !cc( *rslt, double_buffer ) && !cc( double_buffer, *rslt ) );
     if ( result.first )
@@ -341,6 +344,8 @@ void FASTCALL cData::GetRange( const OpenRangeValues& values, cSortCompareBase_p
     }
 }
 
-};
+}; // namespace detail
+
+}; // namespace smds
 //---------------------------------------------------------------------------
 

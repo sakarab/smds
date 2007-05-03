@@ -93,16 +93,16 @@ tblFiles_ptr GetTblFiles()
     cDbEngine       transport = SelectDbEngine( "BDE" );
     cDatabase       connection = transport.NewConnection( BDE_DirData_Conn );
 */
-
-    cDbEngine       transport = SelectDbEngine( "ADO" );
-    cDatabase       connection = transport.NewConnection( ADO_Dirdata_Conn );
 /*
-    cDbEngine       transport = SelectDbEngine( "DAO" );
-    cDatabase       connection = transport.NewConnection( DAO_Dirdata_Conn );
+    cDbEngine       engine = SelectDbEngine( "ADO" );
+    cDatabase       database = engine.NewConnection( ADO_Dirdata_Conn );
 */
+    cDbEngine       engine = SelectDbEngine( "DAO" );
+    cDatabase       database = engine.NewConnection( DAO_Dirdata_Conn );
+
     tblFiles_ptr    result( new tblFiles() );
 
-    result->Open( connection, 0 );
+    result->Open( database, 0 );
 
     return ( result );
 }
@@ -110,7 +110,7 @@ tblFiles_ptr GetTblFiles()
 //***********************************************************************
 //******    WhileLoop
 //***********************************************************************
-void FASTCALL WhileLoop( cRecordIterator ptr )
+void FASTCALL WhileLoop( cTable::iterator ptr )
 {
     while ( ! ptr.eof() )
         ++ptr;
@@ -118,7 +118,7 @@ void FASTCALL WhileLoop( cRecordIterator ptr )
 //***********************************************************************
 //******    ForLoop
 //***********************************************************************
-void FASTCALL ForLoop( cRecordIterator ptr )
+void FASTCALL ForLoop( cTable::iterator ptr )
 {
     for ( int n = 0, end = ptr.RecordCount() ; n < end ; ++n )
         ++ptr;
@@ -176,13 +176,13 @@ int AdjusentCount( cIndex::iterator ptr1 )
     return result;
 }
 
-int FASTCALL Check_Order_g1( cRecordIterator ptr1 )
+int FASTCALL Check_Order_g1( cIndex::iterator ptr1 )
 {
     int     result = 0;
 
     ptr1.First();
 
-    cRecordIterator     ptr2 = ptr1;
+    cIndex::iterator    ptr2 = ptr1;
 
     ptr2.Next();
     while ( ! ptr2.eof() )
@@ -195,24 +195,24 @@ int FASTCALL Check_Order_g1( cRecordIterator ptr1 )
     return ( result );
 }
 
-cIndex_ptr FASTCALL CreateIndex_g2( tblFiles_ptr uds )
+tblFiles::index_ptr FASTCALL CreateIndex_g2( tblFiles_ptr uds )
 {
     return ( uds->NewIndex( OpenIndexFields( cIndexField( "PathID" ), cIndexField( "fSize" ) ) ) );
 }
 
 cIndex_ptr FASTCALL CreateIndex_g22( tblFiles_ptr uds )
 {
-    return ( uds->NewIndex( cIndexSortCompareStd_ptr( new cIndexSortCompareStd(
+    return ( uds->NewIndex( cIndexSortCompareStd_ptr( new detail::cIndexSortCompareStd(
         OpenIndexFields( cIndexField( "PathID" ), cIndexField( "fSize" ) ) ) ) ) );
 }
 
-int FASTCALL Check_Order_g2( cRecordIterator ptr1 )
+int FASTCALL Check_Order_g2( cIndex::iterator ptr1 )
 {
     int     result = 0;
 
     ptr1.First();
 
-    cRecordIterator     ptr2 = ptr1;
+    cIndex::iterator    ptr2 = ptr1;
 
     ptr2.Next();
 
@@ -252,13 +252,15 @@ tblFiles::index_ptr FASTCALL CreateIndex_f1( tblFiles_ptr uds )
     return ( uds->NewIndex( cSortCompareBase_ptr( new idx_ByPathID() ) ) );
 }
 
-int FASTCALL Check_Order_f1( tblFiles::iterator ptr1 )
+int FASTCALL Check_Order_f1( tblFiles::index::iterator ptr1 )
 {
     int     result = 0;
 
     ptr1.First();
+    if ( ptr1.eof() )
+        return result;
 
-    tblFiles::iterator      ptr2 = ptr1;
+    tblFiles::index::iterator      ptr2 = ptr1;
 
     ptr2.Next();
     while ( ! ptr2.eof() )
@@ -318,6 +320,7 @@ void FASTCALL AddRecords( tblFiles_ptr ds )
         new_record->SetFileID( n );
         new_record->SetPathID( n );
         new_record->SetfSize( n );
+        new_record->SetDescription( "record description" );
         ds->AddRecord( new_record );
     }
 }
@@ -417,6 +420,7 @@ void Test( tblFiles_ptr ds )
     if ( unorder_count != 0 )
         foo();
 
+/*
     tblFiles::index::range_iterator     riter = files_idx->GetRangeIterator( cRangeValues( 54, 56 ) );
 
     int     n = 0;
@@ -427,6 +431,7 @@ void Test( tblFiles_ptr ds )
         ++riter;
     }
     foo ( n );
+*/
 
     cIndex_ptr  idx;
 
@@ -465,12 +470,5 @@ void Test( tblFiles_ptr ds )
     cTableWriter::SetTableData( ds, packet );
 }
 
-//void Test( tblLocation_ptr ds )
-//{
-//}
-//
-//void Test( const ds::cTable& ds )
-//{
-//}
 //---------------------------------------------------------------------------
 

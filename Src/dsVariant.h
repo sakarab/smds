@@ -102,8 +102,8 @@ class Variant
 private:
     friend class cVariantStreamBuffer;
 
-    cVariantType    mVariantType;
-    detail::varTag  mData;
+    cVariantType        mVariantType;
+    detail::varTag      mData;
     void FASTCALL ConstructByType( const Variant& src );             // the source type
     void FASTCALL DestructByType();                                  // "this" type
     long FASTCALL ToLongType() const;

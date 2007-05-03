@@ -54,13 +54,40 @@ void __fastcall TfrmMain::lvListData(TObject *Sender, TListItem *Item)
 
     ds.GotoMark( reinterpret_cast<void *>(Item->Index) );
 
-    Item->Caption = IntToStr( ds->GetFileID() );
-    Item->SubItems->Add( IntToStr( ds->GetPathID() ) );
-    Item->SubItems->Add( ds->GetLongFileName().c_str() );
-    Item->SubItems->Add( IntToStr( ds->GetfSize() ) );
-    Item->SubItems->Add( DateTimeToStr( ds->GetfDate().AsDouble() ) );
-    Item->SubItems->Add( ds->GetDescription().c_str() );
-    Item->SubItems->Add( IntToStr( ds->GetzipID() ) );
+    if ( ds->FileID_IsNull() )
+        Item->Caption = "";
+    else
+        Item->Caption = IntToStr( ds->GetFileID() );
+
+    if ( ds->PathID_IsNull() )
+        Item->SubItems->Add( "" );
+    else
+        Item->SubItems->Add( IntToStr( ds->GetPathID() ) );
+
+    if ( ds->LongFileName_IsNull() )
+        Item->SubItems->Add( "" );
+    else
+        Item->SubItems->Add( ds->GetLongFileName().c_str() );
+
+    if ( ds->fSize_IsNull() )
+        Item->SubItems->Add( "" );
+    else
+        Item->SubItems->Add( IntToStr( ds->GetfSize() ) );
+
+    if ( ds->fDate_IsNull() )
+        Item->SubItems->Add( "" );
+    else
+        Item->SubItems->Add( DateTimeToStr( ds->GetfDate().AsDouble() ) );
+
+    if ( ds->Description_IsNull() )
+        Item->SubItems->Add( "" );
+    else
+        Item->SubItems->Add( ds->GetDescription().c_str() );
+
+    if ( ds->zipID_IsNull() )
+        Item->SubItems->Add( "" );
+    else
+        Item->SubItems->Add( IntToStr( ds->GetzipID() ) );
 }
 //---------------------------------------------------------------------------
 

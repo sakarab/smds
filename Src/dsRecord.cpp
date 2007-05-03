@@ -29,9 +29,13 @@
 namespace smds
 {
 
+namespace detail
+{
+
 //***********************************************************************
 //******    cRawRecordPtr
 //***********************************************************************
+/*
 bool FASTCALL cRawRecordPtr::ReadBool( const cFieldDef& field_def ) const               { return ( mRawBuffer->ReadBool( field_def ) ); }
 char FASTCALL cRawRecordPtr::ReadChar( const cFieldDef& field_def ) const               { return ( mRawBuffer->ReadChar( field_def ) ); }
 wchar_t FASTCALL cRawRecordPtr::ReadWChar( const cFieldDef& field_def ) const           { return ( mRawBuffer->ReadWChar( field_def ) ); }
@@ -52,6 +56,7 @@ void FASTCALL cRawRecordPtr::WriteFloat( const cFieldDef& field_def, double valu
 void FASTCALL cRawRecordPtr::WriteDate( const cFieldDef& field_def, const cDateTime& value )    { mRawBuffer->WriteDate( field_def, value ); }
 void FASTCALL cRawRecordPtr::WriteString( const cFieldDef& field_def, const ds_string& value )  { mRawBuffer->WriteString( field_def, value ); }
 void FASTCALL cRawRecordPtr::WriteString( const cFieldDef& field_def, const char *value )       { mRawBuffer->WriteString( field_def, value ); }
+*/
 
 bool FASTCALL cRawRecordPtr::ReadBool( const cFieldDef_& field_def ) const               { return ( mRawBuffer->ReadBool( field_def ) ); }
 char FASTCALL cRawRecordPtr::ReadChar( const cFieldDef_& field_def ) const               { return ( mRawBuffer->ReadChar( field_def ) ); }
@@ -81,6 +86,7 @@ bool FASTCALL cRecordPtr::IsNull( const cFieldDef& field_def ) const            
 bool FASTCALL cRecordPtr::IsNull( const cFieldDef_& field_def ) const           { return ( mBuffer->IsNull( field_def ) ); }
 void FASTCALL cRecordPtr::Nullify( const cFieldDef& field_def )                 { mBuffer->Nullify( field_def ); }
 
+/*
 bool FASTCALL cRecordPtr::ReadBool( const cFieldDef& field_def ) const          { return ( mBuffer->ReadBool( field_def ) ); }
 char FASTCALL cRecordPtr::ReadChar( const cFieldDef& field_def ) const          { return ( mBuffer->ReadChar( field_def ) ); }
 wchar_t FASTCALL cRecordPtr::ReadWChar( const cFieldDef& field_def ) const      { return ( mBuffer->ReadWChar( field_def ) ); }
@@ -101,6 +107,7 @@ void FASTCALL cRecordPtr::WriteFloat( const cFieldDef& field_def, double value )
 void FASTCALL cRecordPtr::WriteDate( const cFieldDef& field_def, const cDateTime& value )   { mBuffer->WriteDate( field_def, value ); }
 void FASTCALL cRecordPtr::WriteString( const cFieldDef& field_def, const ds_string& value ) { mBuffer->WriteString( field_def, value ); }
 void FASTCALL cRecordPtr::WriteString( const cFieldDef& field_def, const char *value )      { mBuffer->WriteString( field_def, value ); }
+*/
 
 bool FASTCALL cRecordPtr::ReadBool( const cFieldDef_& field_def ) const          { return ( mBuffer->ReadBool( field_def ) ); }
 char FASTCALL cRecordPtr::ReadChar( const cFieldDef_& field_def ) const          { return ( mBuffer->ReadChar( field_def ) ); }
@@ -123,15 +130,17 @@ void FASTCALL cRecordPtr::WriteDate( const cFieldDef_& field_def, const cDateTim
 void FASTCALL cRecordPtr::WriteString( const cFieldDef_& field_def, const ds_string& value ) { mBuffer->WriteString( field_def, value ); }
 void FASTCALL cRecordPtr::WriteString( const cFieldDef_& field_def, const char *value )      { mBuffer->WriteString( field_def, value ); }
 
+}; // namespace detail
+
 //***********************************************************************
 //******    cRecordIterator
 //***********************************************************************
-CDFASTCALL cRecordIterator::cRecordIterator( cData_ptr& container )
+CDFASTCALL cRecordIterator::cRecordIterator( detail::cData_ptr& container )
     : mIdx(0), mContainer(container)
 {
 }
 
-CDFASTCALL cRecordIterator::cRecordIterator( cData_ptr& container, cData::size_type idx )
+CDFASTCALL cRecordIterator::cRecordIterator( detail::cData_ptr& container, detail::cData::size_type idx )
     : mIdx(idx), mContainer(container)
 {
 }
@@ -155,7 +164,7 @@ cRecordIterator& FASTCALL cRecordIterator::operator = ( const cRecordIterator& s
     return ( *this );
 }
 
-cDoubleBuffer * FASTCALL cRecordIterator::GetDoubleBuffer() const
+detail::cDoubleBuffer * FASTCALL cRecordIterator::GetDoubleBuffer() const
 {
     return ( (*mContainer)[mIdx].get() );
 }
@@ -170,11 +179,20 @@ detail::cFieldProxy FASTCALL cRecordIterator::FieldByName( const char *field_nam
     return ( FieldByName( ds_string( field_name ) ) );
 }
 
+namespace detail
+{
+
 //***********************************************************************
 //******    cRangeIterator
 //***********************************************************************
+/*
 CDFASTCALL cRangeIterator::cRangeIterator( cData_ptr& container, cData::size_type start, cData::size_type end )
     : cRecordIterator(container,start), mStart(start), mEnd(end)
+{
+}
+
+CDFASTCALL cRangeIterator::cRangeIterator( cData_ptr& container, cData::size_type start, cData::size_type end, cData::size_type idx )
+    : cRecordIterator(container,idx), mStart(start), mEnd(end)
 {
 }
 
@@ -182,11 +200,14 @@ CDFASTCALL cRangeIterator::cRangeIterator( const cRangeIterator& src )
     : cRecordIterator(src), mStart(src.mStart), mEnd(src.mEnd)
 {
 }
+*/
+
+}; // namespace detail
 
 //***********************************************************************
 //******    cRecord
 //***********************************************************************
-CDFASTCALL cRecord::cRecord( const cData::value_type& container, const cFieldDefs_ptr& field_defs )
+CDFASTCALL cRecord::cRecord( const detail::cData::value_type& container, const cFieldDefs_ptr& field_defs )
     : mRecord(container), mFieldDefs(field_defs)
 {
 }
@@ -275,8 +296,8 @@ void FASTCALL cFieldProxyRecordHelper::AsString( const ds_string& value )
     AsVariant( Variant( value ) );
 }
 
-};
+}; // namespace detail
 
-};
+}; // namespace smds
 //---------------------------------------------------------------------------
 

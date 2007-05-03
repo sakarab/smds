@@ -28,7 +28,7 @@
 #include <Provider.hpp>
 #include "uTables.h"
 //---------------------------------------------------------------------------
-void __fastcall FillList( TListView *lv, const smds::cFieldDefs_& field_defs, tblFiles_ptr dataset );
+void __fastcall FillList( TListView *lv, const smds::detail::cFieldDefs_& field_defs, tblFiles_ptr dataset );
 void __fastcall DoFetch( TADOQuery *ADOQuery, TDataSetProvider* Provider, TClientDataSet *ClientDataSet );
 //---------------------------------------------------------------------------
 #endif
