@@ -32,8 +32,8 @@
 namespace smds
 {
 
-class cIndex;
-class cTablebase;
+class Index;
+class Tablebase;
 
 namespace detail
 {
@@ -50,8 +50,8 @@ class cSortCompareBase
 #endif
 {
 private:
-    friend class cTablebase;
-    friend class cIndex;
+    friend class Tablebase;
+    friend class Index;
     friend class cData;
     // non copyable
     CDFASTCALL cSortCompareBase( const cSortCompareBase& src );
@@ -172,8 +172,8 @@ class cFilterCompareBase
 #endif
 {
 private:
-    friend class cTablebase;
-    friend class cIndex;
+    friend class Tablebase;
+    friend class Index;
     // non copyable
     CDFASTCALL cFilterCompareBase( const cFilterCompareBase& src );
     cFilterCompareBase& FASTCALL operator=( const cFilterCompareBase& src );

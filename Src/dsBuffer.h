@@ -38,7 +38,7 @@
 namespace smds
 {
 
-class cTable;
+class Table;
 class cTableReader;
 
 enum cUpdateStatus { usUnmodified, usInserted, usModified, usDeleted };
@@ -59,7 +59,7 @@ public:
 private:
     typedef unsigned char   quantum;
 
-    friend class cTable;
+    friend class Table;
     friend class cDoubleBuffer;
     friend class cTableReader;
 
@@ -709,6 +709,16 @@ public:
 };
 
 //***********************************************************************
+//******    IDataNotify
+//***********************************************************************
+class IDataNotify
+{
+public:
+    virtual void FASTCALL RecordAdded() = 0;
+    virtual void FASTCALL RecordDeleted() = 0;
+};
+
+//***********************************************************************
 //******    cData
 //***********************************************************************
 class cData;
@@ -730,7 +740,6 @@ public:
     typedef std::pair<bool,size_type>                           locate_result;
     typedef std::pair<bool,std::pair<size_type,size_type> >     range_result;
 private:
-    /* TODO -oSam : Change name to "mData" */
     container               mData;
     cFieldDefs_ptr          mFieldDefs;
 

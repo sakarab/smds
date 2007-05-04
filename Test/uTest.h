@@ -29,7 +29,7 @@
 tblFiles_ptr GetTblFiles();
 void Test( tblFiles_ptr ds );
 void Test( tblLocation_ptr ds );
-void Test( const smds::cTable& ds );
+void Test( const smds::Table& ds );
 int DoDsDataTest();
 //---------------------------------------------------------------------------
 #endif

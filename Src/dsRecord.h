@@ -29,9 +29,9 @@
 namespace smds
 {
 
-class cTablebase;
-class cTable;
-class cIndex;
+class Tablebase;
+class Table;
+class Index;
 class cTableReader;
 template <class RECORD> class cuTable;
 template <class RECORD> class cuIndex;
@@ -265,9 +265,9 @@ class cRecordIterator
 {
 private:
     friend class cTableReader;
-    friend class cTablebase;
-    friend class cTable;
-    friend class cIndex;
+    friend class Tablebase;
+    friend class Table;
+    friend class Index;
 
     cData::size_type    mIdx;
     cData_ptr           mContainer;
@@ -366,8 +366,8 @@ public:
 class cRangeIterator : private cRecordIterator
 {
 private:
-    friend class cIndex;
-    friend class cTablebase;
+    friend class Index;
+    friend class Tablebase;
 
     cData::size_type    mStart;
     cData::size_type    mEnd;
@@ -450,7 +450,7 @@ public:
 class cRecord
 {
 private:
-    friend class cTablebase;
+    friend class Tablebase;
     friend class cTableWriter;
 
     detail::cData::value_type   mRecord;

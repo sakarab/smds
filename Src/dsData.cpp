@@ -31,40 +31,33 @@ namespace smds
 {
 
 //***********************************************************************
-//******    cTablebase
+//******    Tablebase
 //***********************************************************************
-CDFASTCALL cTablebase::cTablebase()
+CDFASTCALL Tablebase::Tablebase()
     : mData( new detail::cData() )
 {
 }
 
-CDFASTCALL cTablebase::cTablebase( const detail::cFieldDefs_& field_defs )
+CDFASTCALL Tablebase::Tablebase( const detail::cFieldDefs_& field_defs )
     : mData( new detail::cData( field_defs ) )
 {
 }
 
-CDFASTCALL cTablebase::~cTablebase()
+CDFASTCALL Tablebase::~Tablebase()
 {
 }
 
-cRecord FASTCALL cTablebase::NewRecord()
+cRecord FASTCALL Tablebase::NewRecord()
 {
     return ( cRecord( mData->NewBuffer_usInserted(), mData->GetFieldDefs() ) );
 }
 
-void FASTCALL cTablebase::ConstructIndex( cSortCompareBase_ptr& cmp_func, const detail::cData_ptr& data )
-{
-    SetData( data->Clone_All() );
-    cmp_func->Initialize( GetData()->GetFieldDefs() );
-    GetData()->Sort( detail::SortControler( cmp_func ) );
-}
-
-cTablebase::iterator FASTCALL cTablebase::AddRecord( const cRecord& record )
+Tablebase::iterator FASTCALL Tablebase::AddRecord( const cRecord& record )
 {
     return ( iterator( mData, AddBuffer_ptr( record ) ) );
 }
 
-cTablebase::iterator FASTCALL cTablebase::Locate( const OpenValues& values, const OpenFindFields& fields )
+Tablebase::iterator FASTCALL Tablebase::Locate( const OpenValues& values, const OpenFindFields& fields )
 {
     detail::cData::locate_result    result;
 
@@ -72,18 +65,18 @@ cTablebase::iterator FASTCALL cTablebase::Locate( const OpenValues& values, cons
     return ( iterator( mData, result.second ) );
 }
 
-cTablebase::iterator FASTCALL cTablebase::Locate( const Variant& value, const cFindField& field )
+Tablebase::iterator FASTCALL Tablebase::Locate( const Variant& value, const cFindField& field )
 {
     return ( Locate( OpenValues( value ), OpenFindFields( field ) ) );
 }
 
 /*
-bool FASTCALL cTablebase::Locate( const Variant& value, const cFindField& field, range_iterator& iter )
+bool FASTCALL Tablebase::Locate( const Variant& value, const cFindField& field, range_iterator& iter )
 {
     return ( Locate( OpenValues( value ), OpenFindFields( field ), iter ) );
 }
 
-bool FASTCALL cTablebase::Locate( const OpenValues& values, const OpenFindFields& fields, range_iterator& iter )
+bool FASTCALL Tablebase::Locate( const OpenValues& values, const OpenFindFields& fields, range_iterator& iter )
 {
 #ifdef SM_DS_DEBUG
     if ( mData != iter.mContainer )
@@ -101,33 +94,33 @@ bool FASTCALL cTablebase::Locate( const OpenValues& values, const OpenFindFields
 */
 
 //***********************************************************************
-//******    cTable
+//******    Table
 //***********************************************************************
-CDFASTCALL cTable::cTable( const detail::cFieldDefs_& field_defs )
-    : cTablebase( field_defs ), mSql(field_defs.mSql), mTableName(field_defs.mTableName)
+CDFASTCALL Table::Table( const detail::cFieldDefs_& field_defs )
+    : Tablebase( field_defs ), mSql(field_defs.mSql), mTableName(field_defs.mTableName)
 {
 }
 
-CDFASTCALL cTable::cTable()
-    : cTablebase(), mSql(), mTableName()
+CDFASTCALL Table::Table()
+    : Tablebase(), mSql(), mTableName()
 {
 }
 
-CDFASTCALL cTable::cTable( const ds_string& table_name )
-    : cTablebase(), mSql(), mTableName(table_name)
+CDFASTCALL Table::Table( const ds_string& table_name )
+    : Tablebase(), mSql(), mTableName(table_name)
 {
 }
 
-CDFASTCALL cTable::cTable( const char * table_name )
-    : cTablebase(), mSql(), mTableName(table_name)
+CDFASTCALL Table::Table( const char * table_name )
+    : Tablebase(), mSql(), mTableName(table_name)
 {
 }
 
-CDFASTCALL cTable::~cTable()
+CDFASTCALL Table::~Table()
 {
 }
 
-ds_string FASTCALL cTable::ConstructSelectFromFields( const char *where_clause )
+ds_string FASTCALL Table::ConstructSelectFromFields( const char *where_clause )
 {
     std::ostringstream      qstr;
     const cFieldDefs_ptr&   field_defs = GetData()->GetFieldDefs();
@@ -152,7 +145,7 @@ ds_string FASTCALL cTable::ConstructSelectFromFields( const char *where_clause )
     return ( ds_string( qstr.str().c_str() ) );
 }
 
-ds_string FASTCALL cTable::ConstructSelectFromSql( const char *where_clause )
+ds_string FASTCALL Table::ConstructSelectFromSql( const char *where_clause )
 {
     std::ostringstream      qstr;
 
@@ -163,7 +156,7 @@ ds_string FASTCALL cTable::ConstructSelectFromSql( const char *where_clause )
     return ( ds_string( qstr.str().c_str() ) );
 }
 
-ds_string FASTCALL cTable::ConstructSelect( const char *where_clause )
+ds_string FASTCALL Table::ConstructSelect( const char *where_clause )
 {
     if ( mSql.empty() )
         return ( ConstructSelectFromFields( where_clause ) );
@@ -171,61 +164,47 @@ ds_string FASTCALL cTable::ConstructSelect( const char *where_clause )
         return ( ConstructSelectFromSql( where_clause ) );
 }
 
-detail::cData::value_type FASTCALL cTable::NewBuffer_usUnmodified()
+detail::cData::value_type FASTCALL Table::NewBuffer_usUnmodified()
 {
     return ( GetData()->NewBuffer_usUnmodified() );
 }
 
-detail::cData::value_type FASTCALL cTable::NewBuffer_usInserted()
+detail::cData::value_type FASTCALL Table::NewBuffer_usInserted()
 {
     return ( GetData()->NewBuffer_usInserted() );
 }
 
-cIndex * FASTCALL cTable::ConstructIndex( cIndex *index, const cSortCompareBase_ptr& cmp_func )
+cIndexSortCompareStd_ptr FASTCALL Table::CreateCmp( const cIndexField& index_field )
 {
-    std::auto_ptr<cIndex>   idx( index );
-
-    index->Construct( cmp_func, GetData() );
-    return ( idx.release() );
+    return cIndexSortCompareStd_ptr( new detail::cIndexSortCompareStd( index_field ) );
 }
 
-cIndex * FASTCALL cTable::ConstructIndex( cIndex *index, const cIndexField& index_field )
+cIndexSortCompareStd_ptr FASTCALL Table::CreateCmp( const OpenIndexFields& index_fields )
 {
-    std::auto_ptr<cIndex>   idx( index );
-
-    index->Construct( cIndexSortCompareStd_ptr( new detail::cIndexSortCompareStd( index_field ) ), GetData() );
-    return ( idx.release() );
+    return cIndexSortCompareStd_ptr( new detail::cIndexSortCompareStd( index_fields ) );
 }
 
-cIndex * FASTCALL cTable::ConstructIndex( cIndex *index, const OpenIndexFields& index_fields )
+cIndex_ptr FASTCALL Table::NewIndex( const cIndexField& index_field )
 {
-    std::auto_ptr<cIndex>   idx( index );
-
-    index->Construct( cIndexSortCompareStd_ptr( new detail::cIndexSortCompareStd( index_fields ) ), GetData() );
-    return ( idx.release() );
+    return cIndex_ptr( new Index( CreateCmp( index_field ), GetData() ) );
 }
 
-cIndex_ptr FASTCALL cTable::NewIndex( const cIndexField& index_field )
+cIndex_ptr FASTCALL Table::NewIndex( const OpenIndexFields& index_fields )
 {
-    return ( cIndex_ptr( ConstructIndex( new cIndex(), index_field ) ) );
+    return cIndex_ptr( new Index( CreateCmp( index_fields ), GetData() ) );
 }
 
-cIndex_ptr FASTCALL cTable::NewIndex( const OpenIndexFields& index_fields )
+cIndex_ptr FASTCALL Table::NewIndex( const cIndexSortCompareStd_ptr& cmp_func )
 {
-    return ( cIndex_ptr( ConstructIndex( new cIndex(), index_fields ) ) );
+    return cIndex_ptr( new Index( cmp_func, GetData() ) );
 }
 
-cIndex_ptr FASTCALL cTable::NewIndex( const cIndexSortCompareStd_ptr& cmp_func )
-{
-    return ( cIndex_ptr( ConstructIndex( new cIndex(), cmp_func ) ) );
-}
-
-void FASTCALL cTable::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size )
+void FASTCALL Table::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size )
 {
     GetData()->AddField( name, kind, data_type, size );
 }
 
-void FASTCALL cTable::AddField( const char *name, cFieldKind kind, cFieldDataType data_type, unsigned short size )
+void FASTCALL Table::AddField( const char *name, cFieldKind kind, cFieldDataType data_type, unsigned short size )
 {
     AddField( ds_string( name ), kind, data_type, size );
 }
@@ -236,8 +215,8 @@ namespace
 class cFieldValuesAcceptor : public IFieldValuesAcceptor
 {
 private:
-    detail::cRawBuffer&         mRawBuffer;
-    const cFieldDefs&   mFieldDefs;
+    detail::cRawBuffer&     mRawBuffer;
+    const cFieldDefs&       mFieldDefs;
     // non copyable
     CDFASTCALL cFieldValuesAcceptor( const cFieldValuesAcceptor& src );
     cFieldValuesAcceptor& FASTCALL operator = ( const cFieldValuesAcceptor& src );
@@ -305,7 +284,7 @@ public:
 
 }; // namespace
 
-void FASTCALL cTable::Open( const cDatabase& database, const char *where_clause )
+void FASTCALL Table::Open( const cDatabase& database, const char *where_clause )
 {
     ds_string   sql( ConstructSelect( where_clause ) );
 
@@ -346,7 +325,7 @@ void FASTCALL cTable::Open( const cDatabase& database, const char *where_clause 
     provider->CloseSql();
 }
 
-void FASTCALL cTable::Close()
+void FASTCALL Table::Close()
 {
     detail::cData_ptr   tmp( new detail::cData() );
 
@@ -354,24 +333,21 @@ void FASTCALL cTable::Close()
 }
 
 //***********************************************************************
-//******    cIndex
+//******    Index
 //***********************************************************************
-CDFASTCALL cIndex::cIndex()
-    : cTablebase(), mCompare()
+CDFASTCALL Index::Index( const cSortCompareBase_ptr& cmp_func, const detail::cData_ptr& data )
+    : Tablebase(), mCompare(cmp_func)
+{
+    SetData( data->Clone_All() );
+    cmp_func->Initialize( GetData()->GetFieldDefs() );
+    GetData()->Sort( detail::SortControler( mCompare ) );
+}
+
+CDFASTCALL Index::~Index()
 {
 }
 
-CDFASTCALL cIndex::~cIndex()
-{
-}
-
-void FASTCALL cIndex::Construct( const cSortCompareBase_ptr& cmp_func, const detail::cData_ptr& data )
-{
-    mCompare = cmp_func;
-    ConstructIndex( mCompare, data );
-}
-
-cIndex::iterator FASTCALL cIndex::Find( const OpenValues& values )
+Index::iterator FASTCALL Index::Find( const OpenValues& values )
 {
     detail::cData::locate_result    result;
 
@@ -379,17 +355,17 @@ cIndex::iterator FASTCALL cIndex::Find( const OpenValues& values )
     return iterator( GetData(), result.second );
 }
 
-cIndex::iterator FASTCALL cIndex::Find( const Variant& value )
+Index::iterator FASTCALL Index::Find( const Variant& value )
 {
     return( Find( OpenValues( value ) ) );
 }
 
-bool FASTCALL cIndex::Find( const Variant& value, iterator& iter )
+bool FASTCALL Index::Find( const Variant& value, iterator& iter )
 {
     return ( Find( OpenValues( value ), iter ) );
 }
 
-bool FASTCALL cIndex::Find( const OpenValues& values, iterator& iter )
+bool FASTCALL Index::Find( const OpenValues& values, iterator& iter )
 {
 #ifdef SM_DS_DEBUG
     if ( mData != iter.mContainer )
@@ -403,12 +379,12 @@ bool FASTCALL cIndex::Find( const OpenValues& values, iterator& iter )
     return result.first;
 }
 
-bool FASTCALL cIndex::Find( const Variant& value, range_iterator& iter )
+bool FASTCALL Index::Find( const Variant& value, range_iterator& iter )
 {
     return ( Find( OpenValues( value ), iter ) );
 }
 
-bool FASTCALL cIndex::Find( const OpenValues& values, range_iterator& iter )
+bool FASTCALL Index::Find( const OpenValues& values, range_iterator& iter )
 {
 #ifdef SM_DS_DEBUG
     if ( mData != iter.mContainer )
@@ -425,16 +401,16 @@ bool FASTCALL cIndex::Find( const OpenValues& values, range_iterator& iter )
 }
 
 /*
-cIndex FASTCALL cIndex::GetRange( const cRangeValues& values )
+Index FASTCALL Index::GetRange( const cRangeValues& values )
 {
-    return cIndex();
+    return Index();
     // return ( GetRangeIterator( OpenRangeValues( values ) ) );
 }
 */
 
-//cIndex FASTCALL cIndex::GetRange( const OpenRangeValues& values )
+//Index FASTCALL Index::GetRange( const OpenRangeValues& values )
 //{
-//    return cIndex();
+//    return Index();
 /*
     cData::range_result     result;
 
@@ -495,7 +471,7 @@ void FASTCALL cTableReader::ReadFieldValue( cStream& st, const detail::cRawBuffe
     }
 }
 
-Variant FASTCALL cTableReader::GetTablePacket( cTable& table )
+Variant FASTCALL cTableReader::GetTablePacket( Table& table )
 {
     Variant         result( Variant::VarBlobCreate() );
     cVariantStream  st( result );
@@ -558,7 +534,7 @@ void FASTCALL cTableWriter::Check( cStream& st )
     CheckVersion( st );
 }
 
-void FASTCALL cTableWriter::ReadFieldDefs( cStream& st, cTable& table, bool is_typed )
+void FASTCALL cTableWriter::ReadFieldDefs( cStream& st, Table& table, bool is_typed )
 {
     Check( st );
 
@@ -597,7 +573,7 @@ void FASTCALL cTableWriter::ReadFieldDefs( cStream& st, cTable& table, bool is_t
 
 cTable_ptr FASTCALL cTableWriter::CreateTemporaryTable()
 {
-    return ( cTable_ptr( new cTable( "__TMP__" ) ) );
+    return ( cTable_ptr( new Table( "__TMP__" ) ) );
 }
 
 void FASTCALL cTableWriter::ReadFieldValue( cStream& st, detail::cRawBuffer& rb, const cFieldDef& field )
@@ -688,7 +664,7 @@ void FASTCALL cTableWriter::ReadFieldValue( cStream& st, detail::cRawBuffer& rb,
     }
 }
 
-void FASTCALL cTableWriter::ReadData( cStream& st, cTable& tmp )
+void FASTCALL cTableWriter::ReadData( cStream& st, Table& tmp )
 {
     cFieldDefs_ptr      field_defs( tmp.GetFieldDefs() );
     int                 record_count;
@@ -715,19 +691,19 @@ void FASTCALL cTableWriter::ReadData( cStream& st, cTable& tmp )
     }
 }
 
-void FASTCALL cTableWriter::ReadDataAssign( cStream& st, cTable& tmp, cTable& table )
+void FASTCALL cTableWriter::ReadDataAssign( cStream& st, Table& tmp, Table& table )
 {
     ReadData( st, tmp );
     table.SetData( tmp.GetData() );
 }
 
-//void FASTCALL cTableWriter::CheckFieldDefsEqual( cTable& tmp, cTable& table )
+//void FASTCALL cTableWriter::CheckFieldDefsEqual( Table& tmp, Table& table )
 //{
 //    if ( ! tmp.GetFieldDefs()->equal( *table.GetFieldDefs() ) )
 //        throw ePacketError();
 //}
 
-void FASTCALL cTableWriter::ReadTheRest( cTable& tmp, cTable& table, Variant& variant, bool is_typed )
+void FASTCALL cTableWriter::ReadTheRest( Table& tmp, Table& table, Variant& variant, bool is_typed )
 {
     cVariantStream  st( variant );
 
@@ -735,7 +711,7 @@ void FASTCALL cTableWriter::ReadTheRest( cTable& tmp, cTable& table, Variant& va
     ReadDataAssign( st, tmp, table );
 }
 
-void FASTCALL cTableWriter::SetTableData( cTable& table, Variant& variant )
+void FASTCALL cTableWriter::SetTableData( Table& table, Variant& variant )
 {
     cTable_ptr      tmp = CreateTemporaryTable();
 

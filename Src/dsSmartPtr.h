@@ -38,9 +38,9 @@ template <class T> class shared_ptr : public boost::shared_in_ptr<T>
 private:
     typedef boost::shared_in_ptr<T>    inherited;
 public:
-    shared_ptr() : inherited()                                                  {}
-    explicit shared_ptr( T *obj ) : inherited( obj )                            {}
-    template<class Y> shared_ptr( const shared_ptr<Y>& r) : inherited( r )      {}
+    shared_ptr() : inherited()                                                  {} // empty
+    explicit shared_ptr( T *obj ) : inherited( obj )                            {} // empty
+    template<class Y> shared_ptr( const shared_ptr<Y>& r) : inherited( r )      {} // empty
 };
 
 };
@@ -73,9 +73,9 @@ template <class T> class shared_ptr : public boost::shared_ptr<T>
 private:
     typedef boost::shared_ptr<T>    inherited;
 public:
-    shared_ptr() : inherited()                                                  {}
-    explicit shared_ptr( T *obj ) : inherited( obj )                            {}
-    template<class Y> shared_ptr(shared_ptr<Y> const & r) : inherited( r )      {}
+    shared_ptr() : inherited()                                                  {} // empty
+    explicit shared_ptr( T *obj ) : inherited( obj )                            {} // empty
+    template<class Y> shared_ptr(shared_ptr<Y> const & r) : inherited( r )      {} // empty
 };
 
 };
@@ -114,9 +114,9 @@ private:
     typedef Loki::SmartPtr< T, Loki::RefCounted, Loki::DisallowConversion,
                             Loki::NoCheck, Loki::DefaultSPStorage >             inherited;
 public:
-    shared_ptr() : inherited()                                                  {}
-    explicit shared_ptr( T *obj ) : inherited( obj )                                     {}
-    template<class Y> shared_ptr(shared_ptr<Y> const & r) : inherited( r )      {}
+    shared_ptr() : inherited()                                                  {} // empty
+    explicit shared_ptr( T *obj ) : inherited( obj )                            {} // empty
+    template<class Y> shared_ptr(shared_ptr<Y> const & r) : inherited( r )      {} // empty
     T * get() const                                                             { return ( GetImpl( *this ) ); }
     //void reset( T *p )                                                          { inherited::Reset( inherited( p ) ) ); }
 };

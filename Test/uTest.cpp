@@ -154,7 +154,7 @@ cIndex_ptr FASTCALL CreateIndex_g1( cTable_ptr uds )
     return ( uds->NewIndex( cIndexField( "PathID", cIndexField::Descending ) ) );
 }
 
-int AdjusentCount( cIndex::iterator ptr1 )
+int AdjusentCount( Index::iterator ptr1 )
 {
     int     result = 0;
 
@@ -163,7 +163,7 @@ int AdjusentCount( cIndex::iterator ptr1 )
 
     ptr1.First();
 
-    cIndex::iterator    ptr2 = ptr1;
+    Index::iterator    ptr2 = ptr1;
 
     ptr2.Next();
     while ( ! ptr2.eof() )
@@ -176,13 +176,13 @@ int AdjusentCount( cIndex::iterator ptr1 )
     return result;
 }
 
-int FASTCALL Check_Order_g1( cIndex::iterator ptr1 )
+int FASTCALL Check_Order_g1( Index::iterator ptr1 )
 {
     int     result = 0;
 
     ptr1.First();
 
-    cIndex::iterator    ptr2 = ptr1;
+    Index::iterator    ptr2 = ptr1;
 
     ptr2.Next();
     while ( ! ptr2.eof() )
@@ -206,13 +206,13 @@ cIndex_ptr FASTCALL CreateIndex_g22( tblFiles_ptr uds )
         OpenIndexFields( cIndexField( "PathID" ), cIndexField( "fSize" ) ) ) ) ) );
 }
 
-int FASTCALL Check_Order_g2( cIndex::iterator ptr1 )
+int FASTCALL Check_Order_g2( Index::iterator ptr1 )
 {
     int     result = 0;
 
     ptr1.First();
 
-    cIndex::iterator    ptr2 = ptr1;
+    Index::iterator    ptr2 = ptr1;
 
     ptr2.Next();
 
@@ -337,7 +337,7 @@ void FASTCALL LocateRecord( tblFiles_ptr ds )
 //***********************************************************************
 //******    FindRecord
 //***********************************************************************
-cIndex::iterator FASTCALL FindRecord_g2( cIndex_ptr idx )
+Index::iterator FASTCALL FindRecord_g2( cIndex_ptr idx )
 {
     return ( idx->Find( OpenValues( Variant( 18999 ), Variant( 18999 ) ) ) );
 }
@@ -387,7 +387,7 @@ void FASTCALL foo( int n )
 {
 }
 
-int FASTCALL foo( cIndex::iterator iter )
+int FASTCALL foo( Index::iterator iter )
 {
     if ( ! iter.eof() )
         return ( iter.FieldByName( "PathID" )->AsInteger() + iter.FieldByName( "fSize" )->AsInteger() );
