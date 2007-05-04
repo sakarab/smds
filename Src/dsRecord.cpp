@@ -130,8 +130,6 @@ void FASTCALL cRecordPtr::WriteDate( const cFieldDef_& field_def, const cDateTim
 void FASTCALL cRecordPtr::WriteString( const cFieldDef_& field_def, const ds_string& value ) { mBuffer->WriteString( field_def, value ); }
 void FASTCALL cRecordPtr::WriteString( const cFieldDef_& field_def, const char *value )      { mBuffer->WriteString( field_def, value ); }
 
-}; // namespace detail
-
 //***********************************************************************
 //******    cRecordIterator
 //***********************************************************************
@@ -171,21 +169,32 @@ detail::cDoubleBuffer * FASTCALL cRecordIterator::GetDoubleBuffer() const
 
 detail::cFieldProxy FASTCALL cRecordIterator::FieldByName( const ds_string& field_name )
 {
-    return ( detail::cFieldProxy( GetDoubleBuffer()->GetActiveData(), mContainer->FieldByName( field_name ) ) );
+    return detail::cFieldProxy( GetDoubleBuffer()->GetActiveData(), mContainer->FieldByName( field_name ) );
 }
 
 detail::cFieldProxy FASTCALL cRecordIterator::FieldByName( const char *field_name )
 {
-    return ( FieldByName( ds_string( field_name ) ) );
+    return FieldByName( ds_string( field_name ) );
 }
 
-namespace detail
+bool FASTCALL cRecordIterator::Locate( const Variant& value, const cFindField& field )
 {
+    return Locate( OpenValues( value ), OpenFindFields( field ) );
+}
+
+bool FASTCALL cRecordIterator::Locate( const OpenValues& values, const OpenFindFields& fields )
+{
+    cData::locate_result    result;
+
+    mContainer->Locate( values, fields, result );
+    if ( result.first )
+        mIdx = result.second;
+    return result.first;
+}
 
 //***********************************************************************
 //******    cRangeIterator
 //***********************************************************************
-/*
 CDFASTCALL cRangeIterator::cRangeIterator( cData_ptr& container, cData::size_type start, cData::size_type end )
     : cRecordIterator(container,start), mStart(start), mEnd(end)
 {
@@ -200,7 +209,17 @@ CDFASTCALL cRangeIterator::cRangeIterator( const cRangeIterator& src )
     : cRecordIterator(src), mStart(src.mStart), mEnd(src.mEnd)
 {
 }
-*/
+
+cRangeIterator& FASTCALL cRangeIterator::operator = ( const cRangeIterator& src )
+{
+    if ( &src != this )
+    {
+        cRecordIterator::operator=( src );
+        mStart = src.mStart;
+        mEnd = src.mEnd;
+    }
+    return *this;
+};
 
 }; // namespace detail
 

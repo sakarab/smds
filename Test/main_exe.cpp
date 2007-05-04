@@ -53,13 +53,37 @@ void Output( tblFiles_ptr ds ) // const ds::cFieldDefs_& field_defs, tblFiles::r
 
     for ( int n = 0 ; n < 10 && ! rec.eof() ; ++n )
     {
-        std::cout << rec->GetFileID(); // << " ";
-        std::cout << rec->GetPathID(); // << " ";
-        std::cout << rec->GetLongFileName().c_str(); // << " ";
-        std::cout << rec->GetfSize(); // << " ";
+        if ( rec->FileID_IsNull() )
+            std::cout << "";
+        else
+            std::cout << rec->GetFileID();
+
+        if ( rec->PathID_IsNull() )
+            std::cout << "";
+        else
+            std::cout << rec->GetPathID();
+
+        if ( rec->LongFileName_IsNull() )
+            std::cout << "";
+        else
+            std::cout << rec->GetLongFileName().c_str();
+
+        if ( rec->fSize_IsNull() )
+            std::cout << "";
+        else
+            std::cout << rec->GetfSize();
+
         std::cout << " ";
-        std::cout << rec->GetDescription().c_str(); // << " ";
-        std::cout << rec->GetzipID(); // << " ";
+
+        if ( rec->Description_IsNull() )
+            std::cout << "";
+        else
+            std::cout << rec->GetDescription().c_str();
+
+        if ( rec->zipID_IsNull() )
+            std::cout << "";
+        else
+            std::cout << rec->GetzipID();
     }
 }
 

@@ -30,8 +30,11 @@ namespace smds
 {
 
 class cTablebase;
+class cTable;
 class cIndex;
 class cTableReader;
+template <class RECORD> class cuTable;
+template <class RECORD> class cuIndex;
 
 namespace detail
 {
@@ -255,41 +258,6 @@ public:
 */
 };
 
-}; // namespace detail
-
-//***********************************************************************
-//******    cRecord
-//***********************************************************************
-class cRecord
-{
-private:
-    friend class cTablebase;
-    friend class cTableWriter;
-
-    detail::cData::value_type   mRecord;
-    cFieldDefs_ptr      mFieldDefs;
-protected:
-    detail::cDoubleBuffer * FASTCALL GetDoubleBuffer() const            { return ( mRecord.get() ); }
-public:
-    CDFASTCALL cRecord( const detail::cData::value_type& container, const cFieldDefs_ptr& field_defs );
-    CDFASTCALL ~cRecord();
-    void FASTCALL CommitUpdates()                               { mRecord->CommitUpdates(); }
-    detail::cFieldProxy FieldByName( const ds_string& field_name );
-    detail::cFieldProxy FieldByName( const char *field_name );
-};
-
-//***********************************************************************
-//******    cuRecord
-//***********************************************************************
-template <class RECORD> class cuRecord : public cRecord
-{
-public:
-    CDFASTCALL cuRecord( const detail::cData::value_type& container, const cFieldDefs_ptr& field_defs )
-        : cRecord( container, field_defs )
-    {} // empty
-    RECORD FASTCALL operator->()                    { return ( RECORD( *GetDoubleBuffer() ) ); }
-};
-
 //***********************************************************************
 //******    cRecordIterator
 //***********************************************************************
@@ -299,19 +267,20 @@ private:
     friend class cTableReader;
     friend class cTablebase;
     friend class cTable;
+    friend class cIndex;
 
-    detail::cData::size_type    mIdx;
-    detail::cData_ptr           mContainer;
+    cData::size_type    mIdx;
+    cData_ptr           mContainer;
 protected:
-    typedef detail::cRawRecordProxy<detail::cRawRecordPtr>      OldValuesProxy;
+    typedef cRawRecordProxy<cRawRecordPtr>      OldValuesProxy;
 
-    detail::cDoubleBuffer * FASTCALL GetDoubleBuffer() const;
-    const detail::cData_ptr& FASTCALL GetData() const                   { return ( mContainer ); }
-    detail::cData::size_type FASTCALL GetIndex() const                  { return ( mIdx ); }
-    void FASTCALL SetIndex( detail::cData::size_type idx )              { mIdx = idx; }
+    cDoubleBuffer * FASTCALL GetDoubleBuffer() const;
+    const cData_ptr& FASTCALL GetData() const                   { return ( mContainer ); }
+    cData::size_type FASTCALL GetIndex() const                  { return ( mIdx ); }
+    void FASTCALL SetIndex( cData::size_type idx )              { mIdx = idx; }
 
-    CDFASTCALL cRecordIterator( detail::cData_ptr& container );
-    CDFASTCALL cRecordIterator( detail::cData_ptr& container, detail::cData::size_type idx );
+    CDFASTCALL cRecordIterator( cData_ptr& container );
+    CDFASTCALL cRecordIterator( cData_ptr& container, cData::size_type idx );
 public:
     CDFASTCALL cRecordIterator( const cRecordIterator& src );
     CDFASTCALL ~cRecordIterator();
@@ -349,38 +318,39 @@ public:
     {
         return ( OldValuesProxy( GetDoubleBuffer()->GetOriginalData(), *mContainer->GetFieldDefs().get() ) );
     }
-    detail::cFieldProxy FASTCALL FieldByName( const ds_string& field_name );
-    detail::cFieldProxy FASTCALL FieldByName( const char *field_name );
+    cFieldProxy FASTCALL FieldByName( const ds_string& field_name );
+    cFieldProxy FASTCALL FieldByName( const char *field_name );
+    bool FASTCALL Locate( const Variant& value, const cFindField& field );
+    bool FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields );
 };
 
 //***********************************************************************
 //******    cuRecordIterator
 //***********************************************************************
-/*
-template <class RECORD, class BASE> class cuRecordIterator : public BASE
+template <class RECORD> class cuRecordIterator : public cRecordIterator
 {
 private:
     typedef detail::cRawRecordProxy<typename RECORD::raw>   OldValuesProxy;
-    // RECORD FASTCALL operator*()                     { return ( RECORD( *GetDoubleBuffer() ) ); }
 
-    // template <class RECORD> friend class FRIEND;
+    friend class cuTable<RECORD>;
+    friend class cuIndex<RECORD>;
 protected:
 	CDFASTCALL cuRecordIterator( detail::cData_ptr& container )
-        : BASE(container)                                                {} // empty
+        : cRecordIterator(container)                                                {} // empty
     CDFASTCALL cuRecordIterator( detail::cData_ptr& container, detail::cData::size_type idx )
-        : BASE(container, idx)                                           {} // empty
+        : cRecordIterator(container, idx)                                           {} // empty
+    CDFASTCALL cuRecordIterator( const cRecordIterator& iter )
+        : cRecordIterator(iter)                                                     {} // empty
 public:
-    CDFASTCALL cuRecordIterator( const BASE& iter )
-        : BASE(iter)                                                     {} // empty
     RECORD FASTCALL operator->()                    { return ( RECORD( *GetDoubleBuffer() ) ); }
     cuRecordIterator& FASTCALL operator++()
     {
-        BASE::operator++();
+        cRecordIterator::operator++();
         return ( *this );
     }
     cuRecordIterator& FASTCALL operator--()
     {
-        BASE::operator--();
+        cRecordIterator::operator--();
         return ( *this );
     }
 
@@ -389,15 +359,10 @@ public:
         return ( OldValuesProxy( GetDoubleBuffer()->GetOriginalData(), *GetData()->GetFieldDefs().get() ) );
     }
 };
-*/
-
-namespace detail
-{
 
 //***********************************************************************
 //******    cRangeIterator
 //***********************************************************************
-/*
 class cRangeIterator : private cRecordIterator
 {
 private:
@@ -444,19 +409,17 @@ public:
     cFieldProxy FieldByName( const ds_string& field_name )      { return ( cRecordIterator::FieldByName( field_name ) ); }
     cFieldProxy FieldByName( const char *field_name )           { return ( cRecordIterator::FieldByName( field_name ) ); }
 };
-*/
+
 //***********************************************************************
 //******    cuRangeIterator
 //***********************************************************************
-/*
 template <class RECORD> class cuRangeIterator : public cRangeIterator
 {
 private:
     typedef cRawRecordProxy<typename RECORD::raw>      OldValuesProxy;
-    RECORD FASTCALL operator*(); //                     { return ( RECORD( *GetDoubleBuffer() ) ); }
 
-    template <class RECORD_> friend class cuTable;
-    template <class RECORD_> friend class cuIndex;
+    friend class cuTable<RECORD>;
+    friend class cuIndex<RECORD>;
 
     CDFASTCALL cuRangeIterator( const cRangeIterator& iter )
         : cRangeIterator(iter)                                                      {} // empty
@@ -478,9 +441,43 @@ public:
         return ( *this );
     }
 };
-*/
+
 }; // namespace detail
+
+//***********************************************************************
+//******    cRecord
+//***********************************************************************
+class cRecord
+{
+private:
+    friend class cTablebase;
+    friend class cTableWriter;
+
+    detail::cData::value_type   mRecord;
+    cFieldDefs_ptr      mFieldDefs;
+protected:
+    detail::cDoubleBuffer * FASTCALL GetDoubleBuffer() const            { return ( mRecord.get() ); }
+public:
+    CDFASTCALL cRecord( const detail::cData::value_type& container, const cFieldDefs_ptr& field_defs );
+    CDFASTCALL ~cRecord();
+    void FASTCALL CommitUpdates()                               { mRecord->CommitUpdates(); }
+    detail::cFieldProxy FieldByName( const ds_string& field_name );
+    detail::cFieldProxy FieldByName( const char *field_name );
+};
+
+//***********************************************************************
+//******    cuRecord
+//***********************************************************************
+template <class RECORD> class cuRecord : public cRecord
+{
+public:
+    CDFASTCALL cuRecord( const detail::cData::value_type& container, const cFieldDefs_ptr& field_defs )
+        : cRecord( container, field_defs )
+    {} // empty
+    RECORD FASTCALL operator->()                    { return ( RECORD( *GetDoubleBuffer() ) ); }
+};
 
 }; // namespace smds
 //---------------------------------------------------------------------------
 #endif
+

@@ -110,7 +110,7 @@ tblFiles_ptr GetTblFiles()
 //***********************************************************************
 //******    WhileLoop
 //***********************************************************************
-void FASTCALL WhileLoop( cTable::iterator ptr )
+void FASTCALL WhileLoop( record_iterator ptr )
 {
     while ( ! ptr.eof() )
         ++ptr;
@@ -118,7 +118,7 @@ void FASTCALL WhileLoop( cTable::iterator ptr )
 //***********************************************************************
 //******    ForLoop
 //***********************************************************************
-void FASTCALL ForLoop( cTable::iterator ptr )
+void FASTCALL ForLoop( record_iterator ptr )
 {
     for ( int n = 0, end = ptr.RecordCount() ; n < end ; ++n )
         ++ptr;

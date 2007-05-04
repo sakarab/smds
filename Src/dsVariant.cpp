@@ -63,7 +63,7 @@ Variant& FASTCALL Variant::operator = ( const Variant& src )
         ConstructByType( src );
         mVariantType = src.mVariantType;
     }
-    return ( *this );
+    return *this;
 }
 
 CDFASTCALL Variant::~Variant()
@@ -116,16 +116,16 @@ long FASTCALL Variant::ToLongType() const
     switch ( mVariantType )
     {
         //case vtNull     : throw eVariantConversion();
-        case vtBool     : return ( mData.mBool );
-        case vtChar     : return ( mData.mChar );
-        case vtWChar    : return ( mData.mWChar );
-        case vtShort    : return ( mData.mShort );
-        case vtInteger  : return ( mData.mInt );
-        case vtLong     : return ( mData.mLong );
-        case vtDouble   : return ( static_cast<long>(mData.mDouble) );
-        case vtDateTime : return ( static_cast<long>(mData.GetDateTime().AsDouble()) );
-        case vtString   : return ( StringToLong( mData.GetString() ) );
-        case vtWString  : return ( StringToLong( WStringToString( mData.GetWString() ) ) );
+        case vtBool     : return mData.mBool;
+        case vtChar     : return mData.mChar;
+        case vtWChar    : return mData.mWChar;
+        case vtShort    : return mData.mShort;
+        case vtInteger  : return mData.mInt;
+        case vtLong     : return mData.mLong;
+        case vtDouble   : return static_cast<long>(mData.mDouble);
+        case vtDateTime : return static_cast<long>(mData.GetDateTime().AsDouble());
+        case vtString   : return StringToLong( mData.GetString() );
+        case vtWString  : return StringToLong( WStringToString( mData.GetWString() ) );
         //case vtBlob     : throw eVariantConversion();
         default         : throw eVariantConversion();
     }
@@ -147,7 +147,7 @@ long FASTCALL Variant::StringToLong( const ds_string& sstr ) const
     if ( end_ptr != (str.get() + sstr_len ) )
         throw eVariantConversion();
 
-    return ( result );
+    return result;
 }
 
 double FASTCALL Variant::StringToDouble( const ds_string& sstr ) const
@@ -170,7 +170,7 @@ double FASTCALL Variant::StringToDouble( const ds_string& sstr ) const
 #endif
         throw eVariantConversion();
 
-    return ( result );
+    return result;
 }
 
 ds_wstring Variant::StringToWString( const ds_string& sstr ) const
@@ -184,7 +184,7 @@ ds_wstring Variant::StringToWString( const ds_string& sstr ) const
         *dst++ = *src++;
     *dst = 0;
 
-    return ( ds_wstring( buff.get() ) );
+    return ds_wstring( buff.get() );
 }
 
 ds_string Variant::WStringToString( const ds_wstring& sstr ) const
@@ -198,19 +198,19 @@ ds_string Variant::WStringToString( const ds_wstring& sstr ) const
         *dst++ = static_cast<char>(*src++);
     *dst = 0;
 
-    return ( ds_string( buff.get() ) );
+    return ds_string( buff.get() );
 }
 
 double FASTCALL Variant::AsDouble() const
 {
     switch ( mVariantType )
     {
-        case vtDouble   : return ( mData.mDouble );
-        case vtDateTime : return ( mData.GetDateTime().AsDouble() );
-        case vtString   : return ( StringToDouble( mData.GetString() ) );
-        case vtWString  : return ( StringToDouble( WStringToString( mData.GetWString() ) ) );
+        case vtDouble   : return mData.mDouble;
+        case vtDateTime : return mData.GetDateTime().AsDouble();
+        case vtString   : return StringToDouble( mData.GetString() );
+        case vtWString  : return StringToDouble( WStringToString( mData.GetWString() ) );
         case vtBlob     : throw eVariantConversion();
-        default         : return ( ToLongType() );
+        default         : return ToLongType();
     }
 }
 
@@ -218,12 +218,12 @@ cDateTime FASTCALL Variant::AsDateTime() const
 {
     switch ( mVariantType )
     {
-        case vtDouble   : return ( cDateTime( mData.mDouble ) );
-        case vtDateTime : return ( mData.GetDateTime() );
+        case vtDouble   : return cDateTime( mData.mDouble );
+        case vtDateTime : return mData.GetDateTime();
         case vtString   : throw eVariantConversion();
         case vtWString  : throw eVariantConversion();
         case vtBlob     : throw eVariantConversion();
-        default         : return ( cDateTime( ToLongType() ) );
+        default         : return cDateTime( ToLongType() );
     }
 }
 
@@ -231,7 +231,7 @@ ds_string FASTCALL Variant::AsString() const
 {
     switch ( mVariantType )
     {
-        case vtString   : return ( mData.GetString() );
+        case vtString   : return mData.GetString();
         default         : throw eVariantConversion();
     }
 }
@@ -242,7 +242,7 @@ Variant FASTCALL Variant::VarBlobCreate()
 
     result.mData.ConstructBlob( std::vector<char>() );
     result.mVariantType = vtBlob;
-    return ( result );
+    return result;
 }
 
 //***********************************************************************
