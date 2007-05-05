@@ -70,29 +70,6 @@ Tablebase::iterator FASTCALL Tablebase::Locate( const Variant& value, const cFin
     return ( Locate( OpenValues( value ), OpenFindFields( field ) ) );
 }
 
-/*
-bool FASTCALL Tablebase::Locate( const Variant& value, const cFindField& field, range_iterator& iter )
-{
-    return ( Locate( OpenValues( value ), OpenFindFields( field ), iter ) );
-}
-
-bool FASTCALL Tablebase::Locate( const OpenValues& values, const OpenFindFields& fields, range_iterator& iter )
-{
-#ifdef SM_DS_DEBUG
-    if ( mData != iter.mContainer )
-        throw eDebug( "Error in Locate" );
-#endif
-    cData::locate_result    result;
-
-    // iter.mContainer->Locate( values, fields, iter.mStart, iter.mEnd, result );
-    mData->Locate( values, fields, iter.mStart, iter.mEnd, result );
-    if ( result.first )
-        iter = range_iterator( mData, iter.mStart, iter.mEnd, result.second );
-        // iter.mIdx = result.second;
-    return ( result.first );
-}
-*/
-
 //***********************************************************************
 //******    Table
 //***********************************************************************
@@ -333,6 +310,104 @@ void FASTCALL Table::Close()
 }
 
 //***********************************************************************
+//******    Index::iterator
+//***********************************************************************
+CDFASTCALL Index::iterator::iterator( detail::cData_ptr& container, const cSortCompareBase_ptr& cmp )
+    : Tablebase::iterator(container), mCompare(cmp)
+{
+}
+
+CDFASTCALL Index::iterator::iterator( detail::cData_ptr& container, detail::cData::size_type idx, const cSortCompareBase_ptr& cmp )
+    : Tablebase::iterator(container,idx), mCompare(cmp)
+{
+}
+
+CDFASTCALL Index::iterator::iterator( const Index::iterator& src )
+    : Tablebase::iterator(src), mCompare(src.mCompare)
+{
+}
+
+CDFASTCALL Index::iterator::~iterator()
+{
+}
+
+Index::iterator& FASTCALL Index::iterator::operator = ( const Index::iterator& src )
+{
+    if ( &src != this )
+    {
+        Tablebase::iterator::operator= ( src );
+        mCompare = src.mCompare;
+    }
+    return *this;
+}
+
+bool FASTCALL Index::iterator::Find( const Variant& value )
+{
+    return Find( OpenValues( value ) );
+}
+
+bool FASTCALL Index::iterator::Find( const OpenValues& values )
+{
+    detail::cData::locate_result    result;
+
+    GetData()->Find( values, mCompare, result );
+    if ( result.first )
+        SetIndex( result.second );
+    return result.first;
+}
+
+//***********************************************************************
+//******    Index::range_iterator
+//***********************************************************************
+CDFASTCALL Index::range_iterator::range_iterator( detail::cData_ptr& container, detail::cData::size_type start,
+                                                  detail::cData::size_type end, const cSortCompareBase_ptr& cmp )
+    : Index::iterator( container, cmp ), mStart(start), mEnd(end)
+{
+}
+
+CDFASTCALL Index::range_iterator::range_iterator( detail::cData_ptr& container, detail::cData::size_type start,
+                                                  detail::cData::size_type end, detail::cData::size_type idx,
+                                                  const cSortCompareBase_ptr& cmp )
+    : Index::iterator( container, idx, cmp ), mStart(start), mEnd(end)
+{
+}
+
+CDFASTCALL Index::range_iterator::range_iterator( const range_iterator& src )
+    : Index::iterator( src ), mStart(src.mStart), mEnd(src.mEnd)
+{
+}
+
+CDFASTCALL Index::range_iterator::~range_iterator()
+{
+}
+
+Index::range_iterator& FASTCALL Index::range_iterator::operator = ( const range_iterator& src )
+{
+    if ( &src != this )
+    {
+        Index::iterator::operator= ( src );
+        mStart = src.mStart;
+        mEnd = src.mEnd;
+    }
+    return *this;
+}
+
+bool FASTCALL Index::range_iterator::Find( const Variant& value )
+{
+    return Find( OpenValues( value ) );
+}
+
+bool FASTCALL Index::range_iterator::Find( const OpenValues& values )
+{
+    detail::cData::locate_result    result;
+
+    GetData()->Find( values, GetCompare(), mStart, mEnd, result );
+    if ( result.first )
+        SetIndex( result.second );
+    return result.first;
+}
+
+//***********************************************************************
 //******    Index
 //***********************************************************************
 CDFASTCALL Index::Index( const cSortCompareBase_ptr& cmp_func, const detail::cData_ptr& data )
@@ -352,7 +427,7 @@ Index::iterator FASTCALL Index::Find( const OpenValues& values )
     detail::cData::locate_result    result;
 
     GetData()->Find( values, mCompare, result );
-    return iterator( GetData(), result.second );
+    return iterator( GetData(), result.second, mCompare );
 }
 
 Index::iterator FASTCALL Index::Find( const Variant& value )
@@ -360,64 +435,18 @@ Index::iterator FASTCALL Index::Find( const Variant& value )
     return( Find( OpenValues( value ) ) );
 }
 
-bool FASTCALL Index::Find( const Variant& value, iterator& iter )
+Index::range_iterator FASTCALL Index::GetRangeIterator( const cRangeValues& values )
 {
-    return ( Find( OpenValues( value ), iter ) );
+    return GetRangeIterator( OpenRangeValues( values ) );
 }
 
-bool FASTCALL Index::Find( const OpenValues& values, iterator& iter )
+Index::range_iterator FASTCALL Index::GetRangeIterator( const OpenRangeValues& values )
 {
-#ifdef SM_DS_DEBUG
-    if ( mData != iter.mContainer )
-        throw eDebug( "Error in Find" );
-#endif
-    detail::cData::locate_result    result;
-
-    GetData()->Find( values, mCompare, result );
-    if ( result.first )
-        iter = iterator( GetData(), result.second );
-    return result.first;
-}
-
-bool FASTCALL Index::Find( const Variant& value, range_iterator& iter )
-{
-    return ( Find( OpenValues( value ), iter ) );
-}
-
-bool FASTCALL Index::Find( const OpenValues& values, range_iterator& iter )
-{
-#ifdef SM_DS_DEBUG
-    if ( mData != iter.mContainer )
-        throw eDebug( "Error in Find" );
-#endif
-    detail::cData::locate_result    result;
-
-    // iter.mContainer->Find( values, mCompare, iter.mStart, iter.mEnd, result );
-    GetData()->Find( values, mCompare, iter.mStart, iter.mEnd, result );
-    if ( result.first )
-        // iter.mIdx = result.second;
-        iter = range_iterator( GetData(), iter.mStart, iter.mEnd, result.second );
-    return ( result.first );
-}
-
-/*
-Index FASTCALL Index::GetRange( const cRangeValues& values )
-{
-    return Index();
-    // return ( GetRangeIterator( OpenRangeValues( values ) ) );
-}
-*/
-
-//Index FASTCALL Index::GetRange( const OpenRangeValues& values )
-//{
-//    return Index();
-/*
-    cData::range_result     result;
+    detail::cData::range_result     result;
 
     GetData()->GetRange( values, mCompare, result );
-    return ( cRangeIterator( GetData(), result.second.first, result.second.second ) );
-*/
-//}
+    return range_iterator( GetData(), result.second.first, result.second.second, mCompare );
+}
 
 //***********************************************************************
 //******    cTableSerializingData

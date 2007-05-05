@@ -420,7 +420,6 @@ void Test( tblFiles_ptr ds )
     if ( unorder_count != 0 )
         foo();
 
-/*
     tblFiles::index::range_iterator     riter = files_idx->GetRangeIterator( cRangeValues( 54, 56 ) );
 
     int     n = 0;
@@ -431,7 +430,6 @@ void Test( tblFiles_ptr ds )
         ++riter;
     }
     foo ( n );
-*/
 
     cIndex_ptr  idx;
 

@@ -283,7 +283,7 @@ protected:
     CDFASTCALL cRecordIterator( cData_ptr& container, cData::size_type idx );
 public:
     CDFASTCALL cRecordIterator( const cRecordIterator& src );
-    CDFASTCALL ~cRecordIterator();
+    virtual CDFASTCALL ~cRecordIterator();
     cRecordIterator& FASTCALL operator = ( const cRecordIterator& src );
     cRecordIterator& FASTCALL operator++()
     {
@@ -327,6 +327,7 @@ public:
 //***********************************************************************
 //******    cuRecordIterator
 //***********************************************************************
+/*
 template <class RECORD> class cuRecordIterator : public cRecordIterator
 {
 private:
@@ -359,10 +360,12 @@ public:
         return ( OldValuesProxy( GetDoubleBuffer()->GetOriginalData(), *GetData()->GetFieldDefs().get() ) );
     }
 };
+*/
 
 //***********************************************************************
 //******    cRangeIterator
 //***********************************************************************
+/*
 class cRangeIterator : private cRecordIterator
 {
 private:
@@ -409,10 +412,12 @@ public:
     cFieldProxy FieldByName( const ds_string& field_name )      { return ( cRecordIterator::FieldByName( field_name ) ); }
     cFieldProxy FieldByName( const char *field_name )           { return ( cRecordIterator::FieldByName( field_name ) ); }
 };
+*/
 
 //***********************************************************************
 //******    cuRangeIterator
 //***********************************************************************
+/*
 template <class RECORD> class cuRangeIterator : public cRangeIterator
 {
 private:
@@ -441,6 +446,7 @@ public:
         return ( *this );
     }
 };
+*/
 
 }; // namespace detail
 

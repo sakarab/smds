@@ -79,10 +79,78 @@ typedef Tablebase::iterator    record_iterator;
 class Index : public Tablebase
 {
 public:
-    typedef detail::cRangeIterator      range_iterator;
+    class iterator : public Tablebase::iterator
+    {
+    private:
+        friend class Index;
+        cSortCompareBase_ptr    mCompare;
+    protected:
+        cSortCompareBase_ptr& GetCompare()                      { return mCompare; }
+        CDFASTCALL iterator( detail::cData_ptr& container, const cSortCompareBase_ptr& cmp );
+        CDFASTCALL iterator( detail::cData_ptr& container, detail::cData::size_type idx, const cSortCompareBase_ptr& cmp );
+    public:
+        CDFASTCALL iterator( const iterator& src );
+        CDFASTCALL ~iterator();
+        iterator& FASTCALL operator = ( const iterator& src );
+        bool FASTCALL Find( const Variant& value );
+        bool FASTCALL Find( const OpenValues& values );
+    };
+
+    class range_iterator : private iterator
+    {
+    private:
+        friend class Index;
+
+        detail::cData::size_type    mStart;
+        detail::cData::size_type    mEnd;
+    protected:
+        CDFASTCALL range_iterator( detail::cData_ptr& container, detail::cData::size_type start,
+                                   detail::cData::size_type end, const cSortCompareBase_ptr& cmp );
+        CDFASTCALL range_iterator( detail::cData_ptr& container, detail::cData::size_type start,
+                                   detail::cData::size_type end, detail::cData::size_type idx,
+                                   const cSortCompareBase_ptr& cmp );
+    public:
+        CDFASTCALL range_iterator( const range_iterator& src );
+        CDFASTCALL ~range_iterator();
+        range_iterator& FASTCALL operator = ( const range_iterator& src );
+        range_iterator& FASTCALL operator++()
+        {
+            iterator::operator++();
+            return *this;
+        }
+        range_iterator& FASTCALL operator--()
+        {
+            iterator::operator--();
+            return *this;
+        }
+        void FASTCALL Next()
+        {
+            if ( ! eof() )
+                ++(*this);
+        }
+        void FASTCALL Prev()
+        {
+            if ( GetIndex() > mStart )
+                --(*this);
+        }
+        bool FASTCALL eof()                     { return ( GetIndex() >= mEnd ); }
+        bool FASTCALL bof()                     { return ( GetIndex() == mStart ); }
+        void FASTCALL First()                   { SetIndex( mStart ); }
+        void FASTCALL Last()                    { SetIndex( mEnd - 1 ); }
+        int FASTCALL RecordCount()              { return ( mEnd - mStart ); }
+        void * FASTCALL GetMark()               { return ( reinterpret_cast<void *>(GetIndex()) ); }
+        void FASTCALL GotoMark( void *mark )    { SetIndex( reinterpret_cast<detail::cData::size_type>(mark) ); }
+
+        const OldValuesProxy FASTCALL OldValues()                           { return iterator::OldValues(); }
+        detail::cFieldProxy FieldByName( const ds_string& field_name )      { return iterator::FieldByName( field_name ); }
+        detail::cFieldProxy FieldByName( const char *field_name )           { return iterator::FieldByName( field_name ); }
+        bool FASTCALL Find( const Variant& value );
+        bool FASTCALL Find( const OpenValues& values );
+    };
+
 private:
     typedef detail::cData_ptr       container;
-    friend class Table;            // next to eliminate
+    friend class Table;            // needed only for constructor
 
     cSortCompareBase_ptr    mCompare;
     cFilterCompareBase_ptr  mFilter;
@@ -90,19 +158,17 @@ private:
     CDFASTCALL Index( const Index& src );
     Index& FASTCALL operator=( const Index& src );
 protected:
-    // CDFASTCALL Index();
+    const cSortCompareBase_ptr& GetCompare() const                  { return mCompare; }
     CDFASTCALL Index( const cSortCompareBase_ptr& cmp_func, const detail::cData_ptr& data );
 public:
     virtual CDFASTCALL ~Index();
     iterator FASTCALL Find( const Variant& value );
     iterator FASTCALL Find( const OpenValues& values );
-    bool FASTCALL Find( const Variant& value, iterator& iter );
-    bool FASTCALL Find( const OpenValues& values, iterator& iter );
-    bool FASTCALL Find( const Variant& value, range_iterator& iter );
-    bool FASTCALL Find( const OpenValues& values, range_iterator& iter );
-    // iterator FASTCALL GetIterator()                                         { return Tablebase::GetIterator(); }
-    // Index FASTCALL GetRange( const cRangeValues& values );
-    // Index FASTCALL GetRange( const OpenRangeValues& values );
+    iterator FASTCALL GetIterator()                                         { return iterator( GetData(), mCompare ); }
+    range_iterator FASTCALL GetRangeIterator( const cRangeValues& values );
+    range_iterator FASTCALL GetRangeIterator( const OpenRangeValues& values );
+    // Range FASTCALL GetRange( const cRangeValues& values );
+    // Range FASTCALL GetRange( const OpenRangeValues& values );
 };
 
 typedef shared_ptr<Index>      cIndex_ptr;
@@ -158,10 +224,72 @@ typedef shared_ptr< Table >    cTable_ptr;
 //***********************************************************************
 template <class RECORD> class cuIndex : public Index
 {
-public:
-    typedef detail::cuRecordIterator<RECORD>    iterator;
 private:
     friend class cuTable<RECORD>;
+public:
+    class iterator : public Index::iterator
+    {
+    private:
+        friend class cuIndex<RECORD>;
+        typedef detail::cRawRecordProxy<typename RECORD::raw>   OldValuesProxy;
+    protected:
+        CDFASTCALL iterator( detail::cData_ptr& container, const cSortCompareBase_ptr& cmp )
+            : Index::iterator(container,cmp)                                                {} // empty
+        CDFASTCALL iterator( detail::cData_ptr& container, detail::cData::size_type idx, const cSortCompareBase_ptr& cmp )
+            : Index::iterator(container, idx)                                           {} // empty
+        CDFASTCALL iterator( const Index::iterator& iter )
+            : Index::iterator(iter)                                                     {} // empty
+    public:
+        RECORD FASTCALL operator->()                    { return ( RECORD( *GetDoubleBuffer() ) ); }
+        iterator& FASTCALL operator++()
+        {
+            Index::iterator::operator++();
+            return *this;
+        }
+        iterator& FASTCALL operator--()
+        {
+            Index::iterator::operator--();
+            return *this;
+        }
+
+        const OldValuesProxy FASTCALL OldValues() const
+        {
+            return OldValuesProxy( GetDoubleBuffer()->GetOriginalData(), *GetData()->GetFieldDefs().get() );
+        }
+    };
+
+    class range_iterator : public Index::range_iterator
+    {
+    private:
+        friend class cuIndex<RECORD>;
+        typedef detail::cRawRecordProxy<typename RECORD::raw>   OldValuesProxy;
+    protected:
+        CDFASTCALL range_iterator( detail::cData_ptr& container, detail::cData::size_type start,
+                                   detail::cData::size_type end, const cSortCompareBase_ptr& cmp );
+        CDFASTCALL range_iterator( detail::cData_ptr& container, detail::cData::size_type start,
+                                   detail::cData::size_type end, detail::cData::size_type idx,
+                                   const cSortCompareBase_ptr& cmp );
+        CDFASTCALL range_iterator( const Index::range_iterator& iter )
+            : Index::range_iterator(iter)                                       {} // empty
+    public:
+        CDFASTCALL ~range_iterator()                                            {} // empty
+        range_iterator& FASTCALL operator++()
+        {
+            Index::range_iterator::operator++();
+            return *this;
+        }
+        range_iterator& FASTCALL operator--()
+        {
+            Index::range_iterator::operator--();
+            return ( *this );
+        }
+
+        const OldValuesProxy FASTCALL OldValues() const
+        {
+            return OldValuesProxy( GetDoubleBuffer()->GetOriginalData(), *GetData()->GetFieldDefs().get() );
+        }
+    };
+private:
     // noncopyable
     CDFASTCALL cuIndex( const cuIndex& src );
     cuIndex& FASTCALL operator=( const cuIndex& src );
@@ -176,7 +304,7 @@ protected:
     }
 public:
     virtual CDFASTCALL ~cuIndex()                                           {} // empty
-    iterator FASTCALL GetIterator()                                         { return iterator( Index::GetIterator() ); }
+    iterator FASTCALL GetIterator()                                         { return iterator( GetData(), GetCompare() ); }
     iterator FASTCALL Locate( const Variant& value, const cFindField& field )
     {
         return ( iterator( Index::Locate( value, field ) ) );
@@ -185,10 +313,10 @@ public:
     {
         return ( iterator( Index::Locate( values, fields ) ) );
     }
-    iterator FASTCALL Find( const Variant& value )                              { return ( iterator( Index::Find( value ) ) ); }
-    iterator FASTCALL Find( const OpenValues& values )                          { return ( iterator( Index::Find( values ) ) ); }
-    bool FASTCALL Find( const Variant& value, iterator& iter )                  { return ( Index::Find( value, iter ) ); }
-    bool FASTCALL Find( const OpenValues& values, iterator& iter )              { return ( Index::Find( values, iter ) ); }
+    iterator FASTCALL Find( const Variant& value )                              { return iterator( Index::Find( value ) ); }
+    iterator FASTCALL Find( const OpenValues& values )                          { return iterator( Index::Find( values ) ); }
+    range_iterator FASTCALL GetRangeIterator( const cRangeValues& values )      { return range_iterator( Index::GetRangeIterator( values ) ); }
+    range_iterator FASTCALL GetRangeIterator( const OpenRangeValues& values )   { return range_iterator( Index::GetRangeIterator( values ) ); }
 };
 
 //***********************************************************************
@@ -197,34 +325,64 @@ public:
 template <class RECORD> class cuTable : public Table
 {
 public:
-    typedef detail::cuRecordIterator<RECORD>    iterator;
+    class iterator : public Tablebase::iterator
+    {
+    private:
+        typedef detail::cRawRecordProxy<typename RECORD::raw>   OldValuesProxy;
+
+        friend class cuTable<RECORD>;
+    protected:
+        CDFASTCALL iterator( detail::cData_ptr& container )
+            : Tablebase::iterator(container)                                                {} // empty
+        CDFASTCALL iterator( detail::cData_ptr& container, detail::cData::size_type idx )
+            : Tablebase::iterator(container, idx)                                           {} // empty
+        CDFASTCALL iterator( const Tablebase::iterator& iter )
+            : Tablebase::iterator(iter)                                                     {} // empty
+    public:
+        RECORD FASTCALL operator->()                    { return ( RECORD( *GetDoubleBuffer() ) ); }
+        iterator& FASTCALL operator++()
+        {
+            Tablebase::iterator::operator++();
+            return *this;
+        }
+        iterator& FASTCALL operator--()
+        {
+            Tablebase::iterator::operator--();
+            return *this;
+        }
+
+        const OldValuesProxy FASTCALL OldValues() const
+        {
+            return OldValuesProxy( GetDoubleBuffer()->GetOriginalData(), *GetData()->GetFieldDefs().get() );
+        }
+    };
 private:
     typedef RECORD                      record_type;
 
-    template <class RECORD_> class cIndexSortCompare : public detail::cSortCompareBase
+    class cIndexSortCompare : public detail::cSortCompareBase
     {
     private:
         virtual bool FASTCALL do_compare_1( detail::cRawBuffer *item1, detail::cRawBuffer *item2 )
         {
 #ifdef __BORLANDC__
-            return ( do_compare_2( RECORD_::raw( *item1 ), RECORD_::raw( *item2 ) ) );
+            return ( do_compare_2( RECORD::raw( *item1 ), RECORD::raw( *item2 ) ) );
 #else
-            return ( do_compare_2( typename RECORD_::raw( *item1 ), typename RECORD_::raw( *item2 ) ) );
+            return ( do_compare_2( typename RECORD::raw( *item1 ), typename RECORD::raw( *item2 ) ) );
 #endif
         }
     protected:
-        virtual bool FASTCALL do_compare_2( const typename RECORD_::raw& item1, const typename RECORD_::raw& item2 ) = 0;
+        virtual bool FASTCALL do_compare_2( const typename RECORD::raw& item1, const typename RECORD::raw& item2 ) = 0;
     };
 
-    template <class RECORD_> class cFilterCompare : public detail::cFilterCompareBase
+    class cFilterCompare : public detail::cFilterCompareBase
     {
     private:
         virtual bool FASTCALL do_compare_1( detail::cRawBuffer *item1 )
         {
-            return ( do_compare_2( typename RECORD_::raw( *item1 ) ) );
+            return ( do_compare_2( typename RECORD::raw( *item1 ) ) );
         }
     protected:
-        virtual bool FASTCALL do_compare_2( const typename RECORD_::raw& item1 ) = 0;
+        virtual bool FASTCALL do_compare_2( const typename RECORD::raw& item1 ) = 0;
     };
 public:
 #ifndef __BORLANDC__
@@ -233,8 +391,8 @@ public:
     typedef cuRecord<RECORD>                    record;
     typedef cuIndex<RECORD>                     index;
     typedef shared_ptr< cuIndex<RECORD> >       index_ptr;
-    typedef cIndexSortCompare<RECORD>           sort_compare;
-    typedef cFilterCompare<RECORD>              filter_compare;
+    typedef cIndexSortCompare                   sort_compare;
+    typedef cFilterCompare                      filter_compare;
     typedef typename RECORD::raw                raw;
 private:
     // noncopyable
@@ -264,7 +422,7 @@ public:
         return index_ptr( new index( CreateCmp( index_fields ), GetData() ) );
     }
 
-    iterator FASTCALL GetIterator()                                             { return Table::GetIterator(); }
+    iterator FASTCALL GetIterator()                                             { return iterator( GetData() ); }
     record FASTCALL NewRecord()                                                 { return record( NewBuffer_usInserted(), GetFieldDefs() ); }
     iterator FASTCALL AddRecord( const record& rec )                            { return iterator( GetData(), AddBuffer_ptr( rec ) ); }
     iterator FASTCALL Locate( const Variant& value, const cFindField& field )
@@ -275,16 +433,6 @@ public:
     {
         return ( iterator( Table::Locate( values, fields ) ) );
     }
-#ifdef __BORLANDC__
-    bool FASTCALL Locate( const Variant& value, const cFindField& field, iterator& iter )
-    {
-        return ( Table::Locate( value, field, iter ) );
-    }
-    bool FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields, iterator& iter )
-    {
-        return ( Table::Locate( values, fields, iter ) );
-    }
-#endif
 };
 
 inline bool FASTCALL LocateSucceeded( const record_iterator& iter )

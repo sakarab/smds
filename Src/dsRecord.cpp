@@ -195,6 +195,7 @@ bool FASTCALL cRecordIterator::Locate( const OpenValues& values, const OpenFindF
 //***********************************************************************
 //******    cRangeIterator
 //***********************************************************************
+/*
 CDFASTCALL cRangeIterator::cRangeIterator( cData_ptr& container, cData::size_type start, cData::size_type end )
     : cRecordIterator(container,start), mStart(start), mEnd(end)
 {
@@ -220,6 +221,7 @@ cRangeIterator& FASTCALL cRangeIterator::operator = ( const cRangeIterator& src 
     }
     return *this;
 };
+*/
 
 }; // namespace detail
 
