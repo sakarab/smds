@@ -52,18 +52,18 @@ ConnMapElement  ConnMapArray[] =
 
 //---------------------------------------------------------------------------
 
-cDbEngine FASTCALL SelectDbEngine( const char *name )
+DbEngine FASTCALL SelectDbEngine( const char *name )
 {
     for ( int n = 0 ; ConnMapArray[n].name != 0 ; ++n )
         if ( std::strcmp( ConnMapArray[n].name, name ) == 0 )
-            return ( cDbEngine( ConnMapArray[n].dll_name ) );
+            return ( DbEngine( ConnMapArray[n].dll_name ) );
     throw eDllLoadError();
 }
 
 //***********************************************************************
-//******    cDbEngine
+//******    DbEngine
 //***********************************************************************
-CDFASTCALL cDbEngine::cDbEngine( const char *dll_name )
+CDFASTCALL DbEngine::DbEngine( const char *dll_name )
     : mData(new cDbEngine_impl())
 {
     mData->mDLL = ::LoadLibrary( dll_name );
@@ -75,42 +75,42 @@ CDFASTCALL cDbEngine::cDbEngine( const char *dll_name )
         throw eDllLoadError();
 }
 
-CDFASTCALL cDbEngine::~cDbEngine()
+CDFASTCALL DbEngine::~DbEngine()
 {
 }
 
-cDatabase FASTCALL cDbEngine::NewConnection( const ds_string& connection_string )
+Database FASTCALL DbEngine::NewConnection( const ds_string& connection_string )
 {
-    return ( cDatabase( *this, connection_string ) );
+    return ( Database( *this, connection_string ) );
 }
 
 //***********************************************************************
-//******    cDatabase
+//******    Database
 //***********************************************************************
-CDFASTCALL cDatabase::cDatabase( const cDbEngine& transport_code, const ds_string& connection_string )
+CDFASTCALL Database::Database( const DbEngine& transport_code, const ds_string& connection_string )
     : mData( new cDatabase_impl( transport_code, connection_string ) )
 {
     mData->mDatabase = transport_code.Database_Constructor()( connection_string.c_str() );
 }
 
-CDFASTCALL cDatabase::~cDatabase()
+CDFASTCALL Database::~Database()
 {
 }
 
-cDataTransfer FASTCALL cDatabase::NewTransfer() const
+DataTransfer FASTCALL Database::NewTransfer() const
 {
-    return ( cDataTransfer( *this ) );
+    return ( DataTransfer( *this ) );
 }
 
 //***********************************************************************
-//******    cDataTransfer
+//******    DataTransfer
 //***********************************************************************
-CDFASTCALL cDataTransfer::cDataTransfer( const cDatabase& conn )
+CDFASTCALL DataTransfer::DataTransfer( const Database& conn )
     : mData( new cDataTransferData( conn ) )
 {
 }
 
-CDFASTCALL cDataTransfer::~cDataTransfer()
+CDFASTCALL DataTransfer::~DataTransfer()
 {
 }
 

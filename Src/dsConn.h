@@ -31,13 +31,13 @@
 namespace smds
 {
 
-class cDatabase;
-class cDataTransfer;
+class Database;
+class DataTransfer;
 
 //***********************************************************************
-//******    cDbEngine
+//******    DbEngine
 //***********************************************************************
-class cDbEngine
+class DbEngine
 {
 private:
     class cDbEngine_impl
@@ -66,23 +66,23 @@ private:
     };
     shared_ptr<cDbEngine_impl>           mData;
 public:
-    CDFASTCALL cDbEngine( const char *dll_name );
-    CDFASTCALL cDbEngine( const cDbEngine& src )
+    CDFASTCALL DbEngine( const char *dll_name );
+    CDFASTCALL DbEngine( const DbEngine& src )
         : mData(src.mData)
     {
     }
-    CDFASTCALL ~cDbEngine();
+    CDFASTCALL ~DbEngine();
 
     Database_Ctor FASTCALL Database_Constructor() const     { return ( mData->mDatabase_Ctor ); }
     Database_Dtor FASTCALL Database_Destructor() const      { return ( mData->mDatabase_Dtor ); }
 
-    cDatabase FASTCALL NewConnection( const ds_string& connection_string );
+    Database FASTCALL NewConnection( const ds_string& connection_string );
 };
 
 //***********************************************************************
-//******    cDatabase
+//******    Database
 //***********************************************************************
-class cDatabase
+class Database
 {
 private:
     class cDatabase_impl
@@ -95,10 +95,10 @@ private:
         cDatabase_impl& operator = ( const cDatabase_impl& src );
     public:
         IDatabase           *mDatabase;
-        cDbEngine           mDbEngine;
+        DbEngine           mDbEngine;
         ds_string           mConnectionString;
 
-        CDFASTCALL cDatabase_impl( const cDbEngine& transport_code, const ds_string& connection_string )
+        CDFASTCALL cDatabase_impl( const DbEngine& transport_code, const ds_string& connection_string )
             : mDatabase(0), mDbEngine(transport_code), mConnectionString(connection_string)
         {
         }
@@ -110,18 +110,18 @@ private:
 
     shared_ptr<cDatabase_impl>       mData;
 public:
-    CDFASTCALL cDatabase( const cDbEngine& transport_code, const ds_string& connection_string );
-    CDFASTCALL ~cDatabase();
+    CDFASTCALL Database( const DbEngine& transport_code, const ds_string& connection_string );
+    CDFASTCALL ~Database();
 
-    IDatabase * FASTCALL Database() const           { return ( mData->mDatabase ); }
+    IDatabase * FASTCALL GetDatabase() const           { return ( mData->mDatabase ); }
 
-    cDataTransfer FASTCALL NewTransfer() const;
+    DataTransfer FASTCALL NewTransfer() const;
 };
 
 //***********************************************************************
-//******    cDataTransfer
+//******    DataTransfer
 //***********************************************************************
-class cDataTransfer
+class DataTransfer
 {
 private:
     class cDataTransferData
@@ -134,27 +134,27 @@ private:
         cDataTransferData& operator = ( const cDataTransferData& src );
     public:
         IDataProvider       *mTransfer;
-        cDatabase           mDatabase;
+        Database           mDatabase;
 
-        CDFASTCALL cDataTransferData( const cDatabase& database )
-            : mTransfer(database.Database()->CreateDataProvider()), mDatabase(database)
+        CDFASTCALL cDataTransferData( const Database& database )
+            : mTransfer(database.GetDatabase()->CreateDataProvider()), mDatabase(database)
         {
         }
         CDFASTCALL ~cDataTransferData()
         {
-            mDatabase.Database()->DestroyDataProvider( mTransfer );
+            mDatabase.GetDatabase()->DestroyDataProvider( mTransfer );
         }
     };
 
     shared_ptr<cDataTransferData>  mData;
 public:
-    CDFASTCALL cDataTransfer( const cDatabase& conn );
-    CDFASTCALL ~cDataTransfer();
+    CDFASTCALL DataTransfer( const Database& conn );
+    CDFASTCALL ~DataTransfer();
 
-    IDataProvider * FASTCALL DataTransfer() const           { return ( mData->mTransfer ); }
+    IDataProvider * FASTCALL GetDataTransfer() const           { return ( mData->mTransfer ); }
 };
 
-cDbEngine FASTCALL SelectDbEngine( const char *name );
+DbEngine FASTCALL SelectDbEngine( const char *name );
 
 };
 //---------------------------------------------------------------------------

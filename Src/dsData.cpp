@@ -261,15 +261,15 @@ public:
 
 }; // namespace
 
-void FASTCALL Table::Open( const cDatabase& database, const char *where_clause )
+void FASTCALL Table::Open( const Database& database, const char *where_clause )
 {
     ds_string   sql( ConstructSelect( where_clause ) );
 
     if ( sql[0] == 0 )
         return;
 
-    cDataTransfer   transfer = database.NewTransfer();
-    IDataProvider   *provider = transfer.DataTransfer();
+    DataTransfer    transfer = database.NewTransfer();
+    IDataProvider   *provider = transfer.GetDataTransfer();
 
     provider->OpenSql( sql.c_str() );
 

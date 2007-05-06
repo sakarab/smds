@@ -90,15 +90,15 @@ const char *DAO_Dirdata_Conn =  "G:\\Data\\DirData82.mdb";
 tblFiles_ptr GetTblFiles()
 {
 /*
-    cDbEngine       transport = SelectDbEngine( "BDE" );
-    cDatabase       connection = transport.NewConnection( BDE_DirData_Conn );
+    DbEngine        transport = SelectDbEngine( "BDE" );
+    Database        connection = transport.NewConnection( BDE_DirData_Conn );
 */
 /*
-    cDbEngine       engine = SelectDbEngine( "ADO" );
-    cDatabase       database = engine.NewConnection( ADO_Dirdata_Conn );
+    DbEngine        engine = SelectDbEngine( "ADO" );
+    Database        database = engine.NewConnection( ADO_Dirdata_Conn );
 */
-    cDbEngine       engine = SelectDbEngine( "DAO" );
-    cDatabase       database = engine.NewConnection( DAO_Dirdata_Conn );
+    DbEngine        engine = SelectDbEngine( "DAO" );
+    Database        database = engine.NewConnection( DAO_Dirdata_Conn );
 
     tblFiles_ptr    result( new tblFiles() );
 

@@ -33,10 +33,10 @@ using namespace smds::detail;
 void Tutorial()
 {
     // Select engine
-    cDbEngine       engine = SelectDbEngine( "ADO" );
+    DbEngine        engine = SelectDbEngine( "ADO" );
 
     // connect to database
-    cDatabase       database = engine.NewConnection( "" );
+    Database        database = engine.NewConnection( "" );
 
     // Create and open the dataset
     tblFiles_ptr    ds( new tblFiles() );
