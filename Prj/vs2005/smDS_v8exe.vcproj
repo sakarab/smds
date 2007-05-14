@@ -191,6 +191,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Test\uCompileTest.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Test\uTables.cpp"
 				>
 			</File>
@@ -204,6 +208,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\..\Test\uCompileTest.h"
+				>
+			</File>
 			<File
 				RelativePath="..\..\Test\uTables.h"
 				>

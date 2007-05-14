@@ -27,6 +27,152 @@
 #include <dsData.h>
 #include "uTables.h"
 //---------------------------------------------------------------------------
+
+/*
+class A
+#ifdef SM_DS_USE_SMALL_SHARED_PTR
+    : public boost::shared_in_base<long>
+#endif
+{
+public:
+    int     mA;
+};
+
+typedef smds::shared_ptr<A>     spA;
+
+class variables
+{
+private:
+    spA     mA;
+    int     mIdx;
+protected:
+    variables( const spA& a, int idx );
+    variables( const variables& src );
+    variables& operator = ( const variables& src );
+    void Increment()                            { ++mIdx; }
+    void Decrement()                            { --mIdx; }
+    variables Add( variables& src, int num );
+public:
+    ~variables();
+};
+
+variables::variables( const spA& a, int idx )
+    : mA(a), mIdx(idx)
+{
+}
+
+variables::variables( const variables& src )
+    : mA(src.mA), mIdx(src.mIdx)
+{
+}
+
+variables& variables::operator = ( const variables& src )
+{
+    if ( this != &src )
+    {
+        mA = src.mA;
+        mIdx = src.mIdx;
+    }
+    return *this;
+}
+
+variables::~variables()
+{
+}
+
+variables variables::Add( variables& src, int num )
+{
+    variables   tmp( src );
+
+    src.mIdx += num;
+    return tmp;
+}
+
+template <class T> class varbase : public variables
+{
+protected:
+    varbase( const spA& a, int idx )
+        : variables(a,idx)                      {} // empty
+    varbase( const variables& var )
+        : variables(var)                        {} // empty
+    T& Increment( T& ret )
+    {
+        variables::Increment();
+        return ret;
+    }
+    T& Decrement( T& ret )
+    {
+        variables::Decrement();
+        return ret;
+    }
+    T Add( variables& src, int num )
+    {
+        return T( variables::Add( src, num ) );
+    }
+};
+
+class FIter : private varbase<FIter>
+{
+public:
+    FIter( const spA& a, int idx )
+        : varbase<FIter>(a,idx)                 {} // empty
+    FIter( const variables& var )
+        : varbase<FIter>(var)                   {} // empty
+    FIter& operator++()                         { return varbase<FIter>::Increment( *this ); }
+    FIter operator+( int num )                  { return varbase<FIter>::Add( *this, num ); }
+};
+
+template <class T> class variables
+{
+private:
+    spA     mA;
+    int     mIdx;
+protected:
+    variables( const spA& a, int idx )
+        : mA(a), mIdx(idx)                  {} // empty
+    T& Increment( T& ret )
+    {
+        ++mIdx;
+        return ret;
+    }
+    T& Decrement( T& ret )
+    {
+        --mIdx;
+        return ret;
+    }
+    T Add( variables& src, int num )
+    {
+        variables   tmp( src );
+
+        src.mIdx += num;
+        return T( tmp );
+    }
+};
+
+class FIter : private variables<FIter>
+{
+public:
+    FIter( const spA& a, int idx )
+        : variables<FIter>(a,idx)               {} // empty
+    FIter( const variables<FIter>& var )
+        : variables<FIter>(var)                 {} // empty
+    FIter& operator++()                         { return variables<FIter>::Increment( *this ); }
+    FIter operator+( int num )                  { return variables<FIter>::Add( *this, num ); }
+};
+
+void dummy_main()
+{
+    spA     a( new A );
+    FIter   it( a, 5 );
+
+    ++it;
+    it + 1;
+    FIter   itb = ++it;
+
+    itb = it + 1;
+}
+*/
+
 using namespace smds;
 using namespace smds::detail;
 

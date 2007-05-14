@@ -295,6 +295,10 @@ public:
         --mIdx;
         return ( *this );
     }
+
+    //cRecordIterator FASTCALL operator+( int num );
+    //cRecordIterator FASTCALL operator-( int num );
+
     void FASTCALL Next()
     {
         if ( ! eof() )

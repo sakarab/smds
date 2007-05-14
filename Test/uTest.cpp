@@ -398,8 +398,12 @@ int FASTCALL foo( Index::iterator iter )
 //***********************************************************************
 //******    Test
 //***********************************************************************
+// void dummy_main();
+
 void Test( tblFiles_ptr ds )
 {
+//    dummy_main();
+
     tblFiles::iterator      iter = ds->GetIterator();
 
     WhileLoop( iter );

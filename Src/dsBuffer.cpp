@@ -140,22 +140,45 @@ void FASTCALL cDoubleBuffer::CommitUpdates()
 //******    cData
 //***********************************************************************
 CDFASTCALL cData::cData()
-: mData(), mFieldDefs( new cFieldDefs() )
+    : mData(), mFieldDefs( new cFieldDefs() ), mRelation(this), mDataNotify(0)
 {
 }
 
 CDFASTCALL cData::cData( const cFieldDefs_& field_defs )
-    : mData(), mFieldDefs( new cFieldDefs( field_defs ) )
+    : mData(), mFieldDefs( new cFieldDefs( field_defs ) ), mRelation(this), mDataNotify(0)
 {
 }
 
 CDFASTCALL cData::cData( const cFieldDefs_ptr& field_defs )
-    : mData(), mFieldDefs( field_defs )
+    : mData(), mFieldDefs( field_defs ), mRelation(this), mDataNotify(0)
 {
 }
 
 CDFASTCALL cData::~cData()
 {
+    RemoveRelation( this );
+}
+
+void FASTCALL cData::NotifyRecordAdded()
+{
+    cData   *relation = mRelation;
+
+    while ( relation != this )
+    {
+        mRelation->mDataNotify->RecordAdded();
+        relation = relation->mRelation;
+    }
+}
+
+void FASTCALL cData::NotifyRecordDeleted()
+{
+    cData   *relation = mRelation;
+
+    while ( relation != this )
+    {
+        relation->mDataNotify->RecordDeleted();
+        relation = relation->mRelation;
+    }
 }
 
 void FASTCALL cData::Clear()
@@ -197,6 +220,7 @@ cData_ptr FASTCALL cData::Clone_All()
     cData_ptr   result( new cData( GetFieldDefs() ) );
 
     std::copy( mData.begin(), mData.end(), std::back_inserter( result->mData ) );
+    AddRelation( result.get() );
     return result;
 }
 

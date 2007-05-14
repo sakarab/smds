@@ -719,6 +719,38 @@ public:
 };
 
 //***********************************************************************
+//******    DataRelation
+//***********************************************************************
+/*
+class DataRelation
+{
+private:
+    DataRelation        *mRelation;
+    IDataNotify         *mDataNotify;
+    void FASTCALL RemoveRelation( DataRelation *relation )
+    {
+        while ( relation->mRelation != this )
+            relation = relation->mRelation;
+        relation->mRelation = mRelation;
+    }
+public:
+    CDFASTCALL DataRelation()
+        : mRelation(this), mDataNotify(0)
+    {
+    }
+    CDFASTCALL ~DataRelation()
+    {
+        RemoveRelation( this );
+    }
+    void FASTCALL AddRelation( DataRelation *new_data )
+    {
+        new_data->mRelation = mRelation;
+        mRelation = new_data;
+    }
+};
+*/
+
+//***********************************************************************
 //******    cData
 //***********************************************************************
 class cData;
@@ -740,8 +772,10 @@ public:
     typedef std::pair<bool,size_type>                           locate_result;
     typedef std::pair<bool,std::pair<size_type,size_type> >     range_result;
 private:
-    container               mData;
-    cFieldDefs_ptr          mFieldDefs;
+    container           mData;
+    cFieldDefs_ptr      mFieldDefs;
+    cData               *mRelation;
+    IDataNotify         *mDataNotify;
 
     container& FASTCALL GetContainer()                              { return ( mData ); }
     void FASTCALL Find_0( const cData::value_type& double_buffer, cSortCompareBase_ptr& compare,
@@ -750,6 +784,20 @@ private:
                         iterator begin, iterator end, locate_result& result );
     void FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields,
                           iterator begin, iterator end, locate_result& result );
+    // relation managment
+    void FASTCALL NotifyRecordAdded();
+    void FASTCALL NotifyRecordDeleted();
+    void FASTCALL RemoveRelation( cData *relation )
+    {
+        while ( relation->mRelation != this )
+            relation = relation->mRelation;
+        relation->mRelation = mRelation;
+    }
+    void FASTCALL AddRelation( cData *new_data )
+    {
+        new_data->mRelation = mRelation;
+        mRelation = new_data;
+    }
     // noncopyable
     CDFASTCALL cData( const cData& src );
     cData& FASTCALL operator=( const cData& src );
@@ -764,6 +812,7 @@ public:
     value_type FASTCALL NewBuffer_usUnmodified();
     value_type FASTCALL NewBuffer_usInserted();
 
+    bool FASTCALL is_empty() const                                  { return ( mData.empty() ); }
     size_type FASTCALL size() const                                 { return ( mData.size() ); }
     const value_type& FASTCALL operator[]( size_type idx ) const    { return ( mData[idx] ); }
 
@@ -793,3 +842,4 @@ public:
 }; // namespace smds
 //---------------------------------------------------------------------------
 #endif
+

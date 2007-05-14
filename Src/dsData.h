@@ -60,6 +60,7 @@ protected:
 public:
     virtual CDFASTCALL ~Tablebase();
     const cFieldDefs_ptr& FASTCALL GetFieldDefs() const                         { return mData->GetFieldDefs(); }
+    bool FASTCALL IsEmpty()                                                     { return mData->is_empty(); }
     int FASTCALL RecordCount()                                                  { return mData->size(); }
     iterator FASTCALL GetIterator()                                             { return iterator( mData ); }
 
