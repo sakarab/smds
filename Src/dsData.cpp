@@ -57,17 +57,22 @@ Tablebase::iterator FASTCALL Tablebase::AddRecord( const cRecord& record )
     return ( iterator( mData, AddBuffer_ptr( record ) ) );
 }
 
-Tablebase::iterator FASTCALL Tablebase::Locate( const OpenValues& values, const OpenFindFields& fields )
+detail::cData::locate_result::second_type FASTCALL Tablebase::LocateImpl( const OpenValues& values, const OpenFindFields& fields )
 {
     detail::cData::locate_result    result;
 
     mData->Locate( values, fields, result );
-    return ( iterator( mData, result.second ) );
+    return result.second;
+}
+
+Tablebase::iterator FASTCALL Tablebase::Locate( const OpenValues& values, const OpenFindFields& fields )
+{
+    return iterator( mData, LocateImpl( values, fields ) );
 }
 
 Tablebase::iterator FASTCALL Tablebase::Locate( const Variant& value, const cFindField& field )
 {
-    return ( Locate( OpenValues( value ), OpenFindFields( field ) ) );
+    return Locate( OpenValues( value ), OpenFindFields( field ) );
 }
 
 void FASTCALL Tablebase::RecordAdded( const detail::cData::value_type& value )
@@ -312,7 +317,7 @@ void FASTCALL Table::Open( const Database& database, const char *where_clause )
 
 void FASTCALL Table::Close()
 {
-    detail::cData_ptr   tmp( new detail::cData( this ) );
+    detail::spData      tmp( new detail::cData( this ) );
 
     GetData() = tmp;
 }
@@ -320,18 +325,18 @@ void FASTCALL Table::Close()
 //***********************************************************************
 //******    Index::iterator
 //***********************************************************************
-CDFASTCALL Index::iterator::iterator( detail::cData_ptr& container, const cSortCompareBase_ptr& cmp )
-    : Tablebase::iterator(container), mCompare(cmp)
+CDFASTCALL Index::iterator::iterator( detail::spData& container, const cSortCompareBase_ptr& cmp )
+    : inherited(container), mCompare(cmp)
 {
 }
 
-CDFASTCALL Index::iterator::iterator( detail::cData_ptr& container, detail::cData::size_type idx, const cSortCompareBase_ptr& cmp )
-    : Tablebase::iterator(container,idx), mCompare(cmp)
+CDFASTCALL Index::iterator::iterator( detail::spData& container, detail::cData::size_type idx, const cSortCompareBase_ptr& cmp )
+    : inherited(container,idx), mCompare(cmp)
 {
 }
 
 CDFASTCALL Index::iterator::iterator( const Index::iterator& src )
-    : Tablebase::iterator(src), mCompare(src.mCompare)
+    : inherited(src), mCompare(src.mCompare)
 {
 }
 
@@ -343,7 +348,7 @@ Index::iterator& FASTCALL Index::iterator::operator = ( const Index::iterator& s
 {
     if ( &src != this )
     {
-        Tablebase::iterator::operator= ( src );
+        inherited::operator= ( src );
         mCompare = src.mCompare;
     }
     return *this;
@@ -367,13 +372,13 @@ bool FASTCALL Index::iterator::Find( const OpenValues& values )
 //***********************************************************************
 //******    Index::range_iterator
 //***********************************************************************
-CDFASTCALL Index::range_iterator::range_iterator( detail::cData_ptr& container, detail::cData::size_type start,
+CDFASTCALL Index::range_iterator::range_iterator( detail::spData& container, detail::cData::size_type start,
                                                   detail::cData::size_type end, const cSortCompareBase_ptr& cmp )
     : Index::iterator( container, cmp ), mStart(start), mEnd(end)
 {
 }
 
-CDFASTCALL Index::range_iterator::range_iterator( detail::cData_ptr& container, detail::cData::size_type start,
+CDFASTCALL Index::range_iterator::range_iterator( detail::spData& container, detail::cData::size_type start,
                                                   detail::cData::size_type end, detail::cData::size_type idx,
                                                   const cSortCompareBase_ptr& cmp )
     : Index::iterator( container, idx, cmp ), mStart(start), mEnd(end)
@@ -418,7 +423,7 @@ bool FASTCALL Index::range_iterator::Find( const OpenValues& values )
 //***********************************************************************
 //******    Index
 //***********************************************************************
-CDFASTCALL Index::Index( const cSortCompareBase_ptr& cmp_func, const detail::cData_ptr& data )
+CDFASTCALL Index::Index( const cSortCompareBase_ptr& cmp_func, const detail::spData& data )
     : Tablebase(), mCompare(cmp_func)
 {
     SetData( data->Clone_All( this ) );

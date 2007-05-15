@@ -45,7 +45,7 @@ public:
 private:
     friend class cTableWriter;
 
-    detail::cData_ptr       mData;
+    detail::spData          mData;
     // IDataNotify
     virtual void FASTCALL RecordAdded( const detail::cData::value_type& value );
     virtual void FASTCALL RecordDeleted();
@@ -53,10 +53,12 @@ private:
     CDFASTCALL Tablebase( const Tablebase& src );
     Tablebase& FASTCALL operator=( const Tablebase& src );
 protected:
-    detail::cData_ptr& FASTCALL GetData()                                       { return mData; }
-    void FASTCALL SetData( const detail::cData_ptr& data )                      { mData = data; }
+    detail::spData& FASTCALL GetData()                                          { return mData; }
+    void FASTCALL SetData( const detail::spData& data )                         { mData = data; }
     detail::cDoubleBuffer * FASTCALL GetDoubleBuffer( const cRecord& record )   { return record.GetDoubleBuffer(); }
     int FASTCALL AddBuffer_ptr( const cRecord& record )                         { return mData->AddBuffer_ptr( record.mRecord ); }
+
+    detail::cData::locate_result::second_type FASTCALL LocateImpl( const OpenValues& values, const OpenFindFields& fields );
 
     CDFASTCALL Tablebase();
     CDFASTCALL Tablebase( const detail::cFieldDefs_& field_defs );
@@ -86,16 +88,23 @@ public:
     class iterator : public Tablebase::iterator
     {
     private:
+        typedef Tablebase::iterator     inherited;
         friend class Index;
         cSortCompareBase_ptr    mCompare;
     protected:
         cSortCompareBase_ptr& GetCompare()                      { return mCompare; }
-        CDFASTCALL iterator( detail::cData_ptr& container, const cSortCompareBase_ptr& cmp );
-        CDFASTCALL iterator( detail::cData_ptr& container, detail::cData::size_type idx, const cSortCompareBase_ptr& cmp );
+        CDFASTCALL iterator( detail::spData& container, const cSortCompareBase_ptr& cmp );
+        CDFASTCALL iterator( detail::spData& container, detail::cData::size_type idx, const cSortCompareBase_ptr& cmp );
     public:
         CDFASTCALL iterator( const iterator& src );
         CDFASTCALL ~iterator();
         iterator& FASTCALL operator = ( const iterator& src );
+
+        iterator& FASTCALL operator++()                 { inherited::operator++();      return *this; }
+        iterator& FASTCALL operator--()                 { inherited::operator--();      return *this; }
+        iterator& FASTCALL operator+=( int num )        { inherited::operator+=( num ); return *this; }
+        iterator& FASTCALL operator-=( int num )        { inherited::operator-=( num ); return *this; }
+
         bool FASTCALL Find( const Variant& value );
         bool FASTCALL Find( const OpenValues& values );
     };
@@ -103,30 +112,27 @@ public:
     class range_iterator : private iterator
     {
     private:
+        typedef iterator            inherited;
         friend class Index;
 
         detail::cData::size_type    mStart;
         detail::cData::size_type    mEnd;
     protected:
-        CDFASTCALL range_iterator( detail::cData_ptr& container, detail::cData::size_type start,
+        CDFASTCALL range_iterator( detail::spData& container, detail::cData::size_type start,
                                    detail::cData::size_type end, const cSortCompareBase_ptr& cmp );
-        CDFASTCALL range_iterator( detail::cData_ptr& container, detail::cData::size_type start,
+        CDFASTCALL range_iterator( detail::spData& container, detail::cData::size_type start,
                                    detail::cData::size_type end, detail::cData::size_type idx,
                                    const cSortCompareBase_ptr& cmp );
     public:
         CDFASTCALL range_iterator( const range_iterator& src );
         CDFASTCALL ~range_iterator();
         range_iterator& FASTCALL operator = ( const range_iterator& src );
-        range_iterator& FASTCALL operator++()
-        {
-            iterator::operator++();
-            return *this;
-        }
-        range_iterator& FASTCALL operator--()
-        {
-            iterator::operator--();
-            return *this;
-        }
+
+        range_iterator& FASTCALL operator++()               { inherited::operator++();      return *this; }
+        range_iterator& FASTCALL operator--()               { inherited::operator--();      return *this; }
+        range_iterator& FASTCALL operator+=( int num )      { inherited::operator+=( num ); return *this; }
+        range_iterator& FASTCALL operator-=( int num )      { inherited::operator-=( num ); return *this; }
+
         void FASTCALL Next()
         {
             if ( ! eof() )
@@ -142,7 +148,7 @@ public:
         void FASTCALL First()                   { SetIndex( mStart ); }
         void FASTCALL Last()                    { SetIndex( mEnd - 1 ); }
         int FASTCALL RecordCount()              { return ( mEnd - mStart ); }
-        void * FASTCALL GetMark()               { return ( reinterpret_cast<void *>(GetIndex()) ); }
+        void * FASTCALL GetMark()               { return reinterpret_cast<void *>(GetIndex()); }
         void FASTCALL GotoMark( void *mark )    { SetIndex( reinterpret_cast<detail::cData::size_type>(mark) ); }
 
         const OldValuesProxy FASTCALL OldValues()                           { return iterator::OldValues(); }
@@ -153,7 +159,7 @@ public:
     };
 
 private:
-    typedef detail::cData_ptr       container;
+    typedef detail::spData          container;
     friend class Table;            // needed only for constructor
 
     cSortCompareBase_ptr    mCompare;
@@ -163,7 +169,7 @@ private:
     Index& FASTCALL operator=( const Index& src );
 protected:
     const cSortCompareBase_ptr& GetCompare() const                  { return mCompare; }
-    CDFASTCALL Index( const cSortCompareBase_ptr& cmp_func, const detail::cData_ptr& data );
+    CDFASTCALL Index( const cSortCompareBase_ptr& cmp_func, const detail::spData& data );
 public:
     virtual CDFASTCALL ~Index();
     iterator FASTCALL Find( const Variant& value );
@@ -234,27 +240,23 @@ public:
     class iterator : public Index::iterator
     {
     private:
+        typedef Index::iterator                                 inherited;
         friend class cuIndex<RECORD>;
         typedef detail::cRawRecordProxy<typename RECORD::raw>   OldValuesProxy;
     protected:
-        CDFASTCALL iterator( detail::cData_ptr& container, const cSortCompareBase_ptr& cmp )
-            : Index::iterator(container,cmp)                                                {} // empty
-        CDFASTCALL iterator( detail::cData_ptr& container, detail::cData::size_type idx, const cSortCompareBase_ptr& cmp )
-            : Index::iterator(container, idx)                                           {} // empty
+        CDFASTCALL iterator( detail::spData& container, const cSortCompareBase_ptr& cmp )
+            : inherited(container,cmp)                                                {} // empty
+        CDFASTCALL iterator( detail::spData& container, detail::cData::size_type idx, const cSortCompareBase_ptr& cmp )
+            : inherited(container, idx)                                           {} // empty
         CDFASTCALL iterator( const Index::iterator& iter )
-            : Index::iterator(iter)                                                     {} // empty
+            : inherited(iter)                                                     {} // empty
     public:
         RECORD FASTCALL operator->()                    { return ( RECORD( *GetDoubleBuffer() ) ); }
-        iterator& FASTCALL operator++()
-        {
-            Index::iterator::operator++();
-            return *this;
-        }
-        iterator& FASTCALL operator--()
-        {
-            Index::iterator::operator--();
-            return *this;
-        }
+
+        iterator& FASTCALL operator++()                 { inherited::operator++();      return *this; }
+        iterator& FASTCALL operator--()                 { inherited::operator--();      return *this; }
+        iterator& FASTCALL operator+=( int num )        { inherited::operator+=( num ); return *this; }
+        iterator& FASTCALL operator-=( int num )        { inherited::operator-=( num ); return *this; }
 
         const OldValuesProxy FASTCALL OldValues() const
         {
@@ -265,28 +267,24 @@ public:
     class range_iterator : public Index::range_iterator
     {
     private:
+        typedef Index::range_iterator                           inherited;
         friend class cuIndex<RECORD>;
         typedef detail::cRawRecordProxy<typename RECORD::raw>   OldValuesProxy;
     protected:
-        CDFASTCALL range_iterator( detail::cData_ptr& container, detail::cData::size_type start,
+        CDFASTCALL range_iterator( detail::spData& container, detail::cData::size_type start,
                                    detail::cData::size_type end, const cSortCompareBase_ptr& cmp );
-        CDFASTCALL range_iterator( detail::cData_ptr& container, detail::cData::size_type start,
+        CDFASTCALL range_iterator( detail::spData& container, detail::cData::size_type start,
                                    detail::cData::size_type end, detail::cData::size_type idx,
                                    const cSortCompareBase_ptr& cmp );
         CDFASTCALL range_iterator( const Index::range_iterator& iter )
-            : Index::range_iterator(iter)                                       {} // empty
+            : inherited(iter)                                               {} // empty
     public:
-        CDFASTCALL ~range_iterator()                                            {} // empty
-        range_iterator& FASTCALL operator++()
-        {
-            Index::range_iterator::operator++();
-            return *this;
-        }
-        range_iterator& FASTCALL operator--()
-        {
-            Index::range_iterator::operator--();
-            return ( *this );
-        }
+        CDFASTCALL ~range_iterator()                                        {} // empty
+
+        range_iterator& FASTCALL operator++()           { inherited::operator++();      return *this; }
+        range_iterator& FASTCALL operator--()           { inherited::operator--();      return *this; }
+        range_iterator& FASTCALL operator+=( int num )  { inherited::operator+=( num ); return *this; }
+        range_iterator& FASTCALL operator-=( int num )  { inherited::operator-=( num ); return *this; }
 
         const OldValuesProxy FASTCALL OldValues() const
         {
@@ -302,7 +300,7 @@ protected:
         : Index()
     {
     }
-    CDFASTCALL cuIndex( const cSortCompareBase_ptr& cmp_func, const detail::cData_ptr& data )
+    CDFASTCALL cuIndex( const cSortCompareBase_ptr& cmp_func, const detail::spData& data )
         : Index( cmp_func, data )
     {
     }
@@ -329,31 +327,25 @@ public:
 template <class RECORD> class cuTable : public Table
 {
 public:
-    class iterator : public Tablebase::iterator
+    class iterator : public Table::iterator
     {
     private:
+        typedef Table::iterator                                 inherited;
         typedef detail::cRawRecordProxy<typename RECORD::raw>   OldValuesProxy;
 
         friend class cuTable<RECORD>;
     protected:
-        CDFASTCALL iterator( detail::cData_ptr& container )
-            : Tablebase::iterator(container)                                                {} // empty
-        CDFASTCALL iterator( detail::cData_ptr& container, detail::cData::size_type idx )
-            : Tablebase::iterator(container, idx)                                           {} // empty
-        CDFASTCALL iterator( const Tablebase::iterator& iter )
-            : Tablebase::iterator(iter)                                                     {} // empty
+        CDFASTCALL iterator( detail::spData& container )
+            : inherited(container)                                                {} // empty
+        CDFASTCALL iterator( detail::spData& container, detail::cData::size_type idx )
+            : inherited(container, idx)                                           {} // empty
+        //CDFASTCALL iterator( const inherited& iter )
+        //    : inherited(iter)                                                     {} // empty
     public:
         RECORD FASTCALL operator->()                    { return ( RECORD( *GetDoubleBuffer() ) ); }
-        iterator& FASTCALL operator++()
-        {
-            Tablebase::iterator::operator++();
-            return *this;
-        }
-        iterator& FASTCALL operator--()
-        {
-            Tablebase::iterator::operator--();
-            return *this;
-        }
+
+        iterator& FASTCALL operator++()                 { inherited::operator++();    return *this; }
+        iterator& FASTCALL operator--()                 { inherited::operator--();    return *this; }
 
         const OldValuesProxy FASTCALL OldValues() const
         {
@@ -435,7 +427,7 @@ public:
     }
     iterator FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields )
     {
-        return ( iterator( Table::Locate( values, fields ) ) );
+        return ( iterator( GetData(), Table::LocateImpl( values, fields ) ) );
     }
 };
 

@@ -389,6 +389,10 @@ void FASTCALL foo( int n )
 
 int FASTCALL foo( Index::iterator iter )
 {
+    Index::iterator     aa = ++iter;
+    Table::iterator     bb = aa;
+    Table::iterator     cc = ++bb; 
+
     if ( ! iter.eof() )
         return ( iter.FieldByName( "PathID" )->AsInteger() + iter.FieldByName( "fSize" )->AsInteger() );
     else

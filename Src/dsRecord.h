@@ -270,17 +270,17 @@ private:
     friend class Index;
 
     cData::size_type    mIdx;
-    cData_ptr           mContainer;
+    spData              mContainer;
 protected:
     typedef cRawRecordProxy<cRawRecordPtr>      OldValuesProxy;
 
     cDoubleBuffer * FASTCALL GetDoubleBuffer() const;
-    const cData_ptr& FASTCALL GetData() const                   { return ( mContainer ); }
+    const spData& FASTCALL GetData() const                      { return ( mContainer ); }
     cData::size_type FASTCALL GetIndex() const                  { return ( mIdx ); }
     void FASTCALL SetIndex( cData::size_type idx )              { mIdx = idx; }
 
-    CDFASTCALL cRecordIterator( cData_ptr& container );
-    CDFASTCALL cRecordIterator( cData_ptr& container, cData::size_type idx );
+    CDFASTCALL cRecordIterator( spData& container );
+    CDFASTCALL cRecordIterator( spData& container, cData::size_type idx );
 public:
     CDFASTCALL cRecordIterator( const cRecordIterator& src );
     virtual CDFASTCALL ~cRecordIterator();
@@ -291,9 +291,8 @@ public:
     cRecordIterator& FASTCALL operator+=( int num )     { mIdx += num;  return *this; }
     cRecordIterator& FASTCALL operator-=( int num )     { mIdx -= num;  return *this; }
 
-
-    cRecordIterator FASTCALL operator++( int );
-    cRecordIterator FASTCALL operator--( int );
+    const cRecordIterator FASTCALL operator++( int );
+    const cRecordIterator FASTCALL operator--( int );
 
     cRecordIterator FASTCALL operator+( int num );
     cRecordIterator FASTCALL operator-( int num );

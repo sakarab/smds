@@ -745,7 +745,7 @@ public:
 //***********************************************************************
 class IDataNotify;
 class cData;
-typedef shared_ptr< cData >         cData_ptr;
+typedef shared_ptr< cData >         spData;
 
 class cData
 #ifdef SM_DS_USE_SMALL_SHARED_PTR
@@ -807,7 +807,7 @@ public:
     size_type FASTCALL size() const                                 { return ( mData.size() ); }
     const value_type& FASTCALL operator[]( size_type idx ) const    { return ( mData[idx] ); }
 
-    cData_ptr FASTCALL Clone_All( IDataNotify *i_notify );
+    spData FASTCALL Clone_All( IDataNotify *i_notify );
     void FASTCALL Sort( const SortControler& cmp );
 
     void FASTCALL Clear();

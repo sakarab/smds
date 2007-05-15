@@ -133,12 +133,12 @@ void FASTCALL cRecordPtr::WriteString( const cFieldDef_& field_def, const char *
 //***********************************************************************
 //******    cRecordIterator
 //***********************************************************************
-CDFASTCALL cRecordIterator::cRecordIterator( detail::cData_ptr& container )
+CDFASTCALL cRecordIterator::cRecordIterator( detail::spData& container )
     : mIdx(0), mContainer(container)
 {
 }
 
-CDFASTCALL cRecordIterator::cRecordIterator( detail::cData_ptr& container, detail::cData::size_type idx )
+CDFASTCALL cRecordIterator::cRecordIterator( detail::spData& container, detail::cData::size_type idx )
     : mIdx(idx), mContainer(container)
 {
 }
@@ -167,18 +167,20 @@ detail::cDoubleBuffer * FASTCALL cRecordIterator::GetDoubleBuffer() const
     return ( (*mContainer)[mIdx].get() );
 }
 
-cRecordIterator FASTCALL cRecordIterator::operator++( int )
+const cRecordIterator FASTCALL cRecordIterator::operator++( int )
 {
     cRecordIterator     tmp( *this );
 
-    return ++tmp;
+    ++(*this);
+    return tmp;
 }
 
-cRecordIterator FASTCALL cRecordIterator::operator--( int )
+const cRecordIterator FASTCALL cRecordIterator::operator--( int )
 {
     cRecordIterator     tmp( *this );
 
-    return --tmp;
+    --(*this);
+    return tmp;
 }
 
 cRecordIterator FASTCALL cRecordIterator::operator+( int num )

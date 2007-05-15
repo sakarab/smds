@@ -226,9 +226,9 @@ void FASTCALL cData::AddField( const ds_string& name, cFieldKind kind, cFieldDat
     mFieldDefs->AddField( name, kind, data_type, size );
 }
 
-cData_ptr FASTCALL cData::Clone_All( IDataNotify *i_notify )
+spData FASTCALL cData::Clone_All( IDataNotify *i_notify )
 {
-    cData_ptr   result( new cData( GetFieldDefs(), i_notify ) );
+    spData      result( new cData( GetFieldDefs(), i_notify ) );
 
     std::copy( mData.begin(), mData.end(), std::back_inserter( result->mData ) );
     AddRelation( result.get() );
