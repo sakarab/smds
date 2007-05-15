@@ -34,12 +34,12 @@ namespace smds
 //******    Tablebase
 //***********************************************************************
 CDFASTCALL Tablebase::Tablebase()
-    : mData( new detail::cData() )
+    : mData( new detail::cData( this ) )
 {
 }
 
 CDFASTCALL Tablebase::Tablebase( const detail::cFieldDefs_& field_defs )
-    : mData( new detail::cData( field_defs ) )
+    : mData( new detail::cData( field_defs, this ) )
 {
 }
 
@@ -68,6 +68,14 @@ Tablebase::iterator FASTCALL Tablebase::Locate( const OpenValues& values, const 
 Tablebase::iterator FASTCALL Tablebase::Locate( const Variant& value, const cFindField& field )
 {
     return ( Locate( OpenValues( value ), OpenFindFields( field ) ) );
+}
+
+void FASTCALL Tablebase::RecordAdded( const detail::cData::value_type& value )
+{
+}
+
+void FASTCALL Tablebase::RecordDeleted()
+{
 }
 
 //***********************************************************************
@@ -304,7 +312,7 @@ void FASTCALL Table::Open( const Database& database, const char *where_clause )
 
 void FASTCALL Table::Close()
 {
-    detail::cData_ptr   tmp( new detail::cData() );
+    detail::cData_ptr   tmp( new detail::cData( this ) );
 
     GetData() = tmp;
 }
@@ -413,7 +421,7 @@ bool FASTCALL Index::range_iterator::Find( const OpenValues& values )
 CDFASTCALL Index::Index( const cSortCompareBase_ptr& cmp_func, const detail::cData_ptr& data )
     : Tablebase(), mCompare(cmp_func)
 {
-    SetData( data->Clone_All() );
+    SetData( data->Clone_All( this ) );
     cmp_func->Initialize( GetData()->GetFieldDefs() );
     GetData()->Sort( detail::SortControler( mCompare ) );
 }

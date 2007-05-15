@@ -285,19 +285,18 @@ public:
     CDFASTCALL cRecordIterator( const cRecordIterator& src );
     virtual CDFASTCALL ~cRecordIterator();
     cRecordIterator& FASTCALL operator = ( const cRecordIterator& src );
-    cRecordIterator& FASTCALL operator++()
-    {
-        ++mIdx;
-        return ( *this );
-    }
-    cRecordIterator& FASTCALL operator--()
-    {
-        --mIdx;
-        return ( *this );
-    }
 
-    //cRecordIterator FASTCALL operator+( int num );
-    //cRecordIterator FASTCALL operator-( int num );
+    cRecordIterator& FASTCALL operator++()              { ++mIdx;       return *this; }
+    cRecordIterator& FASTCALL operator--()              { --mIdx;       return *this; }
+    cRecordIterator& FASTCALL operator+=( int num )     { mIdx += num;  return *this; }
+    cRecordIterator& FASTCALL operator-=( int num )     { mIdx -= num;  return *this; }
+
+
+    cRecordIterator FASTCALL operator++( int );
+    cRecordIterator FASTCALL operator--( int );
+
+    cRecordIterator FASTCALL operator+( int num );
+    cRecordIterator FASTCALL operator-( int num );
 
     void FASTCALL Next()
     {
@@ -322,6 +321,7 @@ public:
     {
         return ( OldValuesProxy( GetDoubleBuffer()->GetOriginalData(), *mContainer->GetFieldDefs().get() ) );
     }
+
     cFieldProxy FASTCALL FieldByName( const ds_string& field_name );
     cFieldProxy FASTCALL FieldByName( const char *field_name );
     bool FASTCALL Locate( const Variant& value, const cFindField& field );

@@ -709,16 +709,6 @@ public:
 };
 
 //***********************************************************************
-//******    IDataNotify
-//***********************************************************************
-class IDataNotify
-{
-public:
-    virtual void FASTCALL RecordAdded() = 0;
-    virtual void FASTCALL RecordDeleted() = 0;
-};
-
-//***********************************************************************
 //******    DataRelation
 //***********************************************************************
 /*
@@ -753,6 +743,7 @@ public:
 //***********************************************************************
 //******    cData
 //***********************************************************************
+class IDataNotify;
 class cData;
 typedef shared_ptr< cData >         cData_ptr;
 
@@ -785,7 +776,7 @@ private:
     void FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields,
                           iterator begin, iterator end, locate_result& result );
     // relation managment
-    void FASTCALL NotifyRecordAdded();
+    void FASTCALL NotifyRecordAdded( const value_type& value );
     void FASTCALL NotifyRecordDeleted();
     void FASTCALL RemoveRelation( cData *relation )
     {
@@ -802,9 +793,9 @@ private:
     CDFASTCALL cData( const cData& src );
     cData& FASTCALL operator=( const cData& src );
 public:
-    CDFASTCALL cData();
-    CDFASTCALL cData( const cFieldDefs_& field_defs );
-    CDFASTCALL cData( const cFieldDefs_ptr& field_defs );
+    CDFASTCALL cData( IDataNotify *i_notify );
+    CDFASTCALL cData( const cFieldDefs_& field_defs, IDataNotify *i_notify );
+    CDFASTCALL cData( const cFieldDefs_ptr& field_defs, IDataNotify *i_notify );
     CDFASTCALL ~cData();
 
     int FASTCALL AddBuffer_ptr( const value_type& value );
@@ -816,7 +807,7 @@ public:
     size_type FASTCALL size() const                                 { return ( mData.size() ); }
     const value_type& FASTCALL operator[]( size_type idx ) const    { return ( mData[idx] ); }
 
-    cData_ptr FASTCALL Clone_All();
+    cData_ptr FASTCALL Clone_All( IDataNotify *i_notify );
     void FASTCALL Sort( const SortControler& cmp );
 
     void FASTCALL Clear();
@@ -833,6 +824,17 @@ public:
     void FASTCALL Find( const OpenValues& values, cSortCompareBase_ptr& compare, locate_result& result );
     void FASTCALL Find( const OpenValues& values, cSortCompareBase_ptr& compare, size_type start, size_type end, locate_result& result );
     void FASTCALL GetRange( const OpenRangeValues& values, cSortCompareBase_ptr& compare, range_result& result );
+};
+
+//***********************************************************************
+//******    IDataNotify
+//***********************************************************************
+class IDataNotify
+{
+public:
+    virtual void FASTCALL RecordAdded( const cData::value_type& value ) = 0;
+    virtual void FASTCALL RecordDeleted() = 0;
+    virtual CDFASTCALL ~IDataNotify()               {} // empty
 };
 
 //---------------------------------------------------------------------------

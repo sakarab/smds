@@ -167,12 +167,25 @@ detail::cDoubleBuffer * FASTCALL cRecordIterator::GetDoubleBuffer() const
     return ( (*mContainer)[mIdx].get() );
 }
 
-/*
+cRecordIterator FASTCALL cRecordIterator::operator++( int )
+{
+    cRecordIterator     tmp( *this );
+
+    return ++tmp;
+}
+
+cRecordIterator FASTCALL cRecordIterator::operator--( int )
+{
+    cRecordIterator     tmp( *this );
+
+    return --tmp;
+}
+
 cRecordIterator FASTCALL cRecordIterator::operator+( int num )
 {
     cRecordIterator     tmp( *this );
 
-    tmp.mIdx += num;
+    tmp += num;
     return tmp;
 }
 
@@ -180,10 +193,9 @@ cRecordIterator FASTCALL cRecordIterator::operator-( int num )
 {
     cRecordIterator     tmp( *this );
 
-    tmp.mIdx -= num;
+    tmp -= num;
     return tmp;
 }
-*/
 
 detail::cFieldProxy FASTCALL cRecordIterator::FieldByName( const ds_string& field_name )
 {

@@ -35,9 +35,9 @@ namespace smds
 //***********************************************************************
 //******    Tablebase
 //***********************************************************************
-class Tablebase
+class Tablebase : public detail::IDataNotify
 #ifdef SM_DS_USE_SMALL_SHARED_PTR
-    : public boost::shared_in_base<long>
+    , public boost::shared_in_base<long>
 #endif
 {
 public:
@@ -46,6 +46,9 @@ private:
     friend class cTableWriter;
 
     detail::cData_ptr       mData;
+    // IDataNotify
+    virtual void FASTCALL RecordAdded( const detail::cData::value_type& value );
+    virtual void FASTCALL RecordDeleted();
     // noncopyable
     CDFASTCALL Tablebase( const Tablebase& src );
     Tablebase& FASTCALL operator=( const Tablebase& src );
