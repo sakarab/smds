@@ -769,9 +769,9 @@ private:
     IDataNotify         *mDataNotify;
 
     container& FASTCALL GetContainer()                              { return ( mData ); }
-    void FASTCALL Find_0( const cData::value_type& double_buffer, cSortCompareBase_ptr& compare,
+    void FASTCALL Find_0( const cData::value_type& double_buffer, spSortCompare& compare,
                           iterator begin, iterator end, locate_result& result );
-    void FASTCALL Find( const OpenValues& values, cSortCompareBase_ptr& compare,
+    void FASTCALL Find( const OpenValues& values, spSortCompare& compare,
                         iterator begin, iterator end, locate_result& result );
     void FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields,
                           iterator begin, iterator end, locate_result& result );
@@ -821,9 +821,9 @@ public:
 
     void FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields, locate_result& result );
     void FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields, size_type start, size_type end, locate_result& result );
-    void FASTCALL Find( const OpenValues& values, cSortCompareBase_ptr& compare, locate_result& result );
-    void FASTCALL Find( const OpenValues& values, cSortCompareBase_ptr& compare, size_type start, size_type end, locate_result& result );
-    void FASTCALL GetRange( const OpenRangeValues& values, cSortCompareBase_ptr& compare, range_result& result );
+    void FASTCALL Find( const OpenValues& values, spSortCompare& compare, locate_result& result );
+    void FASTCALL Find( const OpenValues& values, spSortCompare& compare, size_type start, size_type end, locate_result& result );
+    void FASTCALL GetRange( const OpenRangeValues& values, spSortCompare& compare, range_result& result );
 };
 
 //***********************************************************************

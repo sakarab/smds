@@ -195,7 +195,7 @@ public:
 }; // namespace detail
 
 //---------------------------------------------------------------------------
-typedef shared_ptr<detail::cSortCompareBase>        cSortCompareBase_ptr;
+typedef shared_ptr<detail::cSortCompareBase>        spSortCompare;
 typedef shared_ptr<detail::cFilterCompareBase>      cFilterCompareBase_ptr;
 //---------------------------------------------------------------------------
 

@@ -41,7 +41,7 @@ class SortControler : public std::binary_function<const cData::value_type&, cons
 private:
     cSortCompareBase    *mCompare;
 public:
-    CDFASTCALL SortControler( cSortCompareBase_ptr& cmp_func )
+    CDFASTCALL SortControler( spSortCompare& cmp_func )
         : mCompare(cmp_func.get())                                                          {} // empty
     result_type FASTCALL operator()( first_argument_type item1, second_argument_type item2 ) const
     {
@@ -58,7 +58,7 @@ private:
     cSortCompareBase    *mCompare;
     cRawBuffer          *mItem2;
 public:
-    CDFASTCALL FindControler( cSortCompareBase_ptr& cmp_func, cRawBuffer& item2 )
+    CDFASTCALL FindControler( spSortCompare& cmp_func, cRawBuffer& item2 )
         : mCompare(cmp_func.get()), mItem2(&item2)                                          {} // empty
     result_type FASTCALL operator()( argument_type item ) const
     {

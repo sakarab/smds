@@ -325,12 +325,12 @@ void FASTCALL Table::Close()
 //***********************************************************************
 //******    Index::iterator
 //***********************************************************************
-CDFASTCALL Index::iterator::iterator( detail::spData& container, const cSortCompareBase_ptr& cmp )
+CDFASTCALL Index::iterator::iterator( detail::spData& container, const spSortCompare& cmp )
     : inherited(container), mCompare(cmp)
 {
 }
 
-CDFASTCALL Index::iterator::iterator( detail::spData& container, detail::cData::size_type idx, const cSortCompareBase_ptr& cmp )
+CDFASTCALL Index::iterator::iterator( detail::spData& container, detail::cData::size_type idx, const spSortCompare& cmp )
     : inherited(container,idx), mCompare(cmp)
 {
 }
@@ -373,14 +373,14 @@ bool FASTCALL Index::iterator::Find( const OpenValues& values )
 //******    Index::range_iterator
 //***********************************************************************
 CDFASTCALL Index::range_iterator::range_iterator( detail::spData& container, detail::cData::size_type start,
-                                                  detail::cData::size_type end, const cSortCompareBase_ptr& cmp )
+                                                  detail::cData::size_type end, const spSortCompare& cmp )
     : Index::iterator( container, cmp ), mStart(start), mEnd(end)
 {
 }
 
 CDFASTCALL Index::range_iterator::range_iterator( detail::spData& container, detail::cData::size_type start,
                                                   detail::cData::size_type end, detail::cData::size_type idx,
-                                                  const cSortCompareBase_ptr& cmp )
+                                                  const spSortCompare& cmp )
     : Index::iterator( container, idx, cmp ), mStart(start), mEnd(end)
 {
 }
@@ -423,7 +423,7 @@ bool FASTCALL Index::range_iterator::Find( const OpenValues& values )
 //***********************************************************************
 //******    Index
 //***********************************************************************
-CDFASTCALL Index::Index( const cSortCompareBase_ptr& cmp_func, const detail::spData& data )
+CDFASTCALL Index::Index( const spSortCompare& cmp_func, const detail::spData& data )
     : Tablebase(), mCompare(cmp_func)
 {
     SetData( data->Clone_All( this ) );

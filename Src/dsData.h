@@ -90,11 +90,11 @@ public:
     private:
         typedef Tablebase::iterator     inherited;
         friend class Index;
-        cSortCompareBase_ptr    mCompare;
+        spSortCompare           mCompare;
     protected:
-        cSortCompareBase_ptr& GetCompare()                      { return mCompare; }
-        CDFASTCALL iterator( detail::spData& container, const cSortCompareBase_ptr& cmp );
-        CDFASTCALL iterator( detail::spData& container, detail::cData::size_type idx, const cSortCompareBase_ptr& cmp );
+        spSortCompare& GetCompare()                     { return mCompare; }
+        CDFASTCALL iterator( detail::spData& container, const spSortCompare& cmp );
+        CDFASTCALL iterator( detail::spData& container, detail::cData::size_type idx, const spSortCompare& cmp );
     public:
         CDFASTCALL iterator( const iterator& src );
         CDFASTCALL ~iterator();
@@ -119,10 +119,10 @@ public:
         detail::cData::size_type    mEnd;
     protected:
         CDFASTCALL range_iterator( detail::spData& container, detail::cData::size_type start,
-                                   detail::cData::size_type end, const cSortCompareBase_ptr& cmp );
+                                   detail::cData::size_type end, const spSortCompare& cmp );
         CDFASTCALL range_iterator( detail::spData& container, detail::cData::size_type start,
                                    detail::cData::size_type end, detail::cData::size_type idx,
-                                   const cSortCompareBase_ptr& cmp );
+                                   const spSortCompare& cmp );
     public:
         CDFASTCALL range_iterator( const range_iterator& src );
         CDFASTCALL ~range_iterator();
@@ -162,14 +162,14 @@ private:
     typedef detail::spData          container;
     friend class Table;            // needed only for constructor
 
-    cSortCompareBase_ptr    mCompare;
+    spSortCompare           mCompare;
     cFilterCompareBase_ptr  mFilter;
     // noncopyable
     CDFASTCALL Index( const Index& src );
     Index& FASTCALL operator=( const Index& src );
 protected:
-    const cSortCompareBase_ptr& GetCompare() const                  { return mCompare; }
-    CDFASTCALL Index( const cSortCompareBase_ptr& cmp_func, const detail::spData& data );
+    const spSortCompare& GetCompare() const                     { return mCompare; }
+    CDFASTCALL Index( const spSortCompare& cmp_func, const detail::spData& data );
 public:
     virtual CDFASTCALL ~Index();
     iterator FASTCALL Find( const Variant& value );
@@ -244,9 +244,9 @@ public:
         friend class cuIndex<RECORD>;
         typedef detail::cRawRecordProxy<typename RECORD::raw>   OldValuesProxy;
     protected:
-        CDFASTCALL iterator( detail::spData& container, const cSortCompareBase_ptr& cmp )
+        CDFASTCALL iterator( detail::spData& container, const spSortCompare& cmp )
             : inherited(container,cmp)                                                {} // empty
-        CDFASTCALL iterator( detail::spData& container, detail::cData::size_type idx, const cSortCompareBase_ptr& cmp )
+        CDFASTCALL iterator( detail::spData& container, detail::cData::size_type idx, const spSortCompare& cmp )
             : inherited(container, idx)                                           {} // empty
         CDFASTCALL iterator( const Index::iterator& iter )
             : inherited(iter)                                                     {} // empty
@@ -272,10 +272,10 @@ public:
         typedef detail::cRawRecordProxy<typename RECORD::raw>   OldValuesProxy;
     protected:
         CDFASTCALL range_iterator( detail::spData& container, detail::cData::size_type start,
-                                   detail::cData::size_type end, const cSortCompareBase_ptr& cmp );
+                                   detail::cData::size_type end, const spSortCompare& cmp );
         CDFASTCALL range_iterator( detail::spData& container, detail::cData::size_type start,
                                    detail::cData::size_type end, detail::cData::size_type idx,
-                                   const cSortCompareBase_ptr& cmp );
+                                   const spSortCompare& cmp );
         CDFASTCALL range_iterator( const Index::range_iterator& iter )
             : inherited(iter)                                               {} // empty
     public:
@@ -300,7 +300,7 @@ protected:
         : Index()
     {
     }
-    CDFASTCALL cuIndex( const cSortCompareBase_ptr& cmp_func, const detail::spData& data )
+    CDFASTCALL cuIndex( const spSortCompare& cmp_func, const detail::spData& data )
         : Index( cmp_func, data )
     {
     }
@@ -361,9 +361,9 @@ private:
         virtual bool FASTCALL do_compare_1( detail::cRawBuffer *item1, detail::cRawBuffer *item2 )
         {
 #ifdef __BORLANDC__
-            return ( do_compare_2( RECORD::raw( *item1 ), RECORD::raw( *item2 ) ) );
+            return do_compare_2( RECORD::raw( *item1 ), RECORD::raw( *item2 ) );
 #else
-            return ( do_compare_2( typename RECORD::raw( *item1 ), typename RECORD::raw( *item2 ) ) );
+            return do_compare_2( typename RECORD::raw( *item1 ), typename RECORD::raw( *item2 ) );
 #endif
         }
     protected:
@@ -375,7 +375,7 @@ private:
     private:
         virtual bool FASTCALL do_compare_1( detail::cRawBuffer *item1 )
         {
-            return ( do_compare_2( typename RECORD::raw( *item1 ) ) );
+            return do_compare_2( typename RECORD::raw( *item1 ) );
         }
     protected:
         virtual bool FASTCALL do_compare_2( const typename RECORD::raw& item1 ) = 0;
@@ -398,7 +398,7 @@ public:
     CDFASTCALL cuTable() : Table( RECORD::GetFieldDefs() )                      {} // empty
     virtual CDFASTCALL ~cuTable()                                               {} // empty
 
-    index_ptr FASTCALL NewIndex( const cSortCompareBase_ptr& cmp_func )
+    index_ptr FASTCALL NewIndex( const spSortCompare& cmp_func )
     {
         return index_ptr( new index( cmp_func, GetData() ) );
     }

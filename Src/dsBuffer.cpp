@@ -250,7 +250,7 @@ void FASTCALL cData::Locate( const OpenValues& values, const OpenFindFields& fie
         raw_buffer.WriteVariant( mFieldDefs->FieldByName( (fields.GetArray()[n])->GetFieldName() ),
                                  *(values.GetArray()[n]) );
 
-    cSortCompareBase_ptr    cmp_func( new cFindCompareStd( fields ) );
+    spSortCompare       cmp_func( new cFindCompareStd( fields ) );
 
     cmp_func->Initialize( mFieldDefs );
 
@@ -274,7 +274,7 @@ void FASTCALL cData::Locate( const OpenValues& values, const OpenFindFields& fie
     Locate( values, fields, mData.begin() + start, mData.begin() + end, result );
 }
 
-void FASTCALL cData::Find_0( const cData::value_type& double_buffer, cSortCompareBase_ptr& compare,
+void FASTCALL cData::Find_0( const cData::value_type& double_buffer, spSortCompare& compare,
                              iterator begin, iterator end, locate_result& result )
 {
     SortControler       cc = SortControler( compare );
@@ -287,7 +287,7 @@ void FASTCALL cData::Find_0( const cData::value_type& double_buffer, cSortCompar
         result.second = mData.size();
 }
 
-void FASTCALL cData::Find( const OpenValues& values, cSortCompareBase_ptr& compare,
+void FASTCALL cData::Find( const OpenValues& values, spSortCompare& compare,
                            iterator begin, iterator end, locate_result& result )
 {
     // the comparizon function must be cIndexSortCompareStd. There is no other way to do a Find
@@ -313,18 +313,18 @@ void FASTCALL cData::Find( const OpenValues& values, cSortCompareBase_ptr& compa
     }
 }
 
-void FASTCALL cData::Find( const OpenValues& values, cSortCompareBase_ptr& compare, locate_result& result )
+void FASTCALL cData::Find( const OpenValues& values, spSortCompare& compare, locate_result& result )
 {
     Find( values, compare, mData.begin(), mData.end(), result );
 }
 
-void FASTCALL cData::Find( const OpenValues& values, cSortCompareBase_ptr& compare,
+void FASTCALL cData::Find( const OpenValues& values, spSortCompare& compare,
                            size_type start, size_type end, locate_result& result )
 {
     Find( values, compare, mData.begin() + start, mData.begin() + end, result );
 }
 
-void FASTCALL cData::GetRange( const OpenRangeValues& values, cSortCompareBase_ptr& compare, range_result& result )
+void FASTCALL cData::GetRange( const OpenRangeValues& values, spSortCompare& compare, range_result& result )
 {
     // the comparizon function must be cIndexSortCompareStd. There is no other way to do a Find
     if ( dynamic_cast<cIndexSortCompareStd *>(compare.get()) == 0 )

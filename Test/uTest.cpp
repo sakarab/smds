@@ -249,7 +249,7 @@ public:
 
 tblFiles::index_ptr FASTCALL CreateIndex_f1( tblFiles_ptr uds )
 {
-    return ( uds->NewIndex( cSortCompareBase_ptr( new idx_ByPathID() ) ) );
+    return ( uds->NewIndex( spSortCompare( new idx_ByPathID() ) ) );
 }
 
 int FASTCALL Check_Order_f1( tblFiles::index::iterator ptr1 )
