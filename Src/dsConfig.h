@@ -55,8 +55,14 @@
 #define SM_DS_STRING_AS_STRING
 
 /**********************************************************************************
-** Uncomment this line will make a library that uses COM compatible interfaces for
-** communucation with the driver DLLs. The DLLs must also be recompiled.
+** Comment this line to get safer (but not complitly safe) iterator.
+** This will take effect only if SM_DS_DEBUG is **not** defined
+***********************************************************************************/
+// #define SM_DS_FAST_ITERATORS
+
+/**********************************************************************************
+** Uncommenting this line will make a library that uses COM compatible interfaces
+** for communucation with the driver DLLs. The DLLs must also be recompiled.
 ***********************************************************************************/
 // #define SM_USE_COM_DELPHI_INTERFACE
 
@@ -82,6 +88,20 @@
 ***********************************************************************************/
 #if ! defined NDEBUG
 #define NDEBUG
+#endif
+
+/**********************************************************************************
+***********************************************************************************
+***********************************************************************************
+** Change the code below ONLY IF YOU KNOW WHAT YOU ARE DOING!!!!
+***********************************************************************************
+***********************************************************************************
+***********************************************************************************/
+
+#if ! defined(SM_DS_DEBUG)
+    #if defined ( SM_DS_FAST_ITERATORS )
+        #define SM_DS_FAST_ITERATORS_INTERNAL
+    #endif
 #endif
 
 /**********************************************************************************

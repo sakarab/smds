@@ -423,11 +423,11 @@ public:
     iterator FASTCALL AddRecord( const record& rec )                            { return iterator( GetData(), AddBuffer_ptr( rec ) ); }
     iterator FASTCALL Locate( const Variant& value, const cFindField& field )
     {
-        return ( iterator( Table::Locate( value, field ) ) );
+        return iterator( Table::Locate( value, field ) );
     }
     iterator FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields )
     {
-        return ( iterator( GetData(), Table::LocateImpl( values, fields ) ) );
+        return iterator( GetData(), Table::LocateImpl( values, fields ) );
     }
 };
 

@@ -269,13 +269,23 @@ private:
     friend class Table;
     friend class Index;
 
-    cData::size_type    mIdx;
-    spData              mContainer;
+#if ! defined( SM_DS_FAST_ITERATORS_INTERNAL )
+    typedef spData          ContainerPointerType;
+    typedef spData &        ContainerReferanceType;
+    typedef const spData &  ConstContainerReferanceType;
+#else
+    typedef cData *         ContainerPointerType;
+    typedef cData *         ContainerReferanceType;
+    typedef cData *         ConstContainerReferanceType;
+#endif
+
+    cData::size_type        mIdx;
+    ContainerPointerType    mContainer;
 protected:
     typedef cRawRecordProxy<cRawRecordPtr>      OldValuesProxy;
 
     cDoubleBuffer * FASTCALL GetDoubleBuffer() const;
-    const spData& FASTCALL GetData() const                      { return ( mContainer ); }
+    ConstContainerReferanceType FASTCALL GetData() const        { return ( mContainer ); }
     cData::size_type FASTCALL GetIndex() const                  { return ( mIdx ); }
     void FASTCALL SetIndex( cData::size_type idx )              { mIdx = idx; }
 

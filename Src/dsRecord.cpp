@@ -133,13 +133,23 @@ void FASTCALL cRecordPtr::WriteString( const cFieldDef_& field_def, const char *
 //***********************************************************************
 //******    cRecordIterator
 //***********************************************************************
-CDFASTCALL cRecordIterator::cRecordIterator( detail::spData& container )
-    : mIdx(0), mContainer(container)
+CDFASTCALL cRecordIterator::cRecordIterator( spData& container )
+    : mIdx(0),
+#if ! defined( SM_DS_FAST_ITERATORS_INTERNAL )
+      mContainer(container)
+#else
+      mContainer(container.get())
+#endif
 {
 }
 
-CDFASTCALL cRecordIterator::cRecordIterator( detail::spData& container, detail::cData::size_type idx )
-    : mIdx(idx), mContainer(container)
+CDFASTCALL cRecordIterator::cRecordIterator( spData& container, detail::cData::size_type idx )
+    : mIdx(idx),
+#if ! defined( SM_DS_FAST_ITERATORS_INTERNAL )
+      mContainer(container)
+#else
+      mContainer(container.get())
+#endif
 {
 }
 
