@@ -49,20 +49,33 @@
 //#define SM_DS_DEBUG_ITERATORS
 
 /**********************************************************************************
-** Uncomment this so that the raw record buffer class (cRawBuffer) holds strings
-** as ds_string and not char arrays
+** When SM_DS_STRING_AS_STRING is defined then the raw record buffer class
+** (cRawBuffer) holds strings as ds_string.
+** When SM_DS_STRING_AS_STRING is --NOT-- defined then the raw record buffer class
+** (cRawBuffer) holds strings as char arrays
 ***********************************************************************************/
 #define SM_DS_STRING_AS_STRING
 
 /**********************************************************************************
 ** Comment this line to get safer (but not complitly safe) iterator.
-** This will take effect only if SM_DS_DEBUG is **not** defined
+** The gain is not so mush at speed then is code size.
+** This will take effect only if SM_DS_DEBUG is --NOT-- defined
 ***********************************************************************************/
 // #define SM_DS_FAST_ITERATORS
 
 /**********************************************************************************
-** Uncommenting this line will make a library that uses COM compatible interfaces
-** for communucation with the driver DLLs. The DLLs must also be recompiled.
+** When SM_DS_COPYABLE_TABLES is defined all classes inherited from Tablebase
+** will be copyable.
+***********************************************************************************/
+// #define SM_DS_COPYABLE_TABLES
+
+/**********************************************************************************
+** Defining SM_USE_COM_DELPHI_INTERFACE will make a library that uses COM compatible
+** interfaces for communucation with the driver DLLs.
+** That is they will have "QueryInterface", "AddRef", and "Release" methods so that
+** driver DLL can be created with development environments thet support only
+** COM interfaces (eg VB(!!!), Delphi).
+** The DLLs must also be recompiled.
 ***********************************************************************************/
 // #define SM_USE_COM_DELPHI_INTERFACE
 

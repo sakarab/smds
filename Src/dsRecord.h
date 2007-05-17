@@ -274,23 +274,23 @@ private:
     typedef spData &        ContainerReferanceType;
     typedef const spData &  ConstContainerReferanceType;
 #else
-    typedef cData *         ContainerPointerType;
-    typedef cData *         ContainerReferanceType;
-    typedef cData *         ConstContainerReferanceType;
+    typedef Data *          ContainerPointerType;
+    typedef Data *          ContainerReferanceType;
+    typedef Data *          ConstContainerReferanceType;
 #endif
 
-    cData::size_type        mIdx;
+    Data::size_type         mIdx;
     ContainerPointerType    mContainer;
 protected:
     typedef cRawRecordProxy<cRawRecordPtr>      OldValuesProxy;
 
     cDoubleBuffer * FASTCALL GetDoubleBuffer() const;
     ConstContainerReferanceType FASTCALL GetData() const        { return ( mContainer ); }
-    cData::size_type FASTCALL GetIndex() const                  { return ( mIdx ); }
-    void FASTCALL SetIndex( cData::size_type idx )              { mIdx = idx; }
+    Data::size_type FASTCALL GetIndex() const                   { return ( mIdx ); }
+    void FASTCALL SetIndex( Data::size_type idx )               { mIdx = idx; }
 
     CDFASTCALL cRecordIterator( spData& container );
-    CDFASTCALL cRecordIterator( spData& container, cData::size_type idx );
+    CDFASTCALL cRecordIterator( spData& container, Data::size_type idx );
 public:
     CDFASTCALL cRecordIterator( const cRecordIterator& src );
     virtual CDFASTCALL ~cRecordIterator();
@@ -323,7 +323,7 @@ public:
     void FASTCALL Last()                                { mIdx = mContainer->size() - 1; }
     int FASTCALL RecordCount() const                    { return ( mContainer->size() ); }
     void * FASTCALL GetMark() const                     { return ( reinterpret_cast<void *>(mIdx) ); }
-    void FASTCALL GotoMark( void *mark )                { mIdx = reinterpret_cast<detail::cData::size_type>(mark); }
+    void FASTCALL GotoMark( void *mark )                { mIdx = reinterpret_cast<detail::Data::size_type>(mark); }
     cUpdateStatus FASTCALL GetUpdateStatus() const      { return ( GetDoubleBuffer()->GetUpdateStatus() ); }
 
     const OldValuesProxy FASTCALL OldValues()
@@ -351,7 +351,7 @@ private:
 protected:
 	CDFASTCALL cuRecordIterator( detail::cData_ptr& container )
         : cRecordIterator(container)                                                {} // empty
-    CDFASTCALL cuRecordIterator( detail::cData_ptr& container, detail::cData::size_type idx )
+    CDFASTCALL cuRecordIterator( detail::cData_ptr& container, detail::Data::size_type idx )
         : cRecordIterator(container, idx)                                           {} // empty
     CDFASTCALL cuRecordIterator( const cRecordIterator& iter )
         : cRecordIterator(iter)                                                     {} // empty
@@ -385,11 +385,11 @@ private:
     friend class Index;
     friend class Tablebase;
 
-    cData::size_type    mStart;
-    cData::size_type    mEnd;
+    Data::size_type    mStart;
+    Data::size_type    mEnd;
 protected:
-    CDFASTCALL cRangeIterator( cData_ptr& container, cData::size_type start, cData::size_type end );
-    CDFASTCALL cRangeIterator( cData_ptr& container, cData::size_type start, cData::size_type end, cData::size_type idx );
+    CDFASTCALL cRangeIterator( cData_ptr& container, Data::size_type start, Data::size_type end );
+    CDFASTCALL cRangeIterator( cData_ptr& container, Data::size_type start, Data::size_type end, Data::size_type idx );
 public:
     CDFASTCALL cRangeIterator( const cRangeIterator& src );
     cRangeIterator& FASTCALL operator = ( const cRangeIterator& src );
@@ -419,7 +419,7 @@ public:
     void FASTCALL Last()                    { SetIndex( mEnd - 1 ); }
     int FASTCALL RecordCount()              { return ( mEnd - mStart ); }
     void * FASTCALL GetMark()               { return ( reinterpret_cast<void *>(GetIndex()) ); }
-    void FASTCALL GotoMark( void *mark )    { SetIndex( reinterpret_cast<cData::size_type>(mark) ); }
+    void FASTCALL GotoMark( void *mark )    { SetIndex( reinterpret_cast<Data::size_type>(mark) ); }
 
     const OldValuesProxy FASTCALL OldValues()                   { return ( cRecordIterator::OldValues() ); }
     cFieldProxy FieldByName( const ds_string& field_name )      { return ( cRecordIterator::FieldByName( field_name ) ); }
@@ -472,12 +472,12 @@ private:
     friend class Tablebase;
     friend class cTableWriter;
 
-    detail::cData::value_type   mRecord;
-    cFieldDefs_ptr      mFieldDefs;
+    detail::Data::value_type    mRecord;
+    cFieldDefs_ptr              mFieldDefs;
 protected:
     detail::cDoubleBuffer * FASTCALL GetDoubleBuffer() const            { return ( mRecord.get() ); }
 public:
-    CDFASTCALL cRecord( const detail::cData::value_type& container, const cFieldDefs_ptr& field_defs );
+    CDFASTCALL cRecord( const detail::Data::value_type& container, const cFieldDefs_ptr& field_defs );
     CDFASTCALL ~cRecord();
     void FASTCALL CommitUpdates()                               { mRecord->CommitUpdates(); }
     detail::cFieldProxy FieldByName( const ds_string& field_name );
@@ -490,7 +490,7 @@ public:
 template <class RECORD> class cuRecord : public cRecord
 {
 public:
-    CDFASTCALL cuRecord( const detail::cData::value_type& container, const cFieldDefs_ptr& field_defs )
+    CDFASTCALL cuRecord( const detail::Data::value_type& container, const cFieldDefs_ptr& field_defs )
         : cRecord( container, field_defs )
     {} // empty
     RECORD FASTCALL operator->()                    { return ( RECORD( *GetDoubleBuffer() ) ); }

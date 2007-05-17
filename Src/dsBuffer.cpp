@@ -139,111 +139,101 @@ void FASTCALL cDoubleBuffer::CommitUpdates()
 //***********************************************************************
 //******    cData
 //***********************************************************************
-CDFASTCALL cData::cData( IDataNotify *i_notify )
-    : mData(), mFieldDefs( new cFieldDefs() ), mRelation(this), mDataNotify(i_notify)
+CDFASTCALL Data::Data( IDataNotify *i_notify )
+    : mData(), mFieldDefs( new cFieldDefs() ), mRelatedData(this), mTableNotify(i_notify)
 {
 }
 
-CDFASTCALL cData::cData( const cFieldDefs_& field_defs, IDataNotify *i_notify )
-    : mData(), mFieldDefs( new cFieldDefs( field_defs ) ), mRelation(this), mDataNotify(i_notify)
+CDFASTCALL Data::Data( const cFieldDefs_& field_defs, IDataNotify *i_notify )
+    : mData(), mFieldDefs( new cFieldDefs( field_defs ) ), mRelatedData(this), mTableNotify(i_notify)
 {
 }
 
-CDFASTCALL cData::cData( const cFieldDefs_ptr& field_defs, IDataNotify *i_notify )
-    : mData(), mFieldDefs( field_defs ), mRelation(this), mDataNotify(i_notify)
+CDFASTCALL Data::Data( const cFieldDefs_ptr& field_defs, IDataNotify *i_notify )
+    : mData(), mFieldDefs( field_defs ), mRelatedData(this), mTableNotify(i_notify)
 {
 }
 
-CDFASTCALL cData::~cData()
+CDFASTCALL Data::~Data()
 {
     RemoveRelation( this );
 }
 
-void FASTCALL cData::NotifyRecordAdded( const value_type& value )
+void FASTCALL Data::NotifyRecordAdded( const value_type& value )
 {
-    cData   *relation = mRelation;
+    Data    *relation = mRelatedData;
 
     while ( relation != this )
     {
-        mRelation->mDataNotify->RecordAdded( value );
-        relation = relation->mRelation;
+        mRelatedData->mTableNotify->RecordAdded( value );
+        relation = relation->mRelatedData;
     }
 }
 
-void FASTCALL cData::NotifyRecordDeleted()
+void FASTCALL Data::NotifyRecordDeleted()
 {
-    cData   *relation = mRelation;
+    Data    *relation = mRelatedData;
 
     while ( relation != this )
     {
-        relation->mDataNotify->RecordDeleted();
-        relation = relation->mRelation;
+        relation->mTableNotify->RecordDeleted();
+        relation = relation->mRelatedData;
     }
 }
 
-/*
-void FASTCALL cData::EventRecordAdded( const value_type& value )
-{
-}
-
-void FASTCALL cData::EventRecordDeleted()
-{
-}
-*/
-
-void FASTCALL cData::Clear()
+void FASTCALL Data::Clear()
 {
     mData = container();
 }
 
-void FASTCALL cData::CommitUpdates()
+void FASTCALL Data::CommitUpdates()
 {
     for ( iterator n = mData.begin(), eend = mData.end() ; n != eend ; ++n )
         (*n)->CommitUpdates();
 }
 
 // returns a ref counted double buffer, in usUnmodified state, **not** inserted in the container
-cData::value_type FASTCALL cData::NewBuffer_usUnmodified()
+Data::value_type FASTCALL Data::NewBuffer_usUnmodified()
 {
-    return ( cData::value_type( new cDoubleBuffer( mFieldDefs.get(), true ) ) );
+    return ( Data::value_type( new cDoubleBuffer( mFieldDefs.get(), true ) ) );
 }
 
 // returns a ref counted double buffer, in usInserted state, **not** inserted in the container
-cData::value_type FASTCALL cData::NewBuffer_usInserted()
+Data::value_type FASTCALL Data::NewBuffer_usInserted()
 {
-    return ( cData::value_type( new cDoubleBuffer( mFieldDefs.get(), false ) ) );
+    return ( Data::value_type( new cDoubleBuffer( mFieldDefs.get(), false ) ) );
 }
 
-int FASTCALL cData::AddBuffer_ptr( const value_type& value )
+int FASTCALL Data::AddBuffer_ptr( const value_type& value )
 {
     mData.push_back( value );
     NotifyRecordAdded( value );
     return ( size() - 1 );
 }
 
-void FASTCALL cData::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size )
+void FASTCALL Data::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size )
 {
     mFieldDefs->AddField( name, kind, data_type, size );
 }
 
-spData FASTCALL cData::Clone_All( IDataNotify *i_notify )
+spData FASTCALL Data::Clone_All( IDataNotify *i_notify )
 {
-    spData      result( new cData( GetFieldDefs(), i_notify ) );
+    spData      result( new Data( GetFieldDefs(), i_notify ) );
 
     std::copy( mData.begin(), mData.end(), std::back_inserter( result->mData ) );
     AddRelation( result.get() );
     return result;
 }
 
-void FASTCALL cData::Sort( const SortControler& cmp )
+void FASTCALL Data::Sort( const SortControler& cmp )
 {
     std::sort( mData.begin(), mData.end(), cmp );
 }
 
-void FASTCALL cData::Locate( const OpenValues& values, const OpenFindFields& fields,
+void FASTCALL Data::Locate( const OpenValues& values, const OpenFindFields& fields,
                              iterator begin, iterator end, locate_result& result )
 {
-    cData::value_type   tmp_rec = NewBuffer_usInserted();
+    Data::value_type   tmp_rec = NewBuffer_usInserted();
     cRawBuffer&         raw_buffer = tmp_rec->GetActiveData();
 
     for ( int n = 0 ; n < values.GetCount() ; ++n )
@@ -254,7 +244,7 @@ void FASTCALL cData::Locate( const OpenValues& values, const OpenFindFields& fie
 
     cmp_func->Initialize( mFieldDefs );
 
-    cData::iterator     rslt = std::find_if( begin, end, FindControler( cmp_func, tmp_rec->GetActiveData() ) );
+    Data::iterator     rslt = std::find_if( begin, end, FindControler( cmp_func, tmp_rec->GetActiveData() ) );
 
     result.first = rslt != mData.end();
     if ( result.first )
@@ -263,22 +253,22 @@ void FASTCALL cData::Locate( const OpenValues& values, const OpenFindFields& fie
         result.second = mData.size();
 }
 
-void FASTCALL cData::Locate( const OpenValues& values, const OpenFindFields& fields, locate_result& result )
+void FASTCALL Data::Locate( const OpenValues& values, const OpenFindFields& fields, locate_result& result )
 {
     Locate( values, fields, mData.begin(), mData.end(), result );
 }
 
-void FASTCALL cData::Locate( const OpenValues& values, const OpenFindFields& fields,
+void FASTCALL Data::Locate( const OpenValues& values, const OpenFindFields& fields,
                              size_type start, size_type end, locate_result& result )
 {
     Locate( values, fields, mData.begin() + start, mData.begin() + end, result );
 }
 
-void FASTCALL cData::Find_0( const cData::value_type& double_buffer, spSortCompare& compare,
+void FASTCALL Data::Find_0( const Data::value_type& double_buffer, spSortCompare& compare,
                              iterator begin, iterator end, locate_result& result )
 {
     SortControler       cc = SortControler( compare );
-    cData::iterator     rslt = std::lower_bound( begin, end, double_buffer, cc );
+    Data::iterator      rslt = std::lower_bound( begin, end, double_buffer, cc );
 
     result.first = ( rslt != mData.end() && !cc( *rslt, double_buffer ) && !cc( double_buffer, *rslt ) );
     if ( result.first )
@@ -287,7 +277,7 @@ void FASTCALL cData::Find_0( const cData::value_type& double_buffer, spSortCompa
         result.second = mData.size();
 }
 
-void FASTCALL cData::Find( const OpenValues& values, spSortCompare& compare,
+void FASTCALL Data::Find( const OpenValues& values, spSortCompare& compare,
                            iterator begin, iterator end, locate_result& result )
 {
     // the comparizon function must be cIndexSortCompareStd. There is no other way to do a Find
@@ -301,7 +291,7 @@ void FASTCALL cData::Find( const OpenValues& values, spSortCompare& compare,
         cIndexSortCompareStd                *cmp = static_cast<cIndexSortCompareStd *>(compare.get());
         const std::vector<cIndexField>&     index_fields = cmp->GetIndexFields();
         int                                 trip_count = std::min<int>( values.GetCount(), index_fields.size() );
-        cData::value_type                   tmp_rec = NewBuffer_usInserted();
+        Data::value_type                    tmp_rec = NewBuffer_usInserted();
         cRawBuffer&                         raw_buffer = tmp_rec->GetActiveData();
 
         for ( int n = 0 ; n < trip_count ; ++n )
@@ -313,18 +303,18 @@ void FASTCALL cData::Find( const OpenValues& values, spSortCompare& compare,
     }
 }
 
-void FASTCALL cData::Find( const OpenValues& values, spSortCompare& compare, locate_result& result )
+void FASTCALL Data::Find( const OpenValues& values, spSortCompare& compare, locate_result& result )
 {
     Find( values, compare, mData.begin(), mData.end(), result );
 }
 
-void FASTCALL cData::Find( const OpenValues& values, spSortCompare& compare,
+void FASTCALL Data::Find( const OpenValues& values, spSortCompare& compare,
                            size_type start, size_type end, locate_result& result )
 {
     Find( values, compare, mData.begin() + start, mData.begin() + end, result );
 }
 
-void FASTCALL cData::GetRange( const OpenRangeValues& values, spSortCompare& compare, range_result& result )
+void FASTCALL Data::GetRange( const OpenRangeValues& values, spSortCompare& compare, range_result& result )
 {
     // the comparizon function must be cIndexSortCompareStd. There is no other way to do a Find
     if ( dynamic_cast<cIndexSortCompareStd *>(compare.get()) == 0 )
@@ -338,7 +328,7 @@ void FASTCALL cData::GetRange( const OpenRangeValues& values, spSortCompare& com
         cIndexSortCompareStd                *cmp = static_cast<cIndexSortCompareStd *>(compare.get());
         const std::vector<cIndexField>&     index_fields = cmp->GetIndexFields();
         int                                 trip_count = std::min<int>( values.GetCount(), index_fields.size() );
-        cData::value_type                   tmp_rec = NewBuffer_usInserted();
+        Data::value_type                    tmp_rec = NewBuffer_usInserted();
         cRawBuffer&                         raw_buffer = tmp_rec->GetActiveData();
 
         for ( int n = 0 ; n < trip_count ; ++n )

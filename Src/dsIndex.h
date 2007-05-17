@@ -38,7 +38,7 @@ class Tablebase;
 namespace detail
 {
 
-class cData;
+class Data;
 class cRawBuffer;
 
 //***********************************************************************
@@ -52,7 +52,7 @@ class cSortCompareBase
 private:
     friend class Tablebase;
     friend class Index;
-    friend class cData;
+    friend class Data;
     // non copyable
     CDFASTCALL cSortCompareBase( const cSortCompareBase& src );
     cSortCompareBase& FASTCALL operator=( const cSortCompareBase& src );

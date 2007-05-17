@@ -143,7 +143,7 @@ CDFASTCALL cRecordIterator::cRecordIterator( spData& container )
 {
 }
 
-CDFASTCALL cRecordIterator::cRecordIterator( spData& container, detail::cData::size_type idx )
+CDFASTCALL cRecordIterator::cRecordIterator( spData& container, detail::Data::size_type idx )
     : mIdx(idx),
 #if ! defined( SM_DS_FAST_ITERATORS_INTERNAL )
       mContainer(container)
@@ -226,7 +226,7 @@ bool FASTCALL cRecordIterator::Locate( const Variant& value, const cFindField& f
 
 bool FASTCALL cRecordIterator::Locate( const OpenValues& values, const OpenFindFields& fields )
 {
-    cData::locate_result    result;
+    Data::locate_result     result;
 
     mContainer->Locate( values, fields, result );
     if ( result.first )
@@ -238,12 +238,12 @@ bool FASTCALL cRecordIterator::Locate( const OpenValues& values, const OpenFindF
 //******    cRangeIterator
 //***********************************************************************
 /*
-CDFASTCALL cRangeIterator::cRangeIterator( cData_ptr& container, cData::size_type start, cData::size_type end )
+CDFASTCALL cRangeIterator::cRangeIterator( cData_ptr& container, Data::size_type start, Data::size_type end )
     : cRecordIterator(container,start), mStart(start), mEnd(end)
 {
 }
 
-CDFASTCALL cRangeIterator::cRangeIterator( cData_ptr& container, cData::size_type start, cData::size_type end, cData::size_type idx )
+CDFASTCALL cRangeIterator::cRangeIterator( cData_ptr& container, Data::size_type start, Data::size_type end, Data::size_type idx )
     : cRecordIterator(container,idx), mStart(start), mEnd(end)
 {
 }
@@ -270,7 +270,7 @@ cRangeIterator& FASTCALL cRangeIterator::operator = ( const cRangeIterator& src 
 //***********************************************************************
 //******    cRecord
 //***********************************************************************
-CDFASTCALL cRecord::cRecord( const detail::cData::value_type& container, const cFieldDefs_ptr& field_defs )
+CDFASTCALL cRecord::cRecord( const detail::Data::value_type& container, const cFieldDefs_ptr& field_defs )
     : mRecord(container), mFieldDefs(field_defs)
 {
 }

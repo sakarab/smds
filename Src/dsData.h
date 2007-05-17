@@ -47,7 +47,7 @@ private:
 
     detail::spData          mData;
     // IDataNotify
-    virtual void FASTCALL RecordAdded( const detail::cData::value_type& value );
+    virtual void FASTCALL RecordAdded( const detail::Data::value_type& value );
     virtual void FASTCALL RecordDeleted();
     // noncopyable
     CDFASTCALL Tablebase( const Tablebase& src );
@@ -58,7 +58,7 @@ protected:
     detail::cDoubleBuffer * FASTCALL GetDoubleBuffer( const cRecord& record )   { return record.GetDoubleBuffer(); }
     int FASTCALL AddBuffer_ptr( const cRecord& record )                         { return mData->AddBuffer_ptr( record.mRecord ); }
 
-    detail::cData::locate_result::second_type FASTCALL LocateImpl( const OpenValues& values, const OpenFindFields& fields );
+    detail::Data::locate_result::second_type FASTCALL LocateImpl( const OpenValues& values, const OpenFindFields& fields );
 
     CDFASTCALL Tablebase();
     CDFASTCALL Tablebase( const detail::cFieldDefs_& field_defs );
@@ -94,7 +94,7 @@ public:
     protected:
         spSortCompare& GetCompare()                     { return mCompare; }
         CDFASTCALL iterator( detail::spData& container, const spSortCompare& cmp );
-        CDFASTCALL iterator( detail::spData& container, detail::cData::size_type idx, const spSortCompare& cmp );
+        CDFASTCALL iterator( detail::spData& container, detail::Data::size_type idx, const spSortCompare& cmp );
     public:
         CDFASTCALL iterator( const iterator& src );
         CDFASTCALL ~iterator();
@@ -115,13 +115,13 @@ public:
         typedef iterator            inherited;
         friend class Index;
 
-        detail::cData::size_type    mStart;
-        detail::cData::size_type    mEnd;
+        detail::Data::size_type     mStart;
+        detail::Data::size_type     mEnd;
     protected:
-        CDFASTCALL range_iterator( detail::spData& container, detail::cData::size_type start,
-                                   detail::cData::size_type end, const spSortCompare& cmp );
-        CDFASTCALL range_iterator( detail::spData& container, detail::cData::size_type start,
-                                   detail::cData::size_type end, detail::cData::size_type idx,
+        CDFASTCALL range_iterator( detail::spData& container, detail::Data::size_type start,
+                                   detail::Data::size_type end, const spSortCompare& cmp );
+        CDFASTCALL range_iterator( detail::spData& container, detail::Data::size_type start,
+                                   detail::Data::size_type end, detail::Data::size_type idx,
                                    const spSortCompare& cmp );
     public:
         CDFASTCALL range_iterator( const range_iterator& src );
@@ -149,7 +149,7 @@ public:
         void FASTCALL Last()                    { SetIndex( mEnd - 1 ); }
         int FASTCALL RecordCount()              { return ( mEnd - mStart ); }
         void * FASTCALL GetMark()               { return reinterpret_cast<void *>(GetIndex()); }
-        void FASTCALL GotoMark( void *mark )    { SetIndex( reinterpret_cast<detail::cData::size_type>(mark) ); }
+        void FASTCALL GotoMark( void *mark )    { SetIndex( reinterpret_cast<detail::Data::size_type>(mark) ); }
 
         const OldValuesProxy FASTCALL OldValues()                           { return iterator::OldValues(); }
         detail::cFieldProxy FieldByName( const ds_string& field_name )      { return iterator::FieldByName( field_name ); }
@@ -164,6 +164,9 @@ private:
 
     spSortCompare           mCompare;
     cFilterCompareBase_ptr  mFilter;
+    // IDataNotify
+    virtual void FASTCALL RecordAdded( const detail::Data::value_type& value );
+    virtual void FASTCALL RecordDeleted();
     // noncopyable
     CDFASTCALL Index( const Index& src );
     Index& FASTCALL operator=( const Index& src );
@@ -197,12 +200,12 @@ private:
     ds_string FASTCALL ConstructSelectFromFields( const char *where_clause );
     ds_string FASTCALL ConstructSelectFromSql( const char *where_clause );
     ds_string FASTCALL ConstructSelect( const char *where_clause );
-    detail::cData::value_type FASTCALL NewBuffer_usUnmodified();
+    detail::Data::value_type FASTCALL NewBuffer_usUnmodified();
     // noncopyable
     CDFASTCALL Table( const Table& src );
     Table& FASTCALL operator=( const Table& src );
 protected:
-    detail::cData::value_type FASTCALL NewBuffer_usInserted();
+    detail::Data::value_type FASTCALL NewBuffer_usInserted();
 
     cIndexSortCompareStd_ptr FASTCALL CreateCmp( const cIndexField& index_field );
     cIndexSortCompareStd_ptr FASTCALL CreateCmp( const OpenIndexFields& index_fields );
@@ -246,7 +249,7 @@ public:
     protected:
         CDFASTCALL iterator( detail::spData& container, const spSortCompare& cmp )
             : inherited(container,cmp)                                                {} // empty
-        CDFASTCALL iterator( detail::spData& container, detail::cData::size_type idx, const spSortCompare& cmp )
+        CDFASTCALL iterator( detail::spData& container, detail::Data::size_type idx, const spSortCompare& cmp )
             : inherited(container, idx)                                           {} // empty
         CDFASTCALL iterator( const Index::iterator& iter )
             : inherited(iter)                                                     {} // empty
@@ -271,10 +274,10 @@ public:
         friend class cuIndex<RECORD>;
         typedef detail::cRawRecordProxy<typename RECORD::raw>   OldValuesProxy;
     protected:
-        CDFASTCALL range_iterator( detail::spData& container, detail::cData::size_type start,
-                                   detail::cData::size_type end, const spSortCompare& cmp );
-        CDFASTCALL range_iterator( detail::spData& container, detail::cData::size_type start,
-                                   detail::cData::size_type end, detail::cData::size_type idx,
+        CDFASTCALL range_iterator( detail::spData& container, detail::Data::size_type start,
+                                   detail::Data::size_type end, const spSortCompare& cmp );
+        CDFASTCALL range_iterator( detail::spData& container, detail::Data::size_type start,
+                                   detail::Data::size_type end, detail::Data::size_type idx,
                                    const spSortCompare& cmp );
         CDFASTCALL range_iterator( const Index::range_iterator& iter )
             : inherited(iter)                                               {} // empty
@@ -337,7 +340,7 @@ public:
     protected:
         CDFASTCALL iterator( detail::spData& container )
             : inherited(container)                                                {} // empty
-        CDFASTCALL iterator( detail::spData& container, detail::cData::size_type idx )
+        CDFASTCALL iterator( detail::spData& container, detail::Data::size_type idx )
             : inherited(container, idx)                                           {} // empty
         //CDFASTCALL iterator( const inherited& iter )
         //    : inherited(iter)                                                     {} // empty

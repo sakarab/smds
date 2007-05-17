@@ -34,14 +34,24 @@ namespace smds
 //******    Tablebase
 //***********************************************************************
 CDFASTCALL Tablebase::Tablebase()
-    : mData( new detail::cData( this ) )
+    : mData( new detail::Data( this ) )
 {
 }
 
 CDFASTCALL Tablebase::Tablebase( const detail::cFieldDefs_& field_defs )
-    : mData( new detail::cData( field_defs, this ) )
+    : mData( new detail::Data( field_defs, this ) )
 {
 }
+
+/*
+CDFASTCALL Tablebase::Tablebase( const Tablebase& src )
+{
+}
+
+Tablebase& FASTCALL Tablebase::operator=( const Tablebase& src )
+{
+}
+*/
 
 CDFASTCALL Tablebase::~Tablebase()
 {
@@ -57,9 +67,9 @@ Tablebase::iterator FASTCALL Tablebase::AddRecord( const cRecord& record )
     return ( iterator( mData, AddBuffer_ptr( record ) ) );
 }
 
-detail::cData::locate_result::second_type FASTCALL Tablebase::LocateImpl( const OpenValues& values, const OpenFindFields& fields )
+detail::Data::locate_result::second_type FASTCALL Tablebase::LocateImpl( const OpenValues& values, const OpenFindFields& fields )
 {
-    detail::cData::locate_result    result;
+    detail::Data::locate_result    result;
 
     mData->Locate( values, fields, result );
     return result.second;
@@ -75,7 +85,7 @@ Tablebase::iterator FASTCALL Tablebase::Locate( const Variant& value, const cFin
     return Locate( OpenValues( value ), OpenFindFields( field ) );
 }
 
-void FASTCALL Tablebase::RecordAdded( const detail::cData::value_type& value )
+void FASTCALL Tablebase::RecordAdded( const detail::Data::value_type& value )
 {
 }
 
@@ -154,12 +164,12 @@ ds_string FASTCALL Table::ConstructSelect( const char *where_clause )
         return ( ConstructSelectFromSql( where_clause ) );
 }
 
-detail::cData::value_type FASTCALL Table::NewBuffer_usUnmodified()
+detail::Data::value_type FASTCALL Table::NewBuffer_usUnmodified()
 {
     return ( GetData()->NewBuffer_usUnmodified() );
 }
 
-detail::cData::value_type FASTCALL Table::NewBuffer_usInserted()
+detail::Data::value_type FASTCALL Table::NewBuffer_usInserted()
 {
     return ( GetData()->NewBuffer_usInserted() );
 }
@@ -302,7 +312,7 @@ void FASTCALL Table::Open( const Database& database, const char *where_clause )
     while ( ! provider->Eof() )
     {
         // insert a buffer
-        detail::cData::value_type       rec = NewBuffer_usUnmodified();
+        detail::Data::value_type        rec = NewBuffer_usUnmodified();
         detail::cRawBuffer&             raw = rec->GetOriginalData();
         cFieldValuesAcceptor            acceptor( raw, field_defs );
 
@@ -317,7 +327,7 @@ void FASTCALL Table::Open( const Database& database, const char *where_clause )
 
 void FASTCALL Table::Close()
 {
-    detail::spData      tmp( new detail::cData( this ) );
+    detail::spData      tmp( new detail::Data( this ) );
 
     GetData() = tmp;
 }
@@ -330,7 +340,7 @@ CDFASTCALL Index::iterator::iterator( detail::spData& container, const spSortCom
 {
 }
 
-CDFASTCALL Index::iterator::iterator( detail::spData& container, detail::cData::size_type idx, const spSortCompare& cmp )
+CDFASTCALL Index::iterator::iterator( detail::spData& container, detail::Data::size_type idx, const spSortCompare& cmp )
     : inherited(container,idx), mCompare(cmp)
 {
 }
@@ -361,7 +371,7 @@ bool FASTCALL Index::iterator::Find( const Variant& value )
 
 bool FASTCALL Index::iterator::Find( const OpenValues& values )
 {
-    detail::cData::locate_result    result;
+    detail::Data::locate_result     result;
 
     GetData()->Find( values, mCompare, result );
     if ( result.first )
@@ -372,14 +382,14 @@ bool FASTCALL Index::iterator::Find( const OpenValues& values )
 //***********************************************************************
 //******    Index::range_iterator
 //***********************************************************************
-CDFASTCALL Index::range_iterator::range_iterator( detail::spData& container, detail::cData::size_type start,
-                                                  detail::cData::size_type end, const spSortCompare& cmp )
+CDFASTCALL Index::range_iterator::range_iterator( detail::spData& container, detail::Data::size_type start,
+                                                  detail::Data::size_type end, const spSortCompare& cmp )
     : Index::iterator( container, cmp ), mStart(start), mEnd(end)
 {
 }
 
-CDFASTCALL Index::range_iterator::range_iterator( detail::spData& container, detail::cData::size_type start,
-                                                  detail::cData::size_type end, detail::cData::size_type idx,
+CDFASTCALL Index::range_iterator::range_iterator( detail::spData& container, detail::Data::size_type start,
+                                                  detail::Data::size_type end, detail::Data::size_type idx,
                                                   const spSortCompare& cmp )
     : Index::iterator( container, idx, cmp ), mStart(start), mEnd(end)
 {
@@ -412,7 +422,7 @@ bool FASTCALL Index::range_iterator::Find( const Variant& value )
 
 bool FASTCALL Index::range_iterator::Find( const OpenValues& values )
 {
-    detail::cData::locate_result    result;
+    detail::Data::locate_result     result;
 
     GetData()->Find( values, GetCompare(), mStart, mEnd, result );
     if ( result.first )
@@ -437,7 +447,7 @@ CDFASTCALL Index::~Index()
 
 Index::iterator FASTCALL Index::Find( const OpenValues& values )
 {
-    detail::cData::locate_result    result;
+    detail::Data::locate_result     result;
 
     GetData()->Find( values, mCompare, result );
     return iterator( GetData(), result.second, mCompare );
@@ -455,10 +465,18 @@ Index::range_iterator FASTCALL Index::GetRangeIterator( const cRangeValues& valu
 
 Index::range_iterator FASTCALL Index::GetRangeIterator( const OpenRangeValues& values )
 {
-    detail::cData::range_result     result;
+    detail::Data::range_result      result;
 
     GetData()->GetRange( values, mCompare, result );
     return range_iterator( GetData(), result.second.first, result.second.second, mCompare );
+}
+
+void FASTCALL Index::RecordAdded( const detail::Data::value_type& value )
+{
+}
+
+void FASTCALL Index::RecordDeleted()
+{
 }
 
 //***********************************************************************

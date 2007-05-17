@@ -93,12 +93,12 @@ tblFiles_ptr GetTblFiles()
     DbEngine        transport = SelectDbEngine( "BDE" );
     Database        connection = transport.NewConnection( BDE_DirData_Conn );
 */
-/*
     DbEngine        engine = SelectDbEngine( "ADO" );
     Database        database = engine.NewConnection( ADO_Dirdata_Conn );
-*/
+/*
     DbEngine        engine = SelectDbEngine( "DAO" );
     Database        database = engine.NewConnection( DAO_Dirdata_Conn );
+*/
 
     tblFiles_ptr    result( new tblFiles() );
 
@@ -399,6 +399,10 @@ int FASTCALL foo( Index::iterator iter )
         return ( 0 );
 }
 
+void FASTCALL aaa( Index& idx )
+{
+}
+
 //***********************************************************************
 //******    Test
 //***********************************************************************
@@ -427,6 +431,8 @@ void Test( tblFiles_ptr ds )
     unorder_count = Check_Order_f1( files_idx->GetIterator() );
     if ( unorder_count != 0 )
         foo();
+
+    aaa( *files_idx.get() );
 
     tblFiles::index::range_iterator     riter = files_idx->GetRangeIterator( cRangeValues( 54, 56 ) );
 

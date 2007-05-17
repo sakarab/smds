@@ -741,13 +741,13 @@ public:
 */
 
 //***********************************************************************
-//******    cData
+//******    Data
 //***********************************************************************
 class IDataNotify;
-class cData;
-typedef shared_ptr< cData >         spData;
+class Data;
+typedef shared_ptr<Data>    spData;
 
-class cData
+class Data
 #ifdef SM_DS_USE_SMALL_SHARED_PTR
     : public boost::shared_in_base<long>
 #endif
@@ -765,11 +765,11 @@ public:
 private:
     container           mData;
     cFieldDefs_ptr      mFieldDefs;
-    cData               *mRelation;
-    IDataNotify         *mDataNotify;
+    Data                *mRelatedData;      // related "Data ring". Sorted or part of this data
+    IDataNotify         *mTableNotify;
 
     container& FASTCALL GetContainer()                              { return ( mData ); }
-    void FASTCALL Find_0( const cData::value_type& double_buffer, spSortCompare& compare,
+    void FASTCALL Find_0( const Data::value_type& double_buffer, spSortCompare& compare,
                           iterator begin, iterator end, locate_result& result );
     void FASTCALL Find( const OpenValues& values, spSortCompare& compare,
                         iterator begin, iterator end, locate_result& result );
@@ -778,34 +778,38 @@ private:
     // relation managment
     void FASTCALL NotifyRecordAdded( const value_type& value );
     void FASTCALL NotifyRecordDeleted();
-    void FASTCALL RemoveRelation( cData *relation )
+
+    void FASTCALL RemoveRelation( Data *relation )
     {
-        while ( relation->mRelation != this )
-            relation = relation->mRelation;
-        relation->mRelation = mRelation;
+        while ( relation->mRelatedData != this )
+            relation = relation->mRelatedData;
+        relation->mRelatedData = mRelatedData;
     }
-    void FASTCALL AddRelation( cData *new_data )
+    void FASTCALL AddRelation( Data *new_data )
     {
-        new_data->mRelation = mRelation;
-        mRelation = new_data;
+        new_data->mRelatedData = mRelatedData;
+        mRelatedData = new_data;
     }
     // noncopyable
-    CDFASTCALL cData( const cData& src );
-    cData& FASTCALL operator=( const cData& src );
+    CDFASTCALL Data( const Data& src );
+    Data& FASTCALL operator=( const Data& src );
 public:
-    CDFASTCALL cData( IDataNotify *i_notify );
-    CDFASTCALL cData( const cFieldDefs_& field_defs, IDataNotify *i_notify );
-    CDFASTCALL cData( const cFieldDefs_ptr& field_defs, IDataNotify *i_notify );
-    CDFASTCALL ~cData();
+    CDFASTCALL Data( IDataNotify *i_notify );
+    CDFASTCALL Data( const cFieldDefs_& field_defs, IDataNotify *i_notify );
+    CDFASTCALL Data( const cFieldDefs_ptr& field_defs, IDataNotify *i_notify );
+    CDFASTCALL ~Data();
+
+    // IDataNotify * FASTCALL GetTableNotify()                         { return mTableNotify; }
+    // void FASTCALL SetTableNotify( IDataNotify *i_notify )           { mTableNotify = IDataNotify; }
 
     int FASTCALL AddBuffer_ptr( const value_type& value );
 
     value_type FASTCALL NewBuffer_usUnmodified();
     value_type FASTCALL NewBuffer_usInserted();
 
-    bool FASTCALL is_empty() const                                  { return ( mData.empty() ); }
-    size_type FASTCALL size() const                                 { return ( mData.size() ); }
-    const value_type& FASTCALL operator[]( size_type idx ) const    { return ( mData[idx] ); }
+    bool FASTCALL is_empty() const                                  { return mData.empty(); }
+    size_type FASTCALL size() const                                 { return mData.size(); }
+    const value_type& FASTCALL operator[]( size_type idx ) const    { return mData[idx]; }
 
     spData FASTCALL Clone_All( IDataNotify *i_notify );
     void FASTCALL Sort( const SortControler& cmp );
@@ -815,9 +819,9 @@ public:
 
     void FASTCALL AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size );
 
-    const cFieldDefs_ptr& FASTCALL GetFieldDefs() const             { return ( mFieldDefs ); }
-    const cFieldDef& FieldByName( const ds_string& field_name )     { return ( mFieldDefs->FieldByName( field_name ) ); }
-    const cFieldDef& FieldByName( const char *field_name )          { return ( mFieldDefs->FieldByName( field_name ) ); }
+    const cFieldDefs_ptr& FASTCALL GetFieldDefs() const             { return mFieldDefs; }
+    const cFieldDef& FieldByName( const ds_string& field_name )     { return mFieldDefs->FieldByName( field_name ); }
+    const cFieldDef& FieldByName( const char *field_name )          { return mFieldDefs->FieldByName( field_name ); }
 
     void FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields, locate_result& result );
     void FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields, size_type start, size_type end, locate_result& result );
@@ -832,7 +836,7 @@ public:
 class IDataNotify
 {
 public:
-    virtual void FASTCALL RecordAdded( const cData::value_type& value ) = 0;
+    virtual void FASTCALL RecordAdded( const Data::value_type& value ) = 0;
     virtual void FASTCALL RecordDeleted() = 0;
     virtual CDFASTCALL ~IDataNotify()               {} // empty
 };

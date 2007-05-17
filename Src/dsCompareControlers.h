@@ -36,7 +36,7 @@ namespace detail
 //***********************************************************************
 //******    SortControler
 //***********************************************************************
-class SortControler : public std::binary_function<const cData::value_type&, const cData::value_type&, bool>
+class SortControler : public std::binary_function<const Data::value_type&, const Data::value_type&, bool>
 {
 private:
     cSortCompareBase    *mCompare;
@@ -52,7 +52,7 @@ public:
 //***********************************************************************
 //******    FindControler
 //***********************************************************************
-class FindControler : public std::unary_function<const cData::value_type&, bool>
+class FindControler : public std::unary_function<const Data::value_type&, bool>
 {
 private:
     cSortCompareBase    *mCompare;
@@ -69,7 +69,7 @@ public:
 ////***********************************************************************
 ////******    FilterControler
 ////***********************************************************************
-class FilterControler : public std::unary_function<const cData::value_type&, bool>
+class FilterControler : public std::unary_function<const Data::value_type&, bool>
 {
 private:
     cFilterCompareBase      *mCompare;
