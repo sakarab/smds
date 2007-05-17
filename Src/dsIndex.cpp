@@ -35,13 +35,13 @@ namespace detail
 {
 
 //***********************************************************************
-//******    cSortCompareBase
+//******    SortCompare
 //***********************************************************************
-CDFASTCALL cSortCompareBase::~cSortCompareBase()
+CDFASTCALL SortCompare::~SortCompare()
 {
 }
 
-void FASTCALL cSortCompareBase::Initialize( const cFieldDefs_ptr& field_defs )
+void FASTCALL SortCompare::Initialize( const cFieldDefs_ptr& field_defs )
 {
 #if defined SM_DS_DEBUG
     CompareInvocationCount = 0;
@@ -50,7 +50,7 @@ void FASTCALL cSortCompareBase::Initialize( const cFieldDefs_ptr& field_defs )
 }
 
 #if defined SM_DS_DEBUG
-int cSortCompareBase::CompareInvocationCount = 0;
+int SortCompare::CompareInvocationCount = 0;
 #endif
 
 //***********************************************************************
@@ -139,16 +139,18 @@ CompareFunction FASTCALL GetCompareFunction( const cFieldDef& field, cFindField:
     }
 }
 
+}; // namespace detail
+
 //***********************************************************************
-//******    cIndexSortCompareStd
+//******    FieldSortCompare
 //***********************************************************************
-CDFASTCALL cIndexSortCompareStd::cIndexSortCompareStd( const cIndexField& index_field )
+CDFASTCALL FieldSortCompare::FieldSortCompare( const cIndexField& index_field )
     : mIndexFields(), mFieldMap(), mCompareFieldCount(1)
 {
     mIndexFields.push_back( index_field );
 }
 
-CDFASTCALL cIndexSortCompareStd::cIndexSortCompareStd( const OpenIndexFields& index_fields )
+CDFASTCALL FieldSortCompare::FieldSortCompare( const OpenIndexFields& index_fields )
     : mIndexFields(), mFieldMap(), mCompareFieldCount(index_fields.GetCount())
 {
     const cIndexField     **ptr = index_fields.GetArray();
@@ -160,23 +162,23 @@ CDFASTCALL cIndexSortCompareStd::cIndexSortCompareStd( const OpenIndexFields& in
     }
 }
 
-CDFASTCALL cIndexSortCompareStd::~cIndexSortCompareStd()
+CDFASTCALL FieldSortCompare::~FieldSortCompare()
 {
 }
 
-void FASTCALL cIndexSortCompareStd::Initialize( const cFieldDefs_ptr& field_defs )
+void FASTCALL FieldSortCompare::Initialize( const cFieldDefs_ptr& field_defs )
 {
-    cSortCompareBase::Initialize( field_defs );
+    inherited::Initialize( field_defs );
     for ( std::vector<cIndexField>::iterator n = mIndexFields.begin(), eend = mIndexFields.end() ; n != eend ; ++n )
     {
         const cFieldDef&    field_def = field_defs->FieldByName( n->GetFieldName() );
 
         mFieldMap.push_back( cFieldMapItem( &(*n), field_def,
-                                            GetCompareFunction( field_def, n->GetCaseOption() ) ) );
+                                            detail::GetCompareFunction( field_def, n->GetCaseOption() ) ) );
     }
 }
 
-bool FASTCALL cIndexSortCompareStd::do_compare_1( cRawBuffer *item1, cRawBuffer *item2 )
+bool FASTCALL FieldSortCompare::compare( detail::cRawBuffer *item1, detail::cRawBuffer *item2 )
 {
     std::vector<cFieldMapItem>::value_type  *first = &mFieldMap[0];
     std::vector<cFieldMapItem>::value_type  *last  = first + mCompareFieldCount;
@@ -196,6 +198,9 @@ bool FASTCALL cIndexSortCompareStd::do_compare_1( cRawBuffer *item1, cRawBuffer 
     while ( result == 0 && ++first != last );
     return ( result < 0 );
 }
+
+namespace detail
+{
 
 //***********************************************************************
 //******    cFindCompareStd
@@ -224,7 +229,7 @@ CDFASTCALL cFindCompareStd::~cFindCompareStd()
 
 void FASTCALL cFindCompareStd::Initialize( const cFieldDefs_ptr& field_defs )
 {
-    cSortCompareBase::Initialize( field_defs );
+    SortCompare::Initialize( field_defs );
     for ( std::vector<cFindField>::iterator n = mFindFields.begin(), eend = mFindFields.end() ; n != eend ; ++n )
     {
         const cFieldDef&    field_def = field_defs->FieldByName( n->GetFieldName() );
@@ -234,7 +239,7 @@ void FASTCALL cFindCompareStd::Initialize( const cFieldDefs_ptr& field_defs )
     }
 }
 
-bool FASTCALL cFindCompareStd::do_compare_1( cRawBuffer *item1, cRawBuffer *item2 )
+bool FASTCALL cFindCompareStd::compare( cRawBuffer *item1, cRawBuffer *item2 )
 {
     std::vector<cFieldMapItem>::iterator    first = mFieldMap.begin();
     std::vector<cFieldMapItem>::iterator    last  = mFieldMap.end();

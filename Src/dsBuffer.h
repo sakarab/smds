@@ -60,7 +60,7 @@ private:
     typedef unsigned char   quantum;
 
     friend class Table;
-    friend class cDoubleBuffer;
+    friend class DoubleBuffer;
     friend class cTableReader;
 
     boost::scoped_array<char>   mData;
@@ -515,9 +515,9 @@ public:
 };
 
 //***********************************************************************
-//******    cDoubleBuffer
+//******    DoubleBuffer
 //***********************************************************************
-class cDoubleBuffer
+class DoubleBuffer
 #ifdef SM_DS_USE_SMALL_SHARED_PTR
     : public boost::shared_in_base<long>
 #endif
@@ -533,8 +533,8 @@ private:
     const cRawBuffer& FASTCALL GetReadRow() const       { return ( GetActiveData() ); }
     cRawBuffer& FASTCALL GetUpdateRow()                 { return ( GetUpdateData() ); }
     // noncopyable
-    CDFASTCALL cDoubleBuffer( const cDoubleBuffer& src );
-    cDoubleBuffer& FASTCALL operator=( const cDoubleBuffer& src );
+    CDFASTCALL DoubleBuffer( const DoubleBuffer& src );
+    DoubleBuffer& FASTCALL operator=( const DoubleBuffer& src );
 
     cRawBuffer& FASTCALL GetModifiedData()              { return ( mModifiedData ); }
     const cRawBuffer& FASTCALL GetModifiedData() const  { return ( mModifiedData ); }
@@ -551,9 +551,9 @@ private:
     }
 public:
     // the 'bool unmodified' parameter if false means 'inserted'
-    //CDFASTCALL cDoubleBuffer( cRawBuffer::size_type buffer_size, cRawBuffer::size_type field_count, bool unmodified );
-    CDFASTCALL cDoubleBuffer( cFieldDefs *field_defs, bool unmodified );
-    CDFASTCALL ~cDoubleBuffer();
+    //CDFASTCALL DoubleBuffer( cRawBuffer::size_type buffer_size, cRawBuffer::size_type field_count, bool unmodified );
+    CDFASTCALL DoubleBuffer( cFieldDefs *field_defs, bool unmodified );
+    CDFASTCALL ~DoubleBuffer();
     cRawBuffer& FASTCALL GetOriginalData()              { return ( mOriginalData ); }
     const cRawBuffer& FASTCALL GetOriginalData() const  { return ( mOriginalData ); }
     cUpdateStatus FASTCALL GetUpdateStatus() const      { return ( mUpdateStatus ); }
@@ -595,52 +595,52 @@ public:
     cDateTime FASTCALL ReadDate( const cFieldDef& field_def ) const             { return ( GetReadRow().ReadDate( field_def ) ); }
     ds_string FASTCALL ReadString( const cFieldDef& field_def ) const           { return ( GetReadRow().ReadString( field_def ) ); }
 
-    void FASTCALL cDoubleBuffer::WriteBool( const cFieldDef& field_def, bool value )
+    void FASTCALL DoubleBuffer::WriteBool( const cFieldDef& field_def, bool value )
     {
         GetUpdateRow().WriteBool( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteChar( const cFieldDef& field_def, char value )
+    void FASTCALL DoubleBuffer::WriteChar( const cFieldDef& field_def, char value )
     {
         GetUpdateRow().WriteChar( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteWChar( const cFieldDef& field_def, wchar_t value )
+    void FASTCALL DoubleBuffer::WriteWChar( const cFieldDef& field_def, wchar_t value )
     {
         GetUpdateRow().WriteWChar( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteShort( const cFieldDef& field_def, short value )
+    void FASTCALL DoubleBuffer::WriteShort( const cFieldDef& field_def, short value )
     {
         GetUpdateRow().WriteShort( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteInteger( const cFieldDef& field_def, int value )
+    void FASTCALL DoubleBuffer::WriteInteger( const cFieldDef& field_def, int value )
     {
         GetUpdateRow().WriteInteger( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteLong( const cFieldDef& field_def, long value )
+    void FASTCALL DoubleBuffer::WriteLong( const cFieldDef& field_def, long value )
     {
         GetUpdateRow().WriteLong( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteFloat( const cFieldDef& field_def, double value )
+    void FASTCALL DoubleBuffer::WriteFloat( const cFieldDef& field_def, double value )
     {
         GetUpdateRow().WriteFloat( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteDate( const cFieldDef& field_def, const cDateTime& value )
+    void FASTCALL DoubleBuffer::WriteDate( const cFieldDef& field_def, const cDateTime& value )
     {
         GetUpdateRow().WriteDate( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteString(const cFieldDef& field_def, const ds_string& value )
+    void FASTCALL DoubleBuffer::WriteString(const cFieldDef& field_def, const ds_string& value )
     {
         GetUpdateRow().WriteString( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteString( const cFieldDef& field_def, const char *value )
+    void FASTCALL DoubleBuffer::WriteString( const cFieldDef& field_def, const char *value )
     {
         GetUpdateRow().WriteString( field_def, value );
         UpdateRecordStatus();
@@ -656,52 +656,52 @@ public:
     cDateTime FASTCALL ReadDate( const cFieldDef_& field_def ) const             { return ( GetReadRow().ReadDate( field_def ) ); }
     ds_string FASTCALL ReadString( const cFieldDef_& field_def ) const           { return ( GetReadRow().ReadString( field_def ) ); }
 
-    void FASTCALL cDoubleBuffer::WriteBool( const cFieldDef_& field_def, bool value )
+    void FASTCALL DoubleBuffer::WriteBool( const cFieldDef_& field_def, bool value )
     {
         GetUpdateRow().WriteBool( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteChar( const cFieldDef_& field_def, char value )
+    void FASTCALL DoubleBuffer::WriteChar( const cFieldDef_& field_def, char value )
     {
         GetUpdateRow().WriteChar( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteWChar( const cFieldDef_& field_def, wchar_t value )
+    void FASTCALL DoubleBuffer::WriteWChar( const cFieldDef_& field_def, wchar_t value )
     {
         GetUpdateRow().WriteWChar( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteShort( const cFieldDef_& field_def, short value )
+    void FASTCALL DoubleBuffer::WriteShort( const cFieldDef_& field_def, short value )
     {
         GetUpdateRow().WriteShort( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteInteger( const cFieldDef_& field_def, int value )
+    void FASTCALL DoubleBuffer::WriteInteger( const cFieldDef_& field_def, int value )
     {
         GetUpdateRow().WriteInteger( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteLong( const cFieldDef_& field_def, long value )
+    void FASTCALL DoubleBuffer::WriteLong( const cFieldDef_& field_def, long value )
     {
         GetUpdateRow().WriteLong( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteFloat( const cFieldDef_& field_def, double value )
+    void FASTCALL DoubleBuffer::WriteFloat( const cFieldDef_& field_def, double value )
     {
         GetUpdateRow().WriteFloat( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteDate( const cFieldDef_& field_def, const cDateTime& value )
+    void FASTCALL DoubleBuffer::WriteDate( const cFieldDef_& field_def, const cDateTime& value )
     {
         GetUpdateRow().WriteDate( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteString(const cFieldDef_& field_def, const ds_string& value )
+    void FASTCALL DoubleBuffer::WriteString(const cFieldDef_& field_def, const ds_string& value )
     {
         GetUpdateRow().WriteString( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL cDoubleBuffer::WriteString( const cFieldDef_& field_def, const char *value )
+    void FASTCALL DoubleBuffer::WriteString( const cFieldDef_& field_def, const char *value )
     {
         GetUpdateRow().WriteString( field_def, value );
         UpdateRecordStatus();
@@ -753,10 +753,9 @@ class Data
 #endif
 {
 private:
-    typedef shared_ptr< cDoubleBuffer >     cDoubleBuffer_ptr;
-    typedef cDoubleBuffer_ptr               cData_value_type;
+    typedef shared_ptr<DoubleBuffer>                            spDoubleBuffer;
 public:
-    typedef std::vector< cDoubleBuffer_ptr >                    container;
+    typedef std::vector<spDoubleBuffer>                         container;
     typedef container::value_type                               value_type;
     typedef container::size_type                                size_type;
     typedef container::iterator                                 iterator;
@@ -767,6 +766,7 @@ private:
     cFieldDefs_ptr      mFieldDefs;
     Data                *mRelatedData;      // related "Data ring". Sorted or part of this data
     IDataNotify         *mTableNotify;
+    container           mDeleted;
 
     container& FASTCALL GetContainer()                              { return ( mData ); }
     void FASTCALL Find_0( const Data::value_type& double_buffer, spSortCompare& compare,
@@ -777,7 +777,7 @@ private:
                           iterator begin, iterator end, locate_result& result );
     // relation managment
     void FASTCALL NotifyRecordAdded( const value_type& value );
-    void FASTCALL NotifyRecordDeleted();
+    void FASTCALL NotifyRecordDeleted( const value_type& value );
 
     void FASTCALL RemoveRelation( Data *relation )
     {
@@ -803,6 +803,7 @@ public:
     // void FASTCALL SetTableNotify( IDataNotify *i_notify )           { mTableNotify = IDataNotify; }
 
     int FASTCALL AddBuffer_ptr( const value_type& value );
+    void FASTCALL Delete( int idx );
 
     value_type FASTCALL NewBuffer_usUnmodified();
     value_type FASTCALL NewBuffer_usInserted();
@@ -837,7 +838,7 @@ class IDataNotify
 {
 public:
     virtual void FASTCALL RecordAdded( const Data::value_type& value ) = 0;
-    virtual void FASTCALL RecordDeleted() = 0;
+    virtual void FASTCALL RecordDeleted( const Data::value_type& value ) = 0;
     virtual CDFASTCALL ~IDataNotify()               {} // empty
 };
 

@@ -73,7 +73,7 @@ class tblLocation_rec : public tblLocation_data, public smds::detail::cRecordPtr
 public:
     typedef tblLocation_raw    raw;
 public:
-    CDFASTCALL tblLocation_rec( smds::detail::cDoubleBuffer& double_buffer )
+    CDFASTCALL tblLocation_rec( smds::detail::DoubleBuffer& double_buffer )
         : smds::detail::cRecordPtr(double_buffer)
     {
     }
@@ -165,7 +165,7 @@ class tblFiles_rec : public tblFiles_data, public smds::detail::cRecordPtr
 public:
     typedef tblFiles_raw    raw;
 public:
-    CDFASTCALL tblFiles_rec( smds::detail::cDoubleBuffer& double_buffer )
+    CDFASTCALL tblFiles_rec( smds::detail::DoubleBuffer& double_buffer )
         : smds::detail::cRecordPtr(double_buffer)
     {
     }

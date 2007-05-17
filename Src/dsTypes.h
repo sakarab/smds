@@ -52,10 +52,6 @@ typedef smds::wstring_tag   ds_wstring;
 namespace smds
 {
 
-//class cDoubleBuffer;
-//typedef shared_ptr< cDoubleBuffer >     cDoubleBuffer_ptr;
-//typedef cDoubleBuffer_ptr               cData_value_type;
-
 namespace detail
 {
 

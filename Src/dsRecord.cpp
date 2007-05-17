@@ -172,7 +172,7 @@ cRecordIterator& FASTCALL cRecordIterator::operator = ( const cRecordIterator& s
     return ( *this );
 }
 
-detail::cDoubleBuffer * FASTCALL cRecordIterator::GetDoubleBuffer() const
+detail::DoubleBuffer * FASTCALL cRecordIterator::GetDoubleBuffer() const
 {
     return ( (*mContainer)[mIdx].get() );
 }

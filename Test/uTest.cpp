@@ -92,13 +92,12 @@ tblFiles_ptr GetTblFiles()
 /*
     DbEngine        transport = SelectDbEngine( "BDE" );
     Database        connection = transport.NewConnection( BDE_DirData_Conn );
-*/
+
     DbEngine        engine = SelectDbEngine( "ADO" );
     Database        database = engine.NewConnection( ADO_Dirdata_Conn );
-/*
+*/
     DbEngine        engine = SelectDbEngine( "DAO" );
     Database        database = engine.NewConnection( DAO_Dirdata_Conn );
-*/
 
     tblFiles_ptr    result( new tblFiles() );
 
@@ -142,13 +141,13 @@ int FASTCALL CountNulls( tblFiles::iterator ptr )
 //class idx_ByLocationID : public tblLocation::index_sort_compare
 //{
 //protected:
-//    virtual bool FASTCALL do_compare_2( const tblLocation::raw& item1, const tblLocation::raw& item2 )
+//    virtual bool FASTCALL typed_compare( const tblLocation::raw& item1, const tblLocation::raw& item2 )
 //    {
 //        return ( item1.GetLocationID() > item2.GetLocationID() );
 //    }
 //};
 
-cIndex_ptr FASTCALL CreateIndex_g1( cTable_ptr uds )
+cIndex_ptr FASTCALL CreateIndex_g1( spTable uds )
 //ds::cIndex_ptr FASTCALL CreateIndex_g1( tblFiles_ptr uds )
 {
     return ( uds->NewIndex( cIndexField( "PathID", cIndexField::Descending ) ) );
@@ -202,7 +201,7 @@ tblFiles::index_ptr FASTCALL CreateIndex_g2( tblFiles_ptr uds )
 
 cIndex_ptr FASTCALL CreateIndex_g22( tblFiles_ptr uds )
 {
-    return ( uds->NewIndex( cIndexSortCompareStd_ptr( new detail::cIndexSortCompareStd(
+    return ( uds->NewIndex( spFieldSortCompare( new FieldSortCompare(
         OpenIndexFields( cIndexField( "PathID" ), cIndexField( "fSize" ) ) ) ) ) );
 }
 
@@ -236,7 +235,7 @@ private:
     CDFASTCALL idx_ByPathID( const idx_ByPathID& src );
     idx_ByPathID& FASTCALL operator=( const idx_ByPathID& src );
 protected:
-    virtual bool FASTCALL do_compare_2( const tblFiles::raw& item1, const tblFiles::raw& item2 )
+    virtual bool FASTCALL typed_compare( const tblFiles::raw& item1, const tblFiles::raw& item2 )
     {
         return ( item1.GetPathID() < item2.GetPathID() );
     }

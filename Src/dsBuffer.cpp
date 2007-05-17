@@ -113,20 +113,20 @@ ds_string& FASTCALL cRawBuffer::empty_string()
 #endif
 
 //***********************************************************************
-//******    cDoubleBuffer
+//******    DoubleBuffer
 //***********************************************************************
-CDFASTCALL cDoubleBuffer::cDoubleBuffer( cFieldDefs *field_defs, bool unmodified )
+CDFASTCALL DoubleBuffer::DoubleBuffer( cFieldDefs *field_defs, bool unmodified )
     : mOriginalData( field_defs, unmodified ),
       mModifiedData( field_defs, ! unmodified ),
       mUpdateStatus( unmodified ? usUnmodified : usInserted ), mFieldDefs(field_defs)
 {
 }
 
-CDFASTCALL cDoubleBuffer::~cDoubleBuffer()
+CDFASTCALL DoubleBuffer::~DoubleBuffer()
 {
 }
 
-void FASTCALL cDoubleBuffer::CommitUpdates()
+void FASTCALL DoubleBuffer::CommitUpdates()
 {
     if ( mUpdateStatus != usUnmodified )
     {
@@ -137,20 +137,20 @@ void FASTCALL cDoubleBuffer::CommitUpdates()
 }
 
 //***********************************************************************
-//******    cData
+//******    Data
 //***********************************************************************
 CDFASTCALL Data::Data( IDataNotify *i_notify )
-    : mData(), mFieldDefs( new cFieldDefs() ), mRelatedData(this), mTableNotify(i_notify)
+    : mData(), mFieldDefs( new cFieldDefs() ), mRelatedData(this), mTableNotify(i_notify), mDeleted()
 {
 }
 
 CDFASTCALL Data::Data( const cFieldDefs_& field_defs, IDataNotify *i_notify )
-    : mData(), mFieldDefs( new cFieldDefs( field_defs ) ), mRelatedData(this), mTableNotify(i_notify)
+    : mData(), mFieldDefs( new cFieldDefs( field_defs ) ), mRelatedData(this), mTableNotify(i_notify), mDeleted()
 {
 }
 
 CDFASTCALL Data::Data( const cFieldDefs_ptr& field_defs, IDataNotify *i_notify )
-    : mData(), mFieldDefs( field_defs ), mRelatedData(this), mTableNotify(i_notify)
+    : mData(), mFieldDefs( field_defs ), mRelatedData(this), mTableNotify(i_notify), mDeleted()
 {
 }
 
@@ -170,13 +170,13 @@ void FASTCALL Data::NotifyRecordAdded( const value_type& value )
     }
 }
 
-void FASTCALL Data::NotifyRecordDeleted()
+void FASTCALL Data::NotifyRecordDeleted( const value_type& value )
 {
     Data    *relation = mRelatedData;
 
     while ( relation != this )
     {
-        relation->mTableNotify->RecordDeleted();
+        relation->mTableNotify->RecordDeleted( value );
         relation = relation->mRelatedData;
     }
 }
@@ -195,13 +195,13 @@ void FASTCALL Data::CommitUpdates()
 // returns a ref counted double buffer, in usUnmodified state, **not** inserted in the container
 Data::value_type FASTCALL Data::NewBuffer_usUnmodified()
 {
-    return ( Data::value_type( new cDoubleBuffer( mFieldDefs.get(), true ) ) );
+    return Data::value_type( new DoubleBuffer( mFieldDefs.get(), true ) );
 }
 
 // returns a ref counted double buffer, in usInserted state, **not** inserted in the container
 Data::value_type FASTCALL Data::NewBuffer_usInserted()
 {
-    return ( Data::value_type( new cDoubleBuffer( mFieldDefs.get(), false ) ) );
+    return Data::value_type( new DoubleBuffer( mFieldDefs.get(), false ) );
 }
 
 int FASTCALL Data::AddBuffer_ptr( const value_type& value )
@@ -209,6 +209,17 @@ int FASTCALL Data::AddBuffer_ptr( const value_type& value )
     mData.push_back( value );
     NotifyRecordAdded( value );
     return ( size() - 1 );
+}
+
+void FASTCALL Data::Delete( int idx )
+{
+    iterator        tmp( mData.begin() + idx );
+
+    if ( (*tmp)->GetUpdateStatus() != usInserted )
+        mDeleted.push_back( *tmp );
+    NotifyRecordDeleted( *tmp );
+    mData.erase( tmp );
+
 }
 
 void FASTCALL Data::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size )
@@ -280,15 +291,15 @@ void FASTCALL Data::Find_0( const Data::value_type& double_buffer, spSortCompare
 void FASTCALL Data::Find( const OpenValues& values, spSortCompare& compare,
                            iterator begin, iterator end, locate_result& result )
 {
-    // the comparizon function must be cIndexSortCompareStd. There is no other way to do a Find
-    if ( dynamic_cast<cIndexSortCompareStd *>(compare.get()) == 0 )
+    // the comparizon function must be FieldSortCompare. There is no other way to do a Find
+    if ( dynamic_cast<FieldSortCompare *>(compare.get()) == 0 )
     {
         result.first = false;
         result.second = mData.size();
     }
     else
     {
-        cIndexSortCompareStd                *cmp = static_cast<cIndexSortCompareStd *>(compare.get());
+        FieldSortCompare                    *cmp = static_cast<FieldSortCompare *>(compare.get());
         const std::vector<cIndexField>&     index_fields = cmp->GetIndexFields();
         int                                 trip_count = std::min<int>( values.GetCount(), index_fields.size() );
         Data::value_type                    tmp_rec = NewBuffer_usInserted();
@@ -297,7 +308,7 @@ void FASTCALL Data::Find( const OpenValues& values, spSortCompare& compare,
         for ( int n = 0 ; n < trip_count ; ++n )
             raw_buffer.WriteVariant( mFieldDefs->FieldByName( index_fields[n].GetFieldName() ), *(values.GetArray()[n]) );
 
-        cIndexSortCompareStd::CompareFieldCountGuard    count_guard( *cmp, trip_count );
+        FieldSortCompare::CompareFieldCountGuard    count_guard( *cmp, trip_count );
 
         Find_0( tmp_rec, compare, begin, end, result );
     }
@@ -316,8 +327,8 @@ void FASTCALL Data::Find( const OpenValues& values, spSortCompare& compare,
 
 void FASTCALL Data::GetRange( const OpenRangeValues& values, spSortCompare& compare, range_result& result )
 {
-    // the comparizon function must be cIndexSortCompareStd. There is no other way to do a Find
-    if ( dynamic_cast<cIndexSortCompareStd *>(compare.get()) == 0 )
+    // the comparizon function must be FieldSortCompare. There is no other way to do a Find
+    if ( dynamic_cast<FieldSortCompare *>(compare.get()) == 0 )
     {
         result.first = false;
         result.second.first = mData.size();
@@ -325,7 +336,7 @@ void FASTCALL Data::GetRange( const OpenRangeValues& values, spSortCompare& comp
     }
     else
     {
-        cIndexSortCompareStd                *cmp = static_cast<cIndexSortCompareStd *>(compare.get());
+        FieldSortCompare                    *cmp = static_cast<FieldSortCompare *>(compare.get());
         const std::vector<cIndexField>&     index_fields = cmp->GetIndexFields();
         int                                 trip_count = std::min<int>( values.GetCount(), index_fields.size() );
         Data::value_type                    tmp_rec = NewBuffer_usInserted();
@@ -334,7 +345,7 @@ void FASTCALL Data::GetRange( const OpenRangeValues& values, spSortCompare& comp
         for ( int n = 0 ; n < trip_count ; ++n )
             raw_buffer.WriteVariant( mFieldDefs->FieldByName( index_fields[n].GetFieldName() ), (values.GetArray()[n])->First() );
 
-        cIndexSortCompareStd::CompareFieldCountGuard    count_guard( *cmp, trip_count );
+        FieldSortCompare::CompareFieldCountGuard    count_guard( *cmp, trip_count );
 
         locate_result   loc_1;
 

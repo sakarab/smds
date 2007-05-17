@@ -89,7 +89,7 @@ void FASTCALL Tablebase::RecordAdded( const detail::Data::value_type& value )
 {
 }
 
-void FASTCALL Tablebase::RecordDeleted()
+void FASTCALL Tablebase::RecordDeleted( const detail::Data::value_type& value )
 {
 }
 
@@ -174,14 +174,14 @@ detail::Data::value_type FASTCALL Table::NewBuffer_usInserted()
     return ( GetData()->NewBuffer_usInserted() );
 }
 
-cIndexSortCompareStd_ptr FASTCALL Table::CreateCmp( const cIndexField& index_field )
+spFieldSortCompare FASTCALL Table::CreateCmp( const cIndexField& index_field )
 {
-    return cIndexSortCompareStd_ptr( new detail::cIndexSortCompareStd( index_field ) );
+    return spFieldSortCompare( new FieldSortCompare( index_field ) );
 }
 
-cIndexSortCompareStd_ptr FASTCALL Table::CreateCmp( const OpenIndexFields& index_fields )
+spFieldSortCompare FASTCALL Table::CreateCmp( const OpenIndexFields& index_fields )
 {
-    return cIndexSortCompareStd_ptr( new detail::cIndexSortCompareStd( index_fields ) );
+    return spFieldSortCompare( new FieldSortCompare( index_fields ) );
 }
 
 cIndex_ptr FASTCALL Table::NewIndex( const cIndexField& index_field )
@@ -194,7 +194,7 @@ cIndex_ptr FASTCALL Table::NewIndex( const OpenIndexFields& index_fields )
     return cIndex_ptr( new Index( CreateCmp( index_fields ), GetData() ) );
 }
 
-cIndex_ptr FASTCALL Table::NewIndex( const cIndexSortCompareStd_ptr& cmp_func )
+cIndex_ptr FASTCALL Table::NewIndex( const spFieldSortCompare& cmp_func )
 {
     return cIndex_ptr( new Index( cmp_func, GetData() ) );
 }
@@ -475,7 +475,7 @@ void FASTCALL Index::RecordAdded( const detail::Data::value_type& value )
 {
 }
 
-void FASTCALL Index::RecordDeleted()
+void FASTCALL Index::RecordDeleted( const detail::Data::value_type& value )
 {
 }
 
@@ -631,9 +631,9 @@ void FASTCALL cTableWriter::ReadFieldDefs( cStream& st, Table& table, bool is_ty
     }
 }
 
-cTable_ptr FASTCALL cTableWriter::CreateTemporaryTable()
+spTable FASTCALL cTableWriter::CreateTemporaryTable()
 {
-    return ( cTable_ptr( new Table( "__TMP__" ) ) );
+    return spTable( new Table( "__TMP__" ) );
 }
 
 void FASTCALL cTableWriter::ReadFieldValue( cStream& st, detail::cRawBuffer& rb, const cFieldDef& field )
@@ -773,7 +773,7 @@ void FASTCALL cTableWriter::ReadTheRest( Table& tmp, Table& table, Variant& vari
 
 void FASTCALL cTableWriter::SetTableData( Table& table, Variant& variant )
 {
-    cTable_ptr      tmp = CreateTemporaryTable();
+    spTable     tmp = CreateTemporaryTable();
 
     ReadTheRest( *tmp, table, variant, false );
 }

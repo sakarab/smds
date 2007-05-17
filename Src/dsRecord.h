@@ -112,7 +112,7 @@ public:
 class cRecordPtr
 {
 private:
-    cDoubleBuffer       *mBuffer;
+    DoubleBuffer        *mBuffer;
 protected:
     bool FASTCALL IsNull( const cFieldDef& field_def ) const;
     bool FASTCALL IsNull( const cFieldDef_& field_def ) const;
@@ -160,7 +160,7 @@ protected:
     void FASTCALL WriteString( const cFieldDef_& field_def, const ds_string& value );
     void FASTCALL WriteString( const cFieldDef_& field_def, const char *value );
 public:
-    CDFASTCALL cRecordPtr( cDoubleBuffer& buffer )
+    CDFASTCALL cRecordPtr( DoubleBuffer& buffer )
         : mBuffer(&buffer)
     {
     }
@@ -284,7 +284,7 @@ private:
 protected:
     typedef cRawRecordProxy<cRawRecordPtr>      OldValuesProxy;
 
-    cDoubleBuffer * FASTCALL GetDoubleBuffer() const;
+    DoubleBuffer * FASTCALL GetDoubleBuffer() const;
     ConstContainerReferanceType FASTCALL GetData() const        { return ( mContainer ); }
     Data::size_type FASTCALL GetIndex() const                   { return ( mIdx ); }
     void FASTCALL SetIndex( Data::size_type idx )               { mIdx = idx; }
@@ -475,7 +475,7 @@ private:
     detail::Data::value_type    mRecord;
     cFieldDefs_ptr              mFieldDefs;
 protected:
-    detail::cDoubleBuffer * FASTCALL GetDoubleBuffer() const            { return ( mRecord.get() ); }
+    detail::DoubleBuffer * FASTCALL GetDoubleBuffer() const             { return ( mRecord.get() ); }
 public:
     CDFASTCALL cRecord( const detail::Data::value_type& container, const cFieldDefs_ptr& field_defs );
     CDFASTCALL ~cRecord();

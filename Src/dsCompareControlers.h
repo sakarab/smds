@@ -39,13 +39,13 @@ namespace detail
 class SortControler : public std::binary_function<const Data::value_type&, const Data::value_type&, bool>
 {
 private:
-    cSortCompareBase    *mCompare;
+    SortCompare     *mCompare;
 public:
     CDFASTCALL SortControler( spSortCompare& cmp_func )
         : mCompare(cmp_func.get())                                                          {} // empty
     result_type FASTCALL operator()( first_argument_type item1, second_argument_type item2 ) const
     {
-        return ( mCompare->compare( item1->GetActiveData(), item2->GetActiveData() ) );
+        return mCompare->internal_compare( item1->GetActiveData(), item2->GetActiveData() );
     };
 };
 
@@ -55,14 +55,14 @@ public:
 class FindControler : public std::unary_function<const Data::value_type&, bool>
 {
 private:
-    cSortCompareBase    *mCompare;
-    cRawBuffer          *mItem2;
+    SortCompare     *mCompare;
+    cRawBuffer      *mItem2;
 public:
     CDFASTCALL FindControler( spSortCompare& cmp_func, cRawBuffer& item2 )
         : mCompare(cmp_func.get()), mItem2(&item2)                                          {} // empty
     result_type FASTCALL operator()( argument_type item ) const
     {
-        return ( mCompare->compare( item->GetActiveData(), *mItem2 ) );
+        return mCompare->internal_compare( item->GetActiveData(), *mItem2 );
     };
 };
 

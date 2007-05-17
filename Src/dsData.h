@@ -48,14 +48,14 @@ private:
     detail::spData          mData;
     // IDataNotify
     virtual void FASTCALL RecordAdded( const detail::Data::value_type& value );
-    virtual void FASTCALL RecordDeleted();
+    virtual void FASTCALL RecordDeleted( const detail::Data::value_type& value );
     // noncopyable
     CDFASTCALL Tablebase( const Tablebase& src );
     Tablebase& FASTCALL operator=( const Tablebase& src );
 protected:
     detail::spData& FASTCALL GetData()                                          { return mData; }
     void FASTCALL SetData( const detail::spData& data )                         { mData = data; }
-    detail::cDoubleBuffer * FASTCALL GetDoubleBuffer( const cRecord& record )   { return record.GetDoubleBuffer(); }
+    detail::DoubleBuffer * FASTCALL GetDoubleBuffer( const cRecord& record )    { return record.GetDoubleBuffer(); }
     int FASTCALL AddBuffer_ptr( const cRecord& record )                         { return mData->AddBuffer_ptr( record.mRecord ); }
 
     detail::Data::locate_result::second_type FASTCALL LocateImpl( const OpenValues& values, const OpenFindFields& fields );
@@ -166,7 +166,7 @@ private:
     cFilterCompareBase_ptr  mFilter;
     // IDataNotify
     virtual void FASTCALL RecordAdded( const detail::Data::value_type& value );
-    virtual void FASTCALL RecordDeleted();
+    virtual void FASTCALL RecordDeleted( const detail::Data::value_type& value );
     // noncopyable
     CDFASTCALL Index( const Index& src );
     Index& FASTCALL operator=( const Index& src );
@@ -189,7 +189,7 @@ typedef shared_ptr<Index>      cIndex_ptr;
 //***********************************************************************
 //******    Table
 //***********************************************************************
-typedef shared_ptr<detail::cIndexSortCompareStd>        cIndexSortCompareStd_ptr;
+typedef shared_ptr<FieldSortCompare>        spFieldSortCompare;
 
 class Table : public Tablebase
 {
@@ -207,8 +207,8 @@ private:
 protected:
     detail::Data::value_type FASTCALL NewBuffer_usInserted();
 
-    cIndexSortCompareStd_ptr FASTCALL CreateCmp( const cIndexField& index_field );
-    cIndexSortCompareStd_ptr FASTCALL CreateCmp( const OpenIndexFields& index_fields );
+    spFieldSortCompare FASTCALL CreateCmp( const cIndexField& index_field );
+    spFieldSortCompare FASTCALL CreateCmp( const OpenIndexFields& index_fields );
 
     CDFASTCALL Table( const detail::cFieldDefs_& field_defs );
 public:
@@ -227,10 +227,10 @@ public:
     // sort only
     cIndex_ptr FASTCALL NewIndex( const cIndexField& index_field );
     cIndex_ptr FASTCALL NewIndex( const OpenIndexFields& index_fields );
-    cIndex_ptr FASTCALL NewIndex( const cIndexSortCompareStd_ptr& cmp_func );
+    cIndex_ptr FASTCALL NewIndex( const spFieldSortCompare& cmp_func );
 };
 
-typedef shared_ptr< Table >    cTable_ptr;
+typedef shared_ptr<Table>       spTable;
 
 //***********************************************************************
 //******    cuIndex<>
@@ -358,30 +358,30 @@ public:
 private:
     typedef RECORD                      record_type;
 
-    class cIndexSortCompare : public detail::cSortCompareBase
+    class cIndexSortCompare : public detail::SortCompare
     {
     private:
-        virtual bool FASTCALL do_compare_1( detail::cRawBuffer *item1, detail::cRawBuffer *item2 )
+        virtual bool FASTCALL compare( detail::cRawBuffer *item1, detail::cRawBuffer *item2 )
         {
 #ifdef __BORLANDC__
-            return do_compare_2( RECORD::raw( *item1 ), RECORD::raw( *item2 ) );
+            return typed_compare( RECORD::raw( *item1 ), RECORD::raw( *item2 ) );
 #else
-            return do_compare_2( typename RECORD::raw( *item1 ), typename RECORD::raw( *item2 ) );
+            return typed_compare( typename RECORD::raw( *item1 ), typename RECORD::raw( *item2 ) );
 #endif
         }
     protected:
-        virtual bool FASTCALL do_compare_2( const typename RECORD::raw& item1, const typename RECORD::raw& item2 ) = 0;
+        virtual bool FASTCALL typed_compare( const typename RECORD::raw& item1, const typename RECORD::raw& item2 ) = 0;
     };
 
     class cFilterCompare : public detail::cFilterCompareBase
     {
     private:
-        virtual bool FASTCALL do_compare_1( detail::cRawBuffer *item1 )
+        virtual bool FASTCALL compare( detail::cRawBuffer *item1 )
         {
-            return do_compare_2( typename RECORD::raw( *item1 ) );
+            return typed_compare( typename RECORD::raw( *item1 ) );
         }
     protected:
-        virtual bool FASTCALL do_compare_2( const typename RECORD::raw& item1 ) = 0;
+        virtual bool FASTCALL typed_compare( const typename RECORD::raw& item1 ) = 0;
     };
 public:
 #ifndef __BORLANDC__
@@ -406,7 +406,7 @@ public:
         return index_ptr( new index( cmp_func, GetData() ) );
     }
 
-    index_ptr FASTCALL NewIndex( const cIndexSortCompareStd_ptr& cmp_func )
+    index_ptr FASTCALL NewIndex( const spFieldSortCompare& cmp_func )
     {
         return index_ptr( new index( cmp_func, GetData() ) );
     }
@@ -485,12 +485,12 @@ private:
     static void FASTCALL ReadDataAssign( cStream& st, Table& tmp, Table& table );
     static void FASTCALL ReadFieldValue( cStream& st, detail::cRawBuffer& rb, const cFieldDef& field );
     static void FASTCALL ReadTheRest( Table& tmp, Table& table, Variant& variant, bool is_typed );
-    static cTable_ptr FASTCALL CreateTemporaryTable();
+    static spTable FASTCALL CreateTemporaryTable();
 public:
     static void FASTCALL SetTableData( Table& table, Variant& variant );
     template <class T> static void FASTCALL SetTableData( shared_ptr<T>& table, Variant& variant )
     {
-        cTable_ptr      tmp( new T() );
+        spTable     tmp( new T() );
 
         ReadTheRest( *tmp, *table, variant, true );
     }
