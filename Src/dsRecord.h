@@ -475,11 +475,11 @@ private:
     friend class cTableWriter;
 
     detail::Data::value_type    mRecord;
-    cFieldDefs_ptr              mFieldDefs;
+    spFieldDefs                 mFieldDefs;
 protected:
     detail::DoubleBuffer * FASTCALL GetDoubleBuffer() const             { return ( mRecord.get() ); }
 public:
-    CDFASTCALL cRecord( const detail::Data::value_type& container, const cFieldDefs_ptr& field_defs );
+    CDFASTCALL cRecord( const detail::Data::value_type& container, const spFieldDefs& field_defs );
     CDFASTCALL ~cRecord();
     void FASTCALL CommitUpdates()                               { mRecord->CommitUpdates(); }
     detail::cFieldProxy FieldByName( const ds_string& field_name );
@@ -492,7 +492,7 @@ public:
 template <class RECORD> class cuRecord : public cRecord
 {
 public:
-    CDFASTCALL cuRecord( const detail::Data::value_type& container, const cFieldDefs_ptr& field_defs )
+    CDFASTCALL cuRecord( const detail::Data::value_type& container, const spFieldDefs& field_defs )
         : cRecord( container, field_defs )
     {} // empty
     RECORD FASTCALL operator->()                    { return ( RECORD( *GetDoubleBuffer() ) ); }

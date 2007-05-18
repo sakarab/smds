@@ -59,7 +59,7 @@ private:
     virtual bool FASTCALL compare( cRawBuffer *item1, cRawBuffer *item2 ) = 0;
 protected:
     cFieldDefs              *mFieldDefs;
-    virtual void FASTCALL Initialize( const cFieldDefs_ptr& field_defs );
+    virtual void FASTCALL Initialize( const spFieldDefs& field_defs );
 public:
     CDFASTCALL SortCompare() : mFieldDefs(0)                                    {}  // empty
     virtual CDFASTCALL ~SortCompare();
@@ -129,7 +129,7 @@ public:
     friend class CompareFieldCountGuard;
 
 protected:
-    virtual void FASTCALL Initialize( const cFieldDefs_ptr& field_defs );
+    virtual void FASTCALL Initialize( const spFieldDefs& field_defs );
     virtual bool FASTCALL compare( detail::cRawBuffer *item1, detail::cRawBuffer *item2 );
 public:
     CDFASTCALL FieldSortCompare( const cIndexField& index_field );
@@ -161,7 +161,7 @@ private:
     std::vector<cFindField>         mFindFields;
     std::vector<cFieldMapItem>      mFieldMap;
 protected:
-    virtual void FASTCALL Initialize( const cFieldDefs_ptr& field_defs );
+    virtual void FASTCALL Initialize( const spFieldDefs& field_defs );
     virtual bool FASTCALL compare( cRawBuffer *item1, cRawBuffer *item2 );
 public:
     CDFASTCALL cFindCompareStd( const cFindField& find_field );
@@ -186,7 +186,7 @@ private:
 protected:
     cFieldDefs              *mFieldDefs;
 
-    virtual void FASTCALL Initialize( const cFieldDefs_ptr& );      // no_op
+    virtual void FASTCALL Initialize( const spFieldDefs& );         // no_op
     virtual bool FASTCALL compare( cRawBuffer *item1 ) = 0;
 public:
     CDFASTCALL cFilterCompareBase() : mFieldDefs(0)                 {} // empty

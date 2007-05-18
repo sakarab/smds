@@ -140,17 +140,17 @@ void FASTCALL DoubleBuffer::CommitUpdates()
 //******    Data
 //***********************************************************************
 CDFASTCALL Data::Data( IDataNotify *i_notify )
-    : mData(), mFieldDefs( new cFieldDefs() ), mRelatedData(this), mTableNotify(i_notify), mDeleted()
+    : mData(), mFieldDefs( new cFieldDefs() ), mRelatedData(this), mTableNotify(i_notify), mDeleted( new container )
 {
 }
 
 CDFASTCALL Data::Data( const cFieldDefs_& field_defs, IDataNotify *i_notify )
-    : mData(), mFieldDefs( new cFieldDefs( field_defs ) ), mRelatedData(this), mTableNotify(i_notify), mDeleted()
+    : mData(), mFieldDefs( new cFieldDefs( field_defs ) ), mRelatedData(this), mTableNotify(i_notify), mDeleted( new container )
 {
 }
 
-CDFASTCALL Data::Data( const cFieldDefs_ptr& field_defs, IDataNotify *i_notify )
-    : mData(), mFieldDefs( field_defs ), mRelatedData(this), mTableNotify(i_notify), mDeleted()
+CDFASTCALL Data::Data( const spFieldDefs& field_defs, const deleted_container& deleted, IDataNotify *i_notify )
+    : mData(), mFieldDefs( field_defs ), mRelatedData(this), mTableNotify(i_notify), mDeleted(deleted)
 {
 }
 
@@ -211,15 +211,32 @@ int FASTCALL Data::AddBuffer_ptr( const value_type& value )
     return ( size() - 1 );
 }
 
+int FASTCALL Data::InsertBuffer_ptr( const value_type& value, spSortCompare& compare )
+{
+}
+
+void FASTCALL Data::DeleteBuffer_ptr( const value_type& value )
+{
+    DoubleBuffer    *tmp = value.get();
+
+    for ( iterator it = mData.begin(), eend = mData.end() ; it != eend ; ++it )
+    {
+        if ( it->get() == tmp )
+        {
+            mData.erase( it );
+            break;
+        }
+    }
+}
+
 void FASTCALL Data::Delete( int idx )
 {
     iterator        tmp( mData.begin() + idx );
 
     if ( (*tmp)->GetUpdateStatus() != usInserted )
-        mDeleted.push_back( *tmp );
+        mDeleted->push_back( *tmp );
     NotifyRecordDeleted( *tmp );
     mData.erase( tmp );
-
 }
 
 void FASTCALL Data::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size )
@@ -229,7 +246,7 @@ void FASTCALL Data::AddField( const ds_string& name, cFieldKind kind, cFieldData
 
 spData FASTCALL Data::Clone_All( IDataNotify *i_notify )
 {
-    spData      result( new Data( GetFieldDefs(), i_notify ) );
+    spData      result( new Data( GetFieldDefs(), mDeleted, i_notify ) );
 
     std::copy( mData.begin(), mData.end(), std::back_inserter( result->mData ) );
     AddRelation( result.get() );

@@ -41,7 +41,7 @@ CDFASTCALL SortCompare::~SortCompare()
 {
 }
 
-void FASTCALL SortCompare::Initialize( const cFieldDefs_ptr& field_defs )
+void FASTCALL SortCompare::Initialize( const spFieldDefs& field_defs )
 {
 #if defined SM_DS_DEBUG
     CompareInvocationCount = 0;
@@ -166,7 +166,7 @@ CDFASTCALL FieldSortCompare::~FieldSortCompare()
 {
 }
 
-void FASTCALL FieldSortCompare::Initialize( const cFieldDefs_ptr& field_defs )
+void FASTCALL FieldSortCompare::Initialize( const spFieldDefs& field_defs )
 {
     inherited::Initialize( field_defs );
     for ( std::vector<cIndexField>::iterator n = mIndexFields.begin(), eend = mIndexFields.end() ; n != eend ; ++n )
@@ -227,7 +227,7 @@ CDFASTCALL cFindCompareStd::~cFindCompareStd()
 {
 }
 
-void FASTCALL cFindCompareStd::Initialize( const cFieldDefs_ptr& field_defs )
+void FASTCALL cFindCompareStd::Initialize( const spFieldDefs& field_defs )
 {
     SortCompare::Initialize( field_defs );
     for ( std::vector<cFindField>::iterator n = mFindFields.begin(), eend = mFindFields.end() ; n != eend ; ++n )
@@ -265,7 +265,7 @@ CDFASTCALL cFilterCompareBase::~cFilterCompareBase()
 {
 }
 
-void FASTCALL cFilterCompareBase::Initialize( const cFieldDefs_ptr& )
+void FASTCALL cFilterCompareBase::Initialize( const spFieldDefs& )
 {
 }
 

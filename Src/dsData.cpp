@@ -92,6 +92,7 @@ void FASTCALL Tablebase::RecordAdded( const detail::Data::value_type& value )
 
 void FASTCALL Tablebase::RecordDeleted( const detail::Data::value_type& value )
 {
+    mData->DeleteBuffer_ptr( value );
 }
 
 //***********************************************************************
@@ -124,7 +125,7 @@ CDFASTCALL Table::~Table()
 ds_string FASTCALL Table::ConstructSelectFromFields( const char *where_clause )
 {
     std::ostringstream      qstr;
-    const cFieldDefs_ptr&   field_defs = GetData()->GetFieldDefs();
+    const spFieldDefs&      field_defs = GetData()->GetFieldDefs();
     bool                    first_field = true;
 
     qstr << "SELECT ";
@@ -474,10 +475,12 @@ Index::range_iterator FASTCALL Index::GetRangeIterator( const OpenRangeValues& v
 
 void FASTCALL Index::RecordAdded( const detail::Data::value_type& value )
 {
+    GetData()->InsertBuffer_ptr( value, mCompare );
 }
 
 void FASTCALL Index::RecordDeleted( const detail::Data::value_type& value )
 {
+    GetData()->DeleteBuffer_ptr( value );
 }
 
 //***********************************************************************
@@ -539,7 +542,7 @@ Variant FASTCALL cTableReader::GetTablePacket( Table& table )
 
     st << PacketMagic << PacketVersion;
 
-    cFieldDefs_ptr  field_defs( table.GetFieldDefs() );
+    spFieldDefs     field_defs( table.GetFieldDefs() );
 
     st << field_defs->Count();
     for ( cFieldDefs::iterator n = field_defs->begin(), eend = field_defs->end() ; n != eend ; ++n )
@@ -727,7 +730,7 @@ void FASTCALL cTableWriter::ReadFieldValue( cStream& st, detail::cRawBuffer& rb,
 
 void FASTCALL cTableWriter::ReadData( cStream& st, Table& tmp )
 {
-    cFieldDefs_ptr      field_defs( tmp.GetFieldDefs() );
+    spFieldDefs         field_defs( tmp.GetFieldDefs() );
     int                 record_count;
 
     st >> record_count;

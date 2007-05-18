@@ -188,7 +188,7 @@ public:
     const cFieldDef& FASTCALL FieldByName( const char *field_name ) const;
 };
 
-typedef shared_ptr<cFieldDefs>      cFieldDefs_ptr;
+typedef shared_ptr<cFieldDefs>      spFieldDefs;
 
 }; // namespace smds
 

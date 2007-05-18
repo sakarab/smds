@@ -270,7 +270,7 @@ cRangeIterator& FASTCALL cRangeIterator::operator = ( const cRangeIterator& src 
 //***********************************************************************
 //******    cRecord
 //***********************************************************************
-CDFASTCALL cRecord::cRecord( const detail::Data::value_type& container, const cFieldDefs_ptr& field_defs )
+CDFASTCALL cRecord::cRecord( const detail::Data::value_type& container, const spFieldDefs& field_defs )
     : mRecord(container), mFieldDefs(field_defs)
 {
 }

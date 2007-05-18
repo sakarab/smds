@@ -27,6 +27,7 @@
 #include <iterator>
 #include "dsSmartPtr.h"
 #include <boost/scoped_array.hpp>
+#include <boost/shared_ptr.hpp>
 #include "dsUtils.h"
 #include "dsTypes.h"
 #include "dsFields.h"
@@ -762,11 +763,13 @@ public:
     typedef std::pair<bool,size_type>                           locate_result;
     typedef std::pair<bool,std::pair<size_type,size_type> >     range_result;
 private:
-    container           mData;
-    cFieldDefs_ptr      mFieldDefs;
-    Data                *mRelatedData;      // related "Data ring". Sorted or part of this data
-    IDataNotify         *mTableNotify;
-    container           mDeleted;
+    typedef boost::shared_ptr<container>                        deleted_container;
+private:
+    container               mData;
+    spFieldDefs             mFieldDefs;
+    Data                    *mRelatedData;      // related "Data ring". Sorted or part of this data
+    IDataNotify             *mTableNotify;
+    deleted_container       mDeleted;           // this is shared among all related "Data"s
 
     container& FASTCALL GetContainer()                              { return ( mData ); }
     void FASTCALL Find_0( const Data::value_type& double_buffer, spSortCompare& compare,
@@ -793,16 +796,19 @@ private:
     // noncopyable
     CDFASTCALL Data( const Data& src );
     Data& FASTCALL operator=( const Data& src );
+
+    CDFASTCALL Data( const spFieldDefs& field_defs, const deleted_container& deleted, IDataNotify *i_notify );
 public:
     CDFASTCALL Data( IDataNotify *i_notify );
     CDFASTCALL Data( const cFieldDefs_& field_defs, IDataNotify *i_notify );
-    CDFASTCALL Data( const cFieldDefs_ptr& field_defs, IDataNotify *i_notify );
     CDFASTCALL ~Data();
 
     // IDataNotify * FASTCALL GetTableNotify()                         { return mTableNotify; }
     // void FASTCALL SetTableNotify( IDataNotify *i_notify )           { mTableNotify = IDataNotify; }
 
     int FASTCALL AddBuffer_ptr( const value_type& value );
+    int FASTCALL InsertBuffer_ptr( const value_type& value, spSortCompare& compare );
+    void FASTCALL DeleteBuffer_ptr( const value_type& value );
     void FASTCALL Delete( int idx );
 
     value_type FASTCALL NewBuffer_usUnmodified();
@@ -820,7 +826,7 @@ public:
 
     void FASTCALL AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size );
 
-    const cFieldDefs_ptr& FASTCALL GetFieldDefs() const             { return mFieldDefs; }
+    const spFieldDefs& FASTCALL GetFieldDefs() const                { return mFieldDefs; }
     const cFieldDef& FieldByName( const ds_string& field_name )     { return mFieldDefs->FieldByName( field_name ); }
     const cFieldDef& FieldByName( const char *field_name )          { return mFieldDefs->FieldByName( field_name ); }
 

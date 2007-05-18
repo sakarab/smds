@@ -64,7 +64,7 @@ protected:
     CDFASTCALL Tablebase( const detail::cFieldDefs_& field_defs );
 public:
     virtual CDFASTCALL ~Tablebase();
-    const cFieldDefs_ptr& FASTCALL GetFieldDefs() const                         { return mData->GetFieldDefs(); }
+    const spFieldDefs& FASTCALL GetFieldDefs() const                            { return mData->GetFieldDefs(); }
     bool FASTCALL IsEmpty()                                                     { return mData->is_empty(); }
     int FASTCALL RecordCount()                                                  { return mData->size(); }
     iterator FASTCALL GetIterator()                                             { return iterator( mData ); }
