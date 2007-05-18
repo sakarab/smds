@@ -87,6 +87,7 @@ Tablebase::iterator FASTCALL Tablebase::Locate( const Variant& value, const cFin
 
 void FASTCALL Tablebase::RecordAdded( const detail::Data::value_type& value )
 {
+    mData->AddBuffer_ptr( value );
 }
 
 void FASTCALL Tablebase::RecordDeleted( const detail::Data::value_type& value )

@@ -335,6 +335,8 @@ public:
     cFieldProxy FASTCALL FieldByName( const char *field_name );
     bool FASTCALL Locate( const Variant& value, const cFindField& field );
     bool FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields );
+
+    void FASTCALL Delete()                              { mContainer->Delete( mIdx ); }
 };
 
 //***********************************************************************
