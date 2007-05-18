@@ -211,8 +211,13 @@ int FASTCALL Data::AddBuffer_ptr( const value_type& value )
     return ( size() - 1 );
 }
 
+// assume a sorted container and insert it in the right position
 int FASTCALL Data::InsertBuffer_ptr( const value_type& value, spSortCompare& compare )
 {
+    SortControler       cc = SortControler( compare );
+    Data::iterator      rslt = std::lower_bound( mData.begin(), mData.end(), value, cc );
+
+    // mData.insert( rslt. )
 }
 
 void FASTCALL Data::DeleteBuffer_ptr( const value_type& value )
