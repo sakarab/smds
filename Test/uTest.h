@@ -24,12 +24,10 @@
 //---------------------------------------------------------------------------
 #include <dsData.h>
 #include "uTables.h"
-//#include "dsSmartPtr.h"
 //---------------------------------------------------------------------------
+typedef void (FASTCALL *ErrorReporter)( void *user_data, const char *error );
+
 tblFiles_ptr GetTblFiles();
-void Test( tblFiles_ptr ds );
-void Test( tblLocation_ptr ds );
-void Test( const smds::Table& ds );
-int DoDsDataTest();
+void Test( tblFiles_ptr ds, ErrorReporter error_reporter, void *user_data );
 //---------------------------------------------------------------------------
 #endif

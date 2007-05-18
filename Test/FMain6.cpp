@@ -28,6 +28,16 @@
 //---------------------------------------------------------------------------
 #pragma resource "*.dfm"
 TfrmMain *frmMain;
+
+namespace
+{
+
+void FASTCALL ErrorReporter_( void *user_data, const char *error )
+{
+}
+
+};
+
 //---------------------------------------------------------------------------
 __fastcall TfrmMain::TfrmMain(TComponent* Owner)
     : TForm(Owner)
@@ -44,7 +54,7 @@ void __fastcall TfrmMain::Button1Click(TObject *Sender)
 {
     lvList->Items->Count = 0;
     mFiles = GetTblFiles();
-    Test( mFiles );
+    Test( mFiles, ErrorReporter_, this );
     FillList( lvList, tblFiles_rec::GetFieldDefs(), mFiles );
 }
 //---------------------------------------------------------------------------

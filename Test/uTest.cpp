@@ -312,6 +312,8 @@ void FASTCALL dsDatasetModify( tblFiles::iterator ds )
 //***********************************************************************
 void FASTCALL AddRecords( tblFiles_ptr ds )
 {
+    UpdateLocker    lock( *ds.get() ); 
+
     for ( int n = 0 ; n < 20000 ; ++n )
     {
         tblFiles::record    new_record = ds->NewRecord();
@@ -376,21 +378,11 @@ Variant FASTCALL TestVariant()
     return ( a );
 }
 
-
-void FASTCALL foo()
-{
-//    ds::detail::OArr<int, 1>   aa( 5 );
-}
-
-void FASTCALL foo( int n )
-{
-}
-
 int FASTCALL foo( Index::iterator iter )
 {
     Index::iterator     aa = ++iter;
     Table::iterator     bb = aa;
-    Table::iterator     cc = ++bb; 
+    Table::iterator     cc = ++bb;
 
     if ( ! iter.eof() )
         return ( iter.FieldByName( "PathID" )->AsInteger() + iter.FieldByName( "fSize" )->AsInteger() );
@@ -398,16 +390,12 @@ int FASTCALL foo( Index::iterator iter )
         return ( 0 );
 }
 
-void FASTCALL aaa( Index& idx )
-{
-}
-
 //***********************************************************************
 //******    Test
 //***********************************************************************
 // void dummy_main();
 
-void Test( tblFiles_ptr ds )
+void Test( tblFiles_ptr ds, ErrorReporter error_reporter, void *user_data )
 {
 //    dummy_main();
 
@@ -429,39 +417,31 @@ void Test( tblFiles_ptr ds )
     files_idx = CreateIndex_f1( ds );
     unorder_count = Check_Order_f1( files_idx->GetIterator() );
     if ( unorder_count != 0 )
-        foo();
-
-    aaa( *files_idx.get() );
+        error_reporter( user_data, "" );
 
     tblFiles::index::range_iterator     riter = files_idx->GetRangeIterator( cRangeValues( 54, 56 ) );
 
-    int     n = 0;
-
     while ( ! riter.eof() )
-    {
-        ++n;
         ++riter;
-    }
-    foo ( n );
 
     cIndex_ptr  idx;
 
     idx = CreateIndex_g1( ds );
     unorder_count = Check_Order_g1( idx->GetIterator() );
     if ( unorder_count != 0 )
-        foo();
+        error_reporter( user_data, "" );
 
     idx = CreateIndex_g2( ds );
     unorder_count = Check_Order_g2( idx->GetIterator() );
     if ( unorder_count != 0 )
-        foo();
+        error_reporter( user_data, "" );
 
     AddRecords( ds );
 
     idx = CreateIndex_g2( ds );
     unorder_count = Check_Order_g2( idx->GetIterator() );
     if ( unorder_count != 0 )
-        foo();
+        error_reporter( user_data, "" );
 
     for ( int n = 0 ; n < 100 ; ++n )
         foo( FindRecord_g2( idx ) );

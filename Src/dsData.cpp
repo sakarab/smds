@@ -64,7 +64,7 @@ cRecord FASTCALL Tablebase::NewRecord()
 
 Tablebase::iterator FASTCALL Tablebase::AddRecord( const cRecord& record )
 {
-    return ( iterator( mData, AddBuffer_ptr( record ) ) );
+    return ( iterator( mData, AddBuffer( record ) ) );
 }
 
 detail::Data::locate_result::second_type FASTCALL Tablebase::LocateImpl( const OpenValues& values, const OpenFindFields& fields )
@@ -85,7 +85,7 @@ Tablebase::iterator FASTCALL Tablebase::Locate( const Variant& value, const cFin
     return Locate( OpenValues( value ), OpenFindFields( field ) );
 }
 
-void FASTCALL Tablebase::RecordAdded( const detail::Data::value_type& value )
+void FASTCALL Tablebase::RecordAdded( const detail::Data::value_type& value, bool )
 {
     mData->AddBuffer_ptr( value );
 }
@@ -93,6 +93,10 @@ void FASTCALL Tablebase::RecordAdded( const detail::Data::value_type& value )
 void FASTCALL Tablebase::RecordDeleted( const detail::Data::value_type& value )
 {
     mData->DeleteBuffer_ptr( value );
+}
+
+void FASTCALL Tablebase::UpdateLockReleased()
+{
 }
 
 //***********************************************************************
@@ -473,14 +477,22 @@ Index::range_iterator FASTCALL Index::GetRangeIterator( const OpenRangeValues& v
     return range_iterator( GetData(), result.second.first, result.second.second, mCompare );
 }
 
-void FASTCALL Index::RecordAdded( const detail::Data::value_type& value )
+void FASTCALL Index::RecordAdded( const detail::Data::value_type& value, bool locked )
 {
-    GetData()->InsertBuffer_ptr( value, mCompare );
+    if ( locked )
+        GetData()->AddBuffer_ptr( value );
+    else
+        GetData()->InsertBuffer_ptr( value, mCompare );
 }
 
 void FASTCALL Index::RecordDeleted( const detail::Data::value_type& value )
 {
     GetData()->DeleteBuffer_ptr( value );
+}
+
+void FASTCALL Index::UpdateLockReleased()
+{
+    GetData()->Sort( detail::SortControler( mCompare ) );
 }
 
 //***********************************************************************

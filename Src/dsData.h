@@ -32,6 +32,8 @@
 namespace smds
 {
 
+class UpdateLocker;
+
 //***********************************************************************
 //******    Tablebase
 //***********************************************************************
@@ -44,11 +46,13 @@ public:
     typedef detail::cRecordIterator     iterator;
 private:
     friend class cTableWriter;
+    friend class UpdateLocker;
 
     detail::spData          mData;
     // IDataNotify
-    virtual void FASTCALL RecordAdded( const detail::Data::value_type& value );
+    virtual void FASTCALL RecordAdded( const detail::Data::value_type& value, bool locked );
     virtual void FASTCALL RecordDeleted( const detail::Data::value_type& value );
+    virtual void FASTCALL UpdateLockReleased();
     // noncopyable
     CDFASTCALL Tablebase( const Tablebase& src );
     Tablebase& FASTCALL operator=( const Tablebase& src );
@@ -56,7 +60,7 @@ protected:
     detail::spData& FASTCALL GetData()                                          { return mData; }
     void FASTCALL SetData( const detail::spData& data )                         { mData = data; }
     detail::DoubleBuffer * FASTCALL GetDoubleBuffer( const cRecord& record )    { return record.GetDoubleBuffer(); }
-    int FASTCALL AddBuffer_ptr( const cRecord& record )                         { return mData->AddBuffer_ptr( record.mRecord ); }
+    int FASTCALL AddBuffer( const cRecord& record )                             { return mData->AddBuffer( record.mRecord ); }
 
     detail::Data::locate_result::second_type FASTCALL LocateImpl( const OpenValues& values, const OpenFindFields& fields );
 
@@ -78,6 +82,21 @@ public:
 };
 
 typedef Tablebase::iterator    record_iterator;
+
+//***********************************************************************
+//******    UpdateLocker
+//***********************************************************************
+class UpdateLocker
+{
+private:
+    Tablebase&          mTablebase;
+    // noncopyable
+    CDFASTCALL UpdateLocker( const UpdateLocker& src );
+    UpdateLocker& FASTCALL operator=( const UpdateLocker& src );
+public:
+    CDFASTCALL UpdateLocker( Tablebase& tablebase ) : mTablebase(tablebase)     { tablebase.mData->LockUpdates(); }
+    CDFASTCALL ~UpdateLocker()                                                  { mTablebase.mData->UnlockUpdates(); }
+};
 
 //***********************************************************************
 //******    Index
@@ -165,8 +184,9 @@ private:
     spSortCompare           mCompare;
     cFilterCompareBase_ptr  mFilter;
     // IDataNotify
-    virtual void FASTCALL RecordAdded( const detail::Data::value_type& value );
+    virtual void FASTCALL RecordAdded( const detail::Data::value_type& value, bool locked );
     virtual void FASTCALL RecordDeleted( const detail::Data::value_type& value );
+    virtual void FASTCALL UpdateLockReleased();
     // noncopyable
     CDFASTCALL Index( const Index& src );
     Index& FASTCALL operator=( const Index& src );
@@ -423,7 +443,7 @@ public:
 
     iterator FASTCALL GetIterator()                                             { return iterator( GetData() ); }
     record FASTCALL NewRecord()                                                 { return record( NewBuffer_usInserted(), GetFieldDefs() ); }
-    iterator FASTCALL AddRecord( const record& rec )                            { return iterator( GetData(), AddBuffer_ptr( rec ) ); }
+    iterator FASTCALL AddRecord( const record& rec )                            { return iterator( GetData(), AddBuffer( rec ) ); }
     iterator FASTCALL Locate( const Variant& value, const cFindField& field )
     {
         return iterator( Table::Locate( value, field ) );

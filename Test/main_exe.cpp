@@ -3,7 +3,6 @@
 #include <malloc.h>
 
 using namespace smds;
-using namespace smds::detail;
 
 //--------------------------------------------------------------------
 class InitOle
@@ -37,7 +36,7 @@ void __fastcall dsDatasetModify( tblFiles::iterator ds, const ds_string& descr )
 
 void Output( tblFiles_ptr ds ) // const ds::cFieldDefs_& field_defs, tblFiles::record_ptr rec )
 {
-    const cFieldDefs_ptr&   field_defs = ds->GetFieldDefs();
+    const spFieldDefs&      field_defs = ds->GetFieldDefs();
 
     for ( cFieldDefs::const_iterator n = field_defs->begin() ; n != field_defs->end() ; ++n )
         std::cout << n->Name().c_str();
@@ -87,6 +86,15 @@ void Output( tblFiles_ptr ds ) // const ds::cFieldDefs_& field_defs, tblFiles::r
     }
 }
 
+namespace
+{
+
+void FASTCALL ErrorReporter_( void *user_data, const char *error )
+{
+}
+
+};
+
 int main()
 {
     _set_sbh_threshold( 1016 );
@@ -97,7 +105,7 @@ int main()
 	{
         tblFiles_ptr    files = GetTblFiles();
 
-        Test( files );
+        Test( files, ErrorReporter_, 0 );
         Output( files );
 	}
 	catch ( std::exception& e )

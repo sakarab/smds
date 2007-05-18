@@ -764,12 +764,14 @@ public:
     typedef std::pair<bool,std::pair<size_type,size_type> >     range_result;
 private:
     typedef boost::shared_ptr<container>                        deleted_container;
+    typedef boost::shared_ptr<int>                              lock_counter;
 private:
     container               mData;
-    spFieldDefs             mFieldDefs;
+    spFieldDefs             mFieldDefs;         // this is shared among all related "Data"s
+    deleted_container       mDeleted;           // this is shared among all related "Data"s
+    lock_counter            mLockCount;         // this is shared among all related "Data"s
     Data                    *mRelatedData;      // related "Data ring". Sorted or part of this data
     IDataNotify             *mTableNotify;
-    deleted_container       mDeleted;           // this is shared among all related "Data"s
 
     container& FASTCALL GetContainer()                              { return ( mData ); }
     void FASTCALL Find_0( const Data::value_type& double_buffer, spSortCompare& compare,
@@ -781,6 +783,7 @@ private:
     // relation managment
     void FASTCALL NotifyRecordAdded( const value_type& value );
     void FASTCALL NotifyRecordDeleted( const value_type& value );
+    void FASTCALL NotifyUpdateLockReleased();
 
     void FASTCALL RemoveRelation( Data *relation )
     {
@@ -797,7 +800,8 @@ private:
     CDFASTCALL Data( const Data& src );
     Data& FASTCALL operator=( const Data& src );
 
-    CDFASTCALL Data( const spFieldDefs& field_defs, const deleted_container& deleted, IDataNotify *i_notify );
+    CDFASTCALL Data( const spFieldDefs& field_defs, const deleted_container& deleted,
+                     lock_counter lock_count, IDataNotify *i_notify );
 public:
     CDFASTCALL Data( IDataNotify *i_notify );
     CDFASTCALL Data( const cFieldDefs_& field_defs, IDataNotify *i_notify );
@@ -807,9 +811,13 @@ public:
     // void FASTCALL SetTableNotify( IDataNotify *i_notify )           { mTableNotify = IDataNotify; }
 
     int FASTCALL AddBuffer_ptr( const value_type& value );
-    int FASTCALL InsertBuffer_ptr( const value_type& value, spSortCompare& compare );
+    void FASTCALL InsertBuffer_ptr( const value_type& value, spSortCompare& compare );
     void FASTCALL DeleteBuffer_ptr( const value_type& value );
+    int FASTCALL AddBuffer( const value_type& value );
     void FASTCALL Delete( int idx );
+
+    void FASTCALL LockUpdates();
+    void FASTCALL UnlockUpdates();
 
     value_type FASTCALL NewBuffer_usUnmodified();
     value_type FASTCALL NewBuffer_usInserted();
@@ -843,9 +851,10 @@ public:
 class IDataNotify
 {
 public:
-    virtual void FASTCALL RecordAdded( const Data::value_type& value ) = 0;
+    virtual void FASTCALL RecordAdded( const Data::value_type& value, bool locked ) = 0;
     virtual void FASTCALL RecordDeleted( const Data::value_type& value ) = 0;
-    virtual CDFASTCALL ~IDataNotify()               {} // empty
+    virtual void FASTCALL UpdateLockReleased() = 0;
+    virtual CDFASTCALL ~IDataNotify()                       {} // empty
 };
 
 //---------------------------------------------------------------------------
