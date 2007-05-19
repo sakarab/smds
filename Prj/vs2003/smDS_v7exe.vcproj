@@ -4,6 +4,7 @@
 	Version="7.10"
 	Name="smDS_v7exe"
 	ProjectGUID="{62A40FCF-A163-457E-B896-F24163774C54}"
+	RootNamespace="smDS_v7exe"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -60,7 +61,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\"
+			OutputDirectory="..\..\bin"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
 			CharacterSet="2">
@@ -71,7 +72,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="3"
-				AdditionalIncludeDirectories="Test;Src;\Include"
+				AdditionalIncludeDirectories="..\..\Test;..\..\Src;\Include;\Src\boost_1_33_1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;NO_CDFASTCALL"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -127,55 +128,55 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\Src\dsBuffer.cpp">
+				RelativePath="..\..\Src\dsBuffer.cpp">
 			</File>
 			<File
-				RelativePath=".\Src\dsCompareControlers.cpp">
+				RelativePath="..\..\Src\dsCompareControlers.cpp">
 			</File>
 			<File
-				RelativePath=".\Src\dsConn.cpp">
+				RelativePath="..\..\Src\dsConn.cpp">
 			</File>
 			<File
-				RelativePath=".\Src\dsData.cpp">
+				RelativePath="..\..\Src\dsData.cpp">
 			</File>
 			<File
-				RelativePath=".\Src\dsDateTime.cpp">
+				RelativePath="..\..\Src\dsDateTime.cpp">
 			</File>
 			<File
-				RelativePath=".\Src\dsExceptions.cpp">
+				RelativePath="..\..\Src\dsExceptions.cpp">
 			</File>
 			<File
-				RelativePath=".\Src\dsFields.cpp">
+				RelativePath="..\..\Src\dsFields.cpp">
 			</File>
 			<File
-				RelativePath=".\Src\dsIndex.cpp">
+				RelativePath="..\..\Src\dsIndex.cpp">
 			</File>
 			<File
-				RelativePath=".\Src\dsRecord.cpp">
+				RelativePath="..\..\Src\dsRecord.cpp">
 			</File>
 			<File
-				RelativePath=".\Src\dsSmartPtr.cpp">
+				RelativePath="..\..\Src\dsSmartPtr.cpp">
 			</File>
 			<File
-				RelativePath=".\Src\dsStream.cpp">
+				RelativePath="..\..\Src\dsStream.cpp">
 			</File>
 			<File
-				RelativePath=".\Src\dsString.cpp">
+				RelativePath="..\..\Src\dsString.cpp">
 			</File>
 			<File
-				RelativePath=".\Src\dsUtils.cpp">
+				RelativePath="..\..\Src\dsUtils.cpp">
 			</File>
 			<File
-				RelativePath=".\Src\dsVariant.cpp">
+				RelativePath="..\..\Src\dsVariant.cpp">
 			</File>
 			<File
-				RelativePath=".\Src\main_exe.cpp">
+				RelativePath="..\..\Test\main_exe.cpp">
 			</File>
 			<File
-				RelativePath=".\Test\uTables.cpp">
+				RelativePath="..\..\Test\uTables.cpp">
 			</File>
 			<File
-				RelativePath=".\Test\uTest.cpp">
+				RelativePath="..\..\Test\uTest.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -183,64 +184,64 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\Src\dsBuffer.h">
+				RelativePath="..\..\Src\dsBuffer.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsCompareControlers.h">
+				RelativePath="..\..\Src\dsCompareControlers.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsConfig.h">
+				RelativePath="..\..\Src\dsConfig.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsConn.h">
+				RelativePath="..\..\Src\dsConn.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsConn_Intf.h">
+				RelativePath="..\..\Src\dsConn_Intf.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsData.h">
+				RelativePath="..\..\Src\dsData.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsDateTime.h">
+				RelativePath="..\..\Src\dsDateTime.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsExceptions.h">
+				RelativePath="..\..\Src\dsExceptions.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsFields.h">
+				RelativePath="..\..\Src\dsFields.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsIndex.h">
+				RelativePath="..\..\Src\dsIndex.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsRecord.h">
+				RelativePath="..\..\Src\dsRecord.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsSmartPtr.h">
+				RelativePath="..\..\Src\dsSmartPtr.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsStream.h">
+				RelativePath="..\..\Src\dsStream.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsString.h">
+				RelativePath="..\..\Src\dsString.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsSysOpen.h">
+				RelativePath="..\..\Src\dsSysOpen.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsTypes.h">
+				RelativePath="..\..\Src\dsTypes.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsUtils.h">
+				RelativePath="..\..\Src\dsUtils.h">
 			</File>
 			<File
-				RelativePath=".\Src\dsVariant.h">
+				RelativePath="..\..\Src\dsVariant.h">
 			</File>
 			<File
-				RelativePath=".\Test\uTables.h">
+				RelativePath="..\..\Test\uTables.h">
 			</File>
 			<File
-				RelativePath=".\Test\uTest.h">
+				RelativePath="..\..\Test\uTest.h">
 			</File>
 		</Filter>
 		<Filter
