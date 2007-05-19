@@ -92,12 +92,13 @@ tblFiles_ptr GetTblFiles()
 /*
     DbEngine        transport = SelectDbEngine( "BDE" );
     Database        connection = transport.NewConnection( BDE_DirData_Conn );
-
+*/
     DbEngine        engine = SelectDbEngine( "ADO" );
     Database        database = engine.NewConnection( ADO_Dirdata_Conn );
-*/
+/*
     DbEngine        engine = SelectDbEngine( "DAO" );
     Database        database = engine.NewConnection( DAO_Dirdata_Conn );
+*/
 
     tblFiles_ptr    result( new tblFiles() );
 

@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "smDS_v7exe", "smDS_v7exe.vcproj", "{62A40FCF-A163-457E-B896-F24163774C54}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B3776F21-545F-449D-91AA-058BF5AB82E6} = {B3776F21-545F-449D-91AA-058BF5AB82E6}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Loki71vs", "..\..\..\..\..\Libs\Loki\Prj\Loki71vs.vcproj", "{B3776F21-545F-449D-91AA-058BF5AB82E6}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{62A40FCF-A163-457E-B896-F24163774C54}.Debug.ActiveCfg = Debug|Win32
+		{62A40FCF-A163-457E-B896-F24163774C54}.Debug.Build.0 = Debug|Win32
+		{62A40FCF-A163-457E-B896-F24163774C54}.Release.ActiveCfg = Release|Win32
+		{62A40FCF-A163-457E-B896-F24163774C54}.Release.Build.0 = Release|Win32
+		{B3776F21-545F-449D-91AA-058BF5AB82E6}.Debug.ActiveCfg = Debug|Win32
+		{B3776F21-545F-449D-91AA-058BF5AB82E6}.Debug.Build.0 = Debug|Win32
+		{B3776F21-545F-449D-91AA-058BF5AB82E6}.Release.ActiveCfg = Release|Win32
+		{B3776F21-545F-449D-91AA-058BF5AB82E6}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
