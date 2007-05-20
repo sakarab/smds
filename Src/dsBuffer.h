@@ -220,66 +220,102 @@ public:
     bool FASTCALL ReadBool( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<bool *>(field_def.Offset())) );
+#else
+            return false;
+#endif
+        return *(buffer_field_cast<bool *>(field_def.Offset()));
     }
     char FASTCALL ReadChar( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<char *>(field_def.Offset())) );
+#else
+            return 0;
+#endif
+        return *(buffer_field_cast<char *>(field_def.Offset()));
     }
     wchar_t FASTCALL ReadWChar( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<wchar_t *>(field_def.Offset())) );
+#else
+            return 0;
+#endif
+        return *(buffer_field_cast<wchar_t *>(field_def.Offset()));
     }
     short FASTCALL ReadShort( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<short *>(field_def.Offset())) );
+#else
+            return 0;
+#endif
+        return *(buffer_field_cast<short *>(field_def.Offset()));
     }
     int FASTCALL ReadInteger( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<int *>(field_def.Offset())) );
+#else
+            return 0;
+#endif
+        return *(buffer_field_cast<int *>(field_def.Offset()));
     }
     long FASTCALL ReadLong( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<long *>(field_def.Offset())) );
+#else
+            return 0;
+#endif
+        return *(buffer_field_cast<long *>(field_def.Offset()));
     }
     double FASTCALL ReadFloat( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<double *>(field_def.Offset())) );
+        return *(buffer_field_cast<double *>(field_def.Offset()));
     }
     cDateTime FASTCALL ReadDate( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( cDateTime( *(buffer_field_cast<cDateTime *>(field_def.Offset())) ) );
+#else
+            return cDateTime( 0 );
+#endif
+        return cDateTime( *(buffer_field_cast<cDateTime *>(field_def.Offset())) );
     }
 
 #ifdef SM_DS_STRING_AS_STRING
     const ds_string& FASTCALL ReadString( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<ds_string *>(field_def.Offset())) );
+#else
+            return empty_string();
+#endif
+        return *(buffer_field_cast<ds_string *>(field_def.Offset()));
     }
 #else
     ds_string FASTCALL ReadString( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( ds_string( buffer_field_cast<const char *>(field_def.Offset()),
-                            BufferStringLen( buffer_field_cast<const char *>(field_def.Offset()), field_def.Size_() ) ) );
+#else
+            return ds_string();
+#endif
+        return ds_string( buffer_field_cast<const char *>(field_def.Offset()),
+                          BufferStringLen( buffer_field_cast<const char *>(field_def.Offset()), field_def.Size_() ) );
     }
 #endif
     Variant FASTCALL ReadVariant( const cFieldDef& field_def ) const;
@@ -347,66 +383,106 @@ public:
     bool FASTCALL ReadBool( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<bool *>(field_def.mOffset)) );
+#else
+            return false;
+#endif
+        return *(buffer_field_cast<bool *>(field_def.mOffset));
     }
     char FASTCALL ReadChar( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<char *>(field_def.mOffset)) );
+#else
+            return 0;
+#endif
+        return *(buffer_field_cast<char *>(field_def.mOffset));
     }
     wchar_t FASTCALL ReadWChar( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<wchar_t *>(field_def.mOffset)) );
+#else
+            return 0;
+#endif
+        return *(buffer_field_cast<wchar_t *>(field_def.mOffset));
     }
     short FASTCALL ReadShort( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<short *>(field_def.mOffset)) );
+#else
+            return 0;
+#endif
+        return *(buffer_field_cast<short *>(field_def.mOffset));
     }
     int FASTCALL ReadInteger( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<int *>(field_def.mOffset)) );
+#else
+            return 0;
+#endif
+        return *(buffer_field_cast<int *>(field_def.mOffset));
     }
     long FASTCALL ReadLong( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<long *>(field_def.mOffset)) );
+#else
+            return 0;
+#endif
+        return *(buffer_field_cast<long *>(field_def.mOffset));
     }
     double FASTCALL ReadFloat( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<double *>(field_def.mOffset)) );
+#else
+            return 0;
+#endif
+        return *(buffer_field_cast<double *>(field_def.mOffset));
     }
     cDateTime FASTCALL ReadDate( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( cDateTime( *(buffer_field_cast<cDateTime *>(field_def.mOffset)) ) );
+#else
+            return cDateTime( 0 );
+#endif
+        return cDateTime( *(buffer_field_cast<cDateTime *>(field_def.mOffset)) );
     }
 
 #ifdef SM_DS_STRING_AS_STRING
     const ds_string& FASTCALL ReadString( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( *(buffer_field_cast<ds_string *>(field_def.mOffset)) );
+#else
+            return empty_string();
+#endif
+        return *(buffer_field_cast<ds_string *>(field_def.mOffset));
     }
 #else
     ds_string FASTCALL ReadString( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
             throw eNullFieldValue();
-        return ( ds_string( buffer_field_cast<const char *>(field_def.mOffset),
-                            BufferStringLen( buffer_field_cast<const char *>(field_def.mOffset), field_def.mSize ) ) );
+#else
+            return ds_string();
+#endif
+        return ds_string( buffer_field_cast<const char *>(field_def.mOffset),
+                          BufferStringLen( buffer_field_cast<const char *>(field_def.mOffset), field_def.mSize ) );
     }
 #endif
 //---------------------------------------------------------------------------
@@ -471,46 +547,46 @@ public:
 //---------------------------------------------------------------------------
     bool FASTCALL ReadBoolNN( const cFieldDef& field_def ) const
     {
-        return ( *(buffer_field_cast<bool *>(field_def.Offset())) );
+        return *(buffer_field_cast<bool *>(field_def.Offset()));
     }
     char FASTCALL ReadCharNN( const cFieldDef& field_def ) const
     {
-        return ( *(buffer_field_cast<char *>(field_def.Offset())) );
+        return *(buffer_field_cast<char *>(field_def.Offset()));
     }
     wchar_t FASTCALL ReadWCharNN( const cFieldDef& field_def ) const
     {
-        return ( *(buffer_field_cast<wchar_t *>(field_def.Offset())) );
+        return *(buffer_field_cast<wchar_t *>(field_def.Offset()));
     }
     short FASTCALL ReadShortNN( const cFieldDef& field_def ) const
     {
-        return ( *(buffer_field_cast<short *>(field_def.Offset())) );
+        return *(buffer_field_cast<short *>(field_def.Offset()));
     }
     int FASTCALL ReadIntegerNN( const cFieldDef& field_def ) const
     {
-        return ( *(buffer_field_cast<int *>(field_def.Offset())) );
+        return *(buffer_field_cast<int *>(field_def.Offset()));
     }
     long FASTCALL ReadLongNN( const cFieldDef& field_def ) const
     {
-        return ( *(buffer_field_cast<long *>(field_def.Offset())) );
+        return *(buffer_field_cast<long *>(field_def.Offset()));
     }
     double FASTCALL ReadFloatNN( const cFieldDef& field_def ) const
     {
-        return ( *(buffer_field_cast<double *>(field_def.Offset())) );
+        return *(buffer_field_cast<double *>(field_def.Offset()));
     }
     cDateTime FASTCALL ReadDateNN( const cFieldDef& field_def ) const
     {
-        return ( cDateTime( *(buffer_field_cast<cDateTime *>(field_def.Offset())) ) );
+        return cDateTime( *(buffer_field_cast<cDateTime *>(field_def.Offset())) );
     }
 #ifdef SM_DS_STRING_AS_STRING
     const ds_string& FASTCALL ReadStringNN( const cFieldDef& field_def ) const
     {
-        return ( *(buffer_field_cast<ds_string *>(field_def.Offset())) );
+        return *(buffer_field_cast<ds_string *>(field_def.Offset()));
     }
 #else
     ds_string FASTCALL ReadStringNN( const cFieldDef& field_def ) const
     {
-        return ( ds_string( buffer_field_cast<const char *>(field_def.Offset()),
-                            BufferStringLen( buffer_field_cast<const char *>(field_def.Offset()), field_def.Size_() ) ) );
+        return ds_string( buffer_field_cast<const char *>(field_def.Offset()),
+                          BufferStringLen( buffer_field_cast<const char *>(field_def.Offset()), field_def.Size_() ) );
     }
 #endif
 };

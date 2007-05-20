@@ -44,6 +44,12 @@
 //#define SM_DS_DEBUG
 
 /**********************************************************************************
+** Uncomment this so that the library raises an exception when field values are
+** null instead of returning the default value for the field type
+***********************************************************************************/
+#define SM_DS_NULL_VALUE_EXCEPTION
+
+/**********************************************************************************
 ** Uncomment this to make a build with debug iterators (not yet implemented)
 ***********************************************************************************/
 //#define SM_DS_DEBUG_ITERATORS
