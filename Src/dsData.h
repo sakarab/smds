@@ -37,9 +37,17 @@ class UpdateLocker;
 //***********************************************************************
 //******    Tablebase
 //***********************************************************************
-class Tablebase : public detail::IDataNotify
+class Tablebase
+#if defined(SM_DS_ENABLE_NOTIFY)
+    : public detail::IDataNotify
+#endif
 #ifdef SM_DS_USE_SMALL_SHARED_PTR
-    , public boost::shared_in_base<long>
+#if defined(SM_DS_ENABLE_NOTIFY)
+    ,
+#else
+    :
+#endif
+    public boost::shared_in_base<long>
 #endif
 {
 public:

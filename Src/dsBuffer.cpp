@@ -139,30 +139,51 @@ void FASTCALL DoubleBuffer::CommitUpdates()
 //***********************************************************************
 //******    Data
 //***********************************************************************
+#if defined(SM_DS_ENABLE_NOTIFY)
 CDFASTCALL Data::Data( IDataNotify *i_notify )
-    : mData(), mFieldDefs( new cFieldDefs() ), mDeleted( new container ), mLockCount( new int(0) ),
-      mRelatedData(this), mTableNotify(i_notify)
+    : mData(), mFieldDefs( new cFieldDefs() ), mDeleted( new container ),
+      mLockCount( new int(0) ), mRelatedData(this), mTableNotify(i_notify)
 {
 }
 
 CDFASTCALL Data::Data( const cFieldDefs_& field_defs, IDataNotify *i_notify )
-    : mData(), mFieldDefs( new cFieldDefs( field_defs ) ), mDeleted( new container ), mLockCount( new int(0) ),
-      mRelatedData(this), mTableNotify(i_notify)
+    : mData(), mFieldDefs( new cFieldDefs( field_defs ) ), mDeleted( new container ),
+      mLockCount( new int(0) ), mRelatedData(this), mTableNotify(i_notify)
 {
 }
 
 CDFASTCALL Data::Data( const spFieldDefs& field_defs, const deleted_container& deleted,
                        lock_counter lock_count, IDataNotify *i_notify )
-    : mData(), mFieldDefs( field_defs ), mDeleted(deleted), mLockCount(lock_count),
-      mRelatedData(this), mTableNotify(i_notify)
+    : mData(), mFieldDefs( field_defs ), mDeleted(deleted),
+      mLockCount(lock_count), mRelatedData(this), mTableNotify(i_notify)
 {
 }
+
+#else
+CDFASTCALL Data::Data()
+    : mData(), mFieldDefs( new cFieldDefs() ), mDeleted( new container )
+{
+}
+
+CDFASTCALL Data::Data( const cFieldDefs_& field_defs )
+    : mData(), mFieldDefs( new cFieldDefs( field_defs ) ), mDeleted( new container )
+{
+}
+
+CDFASTCALL Data::Data( const spFieldDefs& field_defs, const deleted_container& deleted )
+    : mData(), mFieldDefs( field_defs ), mDeleted(deleted)
+{
+}
+#endif
 
 CDFASTCALL Data::~Data()
 {
+#if defined(SM_DS_ENABLE_NOTIFY)
     RemoveRelation( this );
+#endif
 }
 
+#if defined(SM_DS_ENABLE_NOTIFY)
 void FASTCALL Data::NotifyRecordAdded( const value_type& value )
 {
     Data    *relation = mRelatedData;
@@ -196,7 +217,9 @@ void FASTCALL Data::NotifyUpdateLockReleased()
         relation = relation->mRelatedData;
     }
 }
+#endif
 
+#if defined(SM_DS_ENABLE_NOTIFY)
 void FASTCALL Data::LockUpdates()
 {
     ++(*mLockCount);
@@ -210,6 +233,7 @@ void FASTCALL Data::UnlockUpdates()
         if ( --(*count) == 0 )
             NotifyUpdateLockReleased();
 }
+#endif
 
 void FASTCALL Data::Clear()
 {
@@ -243,7 +267,9 @@ int FASTCALL Data::AddBuffer_ptr( const value_type& value )
 int FASTCALL Data::AddBuffer( const value_type& value )
 {
     mData.push_back( value );
+#if defined(SM_DS_ENABLE_NOTIFY)
     NotifyRecordAdded( value );
+#endif
     return ( size() - 1 );
 }
 
@@ -276,7 +302,9 @@ void FASTCALL Data::Delete( int idx )
 
     if ( (*tmp)->GetUpdateStatus() != usInserted )
         mDeleted->push_back( *tmp );
+#if defined(SM_DS_ENABLE_NOTIFY)
     NotifyRecordDeleted( *tmp );
+#endif
     mData.erase( tmp );
 }
 
@@ -285,12 +313,22 @@ void FASTCALL Data::AddField( const ds_string& name, cFieldKind kind, cFieldData
     mFieldDefs->AddField( name, kind, data_type, size );
 }
 
+#if defined(SM_DS_ENABLE_NOTIFY)
 spData FASTCALL Data::Clone_All( IDataNotify *i_notify )
+#else
+spData FASTCALL Data::Clone_All()
+#endif
 {
+#if defined(SM_DS_ENABLE_NOTIFY)
     spData      result( new Data( GetFieldDefs(), mDeleted, mLockCount, i_notify ) );
+#else
+    spData      result( new Data( GetFieldDefs(), mDeleted ) );
+#endif
 
     std::copy( mData.begin(), mData.end(), std::back_inserter( result->mData ) );
+#if defined(SM_DS_ENABLE_NOTIFY)
     AddRelation( result.get() );
+#endif
     return result;
 }
 

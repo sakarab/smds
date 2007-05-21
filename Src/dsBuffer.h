@@ -845,9 +845,11 @@ private:
     container               mData;
     spFieldDefs             mFieldDefs;         // this is shared among all related "Data"s
     deleted_container       mDeleted;           // this is shared among all related "Data"s
+#if defined(SM_DS_ENABLE_NOTIFY)
     lock_counter            mLockCount;         // this is shared among all related "Data"s
     Data                    *mRelatedData;      // related "Data ring". Sorted or part of this data
     IDataNotify             *mTableNotify;
+#endif
 
     container& FASTCALL GetContainer()                              { return ( mData ); }
     void FASTCALL Find_0( const Data::value_type& double_buffer, spSortCompare& compare,
@@ -856,6 +858,7 @@ private:
                         iterator begin, iterator end, locate_result& result );
     void FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields,
                           iterator begin, iterator end, locate_result& result );
+#if defined(SM_DS_ENABLE_NOTIFY)
     // relation managment
     void FASTCALL NotifyRecordAdded( const value_type& value );
     void FASTCALL NotifyRecordDeleted( const value_type& value );
@@ -872,15 +875,24 @@ private:
         new_data->mRelatedData = mRelatedData;
         mRelatedData = new_data;
     }
+#endif
     // noncopyable
     CDFASTCALL Data( const Data& src );
     Data& FASTCALL operator=( const Data& src );
 
-    CDFASTCALL Data( const spFieldDefs& field_defs, const deleted_container& deleted,
-                     lock_counter lock_count, IDataNotify *i_notify );
+#if defined(SM_DS_ENABLE_NOTIFY)
+    CDFASTCALL Data( const spFieldDefs& field_defs, const deleted_container& deleted, lock_counter lock_count, IDataNotify *i_notify );
+#else
+    CDFASTCALL Data( const spFieldDefs& field_defs, const deleted_container& deleted );
+#endif
 public:
+#if defined(SM_DS_ENABLE_NOTIFY)
     CDFASTCALL Data( IDataNotify *i_notify );
     CDFASTCALL Data( const cFieldDefs_& field_defs, IDataNotify *i_notify );
+#else
+    CDFASTCALL Data();
+    CDFASTCALL Data( const cFieldDefs_& field_defs );
+#endif
     CDFASTCALL ~Data();
 
     // IDataNotify * FASTCALL GetTableNotify()                         { return mTableNotify; }
@@ -892,8 +904,13 @@ public:
     int FASTCALL AddBuffer( const value_type& value );
     void FASTCALL Delete( int idx );
 
+#if defined(SM_DS_ENABLE_NOTIFY)
     void FASTCALL LockUpdates();
     void FASTCALL UnlockUpdates();
+#else
+    void FASTCALL LockUpdates()                 {} // empty
+    void FASTCALL UnlockUpdates()               {} // empty
+#endif
 
     value_type FASTCALL NewBuffer_usUnmodified();
     value_type FASTCALL NewBuffer_usInserted();
@@ -902,7 +919,11 @@ public:
     size_type FASTCALL size() const                                 { return mData.size(); }
     const value_type& FASTCALL operator[]( size_type idx ) const    { return mData[idx]; }
 
+#if defined(SM_DS_ENABLE_NOTIFY)
     spData FASTCALL Clone_All( IDataNotify *i_notify );
+#else
+    spData FASTCALL Clone_All();
+#endif
     void FASTCALL Sort( const SortControler& cmp );
 
     void FASTCALL Clear();
@@ -921,6 +942,7 @@ public:
     void FASTCALL GetRange( const OpenRangeValues& values, spSortCompare& compare, range_result& result );
 };
 
+#if defined(SM_DS_ENABLE_NOTIFY)
 //***********************************************************************
 //******    IDataNotify
 //***********************************************************************
@@ -932,6 +954,7 @@ public:
     virtual void FASTCALL UpdateLockReleased() = 0;
     virtual CDFASTCALL ~IDataNotify()                       {} // empty
 };
+#endif
 
 //---------------------------------------------------------------------------
 

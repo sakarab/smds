@@ -33,6 +33,7 @@ namespace smds
 //***********************************************************************
 //******    Tablebase
 //***********************************************************************
+#if defined(SM_DS_ENABLE_NOTIFY)
 CDFASTCALL Tablebase::Tablebase()
     : mData( new detail::Data( this ) )
 {
@@ -42,7 +43,17 @@ CDFASTCALL Tablebase::Tablebase( const detail::cFieldDefs_& field_defs )
     : mData( new detail::Data( field_defs, this ) )
 {
 }
+#else
+CDFASTCALL Tablebase::Tablebase()
+    : mData( new detail::Data() )
+{
+}
 
+CDFASTCALL Tablebase::Tablebase( const detail::cFieldDefs_& field_defs )
+    : mData( new detail::Data( field_defs ) )
+{
+}
+#endif
 /*
 CDFASTCALL Tablebase::Tablebase( const Tablebase& src )
 {
@@ -333,7 +344,11 @@ void FASTCALL Table::Open( const Database& database, const char *where_clause )
 
 void FASTCALL Table::Close()
 {
+#if defined(SM_DS_ENABLE_NOTIFY)
     detail::spData      tmp( new detail::Data( this ) );
+#else
+    detail::spData      tmp( new detail::Data() );
+#endif
 
     GetData() = tmp;
 }
@@ -442,7 +457,11 @@ bool FASTCALL Index::range_iterator::Find( const OpenValues& values )
 CDFASTCALL Index::Index( const spSortCompare& cmp_func, const detail::spData& data )
     : Tablebase(), mCompare(cmp_func)
 {
+#if defined(SM_DS_ENABLE_NOTIFY)
     SetData( data->Clone_All( this ) );
+#else
+    SetData( data->Clone_All() );
+#endif
     cmp_func->Initialize( GetData()->GetFieldDefs() );
     GetData()->Sort( detail::SortControler( mCompare ) );
 }
