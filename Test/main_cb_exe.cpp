@@ -18,7 +18,7 @@ void __fastcall dsDatasetModify( tblFiles::iterator ds, const ds_string& descr )
 
 void Output( tblFiles_ptr ds ) // const ds::cFieldDefs_& field_defs, tblFiles::record_ptr rec )
 {
-    const cFieldDefs_ptr&   field_defs = ds->GetFieldDefs();
+    const spFieldDefs&      field_defs = ds->GetFieldDefs();
 
     for ( cFieldDefs::const_iterator n = field_defs->begin() ; n != field_defs->end() ; ++n )
         std::cout << n->Name().c_str();
@@ -34,15 +34,48 @@ void Output( tblFiles_ptr ds ) // const ds::cFieldDefs_& field_defs, tblFiles::r
 
     for ( int n = 0 ; n < 10 && ! rec.eof() ; ++n )
     {
-        std::cout << rec->GetFileID(); // << " ";
-        std::cout << rec->GetPathID(); // << " ";
-        std::cout << rec->GetLongFileName().c_str(); // << " ";
-        std::cout << rec->GetfSize(); // << " ";
+        if ( rec->FileID_IsNull() )
+            std::cout << "";
+        else
+            std::cout << rec->GetFileID();
+
+        if ( rec->PathID_IsNull() )
+            std::cout << "";
+        else
+            std::cout << rec->GetPathID();
+
+        if ( rec->LongFileName_IsNull() )
+            std::cout << "";
+        else
+            std::cout << rec->GetLongFileName().c_str();
+
+        if ( rec->fSize_IsNull() )
+            std::cout << "";
+        else
+            std::cout << rec->GetfSize();
+
         std::cout << " ";
-        std::cout << rec->GetDescription().c_str(); // << " ";
-        std::cout << rec->GetzipID(); // << " ";
+
+        if ( rec->Description_IsNull() )
+            std::cout << "";
+        else
+            std::cout << rec->GetDescription().c_str();
+
+        if ( rec->zipID_IsNull() )
+            std::cout << "";
+        else
+            std::cout << rec->GetzipID();
     }
 }
+
+namespace
+{
+
+void FASTCALL ErrorReporter_( void *user_data, const char *error )
+{
+}
+
+};
 
 int main()
 {
@@ -50,7 +83,7 @@ int main()
 	{
         tblFiles_ptr    files = GetTblFiles();
 
-        Test( files );
+        Test( files, ErrorReporter_, 0 );
         Output( files );
 	}
 	catch ( std::exception& e )
