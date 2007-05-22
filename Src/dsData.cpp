@@ -106,6 +106,18 @@ void FASTCALL Tablebase::RecordDeleted( const detail::Data::value_type& value )
     mData->DeleteBuffer_ptr( value );
 }
 
+void FASTCALL Tablebase::DataOpened( detail::Data& )
+{
+    // do nothing. Normally we will never come here as "Open" and "Close" can
+    // be done only from "Table"
+}
+
+void FASTCALL Tablebase::DataClosed()
+{
+    // do nothing. Normally we will never come here as "Open" and "Close" can
+    // be done only from "Table"
+}
+
 void FASTCALL Tablebase::UpdateLockReleased()
 {
 }
@@ -340,17 +352,19 @@ void FASTCALL Table::Open( const Database& database, const char *where_clause )
     }
     provider->EndDataTransfer();
     provider->CloseSql();
+#if defined(SM_DS_ENABLE_NOTIFY)
+    GetData()->NotifyOpened();
+#endif
 }
 
 void FASTCALL Table::Close()
 {
 #if defined(SM_DS_ENABLE_NOTIFY)
-    detail::spData      tmp( new detail::Data( this ) );
+    GetData()->NotifyClosed();
+    SetData( detail::spData( new detail::Data( this ) ) );
 #else
-    detail::spData      tmp( new detail::Data() );
+    SetData( detail::spData( new detail::Data() ) );
 #endif
-
-    GetData() = tmp;
 }
 
 //***********************************************************************
@@ -457,17 +471,22 @@ bool FASTCALL Index::range_iterator::Find( const OpenValues& values )
 CDFASTCALL Index::Index( const spSortCompare& cmp_func, const detail::spData& data )
     : Tablebase(), mCompare(cmp_func)
 {
-#if defined(SM_DS_ENABLE_NOTIFY)
-    SetData( data->Clone_All( this ) );
-#else
-    SetData( data->Clone_All() );
-#endif
-    cmp_func->Initialize( GetData()->GetFieldDefs() );
-    GetData()->Sort( detail::SortControler( mCompare ) );
+    UpdateIndex( *data );
 }
 
 CDFASTCALL Index::~Index()
 {
+}
+
+void FASTCALL Index::UpdateIndex( detail::Data& data )
+{
+#if defined(SM_DS_ENABLE_NOTIFY)
+    SetData( data.Clone_All( this ) );
+#else
+    SetData( data.Clone_All() );
+#endif
+    mCompare->Initialize( GetData()->GetFieldDefs() );
+    GetData()->Sort( detail::SortControler( mCompare ) );
 }
 
 Index::iterator FASTCALL Index::Find( const OpenValues& values )
@@ -507,6 +526,16 @@ void FASTCALL Index::RecordAdded( const detail::Data::value_type& value, bool lo
 void FASTCALL Index::RecordDeleted( const detail::Data::value_type& value )
 {
     GetData()->DeleteBuffer_ptr( value );
+}
+
+void FASTCALL Index::DataOpened( detail::Data& data )
+{
+    UpdateIndex( data );
+}
+
+void FASTCALL Index::DataClosed()
+{
+    SetData( detail::spData() );
 }
 
 void FASTCALL Index::UpdateLockReleased()

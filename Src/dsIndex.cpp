@@ -169,6 +169,7 @@ CDFASTCALL FieldSortCompare::~FieldSortCompare()
 void FASTCALL FieldSortCompare::Initialize( const spFieldDefs& field_defs )
 {
     inherited::Initialize( field_defs );
+    mFieldMap.clear();
     for ( std::vector<cIndexField>::iterator n = mIndexFields.begin(), eend = mIndexFields.end() ; n != eend ; ++n )
     {
         const cFieldDef&    field_def = field_defs->FieldByName( n->GetFieldName() );
@@ -230,6 +231,7 @@ CDFASTCALL cFindCompareStd::~cFindCompareStd()
 void FASTCALL cFindCompareStd::Initialize( const spFieldDefs& field_defs )
 {
     SortCompare::Initialize( field_defs );
+    mFieldMap.clear();
     for ( std::vector<cFindField>::iterator n = mFindFields.begin(), eend = mFindFields.end() ; n != eend ; ++n )
     {
         const cFieldDef&    field_def = field_defs->FieldByName( n->GetFieldName() );

@@ -207,6 +207,24 @@ void FASTCALL Data::NotifyRecordDeleted( const value_type& value )
     }
 }
 
+void FASTCALL Data::NotifyOpened()
+{
+    std::vector<IDataNotify *>  notifies;
+
+    GetNotifies( notifies );
+    for ( std::vector<IDataNotify *>::iterator it = notifies.begin(), eend = notifies.end() ; it != eend ; ++it )
+        (*it)->DataOpened( *this );
+}
+
+void FASTCALL Data::NotifyClosed()
+{
+    std::vector<IDataNotify *>  notifies;
+
+    GetNotifies( notifies );
+    for ( std::vector<IDataNotify *>::iterator it = notifies.begin(), eend = notifies.end() ; it != eend ; ++it )
+        (*it)->DataClosed();
+}
+
 void FASTCALL Data::NotifyUpdateLockReleased()
 {
     Data    *relation = mRelatedData;
@@ -217,6 +235,18 @@ void FASTCALL Data::NotifyUpdateLockReleased()
         relation = relation->mRelatedData;
     }
 }
+
+void FASTCALL Data::GetNotifies( std::vector<IDataNotify *>& notifies )
+{
+    Data                        *relation = mRelatedData;
+
+    while ( relation != this )
+    {
+        notifies.push_back( relation->mTableNotify );
+        relation = relation->mRelatedData;
+    }
+}
+
 #endif
 
 #if defined(SM_DS_ENABLE_NOTIFY)

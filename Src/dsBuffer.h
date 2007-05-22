@@ -820,7 +820,10 @@ public:
 //***********************************************************************
 //******    Data
 //***********************************************************************
+#if defined(SM_DS_ENABLE_NOTIFY)
 class IDataNotify;
+#endif
+
 class Data;
 typedef shared_ptr<Data>    spData;
 
@@ -875,6 +878,7 @@ private:
         new_data->mRelatedData = mRelatedData;
         mRelatedData = new_data;
     }
+    void FASTCALL GetNotifies( std::vector<IDataNotify *>& notifies );
 #endif
     // noncopyable
     CDFASTCALL Data( const Data& src );
@@ -904,12 +908,12 @@ public:
     int FASTCALL AddBuffer( const value_type& value );
     void FASTCALL Delete( int idx );
 
+    // relation managment
 #if defined(SM_DS_ENABLE_NOTIFY)
+    void FASTCALL NotifyOpened();
+    void FASTCALL NotifyClosed();
     void FASTCALL LockUpdates();
     void FASTCALL UnlockUpdates();
-#else
-    void FASTCALL LockUpdates()                 {} // empty
-    void FASTCALL UnlockUpdates()               {} // empty
 #endif
 
     value_type FASTCALL NewBuffer_usUnmodified();
@@ -951,6 +955,8 @@ class IDataNotify
 public:
     virtual void FASTCALL RecordAdded( const Data::value_type& value, bool locked ) = 0;
     virtual void FASTCALL RecordDeleted( const Data::value_type& value ) = 0;
+    virtual void FASTCALL DataOpened( Data& data ) = 0;
+    virtual void FASTCALL DataClosed() = 0;
     virtual void FASTCALL UpdateLockReleased() = 0;
     virtual CDFASTCALL ~IDataNotify()                       {} // empty
 };

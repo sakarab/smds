@@ -57,10 +57,14 @@ private:
     friend class UpdateLocker;
 
     detail::spData          mData;
+#if defined(SM_DS_ENABLE_NOTIFY)
     // IDataNotify
     virtual void FASTCALL RecordAdded( const detail::Data::value_type& value, bool locked );
     virtual void FASTCALL RecordDeleted( const detail::Data::value_type& value );
+    virtual void FASTCALL DataOpened( detail::Data& data );
+    virtual void FASTCALL DataClosed();
     virtual void FASTCALL UpdateLockReleased();
+#endif
     // noncopyable
     CDFASTCALL Tablebase( const Tablebase& src );
     Tablebase& FASTCALL operator=( const Tablebase& src );
@@ -191,10 +195,15 @@ private:
 
     spSortCompare           mCompare;
     cFilterCompareBase_ptr  mFilter;
+    void FASTCALL UpdateIndex( detail::Data& data );
+#if defined(SM_DS_ENABLE_NOTIFY)
     // IDataNotify
     virtual void FASTCALL RecordAdded( const detail::Data::value_type& value, bool locked );
     virtual void FASTCALL RecordDeleted( const detail::Data::value_type& value );
+    virtual void FASTCALL DataOpened( detail::Data& data );
+    virtual void FASTCALL DataClosed();
     virtual void FASTCALL UpdateLockReleased();
+#endif
     // noncopyable
     CDFASTCALL Index( const Index& src );
     Index& FASTCALL operator=( const Index& src );
