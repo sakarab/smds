@@ -63,13 +63,14 @@
 #define SM_DS_STRING_AS_STRING
 
 /**********************************************************************************
-** Comment this line to get safer (but not complitly safe) iterator.
+** Uncomment this line to get faster (but less safe) iterator.
 ** The gain is not so mush at speed then is code size.
 ** This will take effect only if SM_DS_DEBUG is --NOT-- defined
 ***********************************************************************************/
 // #define SM_DS_FAST_ITERATORS
 
 /**********************************************************************************
+** Enable (defined) / disable (undefined) notification mechanism
 ***********************************************************************************/
 #define SM_DS_ENABLE_NOTIFY
 
@@ -81,9 +82,9 @@
 
 /**********************************************************************************
 ** Defining SM_USE_COM_DELPHI_INTERFACE will make a library that uses COM compatible
-** interfaces for communucation with the driver DLLs.
+** interfaces for communucation with the back-end DLLs.
 ** That is they will have "QueryInterface", "AddRef", and "Release" methods so that
-** driver DLL can be created with development environments thet support only
+** back-end DLL can be created with development environments thet support only
 ** COM interfaces (eg VB(!!!), Delphi).
 ** The DLLs must also be recompiled.
 ***********************************************************************************/

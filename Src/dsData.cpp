@@ -96,6 +96,7 @@ Tablebase::iterator FASTCALL Tablebase::Locate( const Variant& value, const cFin
     return Locate( OpenValues( value ), OpenFindFields( field ) );
 }
 
+#if defined(SM_DS_ENABLE_NOTIFY)
 void FASTCALL Tablebase::RecordAdded( const detail::Data::value_type& value, bool )
 {
     mData->AddBuffer_ptr( value );
@@ -121,6 +122,7 @@ void FASTCALL Tablebase::DataClosed()
 void FASTCALL Tablebase::UpdateLockReleased()
 {
 }
+#endif
 
 //***********************************************************************
 //******    Table
@@ -515,6 +517,7 @@ Index::range_iterator FASTCALL Index::GetRangeIterator( const OpenRangeValues& v
     return range_iterator( GetData(), result.second.first, result.second.second, mCompare );
 }
 
+#if defined(SM_DS_ENABLE_NOTIFY)
 void FASTCALL Index::RecordAdded( const detail::Data::value_type& value, bool locked )
 {
     if ( locked )
@@ -542,6 +545,7 @@ void FASTCALL Index::UpdateLockReleased()
 {
     GetData()->Sort( detail::SortControler( mCompare ) );
 }
+#endif
 
 //***********************************************************************
 //******    cTableSerializingData

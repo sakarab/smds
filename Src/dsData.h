@@ -98,6 +98,7 @@ typedef Tablebase::iterator    record_iterator;
 //***********************************************************************
 //******    UpdateLocker
 //***********************************************************************
+#if defined(SM_DS_ENABLE_NOTIFY)
 class UpdateLocker
 {
 private:
@@ -109,6 +110,17 @@ public:
     CDFASTCALL UpdateLocker( Tablebase& tablebase ) : mTablebase(tablebase)     { tablebase.mData->LockUpdates(); }
     CDFASTCALL ~UpdateLocker()                                                  { mTablebase.mData->UnlockUpdates(); }
 };
+#else
+class UpdateLocker
+{
+private:
+    // noncopyable
+    CDFASTCALL UpdateLocker( const UpdateLocker& src );
+    UpdateLocker& FASTCALL operator=( const UpdateLocker& src );
+public:
+    CDFASTCALL UpdateLocker( Tablebase& )                                       {} // empty
+};
+#endif
 
 //***********************************************************************
 //******    Index
