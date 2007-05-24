@@ -320,28 +320,28 @@ public:
         iterator& FASTCALL operator+=( int num )        { inherited::operator+=( num ); return *this; }
         iterator& FASTCALL operator-=( int num )        { inherited::operator-=( num ); return *this; }
 
-        const iterator FASTCALL iterator::operator++( int )
+        const iterator FASTCALL operator++( int )
         {
             iterator    tmp( *this );
 
             ++(*this);
             return tmp;
         }
-        const iterator FASTCALL iterator::operator--( int )
+        const iterator FASTCALL operator--( int )
         {
             iterator    tmp( *this );
 
             --(*this);
             return tmp;
         }
-        iterator FASTCALL iterator::operator+( int num )
+        iterator FASTCALL operator+( int num )
         {
             iterator    tmp( *this );
 
             tmp += num;
             return tmp;
         }
-        iterator FASTCALL iterator::operator-( int num )
+        iterator FASTCALL operator-( int num )
         {
             iterator    tmp( *this );
 
@@ -377,28 +377,28 @@ public:
         range_iterator& FASTCALL operator+=( int num )  { inherited::operator+=( num ); return *this; }
         range_iterator& FASTCALL operator-=( int num )  { inherited::operator-=( num ); return *this; }
 
-        const range_iterator FASTCALL range_iterator::operator++( int )
+        const range_iterator FASTCALL operator++( int )
         {
             range_iterator    tmp( *this );
 
             ++(*this);
             return tmp;
         }
-        const range_iterator FASTCALL range_iterator::operator--( int )
+        const range_iterator FASTCALL operator--( int )
         {
             range_iterator    tmp( *this );
 
             --(*this);
             return tmp;
         }
-        range_iterator FASTCALL range_iterator::operator+( int num )
+        range_iterator FASTCALL operator+( int num )
         {
             range_iterator    tmp( *this );
 
             tmp += num;
             return tmp;
         }
-        range_iterator FASTCALL range_iterator::operator-( int num )
+        range_iterator FASTCALL operator-( int num )
         {
             range_iterator    tmp( *this );
 
@@ -469,28 +469,28 @@ public:
         iterator& FASTCALL operator+=( int num )        { inherited::operator+=( num ); return *this; }
         iterator& FASTCALL operator-=( int num )        { inherited::operator-=( num ); return *this; }
 
-        const iterator FASTCALL iterator::operator++( int )
+        const iterator FASTCALL operator++( int )
         {
             iterator    tmp( *this );
 
             ++(*this);
             return tmp;
         }
-        const iterator FASTCALL iterator::operator--( int )
+        const iterator FASTCALL operator--( int )
         {
             iterator    tmp( *this );
 
             --(*this);
             return tmp;
         }
-        iterator FASTCALL iterator::operator+( int num )
+        iterator FASTCALL operator+( int num )
         {
             iterator    tmp( *this );
 
             tmp += num;
             return tmp;
         }
-        iterator FASTCALL iterator::operator-( int num )
+        iterator FASTCALL operator-( int num )
         {
             iterator    tmp( *this );
 
