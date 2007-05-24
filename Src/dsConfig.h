@@ -70,7 +70,7 @@
 // #define SM_DS_FAST_ITERATORS
 
 /**********************************************************************************
-** Enable (defined) / disable (undefined) notification mechanism
+** Defined - Enables / undefined - disables the notification mechanism
 ***********************************************************************************/
 #define SM_DS_ENABLE_NOTIFY
 
