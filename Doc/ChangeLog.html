@@ -10,15 +10,35 @@
 	<!--
 		@page { size: 21cm 29.7cm; margin: 2cm }
 		P { margin-bottom: 0.21cm }
-		H6 { margin-bottom: 0.21cm }
-		H6.western { font-family: "Arial", sans-serif; font-size: 10pt }
-		H6.cjk { font-size: 10pt }
-		H6.ctl { font-size: 10pt }
 	-->
 	</STYLE>
 </HEAD>
 <BODY LANG="en-US" DIR="LTR">
-<H6 CLASS="western">Version 0.1.1</H6>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Version 0.1.2</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0cm">Extensive refactoring (class
+	relationship changes, moved some classes in detail namespace etc).</P>
+	<LI><P STYLE="margin-bottom: 0cm">Notification mechanism (incomplete
+	&ndash; missing field value change notifications). Can be disabled
+	un-defining SM_DS_ENABLE_NOTIFY.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Class renaming (cTable to Table,
+	cIndex to Index, cSortCompareBase_ptr to spSortCompare etc).</P>
+	<LI><P STYLE="margin-bottom: 0cm">Compilation option
+	&ldquo;SM_DS_FAST_ITERATORS&rdquo; added (not really any faster,
+	except when copying iterators).</P>
+	<LI><P STYLE="margin-bottom: 0cm">Deleting records is now possible.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Added range iterators.</P>
+	<LI><P STYLE="margin-bottom: 0cm">Iterators now have more operator
+	overloads: op++(int), op--(int), op+=(int), op-=(int), op+(int) and
+	op-(int)</P>
+	<LI><P STYLE="margin-bottom: 0cm">Visual Studio 2003 solution and
+	projects added.</P>
+</UL>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Version 0.1.1</P>
 <UL>
 	<LI><P STYLE="margin-bottom: 0cm">2007-04-12 GCC (mingw)
 	compilation.</P>

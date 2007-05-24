@@ -21,7 +21,7 @@ classes.</P>
 <P STYLE="margin-bottom: 0cm">Table</P>
 <P STYLE="margin-bottom: 0cm"><BR>
 </P>
-<P STYLE="margin-bottom: 0cm">A table (class smds::cTable) represents
+<P STYLE="margin-bottom: 0cm">A table (class smds::Table) represents
 one table of in-memory relational data. The data is local to the
 application in which it resides, but can be populated from a database
 using the appropriate back end data provider.</P>
@@ -34,11 +34,11 @@ to columns in a database table or contain calculated values.</P>
 <P STYLE="margin-bottom: 0cm"><BR>
 </P>
 <P STYLE="margin-bottom: 0cm">In addition to a schema, a table must
-also have rows to contain and order data. The smds::cTable::iterator
+also have rows to contain and order data. The smds::Table::iterator
 class represents the actual data contained in a table. You use the
-smds::cTable::iterator and its methods to retrieve, evaluate, and
+smds::Table::iterator and its methods to retrieve, evaluate, and
 manipulate the data in a table. As you access and change the data
-within a row, the smds::cTable::iterator object maintains both its
+within a row, the smds::Table::iterator object maintains both its
 current and original state (field values).</P>
 <P STYLE="margin-bottom: 0cm"><BR>
 </P>
@@ -52,14 +52,14 @@ also done via the table class.</P>
 </P>
 <P STYLE="margin-bottom: 0cm">A table can create ordered &ldquo;views&rdquo;
 of the data it contains, in effect creating indexes (class
-smds::cIndex). These indexes have the same schema and contain the
-same data as the generating table. Changes made to their data are
+smds::Index). These indexes have the same schema and contain the same
+data as the generating table. Changes made to their data are
 reflected back to the table it created them.</P>
 <P STYLE="margin-bottom: 0cm"><BR>
 </P>
 <P STYLE="margin-bottom: 0cm">The index class provides methods to
 find (binary search) a record. Navigation to the ordered data is done
-with the help of smds::cIndex::iterator objects.</P>
+with the help of smds::Index::iterator objects.</P>
 <P STYLE="margin-bottom: 0cm"><BR>
 </P>
 <P STYLE="margin-bottom: 0cm">Iterator</P>
@@ -83,6 +83,16 @@ check for navigational end (iterator.eof()), provide the record count
 and decrement operators (iterator.Prev(),  iterator.Next()).</P>
 <P STYLE="margin-bottom: 0cm"><BR>
 </P>
+<P STYLE="margin-bottom: 0cm">Iterators are sometimes invalid or
+become invalid after some action on the object they were created
+from. In any case an iterator is invalid if iterator.eof() returns
+true. When we delete a record, an iterator is invalidated if it
+pointed the last record before the delete, else it is not invalid but
+the record it is pointing to is undefined. The same can happen for an
+Index::iterator when for some reason changes the ordering of the
+index or the value of a field that the ordering depends on.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
 <P STYLE="margin-bottom: 0cm">See also Typed-Untyped.</P>
 <P STYLE="margin-bottom: 0cm"><BR>
 </P>
@@ -95,7 +105,11 @@ providers. Data providers are separate code that implement the
 specifics of database connection and data retrieval.</P>
 <P STYLE="margin-bottom: 0cm"><BR>
 </P>
-<P STYLE="margin-bottom: 0cm">Note: At this state (release 0.1.1), 
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Note: At this state (release 0.1.2), 
 not all  functionality described above is implemented.</P>
 </BODY>
 </HTML>

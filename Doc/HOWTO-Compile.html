@@ -94,10 +94,20 @@ back end module for Linux yet.</P>
 </P>
 <H6 CLASS="western"><A NAME="0.0.0.0.0.3.Controlling compilation.|outline"></A><A NAME="0.0.0.0.0.3.Controlling compilation.|outline"></A><A NAME="0.0.0.0.0.3.Controlling compilation.|outline"></A>
 Controlling compilation.</H6>
-<P STYLE="margin-bottom: 0cm">You can change or eliminate the
-dependency on the boost and Loki libraries. To do so open
-&ldquo;dsConfig.h&rdquo;, comment the SM_DS_DEFAULT_SHARED_PTR
-#define and uncomment one of the three defines below it.</P>
+<P STYLE="margin-bottom: 0cm">The compilation of the library can be
+changed from a couple of defines. All of them are in
+&ldquo;Src/dsConfig.h&rdquo;.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">SM_DS_DEFAULT_SHARED_PTR</P>
+<P STYLE="margin-bottom: 0cm">SM_DS_USE_BOOST_SMART_PTR</P>
+<P STYLE="margin-bottom: 0cm">SM_DS_USE_LOKI_SHARED_PTR</P>
+<P STYLE="margin-bottom: 0cm">SM_DS_USE_SMALL_SHARED_PTR</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The dependency on the boost and Loki
+libraries can be changed or eliminated with these. To do so, comment 
+SM_DS_DEFAULT_SHARED_PTR and uncomment one of the three below it.</P>
 <UL>
 	<LI><P STYLE="margin-bottom: 0cm">Defining SM_DS_USE_BOOST_SMART_PTR
 	selects boost::shared_ptr&lt;&gt;</P>
@@ -110,11 +120,41 @@ dependency on the boost and Loki libraries. To do so open
 </UL>
 <P STYLE="margin-bottom: 0cm"><BR>
 </P>
+<P STYLE="margin-bottom: 0cm">SM_DS_NULL_VALUE_EXCEPTION</P>
+<P STYLE="margin-bottom: 0cm">Controls the behaviour of the library
+when reading a NULL field value via a typed iterator.</P>
+<P STYLE="margin-bottom: 0cm">When defined (default) it throws
+eNullFieldValue exception. If not defined it returns the &ldquo;default&rdquo;
+value of the field type (for integral types zero, for strings an
+empty string etc.).</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">SM_DS_STRING_AS_STRING</P>
+<P STYLE="margin-bottom: 0cm">Controls how the string fields are held
+internally by the library. When defined (default) string fields are
+held internally as ds_string. This gives a small performance boost
+but is not standard C++. When undefined, string fields are held
+internally as char[].</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">SM_DS_ENABLE_NOTIFY</P>
+<P STYLE="margin-bottom: 0cm">When defined (the default)
+notifications between tables and indexes are enabled. You can disable
+notifications, if you don't need them, undefining this symbol, to get
+a performance boost.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">SM_DS_FAST_ITERATORS</P>
+<P STYLE="margin-bottom: 0cm">Undefined by default. If defined
+iterators are a bit faster, but also a bit less safe.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
 <P STYLE="margin-bottom: 0cm">The library by default has no
 multithreading support, so it also disables the boost::smart_ptr&lt;&gt;
 multithreading support. In case it is needed, an additional step that
-must be taken, beyond the IDE setting changes, is to comment
-BOOST_SP_DISABLE_THREADS in &ldquo;dsConfig.h&rdquo;.</P>
+must be taken, beyond the IDE setting changes (using multithreaded
+runtime libraries), is to comment BOOST_SP_DISABLE_THREADS in
+&ldquo;dsConfig.h&rdquo;.</P>
 <P STYLE="margin-bottom: 0cm"><BR>
 </P>
 </BODY>
