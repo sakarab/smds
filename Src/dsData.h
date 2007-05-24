@@ -133,9 +133,9 @@ public:
     private:
         typedef Tablebase::iterator     inherited;
         friend class Index;
-        spSortCompare           mCompare;
+        spSortCompare       mCompare;
     protected:
-        spSortCompare& GetCompare()                     { return mCompare; }
+        spSortCompare& GetCompare()                         { return mCompare; }
         CDFASTCALL iterator( detail::spData& container, const spSortCompare& cmp );
         CDFASTCALL iterator( detail::spData& container, detail::Data::size_type idx, const spSortCompare& cmp );
     public:
@@ -147,6 +147,11 @@ public:
         iterator& FASTCALL operator--()                 { inherited::operator--();      return *this; }
         iterator& FASTCALL operator+=( int num )        { inherited::operator+=( num ); return *this; }
         iterator& FASTCALL operator-=( int num )        { inherited::operator-=( num ); return *this; }
+
+        const iterator FASTCALL operator++( int );
+        const iterator FASTCALL operator--( int );
+        iterator FASTCALL operator+( int num );
+        iterator FASTCALL operator-( int num );
 
         bool FASTCALL Find( const Variant& value );
         bool FASTCALL Find( const OpenValues& values );
@@ -175,6 +180,11 @@ public:
         range_iterator& FASTCALL operator--()               { inherited::operator--();      return *this; }
         range_iterator& FASTCALL operator+=( int num )      { inherited::operator+=( num ); return *this; }
         range_iterator& FASTCALL operator-=( int num )      { inherited::operator-=( num ); return *this; }
+
+        const range_iterator FASTCALL operator++( int );
+        const range_iterator FASTCALL operator--( int );
+        range_iterator FASTCALL operator+( int num );
+        range_iterator FASTCALL operator-( int num );
 
         void FASTCALL Next()
         {
@@ -310,6 +320,35 @@ public:
         iterator& FASTCALL operator+=( int num )        { inherited::operator+=( num ); return *this; }
         iterator& FASTCALL operator-=( int num )        { inherited::operator-=( num ); return *this; }
 
+        const iterator FASTCALL iterator::operator++( int )
+        {
+            iterator    tmp( *this );
+
+            ++(*this);
+            return tmp;
+        }
+        const iterator FASTCALL iterator::operator--( int )
+        {
+            iterator    tmp( *this );
+
+            --(*this);
+            return tmp;
+        }
+        iterator FASTCALL iterator::operator+( int num )
+        {
+            iterator    tmp( *this );
+
+            tmp += num;
+            return tmp;
+        }
+        iterator FASTCALL iterator::operator-( int num )
+        {
+            iterator    tmp( *this );
+
+            tmp -= num;
+            return tmp;
+        }
+
         const OldValuesProxy FASTCALL OldValues() const
         {
             return OldValuesProxy( GetDoubleBuffer()->GetOriginalData(), *GetData()->GetFieldDefs().get() );
@@ -337,6 +376,35 @@ public:
         range_iterator& FASTCALL operator--()           { inherited::operator--();      return *this; }
         range_iterator& FASTCALL operator+=( int num )  { inherited::operator+=( num ); return *this; }
         range_iterator& FASTCALL operator-=( int num )  { inherited::operator-=( num ); return *this; }
+
+        const range_iterator FASTCALL range_iterator::operator++( int )
+        {
+            range_iterator    tmp( *this );
+
+            ++(*this);
+            return tmp;
+        }
+        const range_iterator FASTCALL range_iterator::operator--( int )
+        {
+            range_iterator    tmp( *this );
+
+            --(*this);
+            return tmp;
+        }
+        range_iterator FASTCALL range_iterator::operator+( int num )
+        {
+            range_iterator    tmp( *this );
+
+            tmp += num;
+            return tmp;
+        }
+        range_iterator FASTCALL range_iterator::operator-( int num )
+        {
+            range_iterator    tmp( *this );
+
+            tmp -= num;
+            return tmp;
+        }
 
         const OldValuesProxy FASTCALL OldValues() const
         {
@@ -396,8 +464,39 @@ public:
     public:
         RECORD FASTCALL operator->()                    { return ( RECORD( *GetDoubleBuffer() ) ); }
 
-        iterator& FASTCALL operator++()                 { inherited::operator++();    return *this; }
-        iterator& FASTCALL operator--()                 { inherited::operator--();    return *this; }
+        iterator& FASTCALL operator++()                 { inherited::operator++();      return *this; }
+        iterator& FASTCALL operator--()                 { inherited::operator--();      return *this; }
+        iterator& FASTCALL operator+=( int num )        { inherited::operator+=( num ); return *this; }
+        iterator& FASTCALL operator-=( int num )        { inherited::operator-=( num ); return *this; }
+
+        const iterator FASTCALL iterator::operator++( int )
+        {
+            iterator    tmp( *this );
+
+            ++(*this);
+            return tmp;
+        }
+        const iterator FASTCALL iterator::operator--( int )
+        {
+            iterator    tmp( *this );
+
+            --(*this);
+            return tmp;
+        }
+        iterator FASTCALL iterator::operator+( int num )
+        {
+            iterator    tmp( *this );
+
+            tmp += num;
+            return tmp;
+        }
+        iterator FASTCALL iterator::operator-( int num )
+        {
+            iterator    tmp( *this );
+
+            tmp -= num;
+            return tmp;
+        }
 
         const OldValuesProxy FASTCALL OldValues() const
         {

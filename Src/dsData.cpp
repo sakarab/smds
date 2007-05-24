@@ -401,6 +401,38 @@ Index::iterator& FASTCALL Index::iterator::operator = ( const Index::iterator& s
     return *this;
 }
 
+const Index::iterator FASTCALL Index::iterator::operator++( int )
+{
+    iterator    tmp( *this );
+
+    ++(*this);
+    return tmp;
+}
+
+const Index::iterator FASTCALL Index::iterator::operator--( int )
+{
+    iterator    tmp( *this );
+
+    --(*this);
+    return tmp;
+}
+
+Index::iterator FASTCALL Index::iterator::operator+( int num )
+{
+    iterator    tmp( *this );
+
+    tmp += num;
+    return tmp;
+}
+
+Index::iterator FASTCALL Index::iterator::operator-( int num )
+{
+    iterator    tmp( *this );
+
+    tmp -= num;
+    return tmp;
+}
+
 bool FASTCALL Index::iterator::Find( const Variant& value )
 {
     return Find( OpenValues( value ) );
@@ -450,6 +482,38 @@ Index::range_iterator& FASTCALL Index::range_iterator::operator = ( const range_
         mEnd = src.mEnd;
     }
     return *this;
+}
+
+const Index::range_iterator FASTCALL Index::range_iterator::operator++( int )
+{
+    range_iterator      tmp( *this );
+
+    ++(*this);
+    return tmp;
+}
+
+const Index::range_iterator FASTCALL Index::range_iterator::operator--( int )
+{
+    range_iterator      tmp( *this );
+
+    --(*this);
+    return tmp;
+}
+
+Index::range_iterator FASTCALL Index::range_iterator::operator+( int num )
+{
+    range_iterator      tmp( *this );
+
+    tmp += num;
+    return tmp;
+}
+
+Index::range_iterator FASTCALL Index::range_iterator::operator-( int num )
+{
+    range_iterator      tmp( *this );
+
+    tmp -= num;
+    return tmp;
 }
 
 bool FASTCALL Index::range_iterator::Find( const Variant& value )
