@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1253">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 2.2  (Win32)">
+	<META NAME="CREATED" CONTENT="16010101;0">
+	<META NAME="CHANGED" CONTENT="16010101;0">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { size: 21cm 29.7cm; margin: 2cm }
+		P { margin-bottom: 0.21cm }
+		H6 { margin-bottom: 0.21cm }
+		H6.western { font-family: "Arial", sans-serif; font-size: 10pt }
+		H6.cjk { font-size: 10pt }
+		H6.ctl { font-size: 10pt }
+		PRE { background: transparent; page-break-before: auto }
+		PRE.western { font-size: 9pt }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<P STYLE="margin-bottom: 0cm">Small, simple and incomplete tutorial.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">this document is unfinished 
+</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">In this tutorial we deal with a
+database that has a sigle table named tblFiles with this fields:</P>
+<PRE CLASS="western">
+CREATE TABLE tblFiles
+(
+    FileID INTEGER,
+    PathID INTEGER,
+    LongFileName STRING(255),
+    fSize INTEGER,
+    fDate TIMESTAMP,
+    Description STRING(255),
+    zipID INTEGER
+)</PRE><H6 CLASS="western">
+Initialization.</H6>
+<P STYLE="margin-bottom: 0cm">The first thing to do is to select the
+database engine and connect to the database:</P>
+<PRE CLASS="western">
+DbEngine       engine = SelectDbEngine( &quot;ADO&quot; );
+Database       database = engine.NewConnection( ADO_Dirdata_Conn );</PRE><P STYLE="margin-bottom: 0cm">
+<BR>
+</P>
+<H6 CLASS="western">Working with typed datasets.</H6>
+<P STYLE="margin-bottom: 0cm">Declaring the typed datasets involves
+declaring a bunch of structures and static data which form the
+metadata information of the dataset. These, in general, do not
+concern the users of the library. The final declaration will be
+something like this (well, for the example database table of this
+tutorial is exactly like this):</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<PRE CLASS="western">typedef smds::cuTable&lt;tblFiles_rec&gt;    tblFiles;
+typedef smds::shared_ptr&lt;tblFiles&gt;     tblFiles_ptr;</PRE><P STYLE="margin-bottom: 0cm">
+<BR>
+</P>
+<P STYLE="margin-bottom: 0cm">You can have a look in &ldquo;Test/uTables.h&rdquo;
+and &ldquo;Test/uTables.cpp&rdquo; to get a feeling how these
+declarations and definitions look like, but this is not mandatory as
+they can (will) be generated form a utility program supplied with the
+library.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Having now the declaration of the table
+working with it is straight forward:</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Create and instance and open the
+dataset:</P>
+<PRE CLASS="western">
+tblFiles_ptr    ds( new tblFiles() );
+
+ds-&gt;Open( database, 0 );
+</PRE><P STYLE="margin-bottom: 0cm">
+Serially locate a record where, for example the PathID field has
+value 27.</P>
+<PRE CLASS="western">
+tblFiles::iterator      iter = ds-&gt;GetIterator();
+
+while ( ! iter.eof() )
+{
+    if ( ! iter-&gt;PathID_IsNull() &amp;&amp; iter-&gt;GetPathID() == 27 )
+        break;
+    ++iter;
+}
+if ( ! iter.eof() )
+{
+    //  found. do something with it
+}
+else
+{
+    // not found. Possibly report an error
+}
+</PRE><P STYLE="margin-bottom: 0cm">
+Create an index on &quot;PathID&quot; and &quot;fSize&quot; fields</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<PRE CLASS="western">tblFiles::index_ptr     idx = ds-&gt;NewIndex( OpenIndexFields( cIndexField( &quot;PathID&quot; ), cIndexField( &quot;fSize&quot; ) ) );
+</PRE><P STYLE="margin-bottom: 0cm">
+Find - binary search - a record where the field PathID has value 27
+and the field fSize has value 45000</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<PRE CLASS="western">tblFiles::index::iterator   idx_it = idx-&gt;Find( OpenValues( 27, 45000 ) );
+
+if ( ! idx_it.eof() )
+{
+    //  found. do something with it
+}
+else
+{
+    // not found. Possibly report an error
+}</PRE><P STYLE="margin-bottom: 0cm">
+<BR>
+</P>
+<P STYLE="margin-bottom: 0cm">The following code (a snippet from
+&ldquo;Test/uTest.cpp&rdquo;) checks if the index is really indexed.
+In fact return the number of &ldquo;unordered&rdquo; adjusent
+records.</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<PRE CLASS="western">int Check_Order( tblFiles::iterator ptr1 )
+{
+    int     result = 0;
+
+    // point to the first record
+    ptr1.First();
+
+    // return if the dataset is empty
+    if ( ptr1.eof() )
+        return result;
+
+    // create a new iterator and point to the next (second) record
+    tblFiles::iterator      ptr2 = ptr1;
+    ptr2.Next();
+
+    // iterate the dataset counting the non-ordered records
+    while ( ! ptr2.eof() )
+    {
+        if ( ptr1-&gt;GetPathID() &gt; ptr2-&gt;GetPathID() )
+            ++result;
+        ++ptr1;
+        ++ptr2;
+    }
+    return ( result );
+}</PRE><P STYLE="margin-bottom: 0cm">
+<BR>
+</P>
+<P STYLE="margin-bottom: 0cm">Adding a record is equally easy</P>
+<P STYLE="margin-bottom: 0cm"><BR>
+</P>
+<PRE CLASS="western">// create the record
+tblFiles::record    new_record = ds-&gt;NewRecord();
+
+// set some field values
+new_record-&gt;SetFileID( 15 );
+new_record-&gt;SetPathID( 45 );
+new_record-&gt;SetfSize( 30000 );
+new_record-&gt;SetDescription( &quot;record description&quot; );
+
+// and finally add the record
+ds-&gt;AddRecord( new_record );
+</PRE>
+</BODY>
+</HTML>
