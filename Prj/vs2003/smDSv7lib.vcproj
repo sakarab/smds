@@ -113,6 +113,9 @@
 				RelativePath="..\..\Src\dsBuffer.cpp">
 			</File>
 			<File
+				RelativePath="..\..\Src\dsCompare.cpp">
+			</File>
+			<File
 				RelativePath="..\..\Src\dsCompareControlers.cpp">
 			</File>
 			<File
@@ -158,6 +161,9 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
 				RelativePath="..\..\Src\dsBuffer.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsCompare.h">
 			</File>
 			<File
 				RelativePath="..\..\Src\dsCompareControlers.h">

@@ -162,6 +162,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Src\dsCompare.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Src\dsCompareControlers.cpp"
 				>
 			</File>
@@ -217,6 +221,10 @@
 			>
 			<File
 				RelativePath="..\..\Src\dsBuffer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\dsCompare.h"
 				>
 			</File>
 			<File
