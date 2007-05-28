@@ -23,7 +23,7 @@
 #pragma hdrstop
 #endif
 
-#include "dsIndex.h"
+#include "dsCompare.h"
 #include "dsExceptions.h"
 #include "dsCompareControlers.h"
 #include <set>
@@ -276,4 +276,3 @@ void FASTCALL cFilterCompareBase::Initialize( const spFieldDefs& )
 
 }; // namespace smds
 //---------------------------------------------------------------------------
-

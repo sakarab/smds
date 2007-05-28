@@ -25,7 +25,7 @@
 #include "dsConfig.h"
 #include <functional>
 #include "dsBuffer.h"
-#include "dsIndex.h"
+#include "dsCompare.h"
 //---------------------------------------------------------------------------
 namespace smds
 {

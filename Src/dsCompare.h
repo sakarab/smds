@@ -19,8 +19,8 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef SM_DS_INDEX_H
-#define SM_DS_INDEX_H
+#ifndef SM_DS_COMPARE_H
+#define SM_DS_COMPARE_H
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
 #include <vector>
@@ -204,3 +204,4 @@ typedef shared_ptr<detail::cFilterCompareBase>      cFilterCompareBase_ptr;
 }; // namespace smds
 //---------------------------------------------------------------------------
 #endif
+

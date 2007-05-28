@@ -34,7 +34,7 @@
 #include "dsDateTime.h"
 #include "dsExceptions.h"
 #include "dsVariant.h"
-#include "dsIndex.h"
+#include "dsCompare.h"
 //---------------------------------------------------------------------------
 namespace smds
 {

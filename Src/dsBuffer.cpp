@@ -25,7 +25,7 @@
 
 #include "dsBuffer.h"
 #include "dsExceptions.h"
-#include "dsIndex.h"
+#include "dsCompare.h"
 #include "dsCompareControlers.h"
 //---------------------------------------------------------------------------
 namespace smds

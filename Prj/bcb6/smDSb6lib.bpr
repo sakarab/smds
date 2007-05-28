@@ -5,10 +5,11 @@
     <VERSION value="BCB.06.00"/>
     <PROJECT value="smDSb6lib.lib"/>
     <OBJFILES value="OutC6lib\dsString.obj OutC6lib\dsConn.obj OutC6lib\dsData.obj 
-      OutC6lib\dsExceptions.obj OutC6lib\dsFields.obj OutC6lib\dsIndex.obj 
-      OutC6lib\dsBuffer.obj OutC6lib\dsRecord.obj OutC6lib\dsVariant.obj 
-      OutC6lib\dsDateTime.obj OutC6lib\dsSmartPtr.obj OutC6lib\dsSysOpen.obj 
-      OutC6lib\dsCompareControlers.obj OutC6lib\dsStream.obj OutC6lib\dsUtils.obj"/>
+      OutC6lib\dsExceptions.obj OutC6lib\dsFields.obj OutC6lib\dsBuffer.obj 
+      OutC6lib\dsRecord.obj OutC6lib\dsVariant.obj OutC6lib\dsDateTime.obj 
+      OutC6lib\dsSmartPtr.obj OutC6lib\dsSysOpen.obj 
+      OutC6lib\dsCompareControlers.obj OutC6lib\dsStream.obj 
+      OutC6lib\dsUtils.obj OutC6lib\dsCompare.obj OutC6lib\dsIndex.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -52,7 +53,6 @@
       <FILE FILENAME="..\..\Src\dsData.cpp" FORMNAME="" UNITNAME="dsData.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Src\dsExceptions.cpp" FORMNAME="" UNITNAME="dsExceptions.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Src\dsFields.cpp" FORMNAME="" UNITNAME="dsFields.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\Src\dsIndex.cpp" FORMNAME="" UNITNAME="dsIndex.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Src\dsBuffer.cpp" FORMNAME="" UNITNAME="dsBuffer.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="smDSb6lib.todo" FORMNAME="" UNITNAME="smDSb6lib.todo" CONTAINERID="ToDo" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\Notes.txt" FORMNAME="" UNITNAME="Notes.txt" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
@@ -64,6 +64,8 @@
       <FILE FILENAME="..\..\Src\dsCompareControlers.cpp" FORMNAME="" UNITNAME="dsCompareControlers" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Src\dsStream.cpp" FORMNAME="" UNITNAME="dsStream" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Src\dsUtils.cpp" FORMNAME="" UNITNAME="dsUtils" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsCompare.cpp" FORMNAME="" UNITNAME="dsCompare" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsIndex.cpp" FORMNAME="" UNITNAME="dsIndex" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

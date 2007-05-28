@@ -25,6 +25,7 @@
 
 #include "uCompileTest.h"
 #include <dsData.h>
+#include <dsIndex.h>
 #include "uTables.h"
 //---------------------------------------------------------------------------
 
