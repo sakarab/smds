@@ -391,6 +391,30 @@ int FASTCALL foo( Index::iterator iter )
         return ( 0 );
 }
 
+int FASTCALL foo1( tblFiles::iterator iter )
+{
+    tblFiles::iterator   aa = ++iter;
+    tblFiles::iterator   bb = iter + 1;
+
+    if ( ! iter.eof() )
+        return ( iter.FieldByName( "PathID" )->AsInteger() + iter.FieldByName( "fSize" )->AsInteger() );
+    else
+        return ( 0 );
+}
+
+int FASTCALL foo2( tblFiles::index::iterator iter )
+{
+    tblFiles::index::iterator   aa = ++iter;
+    tblFiles::index::iterator   bb = iter + 1;
+    // tblFiles::iterator          cc( ++aa );
+    // tblFiles::iterator          dd = cc + 1;
+
+    if ( ! iter.eof() )
+        return ( iter.FieldByName( "PathID" )->AsInteger() + iter.FieldByName( "fSize" )->AsInteger() );
+    else
+        return ( 0 );
+}
+
 //***********************************************************************
 //******    Test
 //***********************************************************************
@@ -406,6 +430,7 @@ void Test( tblFiles_ptr ds, ErrorReporter error_reporter, void *user_data )
     ForLoop( iter );
     dsDatasetModify( iter );
     CountNulls( iter );
+    foo1( iter );
 
     int             unorder_count;
 
@@ -419,6 +444,8 @@ void Test( tblFiles_ptr ds, ErrorReporter error_reporter, void *user_data )
     unorder_count = Check_Order_f1( files_idx->GetIterator() );
     if ( unorder_count != 0 )
         error_reporter( user_data, "" );
+
+    foo2( files_idx->GetIterator() );
 
     tblFiles::index::range_iterator     riter = files_idx->GetRangeIterator( cRangeValues( 54, 56 ) );
 
