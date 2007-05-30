@@ -19,7 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#include <vcl.h>
 #include <windows.h>
 #pragma hdrstop
 //---------------------------------------------------------------------------
@@ -48,7 +47,8 @@
 #include <functional>
 #include <algorithm>
 #include "dsConn_Intf.h"
-#include <ADODB.hpp>
+#include <sql.h>
+#include <sqlext.h>
 //---------------------------------------------------------------------------
 
 using namespace smds;
@@ -56,13 +56,66 @@ using namespace smds;
 namespace
 {
 
+SQLRETURN CheckReturn( SQLRETURN ret )
+{
+    return ret;
+}
+
+//***********************************************************************
+//******    SqlCall
+//***********************************************************************
+/*
+class SqlCall
+{
+private:
+    class SqlCallImpl
+    {
+    public:
+        SQLRETURN SQLAllocHandle_( SQLSMALLINT HandleType, SQLHANDLE InputHandle, SQLHANDLE *OutputHandle)
+        {
+            return SQLAllocHandle( HandleType, InputHandle, OutputHandle );
+        }
+    };
+    SqlCallImpl     mImpl;
+public:
+    SqlCallImpl operator ->()       { return mImpl };
+};
+*/
+
+class DbEngine;
+
+std::auto_ptr<DbEngine>  Engine;
+
+//***********************************************************************
+//******    DbEngine
+//***********************************************************************
+class DbEngine
+{
+private:
+    // noncopyable
+    DbEngine( const DbEngine& src );
+    DbEngine& operator=( const DbEngine& src );
+public:
+    DbEngine();
+    ~DbEngine();
+};
+//---------------------------------------------------------------------------
+DbEngine::DbEngine()
+{
+}
+
+DbEngine::~DbEngine()
+{
+}
+
 //***********************************************************************
 //******    cDataConnection
 //***********************************************************************
 class cDataConnection : public IDatabase
 {
 private:
-    std::auto_ptr<TADOConnection>       mDatabase;
+    SQLHANDLE       mEnvironment;
+    SQLHANDLE       mConnection;
     // noncopyable
     cDataConnection( const cDataConnection& src );
     cDataConnection& operator=( const cDataConnection& src );
@@ -79,12 +132,12 @@ protected:
 public:
     cDataConnection( const char *connection_string );
     ~cDataConnection();
-    TADOConnection *GetDatabase()           { return ( mDatabase.get() ); }
 };
 
 //***********************************************************************
 //******    cDataProvider
 //***********************************************************************
+/*
 class cDataProvider : public IDataProvider
 {
 private:
@@ -113,7 +166,6 @@ private:
     };
 
     cDataConnection                 *mDataConnection;
-    std::auto_ptr<TADOQuery>        mQuery;
     std::vector<FieldFieldPair>     mFieldPairMap;
     // noncopyable
     cDataProvider( const cDataProvider& src );
@@ -146,19 +198,25 @@ public:
     cDataProvider( cDataConnection *conn );
     ~cDataProvider();
 };
+*/
 
 //***********************************************************************
 //******    cDataConnection
 //***********************************************************************
 cDataConnection::cDataConnection( const char *connection_string )
-    : mDatabase(new TADOConnection( 0 ))
+    : mEnvironment(SQL_NULL_HANDLE), mConnection(SQL_NULL_HANDLE)
 {
-    mDatabase->ConnectionString = connection_string;
-    mDatabase->LoginPrompt = false;
+    SQLRETURN   ret = CheckReturn( SQLAllocHandle( SQL_HANDLE_ENV, SQL_NULL_HANDLE, &mEnvironment ) );
+
+    if ( CheckReturn( SQLAllocHandle( SQL_HANDLE_ENV, SQL_NULL_HANDLE, &mEnvironment ) ) == SQL_SUCCESS )
+        if ( CheckReturn( SQLSetEnvAttr( mEnvironment, SQL_ATTR_ODBC_VERSION, reinterpret_cast<SQLPOINTER>(SQL_OV_ODBC3), 0 ) ) )
+            CheckReturn( SQLAllocHandle( SQL_HANDLE_DBC, mEnvironment, &mConnection ) );
 }
 
 cDataConnection::~cDataConnection()
 {
+    SQLFreeHandle( SQL_HANDLE_DBC, mConnection );
+    SQLFreeHandle( SQL_HANDLE_ENV, mEnvironment );
 }
 
 #if defined ( SM_USE_COM_DELPHI_INTERFACE )
@@ -180,7 +238,8 @@ ULONG __stdcall cDataConnection::Release()
 
 IDataProvider * __stdcall cDataConnection::CreateDataProvider()
 {
-    return ( new cDataProvider( this ) );
+//    return ( new cDataProvider( this ) );
+    return 0;
 }
 
 void __stdcall cDataConnection::DestroyDataProvider( IDataProvider *connection )
@@ -191,6 +250,7 @@ void __stdcall cDataConnection::DestroyDataProvider( IDataProvider *connection )
 //***********************************************************************
 //******    cDataProvider
 //***********************************************************************
+/*
 cDataProvider::cDataProvider( cDataConnection *connection )
     : mDataConnection(connection), mQuery()
 {
@@ -360,6 +420,7 @@ void __stdcall cDataProvider::RollBack()
 void __stdcall cDataProvider::ExecSql( const char *sql )
 {
 }
+*/
 
 }; // end namespace
 
@@ -378,8 +439,7 @@ __declspec(dllexport) void DeleteDataConnection( IDatabase *connection )
 
 };
 
-#pragma argsused
-int WINAPI DllEntryPoint(HINSTANCE hinst, unsigned long reason, void* lpReserved)
+int WINAPI DllEntryPoint( HINSTANCE /*hinst*/, unsigned long /*reason*/, void* /*lpReserved*/ )
 {
     return 1;
 }
