@@ -30,16 +30,16 @@
     <USERDEFINES value="WIN32;BOOST_VARIANT_DETAIL_NO_SUBSTITUTE;BOOST_DISABLE_ASSERTS;BOOST_SP_DISABLE_THREADS"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="smDS_ODBCConn_b6.bpf"/>
-    <INCLUDEPATH value="..\..\Src;$(BCB)\include;$(BCB)\include\vcl"/>
+    <INCLUDEPATH value="..\..\Src;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="..\..\Src;$(BCB)\lib\obj;$(BCB)\lib\Psdk;$(BCB)\lib"/>
     <WARNINGS value="-w8092 -w8091 -w8090 -w8089 -w8087 -wprc -wuse -wucp -wstv -wstu -wsig 
-      -wpin -w-par -wnod -wnak -wdef -wcln -wbbf -wasm -wamp -wamb"/>
+      -wpin -w-par -wnod -wnak -w-8027 -w-8026 -wdef -wcln -wbbf -wasm -wamp -wamb"/>
     <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I..\..\Src -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -DWIN32 
-      -DBOOST_VARIANT_DETAIL_NO_SUBSTITUTE -DBOOST_DISABLE_ASSERTS 
-      -DBOOST_SP_DISABLE_THREADS -boa"/>
+    <IDLCFLAGS value="-I..\..\Src -I$(BOOST_INC) -I$(BCB)\include -I$(BCB)\include\vcl 
+      -src_suffix cpp -DWIN32 -DBOOST_VARIANT_DETAIL_NO_SUBSTITUTE 
+      -DBOOST_DISABLE_ASSERTS -DBOOST_SP_DISABLE_THREADS -boa"/>
     <CFLAG1 value="-WD -Og -Ov -H=OutC6Conn\ODBC.csm -Q -Vx -Ve -X- -a8 -6 -b- -d -k- -y -v 
       -vi -tWD -tWM -c"/>
     <PFLAGS value="-N2OutC6Conn -N0OutC6Conn -$YD -$T -$A8 -v -JPHNE -M"/>

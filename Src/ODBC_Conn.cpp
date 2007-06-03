@@ -46,6 +46,8 @@
 #include <vector>
 #include <functional>
 #include <algorithm>
+#include <stdexcept>
+#include <boost/smart_ptr.hpp>
 #include "dsConn_Intf.h"
 #include <sql.h>
 #include <sqlext.h>
@@ -58,6 +60,8 @@ namespace
 
 SQLRETURN CheckReturn( SQLRETURN ret )
 {
+    if ( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO )
+        throw std::runtime_error( "ODBC Error." );
     return ret;
 }
 
@@ -132,15 +136,16 @@ protected:
 public:
     cDataConnection( const char *connection_string );
     ~cDataConnection();
+    SQLHANDLE GetConnectionHandle() const           { return mConnection; }
 };
 
 //***********************************************************************
 //******    cDataProvider
 //***********************************************************************
-/*
 class cDataProvider : public IDataProvider
 {
 private:
+/*
     typedef TField      native_field_type;
 
     struct FieldFieldPair
@@ -164,9 +169,9 @@ private:
             return ( std::stricmp( item1.mFieldName.c_str(), item2.mFieldName.c_str() ) < 0 );
         }
     };
-
+*/
     cDataConnection                 *mDataConnection;
-    std::vector<FieldFieldPair>     mFieldPairMap;
+    // std::vector<FieldFieldPair>     mFieldPairMap;
     // noncopyable
     cDataProvider( const cDataProvider& src );
     cDataProvider& operator=( const cDataProvider& src );
@@ -198,7 +203,6 @@ public:
     cDataProvider( cDataConnection *conn );
     ~cDataProvider();
 };
-*/
 
 //***********************************************************************
 //******    cDataConnection
@@ -206,11 +210,21 @@ public:
 cDataConnection::cDataConnection( const char *connection_string )
     : mEnvironment(SQL_NULL_HANDLE), mConnection(SQL_NULL_HANDLE)
 {
-    SQLRETURN   ret = CheckReturn( SQLAllocHandle( SQL_HANDLE_ENV, SQL_NULL_HANDLE, &mEnvironment ) );
+    CheckReturn( SQLAllocHandle( SQL_HANDLE_ENV, SQL_NULL_HANDLE, &mEnvironment ) );
 
     if ( CheckReturn( SQLAllocHandle( SQL_HANDLE_ENV, SQL_NULL_HANDLE, &mEnvironment ) ) == SQL_SUCCESS )
         if ( CheckReturn( SQLSetEnvAttr( mEnvironment, SQL_ATTR_ODBC_VERSION, reinterpret_cast<SQLPOINTER>(SQL_OV_ODBC3), 0 ) ) )
-            CheckReturn( SQLAllocHandle( SQL_HANDLE_DBC, mEnvironment, &mConnection ) );
+            if ( CheckReturn( SQLAllocHandle( SQL_HANDLE_DBC, mEnvironment, &mConnection ) ) == SQL_SUCCESS )
+            {
+                short   len = static_cast<short>(strlen(connection_string));
+                short   new_len;
+                boost::scoped_ptr<unsigned char>    tmp_conn_str( new unsigned char[len + 1] );
+                unsigned char                       conn_str_out[1024];
+
+                std::strcpy( reinterpret_cast<char *>(tmp_conn_str.get()), connection_string );
+                CheckReturn( SQLDriverConnect( mConnection, 0, tmp_conn_str.get(), len,
+                             conn_str_out,  sizeof(conn_str_out)-1, &new_len, SQL_DRIVER_NOPROMPT ) );
+            }
 }
 
 cDataConnection::~cDataConnection()
@@ -238,8 +252,7 @@ ULONG __stdcall cDataConnection::Release()
 
 IDataProvider * __stdcall cDataConnection::CreateDataProvider()
 {
-//    return ( new cDataProvider( this ) );
-    return 0;
+    return ( new cDataProvider( this ) );
 }
 
 void __stdcall cDataConnection::DestroyDataProvider( IDataProvider *connection )
@@ -250,9 +263,8 @@ void __stdcall cDataConnection::DestroyDataProvider( IDataProvider *connection )
 //***********************************************************************
 //******    cDataProvider
 //***********************************************************************
-/*
 cDataProvider::cDataProvider( cDataConnection *connection )
-    : mDataConnection(connection), mQuery()
+    : mDataConnection(connection) //, mQuery()
 {
 }
 
@@ -279,49 +291,61 @@ ULONG __stdcall cDataProvider::Release()
 
 void __stdcall cDataProvider::OpenSql( const char *sql )
 {
-    mQuery.reset( new TADOQuery(0) );
-    mQuery->Connection = mDataConnection->GetDatabase();
-    mQuery->SQL->Text = sql;
-    mQuery->Open();
+    boost::scoped_array<unsigned char>  tmp_sql( new unsigned char[strlen(sql) + 1] );
+
+    std::strcpy( reinterpret_cast<char *>(tmp_sql.get()), sql );
+
+    SQLHSTMT    hstmt;
+
+    CheckReturn( SQLAllocHandle( SQL_HANDLE_STMT, mDataConnection->GetConnectionHandle(), &hstmt ) );
+    CheckReturn( SQLExecDirect( hstmt, tmp_sql.get(), SQL_NTS ) );
+
+    SWORD    nCols;                      // # of result columns
+
+    CheckReturn( SQLNumResultCols( hstmt, &nCols ) );
 }
 
 bool __stdcall cDataProvider::Eof()
 {
-    return( mQuery->Eof );
+//    return( mQuery->Eof );
+    return true;
 }
 
 void __stdcall cDataProvider::Next()
 {
-    mQuery->Next();
+//    mQuery->Next();
 }
 
 void __stdcall cDataProvider::CloseSql()
 {
-    mQuery.reset( 0 );
+//    mQuery.reset( 0 );
 }
 
 void __stdcall cDataProvider::InitDataTransfer()
 {
-    mFieldPairMap.clear();
+//    mFieldPairMap.clear();
 }
 
 void __stdcall cDataProvider::StepInitDataTransfer( const char *field_name, int field_data_size, int field_data_type, const void *data )
 {
+/*
     mFieldPairMap.push_back( FieldFieldPair( mQuery->FieldByName( field_name ), field_name, field_data_size, field_data_type, data ) );
 
     std::vector<FieldFieldPair>::value_type&    pair_ptr = mFieldPairMap.back();
 
     if ( pair_ptr.mNativeField->Size > field_data_size )
         throw Exception( "DataSize mismatch!!!!" );
+*/
 }
 
 void __stdcall cDataProvider::EndInitDataTransfer()
 {
-    std::sort( mFieldPairMap.begin(), mFieldPairMap.end(), SortCmpByFieldDef() );
+//    std::sort( mFieldPairMap.begin(), mFieldPairMap.end(), SortCmpByFieldDef() );
 }
 
 bool __stdcall cDataProvider::GetFieldValues( IFieldValuesAcceptor *values_acceptor )
 {
+/*
     bool        result = false;
     Variant     v;
 
@@ -398,11 +422,13 @@ bool __stdcall cDataProvider::GetFieldValues( IFieldValuesAcceptor *values_accep
         }
     }
     return ( result );
+*/
+    return true;
 }
 
 void __stdcall cDataProvider::EndDataTransfer()
 {
-    mFieldPairMap.clear();
+//    mFieldPairMap.clear();
 }
 
 void __stdcall cDataProvider::StartTransaction()
@@ -420,7 +446,6 @@ void __stdcall cDataProvider::RollBack()
 void __stdcall cDataProvider::ExecSql( const char *sql )
 {
 }
-*/
 
 }; // end namespace
 

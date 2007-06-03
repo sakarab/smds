@@ -44,6 +44,18 @@ const char *BDE_DirData_Conn = "DirData"                                "\r\n"
                                "SYSTEM DATABASE="                       "\r\n"
                                "PASSWORD=";
 
+const char *ODBC_DirData_Conn = "DBQ=G:\\Data\\Dirdata82.mdb;"
+                                "DefaultDir=G:\\Data;"
+                                "Driver={Microsoft Access Driver (*.mdb)};"
+                                "DriverId=281;"
+                                "FIL=MS Access;"
+                                "MaxBufferSize=2048;"
+                                "MaxScanRows=8;"
+                                "PageTimeout=5;"
+                                "SafeTransactions=0;"
+                                "Threads=3;"
+                                "UID=admin;"
+                                "UserCommitSync=Yes;";
 
 const char *BDE_SENDATA_Conn = "SENDATA"                            "\r\n"
                                "SERVER NAME=SEN9I.WORLD"            "\r\n"
