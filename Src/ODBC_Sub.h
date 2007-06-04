@@ -26,6 +26,7 @@
 #include <windows.h>
 #include <sql.h>
 #include <sqlext.h>
+//#include <sqltypes.h>
 #include <vector>
 #include <string>
 //---------------------------------------------------------------------------
@@ -36,19 +37,25 @@
 class ODBC_Field
 {
 private:
-    SWORD           mDataType;
-    UDWORD          mDataSize;
-    SWORD           mDecimalDigits;
-    SWORD           mNullable;
-    std::string     mName;
-    union
-    {
-        char    char_buff[16];
-        char    vec_buff[sizeof(std::vector<char>)];
-    } Data;
+    enum { BUFFER_SWITCH = 16 };
+
+    SWORD               mDataType;
+    UDWORD              mDataSize;
+    SWORD               mDecimalDigits;
+    SWORD               mNullable;
+    SQLLEN              mIndicator;
+    std::string         mName;
+    std::vector<char>   mVecBuff;
+    char                mCharBuff[BUFFER_SWITCH];
 public:
     CDFASTCALL ODBC_Field( const std::string name, SWORD data_type, UDWORD data_size, SWORD decimal_digits, SWORD nullable );
     CDFASTCALL ~ODBC_Field();
+    SWORD FASTCALL GetDataType() const                      { return mDataType; }
+    UDWORD FASTCALL GetDataSize() const                     { return mDataSize; }
+    SQLPOINTER FASTCALL GetBuffer();
+    SQLLEN FASTCALL GetBufferLength();
+    SQLLEN * FASTCALL GetIndicatorAddress()                 { return &mIndicator; }
+    bool FASTCALL IsNull() const                            { return mIndicator == SQL_NULL_DATA; }
 };
 
 //***********************************************************************
@@ -94,7 +101,8 @@ public:
 class ODBC_Statement
 {
 private:
-    SQLHANDLE       mStatement;
+    SQLHANDLE                   mStatement;
+    std::vector<ODBC_Field>     mFields;
     // noncopyable
     ODBC_Statement( const ODBC_Statement& src );
     ODBC_Statement& operator=( const ODBC_Statement& src );
@@ -103,6 +111,7 @@ public:
     CDFASTCALL ~ODBC_Statement();
 
     void FASTCALL ExecSql( const char *sql );
+    void FASTCALL CloseSql();
 };
 
 //---------------------------------------------------------------------------

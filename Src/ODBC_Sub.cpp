@@ -38,11 +38,27 @@ SQLRETURN CheckReturn( SQLRETURN ret )
 //******    ODBC_Field
 //***********************************************************************
 CDFASTCALL ODBC_Field::ODBC_Field( const std::string name, SWORD data_type, UDWORD data_size, SWORD decimal_digits, SWORD nullable )
+    : mDataType(data_type), mDataSize(data_size), mDecimalDigits(decimal_digits), mNullable(nullable), mIndicator(0),
+      mName(name), mVecBuff( data_size <= BUFFER_SWITCH ? 0 : data_size )
 {
 }
 
 CDFASTCALL ODBC_Field::~ODBC_Field()
 {
+}
+
+SQLPOINTER FASTCALL ODBC_Field::GetBuffer()
+{
+    if ( mDataSize <= BUFFER_SWITCH )
+        return mCharBuff;
+    return &mVecBuff.front();
+}
+
+SQLLEN FASTCALL ODBC_Field::GetBufferLength()
+{
+    if ( mDataSize <= BUFFER_SWITCH )
+        return BUFFER_SWITCH;
+    return mDataSize;
 }
 
 //***********************************************************************
@@ -104,7 +120,7 @@ void FASTCALL ODBC_Connection::Disconnect()
 //******    ODBC_Statement
 //***********************************************************************
 CDFASTCALL ODBC_Statement::ODBC_Statement( ODBC_Connection& connection )
-    : mStatement(SQL_NULL_HANDLE)
+    : mStatement(SQL_NULL_HANDLE), mFields()
 {
     CheckReturn( SQLAllocHandle( SQL_HANDLE_STMT, connection.GetHandle(), &mStatement ) );
 }
@@ -126,8 +142,8 @@ void FASTCALL ODBC_Statement::ExecSql( const char *sql )
 
     CheckReturn( SQLNumResultCols( mStatement, &nCols ) );
 
-    std::vector<unsigned char>      field_name( 50 );
-    SWORD                           field_name_size = static_cast<SWORD>(field_name.size() - 1);
+    std::vector<char>   field_name( 50 );
+    SWORD               field_name_size = static_cast<SWORD>(field_name.size() - 1);
 
     for ( SWORD n = 1 ; n <= nCols ; ++n )
     {
@@ -137,16 +153,29 @@ void FASTCALL ODBC_Statement::ExecSql( const char *sql )
         SWORD   name_length;                // column data length
         UDWORD  data_size;                  // precision on the column
 
-        SQLRETURN   ret = CheckReturn( SQLDescribeCol( mStatement, n, &field_name.front(), field_name_size,
-                                                       &name_length, &data_type, &data_size, &decimal_digits, &nullable ) );
+        SQLRETURN   ret = CheckReturn( SQLDescribeCol( mStatement, n, reinterpret_cast<unsigned char *>(&field_name.front()),
+                                                       field_name_size, &name_length, &data_type, &data_size, &decimal_digits,
+                                                       &nullable ) );
         if ( ret == SQL_SUCCESS_WITH_INFO )
         {
             field_name.resize( name_length + 1 );
             field_name_size = static_cast<SWORD>(field_name.size() - 1);
-            CheckReturn( SQLDescribeCol( mStatement, n, &field_name.front(), field_name_size,
+            CheckReturn( SQLDescribeCol( mStatement, n, reinterpret_cast<unsigned char *>(&field_name.front()), field_name_size,
                                          &name_length, &data_type, &data_size, &decimal_digits, &nullable ) );
         }
+        mFields.push_back( ODBC_Field( &field_name.front(), data_type, data_size, decimal_digits, nullable ) );
     }
+    for ( SWORD n = 1 ; n <= nCols ; ++n )
+    {
+        ODBC_Field&     field = mFields[n-1];
+
+        SQLBindCol( mStatement, n, field.GetDataType(), field.GetBuffer(), field.GetBufferLength(), field.GetIndicatorAddress() );
+    }
+}
+
+void FASTCALL ODBC_Statement::CloseSql()
+{
+    CheckReturn( SQLFreeStmt( mStatement, SQL_CLOSE ) );
 }
 
 //---------------------------------------------------------------------------

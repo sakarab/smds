@@ -38,54 +38,9 @@ using namespace smds;
 namespace
 {
 
-//***********************************************************************
-//******    SqlCall
-//***********************************************************************
-/*
-class SqlCall
-{
-private:
-    class SqlCallImpl
-    {
-    public:
-        SQLRETURN SQLAllocHandle_( SQLSMALLINT HandleType, SQLHANDLE InputHandle, SQLHANDLE *OutputHandle)
-        {
-            return SQLAllocHandle( HandleType, InputHandle, OutputHandle );
-        }
-    };
-    SqlCallImpl     mImpl;
-public:
-    SqlCallImpl operator ->()       { return mImpl };
-};
-*/
-
 class DbEngine;
 
-std::auto_ptr<DbEngine>  Engine;
-
-//***********************************************************************
-//******    DbEngine
-//***********************************************************************
-class DbEngine
-{
-private:
-    SQLHANDLE       mEnvironment;
-    // noncopyable
-    DbEngine( const DbEngine& src );
-    DbEngine& operator=( const DbEngine& src );
-public:
-    DbEngine();
-    ~DbEngine();
-};
-//---------------------------------------------------------------------------
-DbEngine::DbEngine()
-    : mEnvironment(0)
-{
-}
-
-DbEngine::~DbEngine()
-{
-}
+std::auto_ptr<ODBC_Env>     Engine;
 
 //***********************************************************************
 //******    cDataConnection
@@ -93,8 +48,7 @@ DbEngine::~DbEngine()
 class cDataConnection : public IDatabase
 {
 private:
-    SQLHANDLE       mEnvironment;
-    SQLHANDLE       mConnection;
+    ODBC_Connection     mConnection;
     // noncopyable
     cDataConnection( const cDataConnection& src );
     cDataConnection& operator=( const cDataConnection& src );
@@ -109,9 +63,9 @@ protected:
     virtual IDataProvider *     __stdcall CreateDataProvider();
     virtual void                __stdcall DestroyDataProvider( IDataProvider *connection );
 public:
-    cDataConnection( const char *connection_string );
+    cDataConnection( ODBC_Env& env, const char *connection_string );
     ~cDataConnection();
-    SQLHANDLE GetConnectionHandle() const           { return mConnection; }
+    ODBC_Connection& GetConnection()                  { return mConnection; }
 };
 
 //***********************************************************************
@@ -120,8 +74,7 @@ public:
 class cDataProvider : public IDataProvider
 {
 private:
-/*
-    typedef TField      native_field_type;
+    typedef ODBC_Field      native_field_type;
 
     struct FieldFieldPair
     {
@@ -139,14 +92,21 @@ private:
 
     struct SortCmpByFieldDef : public std::binary_function<FieldFieldPair, FieldFieldPair, bool>
     {
+#if defined(__BORLANDC__)
+        int _stricmp( const char * str1, const char * str2 )
+        {
+            return std::stricmp( str1, str2 );
+        }
+#endif
+
         bool operator() ( const FieldFieldPair& item1, const FieldFieldPair& item2 )
         {
-            return ( std::stricmp( item1.mFieldName.c_str(), item2.mFieldName.c_str() ) < 0 );
+            return ( _stricmp( item1.mFieldName.c_str(), item2.mFieldName.c_str() ) < 0 );
         }
     };
-*/
     cDataConnection                 *mDataConnection;
-    // std::vector<FieldFieldPair>     mFieldPairMap;
+    std::vector<FieldFieldPair>     mFieldPairMap;
+    ODBC_Statement                  mStatement;
     // noncopyable
     cDataProvider( const cDataProvider& src );
     cDataProvider& operator=( const cDataProvider& src );
@@ -182,28 +142,13 @@ public:
 //***********************************************************************
 //******    cDataConnection
 //***********************************************************************
-cDataConnection::cDataConnection( const char *connection_string )
-    : mEnvironment(SQL_NULL_HANDLE), mConnection(SQL_NULL_HANDLE)
+cDataConnection::cDataConnection( ODBC_Env& env, const char *connection_string )
+    : mConnection( env )
 {
-    if ( CheckReturn( SQLAllocHandle( SQL_HANDLE_ENV, SQL_NULL_HANDLE, &mEnvironment ) ) == SQL_SUCCESS )
-        if ( CheckReturn( SQLSetEnvAttr( mEnvironment, SQL_ATTR_ODBC_VERSION, reinterpret_cast<SQLPOINTER>(SQL_OV_ODBC3), 0 ) ) )
-            if ( CheckReturn( SQLAllocHandle( SQL_HANDLE_DBC, mEnvironment, &mConnection ) ) == SQL_SUCCESS )
-            {
-                short                               len = static_cast<short>(strlen(connection_string));
-                short                               new_len;
-                boost::scoped_ptr<unsigned char>    tmp_conn_str( new unsigned char[len + 1] );
-                unsigned char                       conn_str_out[1024];
-
-                std::strcpy( reinterpret_cast<char *>(tmp_conn_str.get()), connection_string );
-                CheckReturn( SQLDriverConnect( mConnection, 0, tmp_conn_str.get(), len,
-                             conn_str_out,  sizeof(conn_str_out)-1, &new_len, SQL_DRIVER_NOPROMPT ) );
-            }
 }
 
 cDataConnection::~cDataConnection()
 {
-    SQLFreeHandle( SQL_HANDLE_DBC, mConnection );
-    SQLFreeHandle( SQL_HANDLE_ENV, mEnvironment );
 }
 
 #if defined ( SM_USE_COM_DELPHI_INTERFACE )
@@ -237,7 +182,7 @@ void __stdcall cDataConnection::DestroyDataProvider( IDataProvider *connection )
 //******    cDataProvider
 //***********************************************************************
 cDataProvider::cDataProvider( cDataConnection *connection )
-    : mDataConnection(connection) //, mQuery()
+    : mDataConnection(connection), mStatement( connection->GetConnection() )
 {
 }
 
@@ -264,18 +209,7 @@ ULONG __stdcall cDataProvider::Release()
 
 void __stdcall cDataProvider::OpenSql( const char *sql )
 {
-    boost::scoped_array<unsigned char>  tmp_sql( new unsigned char[strlen(sql) + 1] );
-
-    std::strcpy( reinterpret_cast<char *>(tmp_sql.get()), sql );
-
-    SQLHSTMT    hstmt;
-
-    CheckReturn( SQLAllocHandle( SQL_HANDLE_STMT, mDataConnection->GetConnectionHandle(), &hstmt ) );
-    CheckReturn( SQLExecDirect( hstmt, tmp_sql.get(), SQL_NTS ) );
-
-    SWORD    nCols;                      // # of result columns
-
-    CheckReturn( SQLNumResultCols( hstmt, &nCols ) );
+    mStatement.ExecSql( sql );
 }
 
 bool __stdcall cDataProvider::Eof()
@@ -291,101 +225,81 @@ void __stdcall cDataProvider::Next()
 
 void __stdcall cDataProvider::CloseSql()
 {
-//    mQuery.reset( 0 );
+    mStatement.CloseSql();
 }
 
 void __stdcall cDataProvider::InitDataTransfer()
 {
-//    mFieldPairMap.clear();
+    mFieldPairMap.clear();
 }
 
 void __stdcall cDataProvider::StepInitDataTransfer( const char *field_name, int field_data_size, int field_data_type, const void *data )
 {
-/*
-    mFieldPairMap.push_back( FieldFieldPair( mQuery->FieldByName( field_name ), field_name, field_data_size, field_data_type, data ) );
+    // sam. mFieldPairMap.push_back( FieldFieldPair( mQuery->FieldByName( field_name ), field_name, field_data_size, field_data_type, data ) );
 
     std::vector<FieldFieldPair>::value_type&    pair_ptr = mFieldPairMap.back();
 
-    if ( pair_ptr.mNativeField->Size > field_data_size )
-        throw Exception( "DataSize mismatch!!!!" );
-*/
+    if ( pair_ptr.mNativeField->GetDataSize() > field_data_size )
+        throw std::runtime_error( "DataSize mismatch!!!!" );
 }
 
 void __stdcall cDataProvider::EndInitDataTransfer()
 {
-//    std::sort( mFieldPairMap.begin(), mFieldPairMap.end(), SortCmpByFieldDef() );
+    std::sort( mFieldPairMap.begin(), mFieldPairMap.end(), SortCmpByFieldDef() );
 }
 
 bool __stdcall cDataProvider::GetFieldValues( IFieldValuesAcceptor *values_acceptor )
 {
-/*
     bool        result = false;
-    Variant     v;
 
     for ( std::vector<FieldFieldPair>::iterator n = mFieldPairMap.begin(), eend = mFieldPairMap.end() ; n != eend ; ++n )
     {
-        v = n->mNativeField->Value;
+        native_field_type   *field = n->mNativeField;
 
-        if ( VarIsNull( v ) )
+        if ( field->IsNull() )
             values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, 0, n->mFieldDataSize );
         else switch ( n->mFieldDataType )
         {
             case cFieldDataType_ftBool :
                 {
-                    bool    a = v;
-
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &a, n->mFieldDataSize );
+                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 }
                 break;
             case cFieldDataType_ftChar :
                 {
-                    char    a = v;
-
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &a, n->mFieldDataSize );
+                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 }
                 break;
             case cFieldDataType_ftWChar :
                 break;
             case cFieldDataType_ftShort :
                 {
-                    short    a = v;
-
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &a, n->mFieldDataSize );
+                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 }
                 break;
             case cFieldDataType_ftInteger :
                 {
-                    int    a = v;
-
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &a, n->mFieldDataSize );
+                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 }
                 break;
             case cFieldDataType_ftLong :
                 {
-                    long    a = v;
-
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &a, n->mFieldDataSize );
+                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 }
                 break;
             case cFieldDataType_ftDouble :
                 {
-                    double    a = v;
-
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &a, n->mFieldDataSize );
+                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 }
                 break;
             case cFieldDataType_ftDateTime :
                 {
-                    double    a = v;
-
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &a, n->mFieldDataSize );
+                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 }
                 break;
             case cFieldDataType_ftString :
                 {
-                    AnsiString    a = v;
-
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, a.c_str(), n->mFieldDataSize );
+                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 }
                 break;
             case cFieldDataType_ftWString :
@@ -395,13 +309,11 @@ bool __stdcall cDataProvider::GetFieldValues( IFieldValuesAcceptor *values_accep
         }
     }
     return ( result );
-*/
-    return true;
 }
 
 void __stdcall cDataProvider::EndDataTransfer()
 {
-//    mFieldPairMap.clear();
+    mFieldPairMap.clear();
 }
 
 void __stdcall cDataProvider::StartTransaction()
@@ -427,7 +339,9 @@ extern "C"
 
 __declspec(dllexport) IDatabase * CreateDataConnection( const char *connection_string )
 {
-    return ( new cDataConnection( connection_string ) );
+    if ( Engine.get() == 0 )
+        Engine.reset( new ODBC_Env() );
+    return ( new cDataConnection( *Engine.get(), connection_string ) );
 }
 
 __declspec(dllexport) void DeleteDataConnection( IDatabase *connection )

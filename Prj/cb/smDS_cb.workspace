@@ -2,8 +2,9 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="Workspace">
 		<Project filename="smds_gcc.cbp" />
-		<Project filename="smds_gexe.cbp" active="1">
+		<Project filename="smds_gexe.cbp">
 			<Depends filename="smds_gcc.cbp" />
 		</Project>
+		<Project filename="ODBC_Conn_gcc.cbp" active="1" />
 	</Workspace>
 </CodeBlocks_workspace_file>

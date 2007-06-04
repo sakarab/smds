@@ -38,6 +38,8 @@
 		</Compiler>
 		<Unit filename="..\..\Src\dsBuffer.cpp" />
 		<Unit filename="..\..\Src\dsBuffer.h" />
+		<Unit filename="..\..\Src\dsCompare.cpp" />
+		<Unit filename="..\..\Src\dsCompare.h" />
 		<Unit filename="..\..\Src\dsCompareControlers.cpp" />
 		<Unit filename="..\..\Src\dsCompareControlers.h" />
 		<Unit filename="..\..\Src\dsConfig.h" />

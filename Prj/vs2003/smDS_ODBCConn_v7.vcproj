@@ -73,7 +73,7 @@
 				AdditionalIncludeDirectories="\Src\boost_1_33_1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V7_EXPORTS;NO_CDFASTCALL"
 				StringPooling="TRUE"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
