@@ -70,7 +70,8 @@
 				InlineFunctionExpansion="1"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="3"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V7_EXPORTS"
+				AdditionalIncludeDirectories="\Src\boost_1_33_1"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V7_EXPORTS;NO_CDFASTCALL"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
@@ -128,11 +129,17 @@
 			<File
 				RelativePath="..\..\Src\ODBC_Conn.cpp">
 			</File>
+			<File
+				RelativePath="..\..\Src\ODBC_Sub.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			<File
+				RelativePath="..\..\Src\ODBC_Sub.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"

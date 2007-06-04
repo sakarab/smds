@@ -21,26 +21,7 @@
 //---------------------------------------------------------------------------
 #include <windows.h>
 #pragma hdrstop
-//---------------------------------------------------------------------------
-//   Important note about DLL memory management when your DLL uses the
-//   static version of the RunTime Library:
-//
-//   If your DLL exports any functions that pass String objects (or structs/
-//   classes containing nested Strings) as parameter or function results,
-//   you will need to add the library MEMMGR.LIB to both the DLL project and
-//   any other projects that use the DLL.  You will also need to use MEMMGR.LIB
-//   if any other projects which use the DLL will be performing new or delete
-//   operations on any non-TObject-derived classes which are exported from the
-//   DLL. Adding MEMMGR.LIB to your project will change the DLL and its calling
-//   EXE's to use the BORLNDMM.DLL as their memory manager.  In these cases,
-//   the file BORLNDMM.DLL should be deployed along with your DLL.
-//
-//   To avoid using BORLNDMM.DLL, pass string information using "char *" or
-//   ShortString parameters.
-//
-//   If your DLL uses the dynamic version of the RTL, you do not need to
-//   explicitly add MEMMGR.LIB as this will be done implicitly for you
-//---------------------------------------------------------------------------
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -49,21 +30,13 @@
 #include <stdexcept>
 #include <boost/smart_ptr.hpp>
 #include "dsConn_Intf.h"
-#include <sql.h>
-#include <sqlext.h>
+#include "ODBC_Sub.h"
 //---------------------------------------------------------------------------
 
 using namespace smds;
 
 namespace
 {
-
-SQLRETURN CheckReturn( SQLRETURN ret )
-{
-    if ( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO )
-        throw std::runtime_error( "ODBC Error." );
-    return ret;
-}
 
 //***********************************************************************
 //******    SqlCall
@@ -96,6 +69,7 @@ std::auto_ptr<DbEngine>  Engine;
 class DbEngine
 {
 private:
+    SQLHANDLE       mEnvironment;
     // noncopyable
     DbEngine( const DbEngine& src );
     DbEngine& operator=( const DbEngine& src );
@@ -105,6 +79,7 @@ public:
 };
 //---------------------------------------------------------------------------
 DbEngine::DbEngine()
+    : mEnvironment(0)
 {
 }
 
@@ -210,14 +185,12 @@ public:
 cDataConnection::cDataConnection( const char *connection_string )
     : mEnvironment(SQL_NULL_HANDLE), mConnection(SQL_NULL_HANDLE)
 {
-    CheckReturn( SQLAllocHandle( SQL_HANDLE_ENV, SQL_NULL_HANDLE, &mEnvironment ) );
-
     if ( CheckReturn( SQLAllocHandle( SQL_HANDLE_ENV, SQL_NULL_HANDLE, &mEnvironment ) ) == SQL_SUCCESS )
         if ( CheckReturn( SQLSetEnvAttr( mEnvironment, SQL_ATTR_ODBC_VERSION, reinterpret_cast<SQLPOINTER>(SQL_OV_ODBC3), 0 ) ) )
             if ( CheckReturn( SQLAllocHandle( SQL_HANDLE_DBC, mEnvironment, &mConnection ) ) == SQL_SUCCESS )
             {
-                short   len = static_cast<short>(strlen(connection_string));
-                short   new_len;
+                short                               len = static_cast<short>(strlen(connection_string));
+                short                               new_len;
                 boost::scoped_ptr<unsigned char>    tmp_conn_str( new unsigned char[len + 1] );
                 unsigned char                       conn_str_out[1024];
 
