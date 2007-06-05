@@ -293,7 +293,12 @@ bool __stdcall cDataProvider::GetFieldValues( IFieldValuesAcceptor *values_accep
                 break;
             case cFieldDataType_ftString :
                 {
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
+                    /* TODO -osakarab : Need a conversion here */
+                    //if ( field->GetCDataType() == SQL_C_WCHAR )
+                    //{
+                    //}
+                    //else
+                        result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 }
                 break;
             case cFieldDataType_ftWString :
@@ -302,6 +307,7 @@ bool __stdcall cDataProvider::GetFieldValues( IFieldValuesAcceptor *values_accep
                 break;
         }
     }
+
     return ( result );
 }
 

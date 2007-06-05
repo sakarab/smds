@@ -99,7 +99,7 @@
 ** Comment this to enable multithreading support in boost and specificaly
 ** in shared_ptr
 ***********************************************************************************/
-// #define BOOST_DISABLE_THREADS
+#define BOOST_DISABLE_THREADS
 #define BOOST_SP_DISABLE_THREADS
 
 /**********************************************************************************

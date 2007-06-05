@@ -30,9 +30,9 @@
 
 SQLRETURN CheckReturn( SQLRETURN ret )
 {
-    if ( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO )
-        throw std::runtime_error( "ODBC Error." );
-    return ret;
+    if ( ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO )
+        return ret;
+    throw std::runtime_error( "ODBC Error." );
 }
 
 static SQLRETURN    LastError;
@@ -212,14 +212,16 @@ void FASTCALL ODBC_Statement::ExecSql( const char *sql )
                                          &name_length, &data_type, &data_size, &decimal_digits, &nullable ) );
         }
 
-        int     n_data_type, n_data_size;
+        // start MS Access ODBC bug
+        int             n_data_type;
+        unsigned int    n_data_size;
 
         CheckReturn( SQLColAttribute( mStatement, n, SQL_DESC_OCTET_LENGTH, 0, 0, 0, &n_data_size ) );
         if ( data_type == SQL_CHAR || data_type == SQL_VARCHAR || data_type == SQL_LONGVARCHAR )
         {
             CheckReturn( SQLColAttribute( mStatement, n, SQL_DESC_TYPE, 0, 0, 0, &n_data_type ) );
             if ( n_data_type != data_type )
-                data_type = n_data_type;
+                data_type = static_cast<SWORD>(n_data_type);
             else if ( data_size * 2 == n_data_size )
             {
                 switch ( data_type )
@@ -231,6 +233,8 @@ void FASTCALL ODBC_Statement::ExecSql( const char *sql )
             }
         }
         data_size = n_data_size;
+        // end MS Access ODBC bug
+
         mFields.push_back( ODBC_Field( &field_name.front(), data_type, data_size, decimal_digits, nullable ) );
     }
     for ( SWORD n = 1 ; n <= nCols ; ++n )
@@ -239,8 +243,8 @@ void FASTCALL ODBC_Statement::ExecSql( const char *sql )
 
         CheckReturn( SQLBindCol( mStatement, n, field.GetCDataType(), field.GetBuffer(),
                                  field.GetBufferLength(), field.GetIndicatorAddress() ) );
-        // DescribeError( SQL_HANDLE_STMT, mStatement );
     }
+    Next();
 }
 
 void FASTCALL ODBC_Statement::CloseSql()
@@ -251,9 +255,10 @@ void FASTCALL ODBC_Statement::CloseSql()
 
 void FASTCALL ODBC_Statement::Next()
 {
-    SQLRETURN   nReturn = CheckReturn_( SQLFetch( mStatement ) );
+    SQLRETURN   nReturn = SQLFetch( mStatement );
 
-    DescribeError( SQL_HANDLE_STMT, mStatement );
+    if ( nReturn != SQL_NO_DATA )
+        CheckReturn( nReturn );
     mIsEof = nReturn != SQL_SUCCESS;
 }
 

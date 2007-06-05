@@ -146,7 +146,7 @@ public:
     wstring_tag& FASTCALL operator += ( const value_type *src );
     wstring_tag& FASTCALL operator += ( value_type src );
 
-    value_type FASTCALL operator []( size_type idx ) const;                     /* TODO -oSam : Check this out */
+    value_type FASTCALL operator []( size_type idx ) const;                     /* TODO -osakarab : Check this out */
 
     wstring_tag& FASTCALL erase( size_type pos = 0, size_type n = npos );
     iterator FASTCALL erase( iterator p );

@@ -339,7 +339,7 @@ class cTableReader : private cTableSerializingData
 private:
     static void FASTCALL ReadFieldValue( cStream& st, const detail::cRawBuffer& rb, const cFieldDef& field );
 public:
-    /* TODO -oSam : parameter must be const */
+    /* TODO -osakarab : parameter must be const */
     static Variant FASTCALL GetTablePacket( Table& table );
     template <class T> static Variant FASTCALL GetTablePacket( shared_ptr<T>& table )
     {
