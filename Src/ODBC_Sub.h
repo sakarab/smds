@@ -26,7 +26,6 @@
 #include <windows.h>
 #include <sql.h>
 #include <sqlext.h>
-//#include <sqltypes.h>
 #include <vector>
 #include <string>
 //---------------------------------------------------------------------------
@@ -51,7 +50,10 @@ public:
     CDFASTCALL ODBC_Field( const std::string name, SWORD data_type, UDWORD data_size, SWORD decimal_digits, SWORD nullable );
     CDFASTCALL ~ODBC_Field();
     SWORD FASTCALL GetDataType() const                      { return mDataType; }
+    SWORD FASTCALL GetCDataType() const;
+    UDWORD FASTCALL GetSize() const;
     UDWORD FASTCALL GetDataSize() const                     { return mDataSize; }
+    const std::string& GetName() const                      { return mName; }
     SQLPOINTER FASTCALL GetBuffer();
     SQLLEN FASTCALL GetBufferLength();
     SQLLEN * FASTCALL GetIndicatorAddress()                 { return &mIndicator; }
@@ -103,6 +105,7 @@ class ODBC_Statement
 private:
     SQLHANDLE                   mStatement;
     std::vector<ODBC_Field>     mFields;
+    bool                        mIsEof;
     // noncopyable
     ODBC_Statement( const ODBC_Statement& src );
     ODBC_Statement& operator=( const ODBC_Statement& src );
@@ -112,11 +115,22 @@ public:
 
     void FASTCALL ExecSql( const char *sql );
     void FASTCALL CloseSql();
+    void FASTCALL Next();
+    bool FASTCALL Eof() const                                       { return mIsEof; }
+
+    ODBC_Field * FASTCALL FieldByName( const char *field_name );
 };
 
 //---------------------------------------------------------------------------
 
 SQLRETURN CheckReturn( SQLRETURN ret );
+
+#if defined(__BORLANDC__)
+int _stricmp( const char * str1, const char * str2 )
+{
+    return std::stricmp( str1, str2 );
+}
+#endif
 
 //---------------------------------------------------------------------------
 #endif

@@ -41,10 +41,19 @@ struct ConnMapElement
 
 ConnMapElement  ConnMapArray[] =
 {
-    { "ADO", "smDS_ADOConn_b6.dll" },
-    { "DAO", "smDS_DAOConn_b6.dll" },
-    { "BDE", "smDS_BDEConn_b6.dll" },
-    { "SAS", "SmDS_SASConn_d7.dll" },
+    { "ADO",  "smDS_ADOConn_b6.dll" },
+    { "DAO",  "smDS_DAOConn_b6.dll" },
+    { "BDE",  "smDS_BDEConn_b6.dll" },
+    { "SAS",  "SmDS_SASConn_d7.dll" },
+#if defined(__BORLANDC__)
+    { "ODBC", "SmDS_ODBCConn_b6.dll" },
+#elif ( _MSC_VER == 1310 )
+    { "ODBC", "SmDS_ODBCConn_v7.dll" },
+#elif ( _MSC_VER == 1400 )
+    { "ODBC", "SmDS_ODBCConn_v8.dll" },
+#elif defined (__GNUG__ )
+    { "ODBC", "SmDS_ODBCConn_gcc.dll" },
+#endif
     { 0, 0 }
 };
 

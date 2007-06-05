@@ -24,6 +24,7 @@
 
 #include "ODBC_Sub.h"
 #include <stdexcept>
+// #include <sstream>
 #include <boost/smart_ptr.hpp>
 //---------------------------------------------------------------------------
 
@@ -32,6 +33,37 @@ SQLRETURN CheckReturn( SQLRETURN ret )
     if ( ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO )
         throw std::runtime_error( "ODBC Error." );
     return ret;
+}
+
+static SQLRETURN    LastError;
+
+SQLRETURN CheckReturn_( SQLRETURN ret )
+{
+    LastError = ret;
+    return ret;
+}
+
+void DescribeError( short handle_type, void *handle )
+{
+    if ( LastError == SQL_SUCCESS || LastError == SQL_SUCCESS_WITH_INFO )
+        return;
+
+    unsigned char   sql_state[10];
+    SQLINTEGER      native_error;
+    SQLCHAR         message[1024];
+    SQLSMALLINT     message_len_is;
+    SQLSMALLINT     rec_no = 1;
+    SQLRETURN       ret;
+
+    do
+    {
+        ret = SQLGetDiagRec( handle_type, handle, rec_no, sql_state, &native_error, message, sizeof(message), &message_len_is );
+        if ( ret == SQL_INVALID_HANDLE || ret == SQL_ERROR )
+            break;
+        ++rec_no;
+    }
+    while ( ret != SQL_NO_DATA );
+    throw std::runtime_error( "ODBC Error." );
 }
 
 //***********************************************************************
@@ -59,6 +91,20 @@ SQLLEN FASTCALL ODBC_Field::GetBufferLength()
     if ( mDataSize <= BUFFER_SWITCH )
         return BUFFER_SWITCH;
     return mDataSize;
+}
+
+UDWORD FASTCALL ODBC_Field::GetSize() const
+{
+    if ( mDataType == SQL_WCHAR || mDataType == SQL_WVARCHAR || mDataType == SQL_WLONGVARCHAR )
+        return mDataSize / 2;
+    return mDataSize;
+}
+
+SWORD FASTCALL ODBC_Field::GetCDataType() const
+{
+    if ( mDataType == SQL_WCHAR || mDataType == SQL_WVARCHAR || mDataType == SQL_WLONGVARCHAR )
+        return SQL_C_WCHAR;
+    return mDataType;
 }
 
 //***********************************************************************
@@ -120,7 +166,7 @@ void FASTCALL ODBC_Connection::Disconnect()
 //******    ODBC_Statement
 //***********************************************************************
 CDFASTCALL ODBC_Statement::ODBC_Statement( ODBC_Connection& connection )
-    : mStatement(SQL_NULL_HANDLE), mFields()
+    : mStatement(SQL_NULL_HANDLE), mFields(), mIsEof(false)
 {
     CheckReturn( SQLAllocHandle( SQL_HANDLE_STMT, connection.GetHandle(), &mStatement ) );
 }
@@ -132,6 +178,8 @@ CDFASTCALL ODBC_Statement::~ODBC_Statement()
 
 void FASTCALL ODBC_Statement::ExecSql( const char *sql )
 {
+    mIsEof = false;
+
     boost::scoped_array<unsigned char>  tmp_sql( new unsigned char[strlen(sql) + 1] );
 
     std::strcpy( reinterpret_cast<char *>(tmp_sql.get()), sql );
@@ -163,19 +211,58 @@ void FASTCALL ODBC_Statement::ExecSql( const char *sql )
             CheckReturn( SQLDescribeCol( mStatement, n, reinterpret_cast<unsigned char *>(&field_name.front()), field_name_size,
                                          &name_length, &data_type, &data_size, &decimal_digits, &nullable ) );
         }
+
+        int     n_data_type, n_data_size;
+
+        CheckReturn( SQLColAttribute( mStatement, n, SQL_DESC_OCTET_LENGTH, 0, 0, 0, &n_data_size ) );
+        if ( data_type == SQL_CHAR || data_type == SQL_VARCHAR || data_type == SQL_LONGVARCHAR )
+        {
+            CheckReturn( SQLColAttribute( mStatement, n, SQL_DESC_TYPE, 0, 0, 0, &n_data_type ) );
+            if ( n_data_type != data_type )
+                data_type = n_data_type;
+            else if ( data_size * 2 == n_data_size )
+            {
+                switch ( data_type )
+                {
+                    case SQL_CHAR           : data_type = SQL_WCHAR;                break;
+                    case SQL_VARCHAR        : data_type = SQL_WVARCHAR;             break;
+                    case SQL_LONGVARCHAR    : data_type = SQL_WLONGVARCHAR;         break;
+                }
+            }
+        }
+        data_size = n_data_size;
         mFields.push_back( ODBC_Field( &field_name.front(), data_type, data_size, decimal_digits, nullable ) );
     }
     for ( SWORD n = 1 ; n <= nCols ; ++n )
     {
         ODBC_Field&     field = mFields[n-1];
 
-        SQLBindCol( mStatement, n, field.GetDataType(), field.GetBuffer(), field.GetBufferLength(), field.GetIndicatorAddress() );
+        CheckReturn( SQLBindCol( mStatement, n, field.GetCDataType(), field.GetBuffer(),
+                                 field.GetBufferLength(), field.GetIndicatorAddress() ) );
+        // DescribeError( SQL_HANDLE_STMT, mStatement );
     }
 }
 
 void FASTCALL ODBC_Statement::CloseSql()
 {
     CheckReturn( SQLFreeStmt( mStatement, SQL_CLOSE ) );
+    mIsEof = false;
+}
+
+void FASTCALL ODBC_Statement::Next()
+{
+    SQLRETURN   nReturn = CheckReturn_( SQLFetch( mStatement ) );
+
+    DescribeError( SQL_HANDLE_STMT, mStatement );
+    mIsEof = nReturn != SQL_SUCCESS;
+}
+
+ODBC_Field * FASTCALL ODBC_Statement::FieldByName( const char *field_name )
+{
+    for ( std::vector<ODBC_Field>::iterator it = mFields.begin(), eend = mFields.end() ; it != eend ; ++it )
+        if ( _stricmp( it->GetName().c_str(), field_name ) == 0 )
+            return &(*it);
+    throw std::runtime_error( "ODBC FieldByName error." );
 }
 
 //---------------------------------------------------------------------------

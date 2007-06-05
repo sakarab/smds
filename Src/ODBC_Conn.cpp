@@ -92,13 +92,6 @@ private:
 
     struct SortCmpByFieldDef : public std::binary_function<FieldFieldPair, FieldFieldPair, bool>
     {
-#if defined(__BORLANDC__)
-        int _stricmp( const char * str1, const char * str2 )
-        {
-            return std::stricmp( str1, str2 );
-        }
-#endif
-
         bool operator() ( const FieldFieldPair& item1, const FieldFieldPair& item2 )
         {
             return ( _stricmp( item1.mFieldName.c_str(), item2.mFieldName.c_str() ) < 0 );
@@ -145,10 +138,12 @@ public:
 cDataConnection::cDataConnection( ODBC_Env& env, const char *connection_string )
     : mConnection( env )
 {
+    mConnection.Connect( connection_string );
 }
 
 cDataConnection::~cDataConnection()
 {
+    mConnection.Disconnect();
 }
 
 #if defined ( SM_USE_COM_DELPHI_INTERFACE )
@@ -214,13 +209,12 @@ void __stdcall cDataProvider::OpenSql( const char *sql )
 
 bool __stdcall cDataProvider::Eof()
 {
-//    return( mQuery->Eof );
-    return true;
+    return mStatement.Eof();
 }
 
 void __stdcall cDataProvider::Next()
 {
-//    mQuery->Next();
+    mStatement.Next();
 }
 
 void __stdcall cDataProvider::CloseSql()
@@ -235,11 +229,11 @@ void __stdcall cDataProvider::InitDataTransfer()
 
 void __stdcall cDataProvider::StepInitDataTransfer( const char *field_name, int field_data_size, int field_data_type, const void *data )
 {
-    // sam. mFieldPairMap.push_back( FieldFieldPair( mQuery->FieldByName( field_name ), field_name, field_data_size, field_data_type, data ) );
+    mFieldPairMap.push_back( FieldFieldPair( mStatement.FieldByName( field_name ), field_name, field_data_size, field_data_type, data ) );
 
     std::vector<FieldFieldPair>::value_type&    pair_ptr = mFieldPairMap.back();
 
-    if ( pair_ptr.mNativeField->GetDataSize() > field_data_size )
+    if ( static_cast<long>(pair_ptr.mNativeField->GetSize()) > field_data_size )
         throw std::runtime_error( "DataSize mismatch!!!!" );
 }
 
@@ -340,7 +334,10 @@ extern "C"
 __declspec(dllexport) IDatabase * CreateDataConnection( const char *connection_string )
 {
     if ( Engine.get() == 0 )
+    {
         Engine.reset( new ODBC_Env() );
+        Engine->SetOdbcVersion( SQL_OV_ODBC3 );
+    }
     return ( new cDataConnection( *Engine.get(), connection_string ) );
 }
 
