@@ -57,6 +57,11 @@ const char *ODBC_DirData_Conn = "DBQ=G:\\Data\\Dirdata82.mdb;"
                                 "UID=admin;"
                                 "UserCommitSync=Yes;";
 
+const char *ODBC_SEn_Conn = "DRIVER={Microsoft ODBC for Oracle};"
+                            "UID=s01999;"
+                            "PWD=s01999;"
+                            "SERVER=sen9i.world;";
+
 const char *BDE_SENDATA_Conn = "SENDATA"                            "\r\n"
                                "SERVER NAME=SEN9I.WORLD"            "\r\n"
                                "USER NAME=s01000"                   "\r\n"

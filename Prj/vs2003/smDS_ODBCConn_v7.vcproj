@@ -91,6 +91,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)/smDS_ODBCConn_v7.dll"
 				LinkIncremental="1"
+				ModuleDefinitionFile="..\..\Src\smDS_ODBCConn_vc.def"
 				GenerateDebugInformation="TRUE"
 				SubSystem="2"
 				OptimizeReferences="2"

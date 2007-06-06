@@ -8,7 +8,7 @@
     <RESFILES value="smDS_ODBCConn_b6.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
-    <DEFFILE value=""/>
+    <DEFFILE value="..\..\Src\smDS_ODBCConn_bcc.def"/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value="odbc32.lib"/>
     <LIBRARIES value="rtl.lib"/>
@@ -60,6 +60,7 @@
       <FILE FILENAME="..\..\Src\ODBC_Conn.cpp" FORMNAME="" UNITNAME="ODBC_Conn" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="odbc32.lib" FORMNAME="" UNITNAME="odbc32.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Src\ODBC_Sub.cpp" FORMNAME="" UNITNAME="ODBC_Sub" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\smDS_ODBCConn_bcc.def" FORMNAME="" UNITNAME="smDS_ODBCConn_bcc.def" CONTAINERID="DefTool" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

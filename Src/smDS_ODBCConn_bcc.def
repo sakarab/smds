@@ -1,0 +1,4 @@
+EXPORTS
+    _CreateDataConnection
+    _DeleteDataConnection
+

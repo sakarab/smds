@@ -255,41 +255,33 @@ bool __stdcall cDataProvider::GetFieldValues( IFieldValuesAcceptor *values_accep
         else switch ( n->mFieldDataType )
         {
             case cFieldDataType_ftBool :
-                {
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                }
+                result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 break;
             case cFieldDataType_ftChar :
-                {
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                }
+                result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 break;
             case cFieldDataType_ftWChar :
                 break;
             case cFieldDataType_ftShort :
-                {
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                }
+                result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 break;
             case cFieldDataType_ftInteger :
-                {
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                }
+                result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 break;
             case cFieldDataType_ftLong :
-                {
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                }
+                result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 break;
             case cFieldDataType_ftDouble :
-                {
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                }
+                result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 break;
             case cFieldDataType_ftDateTime :
-                {
-                    result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                }
+            {
+                SQL_TIMESTAMP_STRUCT    *tm = reinterpret_cast<SQL_TIMESTAMP_STRUCT *>(field->GetBuffer());
+                double                  aa = (tm->year - 1899) * 365 + tm->month * 30 + tm->day;
+
+                // result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
+                result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &aa, sizeof(aa) );
+            }
                 break;
             case cFieldDataType_ftString :
                 {
@@ -308,7 +300,7 @@ bool __stdcall cDataProvider::GetFieldValues( IFieldValuesAcceptor *values_accep
         }
     }
 
-    return ( result );
+    return result;
 }
 
 void __stdcall cDataProvider::EndDataTransfer()
@@ -337,7 +329,7 @@ void __stdcall cDataProvider::ExecSql( const char *sql )
 extern "C"
 {
 
-__declspec(dllexport) IDatabase * CreateDataConnection( const char *connection_string )
+IDatabase * CreateDataConnection( const char *connection_string )
 {
     if ( Engine.get() == 0 )
     {
@@ -347,12 +339,12 @@ __declspec(dllexport) IDatabase * CreateDataConnection( const char *connection_s
     return ( new cDataConnection( *Engine.get(), connection_string ) );
 }
 
-__declspec(dllexport) void DeleteDataConnection( IDatabase *connection )
+void DeleteDataConnection( IDatabase *connection )
 {
     delete connection;
 }
 
-};
+}; // extern "C"
 
 int WINAPI DllEntryPoint( HINSTANCE /*hinst*/, unsigned long /*reason*/, void* /*lpReserved*/ )
 {

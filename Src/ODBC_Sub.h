@@ -51,7 +51,7 @@ public:
     CDFASTCALL ~ODBC_Field();
     SWORD FASTCALL GetDataType() const                      { return mDataType; }
     SWORD FASTCALL GetCDataType() const;
-    UDWORD FASTCALL GetSize() const;
+    UDWORD FASTCALL GetSize() const                         { return mDataSize; }
     UDWORD FASTCALL GetDataSize() const                     { return mDataSize; }
     const std::string& GetName() const                      { return mName; }
     SQLPOINTER FASTCALL GetBuffer();

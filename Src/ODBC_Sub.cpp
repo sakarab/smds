@@ -93,17 +93,10 @@ SQLLEN FASTCALL ODBC_Field::GetBufferLength()
     return mDataSize;
 }
 
-UDWORD FASTCALL ODBC_Field::GetSize() const
-{
-    if ( mDataType == SQL_WCHAR || mDataType == SQL_WVARCHAR || mDataType == SQL_WLONGVARCHAR )
-        return mDataSize / 2;
-    return mDataSize;
-}
-
 SWORD FASTCALL ODBC_Field::GetCDataType() const
 {
-    if ( mDataType == SQL_WCHAR || mDataType == SQL_WVARCHAR || mDataType == SQL_WLONGVARCHAR )
-        return SQL_C_WCHAR;
+    if ( mDataType == SQL_CHAR || mDataType == SQL_VARCHAR || mDataType == SQL_LONGVARCHAR )
+        return SQL_C_CHAR;
     return mDataType;
 }
 
@@ -212,28 +205,11 @@ void FASTCALL ODBC_Statement::ExecSql( const char *sql )
                                          &name_length, &data_type, &data_size, &decimal_digits, &nullable ) );
         }
 
-        // start MS Access ODBC bug
-        int             n_data_type;
         unsigned int    n_data_size;
 
         CheckReturn( SQLColAttribute( mStatement, n, SQL_DESC_OCTET_LENGTH, 0, 0, 0, &n_data_size ) );
-        if ( data_type == SQL_CHAR || data_type == SQL_VARCHAR || data_type == SQL_LONGVARCHAR )
-        {
-            CheckReturn( SQLColAttribute( mStatement, n, SQL_DESC_TYPE, 0, 0, 0, &n_data_type ) );
-            if ( n_data_type != data_type )
-                data_type = static_cast<SWORD>(n_data_type);
-            else if ( data_size * 2 == n_data_size )
-            {
-                switch ( data_type )
-                {
-                    case SQL_CHAR           : data_type = SQL_WCHAR;                break;
-                    case SQL_VARCHAR        : data_type = SQL_WVARCHAR;             break;
-                    case SQL_LONGVARCHAR    : data_type = SQL_WLONGVARCHAR;         break;
-                }
-            }
-        }
-        data_size = n_data_size;
-        // end MS Access ODBC bug
+        if ( data_type != SQL_CHAR && data_type != SQL_VARCHAR && data_type != SQL_LONGVARCHAR )
+            data_size = n_data_size;
 
         mFields.push_back( ODBC_Field( &field_name.front(), data_type, data_size, decimal_digits, nullable ) );
     }
