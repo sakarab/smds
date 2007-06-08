@@ -218,17 +218,17 @@ spFieldSortCompare FASTCALL Table::CreateCmp( const OpenIndexFields& index_field
 
 cIndex_ptr FASTCALL Table::NewIndex( const cIndexField& index_field )
 {
-    return cIndex_ptr( new Index( CreateCmp( index_field ), GetData() ) );
+    return cIndex_ptr( new Index( GetData(), CreateCmp( index_field ) ) );
 }
 
 cIndex_ptr FASTCALL Table::NewIndex( const OpenIndexFields& index_fields )
 {
-    return cIndex_ptr( new Index( CreateCmp( index_fields ), GetData() ) );
+    return cIndex_ptr( new Index( GetData(), CreateCmp( index_fields ) ) );
 }
 
 cIndex_ptr FASTCALL Table::NewIndex( const spFieldSortCompare& cmp_func )
 {
-    return cIndex_ptr( new Index( cmp_func, GetData() ) );
+    return cIndex_ptr( new Index( GetData(), cmp_func ) );
 }
 
 void FASTCALL Table::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size )

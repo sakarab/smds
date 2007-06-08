@@ -23,6 +23,8 @@
 #define uProfileH
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
+#include <dsData.h>
+#include "uTables.h"
 //---------------------------------------------------------------------------
 
 void FASTCALL RunProfile();

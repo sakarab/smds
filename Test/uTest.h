@@ -24,6 +24,7 @@
 //---------------------------------------------------------------------------
 #include <dsData.h>
 #include "uTables.h"
+#include <dsIndex.h>
 //---------------------------------------------------------------------------
 typedef void (FASTCALL *ErrorReporter)( void *user_data, const char *error );
 

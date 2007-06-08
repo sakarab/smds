@@ -196,7 +196,7 @@ bool FASTCALL Index::range_iterator::Find( const OpenValues& values )
 //***********************************************************************
 //******    Index
 //***********************************************************************
-CDFASTCALL Index::Index( const spSortCompare& cmp_func, const detail::spData& data )
+CDFASTCALL Index::Index( const detail::spData& data, const spSortCompare& cmp_func )
     : Tablebase(), mCompare(cmp_func)
 {
     UpdateIndex( *data );

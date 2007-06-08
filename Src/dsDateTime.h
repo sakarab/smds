@@ -31,6 +31,34 @@ namespace smds
 
 // Date types
 
+class cDate
+{
+private:
+    friend cStream& FASTCALL operator << ( cStream& st, const cDate a );
+    friend cStream& FASTCALL operator >> ( cStream& st, cDate& a );
+    double  mValue;
+public:
+    CDFASTCALL cDate() : mValue(0)                                      {} // empty
+    explicit CDFASTCALL cDate( const double& value ) : mValue(value)    {} // empty
+    double FASTCALL AsDouble() const                                    { return ( mValue ); }
+    bool operator <= ( const cDate& right )                             { return ( mValue <= right.mValue ); }
+    bool operator < ( const cDate& right )                              { return ( mValue < right.mValue ); }
+};
+
+class cTime
+{
+private:
+    friend cStream& FASTCALL operator << ( cStream& st, const cTime a );
+    friend cStream& FASTCALL operator >> ( cStream& st, cTime& a );
+    double  mValue;
+public:
+    CDFASTCALL cTime() : mValue(0)                                      {} // empty
+    explicit CDFASTCALL cTime( const double& value ) : mValue(value)    {} // empty
+    double FASTCALL AsDouble() const                                    { return ( mValue ); }
+    bool operator <= ( const cTime& right )                             { return ( mValue <= right.mValue ); }
+    bool operator < ( const cTime& right )                              { return ( mValue < right.mValue ); }
+};
+
 class cDateTime
 {
 private:

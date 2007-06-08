@@ -23,6 +23,7 @@
 #pragma hdrstop
 
 #include "bcbTest.h"
+#include <dsIndex.h>
 
 //---------------------------------------------------------------------------
 void __fastcall FillList( TListView *lv, const smds::detail::cFieldDefs_& field_defs, tblFiles_ptr dataset )
