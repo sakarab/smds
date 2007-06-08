@@ -195,6 +195,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Test\uProfile.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Test\uTables.cpp"
 				>
 			</File>
@@ -210,6 +214,10 @@
 			>
 			<File
 				RelativePath="..\..\Test\uCompileTest.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Test\uProfile.h"
 				>
 			</File>
 			<File

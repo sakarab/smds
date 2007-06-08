@@ -39,6 +39,25 @@ const int cFieldDataType_ftString   = 8;
 const int cFieldDataType_ftWString  = 9;
 const int cFieldDataType_ftBlob     = 10;
 
+/*
+const int FieldDataType_ftBool      = 0;            // one byte
+const int FieldDataType_ftByte      = 1;            // one byte
+const int FieldDataType_ftShort     = 2;            // two bytes
+const int FieldDataType_ftInteger   = 3;            // four bytes
+const int FieldDataType_ftLong      = 4;            // eight bytes
+const int FieldDataType_ftDouble    = 5;
+const int FieldDataType_ftDate      = 6;
+const int FieldDataType_ftTime      = 7;
+const int FieldDataType_ftDateTime  = 8;
+const int FieldDataType_ftGUID      = 9;
+const int FieldDataType_ftChar      = 10;           // CHAR(n)
+const int FieldDataType_ftString    = 11;           // VARCHAR
+const int FieldDataType_ftWChar     = 12;           // WCHAR(n)
+const int FieldDataType_ftWString   = 13;           // VARWCHAR
+const int FieldDataType_ftBlobn     = 14;           // fixed length blob
+const int FieldDataType_ftBlob      = 15;           // variable length blob
+*/
+
 class IDataConnection;
 class IDataProvider;
 

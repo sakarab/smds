@@ -24,20 +24,12 @@
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
 #include "dsStream.h"
+#include <ctime>
 
 namespace smds
 {
 
-// Data types
-#pragma pack( push, 1 )
-
-/*
-struct cDateTime
-{
-    unsigned int Date;
-    unsigned int Time;
-};
-*/
+// Date types
 
 class cDateTime
 {
@@ -49,10 +41,10 @@ private:
     friend cStream& FASTCALL operator >> ( cStream& st, cDateTime& a );
     double  mValue;
 public:
-    CDFASTCALL cDateTime() : mValue(0)                                  {} // empty
-    CDFASTCALL cDateTime( const double& value ) : mValue(value)         {} // empty
-    double FASTCALL AsDouble() const                                    { return ( mValue ); }
-    double FASTCALL Date() const                                        { return ( static_cast<double>(static_cast<int>(mValue)) ); }
+    CDFASTCALL cDateTime() : mValue(0)                                      {} // empty
+    explicit CDFASTCALL cDateTime( const double& value ) : mValue(value)    {} // empty
+    double FASTCALL AsDouble() const                                        { return ( mValue ); }
+    double FASTCALL Date() const                                            { return ( static_cast<double>(static_cast<int>(mValue)) ); }
     cDateTime& FASTCALL operator += ( int days )
     {
         mValue += days;
@@ -92,10 +84,81 @@ public:
 cStream& FASTCALL operator << ( cStream& st, const cDateTime a );
 cStream& FASTCALL operator >> ( cStream& st, cDateTime& a );
 
-//typedef double  cDateTime;
 
-#pragma pack( pop )
 
+// put everything to namespace temp for now
+namespace temp
+{
+
+//***********************************************************************
+//******    dbDate
+//***********************************************************************
+// exactly like tagDATE_STRUCT
+struct dbDate_tag
+{
+    short           year;
+    unsigned short  month;
+    unsigned short  day;
 };
+
+class dbDate
+{
+private:
+    dbDate_tag      mData;
+public:
+    explicit CDFASTCALL dbDate( const dbDate_tag& date );
+    explicit CDFASTCALL dbDate( const std::tm& date );
+    explicit CDFASTCALL dbDate( const double& date );
+    CDFASTCALL dbDate( short year, unsigned short month, unsigned short day );
+
+    bool operator < ( const dbDate& right );
+
+    short FASTCALL GetYear() const                  { return mData.year; }
+    unsigned short FASTCALL GetMonth() const        { return mData.month; }
+    unsigned short FASTCALL GetDay() const          { return mData.day; }
+};
+
+//***********************************************************************
+//******    dbTime
+//***********************************************************************
+// exactly like tagTIME_STRUCT
+struct dbTime_tag
+{
+    unsigned short  hour;
+    unsigned short  minute;
+    unsigned short  second;
+};
+
+//***********************************************************************
+//******    dbDateTime
+//***********************************************************************
+// exactly like tagTIMESTAMP_STRUCT
+struct dbDateTime_tag
+{
+    short           year;
+    unsigned short  month;
+    unsigned short  day;
+    unsigned short  hour;
+    unsigned short  minute;
+    unsigned short  second;
+    unsigned long   fraction;
+};
+
+class dbDateTime
+{
+private:
+    dbDateTime_tag  mData;
+public:
+    explicit CDFASTCALL dbDateTime( const dbDate_tag& date );
+    explicit CDFASTCALL dbDateTime( const std::tm& date );
+    explicit CDFASTCALL dbDateTime( const double& date );
+    CDFASTCALL dbDateTime( short year, unsigned short month, unsigned short day );
+
+    bool operator < ( const dbDateTime& right );
+};
+
+}; // temp
+
+}; // smds
 //---------------------------------------------------------------------------
 #endif
