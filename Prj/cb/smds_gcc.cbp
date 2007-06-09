@@ -66,6 +66,7 @@
 		<Unit filename="..\..\Src\dsString.h" />
 		<Unit filename="..\..\Src\dsSysOpen.cpp" />
 		<Unit filename="..\..\Src\dsSysOpen.h" />
+		<Unit filename="..\..\Src\dsTypedData.h" />
 		<Unit filename="..\..\Src\dsTypes.h" />
 		<Unit filename="..\..\Src\dsUtils.cpp" />
 		<Unit filename="..\..\Src\dsUtils.h" />

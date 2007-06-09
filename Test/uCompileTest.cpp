@@ -175,7 +175,11 @@ void dummy_main()
 */
 
 using namespace smds;
-using namespace smds::detail;
+
+void ConvertTypedData( tblFiles::index_ptr& idx )
+{
+    // tblFiles_ptr    ds = *idx;
+}
 
 void Tutorial()
 {

@@ -1,4 +1,5 @@
 #include <uTest.h>
+#include "uProfile.h"
 #include <iostream>
 #include <malloc.h>
 
@@ -107,6 +108,21 @@ int main()
 
         Test( files, ErrorReporter_, 0 );
         Output( files );
+	}
+	catch ( std::exception& e )
+	{
+		::MessageBox( 0, e.what(), 0, MB_OK );
+	}
+
+	try
+	{
+        RunProfile();
+        std::cout << "press enter" << std::endl;
+
+        char    ch;
+
+        std::cin.get( ch );
+
 	}
 	catch ( std::exception& e )
 	{

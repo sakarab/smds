@@ -208,6 +208,9 @@
 				RelativePath="..\..\Src\dsSysOpen.h">
 			</File>
 			<File
+				RelativePath="..\..\Src\dsTypedData.h">
+			</File>
+			<File
 				RelativePath="..\..\Src\dsTypes.h">
 			</File>
 			<File

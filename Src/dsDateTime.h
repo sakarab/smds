@@ -29,7 +29,7 @@
 namespace smds
 {
 
-// Date types
+#if defined(SM_DS_DATE_IS_DOUBLE)
 
 class cDate
 {
@@ -112,11 +112,7 @@ public:
 cStream& FASTCALL operator << ( cStream& st, const cDateTime a );
 cStream& FASTCALL operator >> ( cStream& st, cDateTime& a );
 
-
-
-// put everything to namespace temp for now
-namespace temp
-{
+#else
 
 //***********************************************************************
 //******    dbDate
@@ -185,7 +181,7 @@ public:
     bool operator < ( const dbDateTime& right );
 };
 
-}; // temp
+#endif
 
 }; // smds
 //---------------------------------------------------------------------------

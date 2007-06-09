@@ -40,6 +40,10 @@
 			<Add directory="..\..\Test" />
 		</Compiler>
 		<Unit filename="..\..\Test\main_cb_exe.cpp" />
+		<Unit filename="..\..\Test\uConnectionStrings.cpp" />
+		<Unit filename="..\..\Test\uConnectionStrings.h" />
+		<Unit filename="..\..\Test\uProfile.cpp" />
+		<Unit filename="..\..\Test\uProfile.h" />
 		<Unit filename="..\..\Test\uTables.cpp" />
 		<Unit filename="..\..\Test\uTables.h" />
 		<Unit filename="..\..\Test\uTest.cpp" />

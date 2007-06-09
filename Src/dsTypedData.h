@@ -305,6 +305,19 @@ protected:
     }
 public:
     virtual CDFASTCALL ~cuIndex()                                           {} // empty
+
+/*
+    shared_ptr< cuTable<RECORD> > FASTCALL AsTable()
+    {
+        return shared_ptr< cuTable<RECORD> >( new cuTable<RECORD>( GetData() ) );
+    }
+
+    operator shared_ptr< cuTable<RECORD> >()
+    {
+        return shared_ptr< cuTable<RECORD> >( new cuTable<RECORD>( GetData() ) );
+    }
+*/
+
     iterator FASTCALL GetIterator()                                         { return iterator( GetData(), GetCompare() ); }
     iterator FASTCALL Locate( const Variant& value, const cFindField& field )
     {

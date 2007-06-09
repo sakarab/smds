@@ -105,22 +105,29 @@ class UpdateLocker
 {
 private:
     Tablebase&          mTablebase;
+
+    CDFASTCALL UpdateLocker();
     // noncopyable
     CDFASTCALL UpdateLocker( const UpdateLocker& src );
     UpdateLocker& FASTCALL operator=( const UpdateLocker& src );
 public:
-    CDFASTCALL UpdateLocker( Tablebase& tablebase ) : mTablebase(tablebase)     { tablebase.mData->LockUpdates(); }
+    template <class T> CDFASTCALL UpdateLocker( shared_ptr<T>& src )
+        : mTablebase( *src.get() )
+    {
+        mTablebase.mData->LockUpdates();
+    }
     CDFASTCALL ~UpdateLocker()                                                  { mTablebase.mData->UnlockUpdates(); }
 };
 #else
 class UpdateLocker
 {
 private:
+    CDFASTCALL UpdateLocker();
     // noncopyable
     CDFASTCALL UpdateLocker( const UpdateLocker& src );
     UpdateLocker& FASTCALL operator=( const UpdateLocker& src );
 public:
-    CDFASTCALL UpdateLocker( Tablebase& )                                       {} // empty
+    template <class T> CDFASTCALL UpdateLocker( shared_ptr<T>& src )            {} // empty
 };
 #endif
 

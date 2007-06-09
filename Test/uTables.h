@@ -210,7 +210,14 @@ typedef smds::shared_ptr<tblFiles>                  tblFiles_ptr;
 //***********************************************************************
 //******    tblSLD
 //***********************************************************************
-/*
+#ifdef SM_DS_STRING_AS_STRING
+    #define STRING_FM(name,size)    ds_string name
+    typedef ds_string               STRING_RET;
+#else
+    #define STRING_FM(name,size)    char    name[size]
+    typedef ds_string               STRING_RET;
+#endif
+
 class tblSLD_map
 {
 private:
@@ -393,15 +400,15 @@ public:
 class tblSLD_data
 {
 protected:
-    static const smds::cFieldDef_   tblSLD_Fields[];
-    static const smds::cFieldDefs_  tblSLD_FieldDef;
+    static const smds::detail::cFieldDef_   tblSLD_Fields[];
+    static const smds::detail::cFieldDefs_  tblSLD_FieldDef;
 };
 
-class tblSLD_raw : public tblSLD_data, public smds::cRawRecordPtr
+class tblSLD_raw : public tblSLD_data, public smds::detail::cRawRecordPtr
 {
 public:
-    CDFASTCALL tblSLD_raw( smds::cRawBuffer& raw_buffer )
-        : smds::cRawRecordPtr(raw_buffer)                     {} // empty
+    CDFASTCALL tblSLD_raw( smds::detail::cRawBuffer& raw_buffer )
+        : smds::detail::cRawRecordPtr(raw_buffer)             {} // empty
     tblSLD_raw * FASTCALL operator->()                        { return ( this ); }
     const tblSLD_raw * FASTCALL operator->() const            { return ( this ); }
 
@@ -916,16 +923,16 @@ public:
     bool FASTCALL SLDDELIVERYPLACE_IsNull() const             { return ( IsNull( tblSLD_Fields[169] ) ); }
 };
 
-class tblSLD_rec : public tblSLD_data, public smds::cRecordPtr
+class tblSLD_rec : public tblSLD_data, public smds::detail::cRecordPtr
 {
 public:
     typedef tblSLD_raw    raw;
 public:
-    CDFASTCALL tblSLD_rec( smds::cDoubleBuffer& double_buffer )
-        : smds::cRecordPtr(double_buffer)           {} // empty
+    CDFASTCALL tblSLD_rec( smds::detail::DoubleBuffer& double_buffer )
+        : smds::detail::cRecordPtr(double_buffer)   {} // empty
     tblSLD_rec * FASTCALL operator->()              { return ( this ); }
     const tblSLD_rec * FASTCALL operator->() const  { return ( this ); }
-    static const smds::cFieldDefs_& FASTCALL GetFieldDefs();
+    static const smds::detail::cFieldDefs_& FASTCALL GetFieldDefs();
 
     int FASTCALL GetDOCID() const                                         { return ( ReadInteger( tblSLD_Fields[0] ) ); }
     bool FASTCALL DOCID_IsNull() const                                    { return ( IsNull( tblSLD_Fields[0] ) ); }
@@ -1610,6 +1617,5 @@ public:
 
 typedef smds::cuTable<tblSLD_rec>  tblSLD;
 typedef smds::shared_ptr<tblSLD>   tblSLD_ptr;
-*/
 //---------------------------------------------------------------------------
 #endif

@@ -284,6 +284,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Src\dsTypedData.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Src\dsTypes.h"
 				>
 			</File>

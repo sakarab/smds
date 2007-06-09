@@ -34,7 +34,11 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add directory="$(BOOST_INC)" />
 		</Compiler>
+		<Linker>
+			<Add library="odbc32" />
+		</Linker>
 		<Unit filename="..\..\Src\ODBC_Conn.cpp" />
 		<Unit filename="..\..\Src\ODBC_Sub.cpp" />
 		<Unit filename="..\..\Src\ODBC_Sub.h" />
