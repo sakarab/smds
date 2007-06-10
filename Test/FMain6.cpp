@@ -25,6 +25,7 @@
 #include "FMain6.h"
 #include "bcbTest.h"
 #include "uTest.h"
+#include "uProfile.h"
 //---------------------------------------------------------------------------
 #pragma resource "*.dfm"
 TfrmMain *frmMain;
@@ -56,6 +57,7 @@ void __fastcall TfrmMain::Button1Click(TObject *Sender)
     mFiles = GetTblFiles();
     Test( mFiles, ErrorReporter_, this );
     FillList( lvList, tblFiles_rec::GetFieldDefs(), mFiles );
+    RunProfile();
 }
 //---------------------------------------------------------------------------
 void __fastcall TfrmMain::lvListData(TObject *Sender, TListItem *Item)

@@ -138,6 +138,9 @@
 				RelativePath="..\..\Test\uProfile.cpp">
 			</File>
 			<File
+				RelativePath="..\..\Test\uProfile1.cpp">
+			</File>
+			<File
 				RelativePath="..\..\Test\uTables.cpp">
 			</File>
 			<File
@@ -153,6 +156,9 @@
 			</File>
 			<File
 				RelativePath="..\..\Test\uProfile.h">
+			</File>
+			<File
+				RelativePath="..\..\Test\uProfile1.h">
 			</File>
 			<File
 				RelativePath="..\..\Test\uTables.h">

@@ -7,7 +7,7 @@
     <OBJFILES value="OutC6libTest\smDSb6libTest.obj OutC6libTest\FMain6.obj 
       OutC6libTest\uTest.obj OutC6libTest\bcbTest.obj OutC6libTest\uTables.obj 
       OutC6libTest\uCompileTest.obj OutC6libTest\uProfile.obj 
-      OutC6libTest\uConnectionStrings.obj"/>
+      OutC6libTest\uConnectionStrings.obj OutC6libTest\uProfile1.obj"/>
     <RESFILES value="smDSb6libTest.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -34,7 +34,7 @@
     <SYSDEFINES value="NO_STRICT;_RTLDLL;USEPACKAGES"/>
     <MAINSOURCE value="smDSb6libTest.cpp"/>
     <INCLUDEPATH value="..\..\Test;..\..\Src;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..\..\Test;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <LIBPATH value="..\..\Src;..\..\Test;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w8092 -w8091 -w8090 -w8089 -w8087 -wprc -wuse -wucp -wstv -wstu -wsig 
       -wpin -w-par -wnod -wnak -w-8027 -w-8026 -wdef -wcln -wbbf -wasm -wamp -wamb"/>
     <OTHERFILES value=""/>
@@ -67,6 +67,7 @@
       <FILE FILENAME="..\..\Test\uCompileTest.cpp" FORMNAME="" UNITNAME="uCompileTest" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Test\uProfile.cpp" FORMNAME="" UNITNAME="uProfile" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Test\uConnectionStrings.cpp" FORMNAME="" UNITNAME="uConnectionStrings" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Test\uProfile1.cpp" FORMNAME="" UNITNAME="uProfile1.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
