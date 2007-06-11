@@ -113,6 +113,10 @@ public:
     CDFASTCALL ODBC_Statement( ODBC_Connection& connection );
     CDFASTCALL ~ODBC_Statement();
 
+    std::size_t FASTCALL GetFieldCount()                            { return mFields.size(); }
+    void FASTCALL GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+                                      std::size_t& name_buffer_required_length, int& field_data_size, int& field_data_type );
+
     void FASTCALL ExecSql( const char *sql );
     void FASTCALL CloseSql();
     void FASTCALL Next();

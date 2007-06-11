@@ -243,6 +243,24 @@ CDFASTCALL ODBC_Statement::~ODBC_Statement()
     SQLFreeHandle( SQL_HANDLE_STMT, mStatement );
 }
 
+void FASTCALL ODBC_Statement::GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+                                                  std::size_t& name_buffer_required_length, int& field_data_size, int& field_data_type )
+{
+    ODBC_Field&     field = mFields[idx];
+    std::size_t          copy_len;
+
+    if ( name_buffer_length > field.GetName().length() )
+        copy_len = field.GetName().length();
+    else
+        copy_len = name_buffer_length - 1;
+
+    std::strncpy( name, field.GetName().c_str(), copy_len );
+    name[name_buffer_length] = '\0';
+    name_buffer_required_length = field.GetName().length() + 1;
+    field_data_size = field.GetDataSize();
+    field_data_type = field.GetCDataType();
+}
+
 void FASTCALL ODBC_Statement::ExecSql( const char *sql )
 {
     mIsEof = false;

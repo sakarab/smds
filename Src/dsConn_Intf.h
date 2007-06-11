@@ -22,6 +22,7 @@
 #define SM_DS_CONN_INTF_H
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
+#include <cstddef>
 //---------------------------------------------------------------------------
 namespace smds
 {
@@ -98,14 +99,18 @@ class IDataProvider
 {
 public:
     virtual void __stdcall OpenSql( const char *sql ) = 0;
+    virtual void __stdcall CloseSql() = 0;
+
     virtual bool __stdcall Eof() = 0;
     virtual void __stdcall Next() = 0;
-    virtual void __stdcall CloseSql() = 0;
+
+    virtual std::size_t __stdcall GetFieldCount() = 0;
+    virtual void __stdcall GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+                                               unsigned int& name_buffer_required_length, int& field_data_size, int& field_data_type ) = 0;
 
     virtual void __stdcall InitDataTransfer() = 0;
     virtual void __stdcall StepInitDataTransfer( const char *field_name, int field_data_size, int field_data_type, const void *data ) = 0;
     virtual void __stdcall EndInitDataTransfer() = 0;
-
     virtual bool __stdcall GetFieldValues( IFieldValuesAcceptor *values_acceptor ) = 0;
     virtual void __stdcall EndDataTransfer() = 0;
 

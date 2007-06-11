@@ -44,6 +44,56 @@ class DbEngine;
 
 std::auto_ptr<ODBC_Env>     Engine;
 
+typedef SQLUSMALLINT        DayTable[13];
+
+const int DaysOffset            = 693594;
+const int HoursPerDay           = 24;
+const int MinutesPerHour        = 60;
+const int SecondsPerMinute      = 60;
+const int MillisecondsPerSecond = 1000;
+const int MinutesPerDay         = HoursPerDay * MinutesPerHour;
+const int SecondsPerDay         = MinutesPerDay * SecondsPerMinute;
+const int MillisecondsPerDay    = SecondsPerDay * MillisecondsPerSecond;
+
+DayTable MonthDays[2] =
+{
+    { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
+    { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
+};
+
+bool IsLeapYear( SQLSMALLINT year )
+{
+    return (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
+}
+
+double EncodeDate( SQLSMALLINT year, SQLUSMALLINT month, SQLUSMALLINT day )
+{
+    SQLUSMALLINT    *day_table = MonthDays[IsLeapYear( year )];
+
+    if ( year < 1 || year > 9999 || month < 1 || month > 12 || day < 1 || day > day_table[month] )
+        throw std::runtime_error( "ODBC date conversion error." );
+    for ( int i = 1 ; i < month ; ++i )
+        day += day_table[i];
+    --year;
+    return ( year * 365 + year / 4 - year / 100 + year / 400 + day - DaysOffset );
+}
+
+double EncodeTime( SQLUSMALLINT hour, SQLUSMALLINT minute, SQLUSMALLINT second, SQLUINTEGER fraction )
+{
+    if ( hour >= HoursPerDay || minute >= MinutesPerHour || second >= SecondsPerMinute || fraction >= MillisecondsPerSecond )
+        throw std::runtime_error( "ODBC time conversion error." );
+    return ( ( hour * (MinutesPerHour * SecondsPerMinute * MillisecondsPerSecond) +
+               minute * (SecondsPerMinute * MillisecondsPerSecond) +
+               second * MillisecondsPerSecond +
+               fraction ) / static_cast<double>(MillisecondsPerDay) );
+}
+
+double EncodeDateTime( SQLSMALLINT year, SQLUSMALLINT month, SQLUSMALLINT day,
+                       SQLUSMALLINT hour, SQLUSMALLINT minute, SQLUSMALLINT second, SQLUINTEGER fraction )
+{
+    return EncodeDate( year, month, day ) + EncodeTime( hour, minute, second, fraction );
+}
+
 //***********************************************************************
 //******    cDataConnection
 //***********************************************************************
@@ -114,9 +164,13 @@ protected:
 #endif
     // IDataTransfer
     virtual void __stdcall OpenSql( const char *sql );
+    virtual void __stdcall CloseSql();
     virtual bool __stdcall Eof();
     virtual void __stdcall Next();
-    virtual void __stdcall CloseSql();
+
+    virtual std::size_t __stdcall GetFieldCount();
+    virtual void __stdcall GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+                                               std::size_t& name_buffer_required_length, int& field_data_size, int& field_data_type );
 
     virtual void __stdcall InitDataTransfer();
     virtual void __stdcall StepInitDataTransfer( const char *field_name, int field_data_size, int field_data_type, const void *data );
@@ -224,6 +278,17 @@ void __stdcall cDataProvider::CloseSql()
     mStatement.CloseSql();
 }
 
+unsigned int __stdcall cDataProvider::GetFieldCount()
+{
+    return mStatement.GetFieldCount();
+}
+
+void __stdcall cDataProvider::GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+                                                  std::size_t& name_buffer_required_length, int& field_data_size, int& field_data_type )
+{
+    mStatement.GetFieldAttributes( idx, name, name_buffer_length, name_buffer_required_length, field_data_size, field_data_type );
+}
+
 void __stdcall cDataProvider::InitDataTransfer()
 {
     mFieldPairMap.clear();
@@ -279,7 +344,7 @@ bool __stdcall cDataProvider::GetFieldValues( IFieldValuesAcceptor *values_accep
             case cFieldDataType_ftDateTime :
             {
                 SQL_TIMESTAMP_STRUCT    *tm = reinterpret_cast<SQL_TIMESTAMP_STRUCT *>(field->GetBuffer());
-                double                  aa = (tm->year - 1899) * 365 + tm->month * 30 + tm->day;
+                double                  aa = EncodeDateTime( tm->year, tm->month, tm->day, tm->hour, tm->minute, tm->second, tm->fraction );
 
                 // result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
                 result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &aa, sizeof(aa) );

@@ -47,13 +47,12 @@ tblFiles_ptr GetTblFiles()
     Database        database = engine.NewConnection( ADO_Dirdata_Conn );
 */
 
-    DbEngine        engine = SelectDbEngine( "DAO" );
-    Database        database = engine.NewConnection( DAO_Dirdata_Conn );
+    // DbEngine        engine = SelectDbEngine( "DAO" );
+    // Database        database = engine.NewConnection( DAO_Dirdata_Conn );
 
-/*
     DbEngine        engine = SelectDbEngine( "ODBC" );
     Database        database = engine.NewConnection( ODBC_DirData_Conn );
-*/
+
     tblFiles_ptr    result( new tblFiles() );
 
     result->Open( database, 0 );

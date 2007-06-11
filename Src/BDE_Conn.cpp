@@ -146,9 +146,13 @@ protected:
 #endif
     // IDataTransfer
     virtual void __stdcall OpenSql( const char *sql );
+    virtual void __stdcall CloseSql();
     virtual bool __stdcall Eof();
     virtual void __stdcall Next();
-    virtual void __stdcall CloseSql();
+
+    virtual std::size_t __stdcall GetFieldCount();
+    virtual void __stdcall GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+                                               std::size_t& name_buffer_required_length, int& field_data_size, int& field_data_type );
 
     virtual void __stdcall InitDataTransfer();
     virtual void __stdcall StepInitDataTransfer( const char *field_name, int field_data_size, int field_data_type, const void *data );
@@ -270,6 +274,15 @@ void __stdcall cDataProvider::Next()
 void __stdcall cDataProvider::CloseSql()
 {
     mQuery.reset( 0 );
+}
+
+std::size_t __stdcall cDataProvider::GetFieldCount()
+{
+}
+
+void __stdcall cDataProvider::GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+                                                  std::size_t& name_buffer_required_length, int& field_data_size, int& field_data_type )
+{
 }
 
 void __stdcall cDataProvider::InitDataTransfer()
