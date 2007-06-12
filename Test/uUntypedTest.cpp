@@ -19,14 +19,29 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef uProfileH
-#define uProfileH
-//---------------------------------------------------------------------------
-#include "dsConfig.h"
-#include "uTables.h"
-//---------------------------------------------------------------------------
-
-void FASTCALL RunProfile( smds::Database& database );
-
-//---------------------------------------------------------------------------
+#ifndef __GNUG__
+#pragma hdrstop
 #endif
+
+#include "uUntypedTest.h"
+//---------------------------------------------------------------------------
+
+using namespace smds;
+
+void FASTCALL UntypedTest( Database& database )
+{
+    spTable     table( new Table( "tblFiles" ) );
+
+    table->AddField( "FileID",       fkData, ftInteger,  4 );
+    table->AddField( "PathID",       fkData, ftInteger,  4 );
+    table->AddField( "LongFileName", fkData, ftString,   255 );
+    table->AddField( "fSize",        fkData, ftInteger,  4 );
+    table->AddField( "fDate",        fkData, ftDateTime, 8 );
+    table->AddField( "Description",  fkData, ftString,   255 );
+    table->AddField( "zipID",        fkData, ftInteger,  4 );
+
+    table->Open( database, 0 );
+
+}
+//---------------------------------------------------------------------------
+

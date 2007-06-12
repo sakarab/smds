@@ -26,9 +26,13 @@
 #include "bcbTest.h"
 #include "uTest.h"
 #include "uProfile.h"
+#include "uUntypedTest.h"
+#include "uConnectionStrings.h"
 //---------------------------------------------------------------------------
 #pragma resource "*.dfm"
 TfrmMain *frmMain;
+
+using namespace smds;
 
 namespace
 {
@@ -41,7 +45,9 @@ void FASTCALL ErrorReporter_( void *user_data, const char *error )
 
 //---------------------------------------------------------------------------
 __fastcall TfrmMain::TfrmMain(TComponent* Owner)
-    : TForm(Owner)
+    : TForm(Owner),
+      mEngine( SelectDbEngine( "ODBC" ) ),
+      mDatabase( mEngine.NewConnection( ODBC_DirData_Conn ) )
 {
 }
 //---------------------------------------------------------------------------
@@ -54,10 +60,19 @@ void __fastcall TfrmMain::Button2Click(TObject *Sender)
 void __fastcall TfrmMain::Button1Click(TObject *Sender)
 {
     lvList->Items->Count = 0;
-    mFiles = GetTblFiles();
-    Test( mFiles, ErrorReporter_, this );
-    FillList( lvList, tblFiles_rec::GetFieldDefs(), mFiles );
-    RunProfile();
+
+    try
+    {
+        mFiles = GetTblFiles( mDatabase );
+        Test( mFiles, ErrorReporter_, this );
+        FillList( lvList, tblFiles_rec::GetFieldDefs(), mFiles );
+        RunProfile( mDatabase );
+        UntypedTest( mDatabase );
+    }
+	catch ( std::exception& e )
+	{
+		::MessageBox( 0, e.what(), 0, MB_OK );
+	}
 }
 //---------------------------------------------------------------------------
 void __fastcall TfrmMain::lvListData(TObject *Sender, TListItem *Item)

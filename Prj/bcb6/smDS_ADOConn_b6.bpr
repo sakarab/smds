@@ -28,7 +28,7 @@
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="ilink32"/>
     <USERDEFINES value="BOOST_VARIANT_DETAIL_NO_SUBSTITUTE;BOOST_DISABLE_ASSERTS;BOOST_SP_DISABLE_THREADS"/>
-    <SYSDEFINES value="NO_STRICT"/>
+    <SYSDEFINES value="NO_STRICT;_RTLDLL"/>
     <MAINSOURCE value="smDS_ADOConn_b6.bpf"/>
     <INCLUDEPATH value="..\..\Src;$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="..\..\Src;$(BCB)\lib\obj;$(BCB)\lib"/>
@@ -49,9 +49,9 @@
     <OTHERFILES value=""/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0d32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0d32.obj Memmgr.Lib sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
-    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
     <OTHERFILES value=""/>
   </LINKER>
   <FILELIST>

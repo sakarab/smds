@@ -7,7 +7,8 @@
     <OBJFILES value="OutC6libTest\smDSb6libTest.obj OutC6libTest\FMain6.obj 
       OutC6libTest\uTest.obj OutC6libTest\bcbTest.obj OutC6libTest\uTables.obj 
       OutC6libTest\uCompileTest.obj OutC6libTest\uProfile.obj 
-      OutC6libTest\uConnectionStrings.obj OutC6libTest\uProfile1.obj"/>
+      OutC6libTest\uConnectionStrings.obj OutC6libTest\uProfile1.obj 
+      OutC6libTest\uUntypedTest.obj"/>
     <RESFILES value="smDSb6libTest.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -68,6 +69,7 @@
       <FILE FILENAME="..\..\Test\uProfile.cpp" FORMNAME="" UNITNAME="uProfile" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Test\uConnectionStrings.cpp" FORMNAME="" UNITNAME="uConnectionStrings" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Test\uProfile1.cpp" FORMNAME="" UNITNAME="uProfile1.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Test\uUntypedTest.cpp" FORMNAME="" UNITNAME="uUntypedTest" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

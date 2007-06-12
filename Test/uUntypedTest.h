@@ -19,14 +19,11 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef uProfileH
-#define uProfileH
+#ifndef uUntypedTestH
+#define uUntypedTestH
 //---------------------------------------------------------------------------
-#include "dsConfig.h"
-#include "uTables.h"
+#include <dsData.h>
 //---------------------------------------------------------------------------
-
-void FASTCALL RunProfile( smds::Database& database );
-
+void FASTCALL UntypedTest( smds::Database& database );
 //---------------------------------------------------------------------------
 #endif

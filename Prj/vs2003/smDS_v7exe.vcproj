@@ -146,6 +146,9 @@
 			<File
 				RelativePath="..\..\Test\uTest.cpp">
 			</File>
+			<File
+				RelativePath="..\..\Test\uUntypedTest.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -165,6 +168,9 @@
 			</File>
 			<File
 				RelativePath="..\..\Test\uTest.h">
+			</File>
+			<File
+				RelativePath="..\..\Test\uUntypedTest.h">
 			</File>
 		</Filter>
 		<Filter

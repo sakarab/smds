@@ -57,6 +57,8 @@ __published:	// IDE-managed Components
     void __fastcall Button1Click(TObject *Sender);
     void __fastcall lvListData(TObject *Sender, TListItem *Item);
 private:	// User declarations
+    smds::DbEngine  mEngine;
+    smds::Database  mDatabase;
     tblFiles_ptr    mFiles;
 public:		// User declarations
     __fastcall TfrmMain(TComponent* Owner);

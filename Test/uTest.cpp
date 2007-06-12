@@ -29,7 +29,6 @@
 #include "dsVariant.h"
 #include "dsSysOpen.h"
 #include "dsExceptions.h"
-#include "uConnectionStrings.h"
 //---------------------------------------------------------------------------
 
 using namespace smds;
@@ -37,22 +36,8 @@ using namespace smds;
 //***********************************************************************
 //******    GetTblFiles
 //***********************************************************************
-tblFiles_ptr GetTblFiles()
+tblFiles_ptr GetTblFiles( Database& database )
 {
-/*
-    DbEngine        transport = SelectDbEngine( "BDE" );
-    Database        connection = transport.NewConnection( BDE_DirData_Conn );
-
-    DbEngine        engine = SelectDbEngine( "ADO" );
-    Database        database = engine.NewConnection( ADO_Dirdata_Conn );
-*/
-
-    // DbEngine        engine = SelectDbEngine( "DAO" );
-    // Database        database = engine.NewConnection( DAO_Dirdata_Conn );
-
-    DbEngine        engine = SelectDbEngine( "ODBC" );
-    Database        database = engine.NewConnection( ODBC_DirData_Conn );
-
     tblFiles_ptr    result( new tblFiles() );
 
     result->Open( database, 0 );

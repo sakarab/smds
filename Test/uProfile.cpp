@@ -170,15 +170,9 @@ void FASTCALL run_FindRecord_Two( tblFiles_ptr& ds )
 
 }; // namespace
 
-void FASTCALL RunProfile()
+void FASTCALL RunProfile( Database& database )
 {
     std::cout << "\n\n";
-
-    DbEngine        engine = SelectDbEngine( "ODBC" );
-    Database        database = engine.NewConnection( ODBC_DirData_Conn );
-
-    // DbEngine        engine = SelectDbEngine( "DAO" );
-    // Database        database = engine.NewConnection( DAO_Dirdata_Conn );
 
     tblFiles_ptr    ds = run_FillTable( database );
 

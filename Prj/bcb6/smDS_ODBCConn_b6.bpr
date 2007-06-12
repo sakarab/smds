@@ -28,7 +28,7 @@
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="ilink32"/>
     <USERDEFINES value="WIN32;BOOST_VARIANT_DETAIL_NO_SUBSTITUTE;BOOST_DISABLE_ASSERTS;BOOST_SP_DISABLE_THREADS"/>
-    <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
+    <SYSDEFINES value="NO_STRICT;_NO_VCL;_RTLDLL"/>
     <MAINSOURCE value="smDS_ODBCConn_b6.bpf"/>
     <INCLUDEPATH value="..\..\Src;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="..\..\Src;$(BCB)\lib\obj;$(BCB)\lib\Psdk;$(BCB)\lib"/>
@@ -51,7 +51,7 @@
   <LINKER>
     <ALLOBJ value="c0d32.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
-    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32mt.lib"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32mti.lib"/>
     <OTHERFILES value=""/>
   </LINKER>
   <FILELIST>

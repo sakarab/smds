@@ -24,11 +24,10 @@
 //---------------------------------------------------------------------------
 #include <dsData.h>
 #include "uTables.h"
-#include <dsIndex.h>
 //---------------------------------------------------------------------------
 typedef void (FASTCALL *ErrorReporter)( void *user_data, const char *error );
 
-tblFiles_ptr GetTblFiles();
+tblFiles_ptr GetTblFiles( smds::Database& database );
 void Test( tblFiles_ptr ds, ErrorReporter error_reporter, void *user_data );
 //---------------------------------------------------------------------------
 #endif
