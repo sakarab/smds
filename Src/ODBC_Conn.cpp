@@ -300,7 +300,7 @@ void __stdcall cDataProvider::StepInitDataTransfer( const char *field_name, int 
 
     std::vector<FieldFieldPair>::value_type&    pair_ptr = mFieldPairMap.back();
 
-    if ( static_cast<long>(pair_ptr.mNativeField->GetSize()) > field_data_size )
+    if ( static_cast<long>(pair_ptr.mNativeField->GetDataSize()) > field_data_size )
         throw std::runtime_error( "DataSize mismatch!!!!" );
 }
 

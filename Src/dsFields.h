@@ -35,14 +35,12 @@ namespace smds
 // cFieldKind_sync
 enum cFieldKind         { fkData, fkInternalCalc };
 // cFieldDataType_sync
-enum cFieldDataType     { ftBool, ftChar, ftWChar, ftShort, ftInteger, ftLong, ftDouble, ftDateTime, ftString, ftWString, ftBlob };
-/*
-enum FieldDataType
+/* TODO -osakarab : Rename cFieldDataType to FieldDataType */
+enum cFieldDataType
 {
     ftBool, ftByte, ftShort, ftInteger, ftLong, ftDouble, ftDate, ftTime, ftDateTime, ftGUID, ftChar, ftString, ftWChar,
     ftWString, ftBlobn, ftBlob
 };
-*/
 
 inline cStream& FASTCALL operator << ( cStream& st, const cFieldKind a )        { return ( st.WriteBuffer( &a, sizeof(cFieldKind) ) ); }
 inline cStream& FASTCALL operator << ( cStream& st, const cFieldDataType a )    { return ( st.WriteBuffer( &a, sizeof(cFieldDataType) ) ); }

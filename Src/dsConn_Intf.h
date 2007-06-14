@@ -27,37 +27,24 @@
 namespace smds
 {
 
+/* TODO -osakarab : Rename cFieldDataType_xxx to FieldDataType_xxx */
 // these must be in sync with "cFieldDataType" enum in "dsFields.h"
-const int cFieldDataType_ftBool     = 0;
-const int cFieldDataType_ftChar     = 1;
-const int cFieldDataType_ftWChar    = 2;
-const int cFieldDataType_ftShort    = 3;
-const int cFieldDataType_ftInteger  = 4;
-const int cFieldDataType_ftLong     = 5;
-const int cFieldDataType_ftDouble   = 6;
-const int cFieldDataType_ftDateTime = 7;
-const int cFieldDataType_ftString   = 8;
-const int cFieldDataType_ftWString  = 9;
-const int cFieldDataType_ftBlob     = 10;
-
-/*
-const int FieldDataType_ftBool      = 0;            // one byte
-const int FieldDataType_ftByte      = 1;            // one byte
-const int FieldDataType_ftShort     = 2;            // two bytes
-const int FieldDataType_ftInteger   = 3;            // four bytes
-const int FieldDataType_ftLong      = 4;            // eight bytes
-const int FieldDataType_ftDouble    = 5;
-const int FieldDataType_ftDate      = 6;
-const int FieldDataType_ftTime      = 7;
-const int FieldDataType_ftDateTime  = 8;
-const int FieldDataType_ftGUID      = 9;
-const int FieldDataType_ftChar      = 10;           // CHAR(n)
-const int FieldDataType_ftString    = 11;           // VARCHAR
-const int FieldDataType_ftWChar     = 12;           // WCHAR(n)
-const int FieldDataType_ftWString   = 13;           // VARWCHAR
-const int FieldDataType_ftBlobn     = 14;           // fixed length blob
-const int FieldDataType_ftBlob      = 15;           // variable length blob
-*/
+const int cFieldDataType_ftBool      = 0;            // one byte
+const int cFieldDataType_ftByte      = 1;            // one byte
+const int cFieldDataType_ftShort     = 2;            // two bytes
+const int cFieldDataType_ftInteger   = 3;            // four bytes
+const int cFieldDataType_ftLong      = 4;            // eight bytes
+const int cFieldDataType_ftDouble    = 5;
+const int cFieldDataType_ftDate      = 6;
+const int cFieldDataType_ftTime      = 7;
+const int cFieldDataType_ftDateTime  = 8;
+const int cFieldDataType_ftGUID      = 9;
+const int cFieldDataType_ftChar      = 10;           // CHAR(n)
+const int cFieldDataType_ftString    = 11;           // VARCHAR
+const int cFieldDataType_ftWChar     = 12;           // WCHAR(n)
+const int cFieldDataType_ftWString   = 13;           // VARWCHAR
+const int cFieldDataType_ftBlobn     = 14;           // fixed length blob
+const int cFieldDataType_ftBlob      = 15;           // variable length blob
 
 class IDataConnection;
 class IDataProvider;

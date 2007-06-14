@@ -40,8 +40,7 @@ void FASTCALL UntypedTest( Database& database )
     table->AddField( "Description",  fkData, ftString,   255 );
     table->AddField( "zipID",        fkData, ftInteger,  4 );
 
-    table->Open( database, 0 );
-
+    // table->Open( database, 0 );
 }
 //---------------------------------------------------------------------------
 

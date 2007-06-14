@@ -31,7 +31,6 @@
 #include "uProfile1.h"
 //---------------------------------------------------------------------------
 
-using namespace smds;
 using namespace profile;
 
 namespace
@@ -40,7 +39,7 @@ namespace
 //******************************************************
 // fill table
 //******************************************************
-tblFiles_ptr FASTCALL run_FillTable( Database& database )
+tblFiles_ptr FASTCALL run_FillTable( smds::Database& database )
 {
     tblFiles_ptr    result( new tblFiles() );
     boost::timer    clock;
@@ -103,7 +102,11 @@ void FASTCALL run_ModifyDataset( tblFiles_ptr& ds )
     ds_string       sstr( 200, 'h' );
     boost::timer    clock;
 
+#ifndef __GNUG__
     ModifyDataset( ds->GetIterator(), sstr );
+#else
+    std::cout << "ModifyDataset() not called. gcc bug\n";
+#endif
 
     double      elapsed = clock.elapsed();
 
@@ -170,7 +173,7 @@ void FASTCALL run_FindRecord_Two( tblFiles_ptr& ds )
 
 }; // namespace
 
-void FASTCALL RunProfile( Database& database )
+void FASTCALL RunProfile( smds::Database& database )
 {
     std::cout << "\n\n";
 

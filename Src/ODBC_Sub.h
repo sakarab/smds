@@ -30,6 +30,14 @@
 #include <string>
 //---------------------------------------------------------------------------
 
+struct TypeRaw
+{
+    SWORD   OdbcType;
+    SWORD   DriverCType;
+    int     DatasetType;
+    int     BinarySize;
+};
+
 //***********************************************************************
 //******    ODBC_Field
 //***********************************************************************
@@ -38,20 +46,23 @@ class ODBC_Field
 private:
     enum { BUFFER_SWITCH = 16 };
 
-    SWORD               mDataType;
-    UDWORD              mDataSize;
-    SWORD               mDecimalDigits;
+    // const TypeRaw     * mDataType;
+    SWORD               m_ODBC_type;
+    UDWORD              mPrecision;
+    SWORD               mScale;
     SWORD               mNullable;
     SQLLEN              mIndicator;
     std::string         mName;
     std::vector<char>   mVecBuff;
     char                mCharBuff[BUFFER_SWITCH];
+    SWORD               m_C_type;
+    int                 m_DS_type;
+    UDWORD              mDataSize;
 public:
-    CDFASTCALL ODBC_Field( const std::string name, SWORD data_type, UDWORD data_size, SWORD decimal_digits, SWORD nullable );
+    CDFASTCALL ODBC_Field( const std::string name, const TypeRaw *data_type, UDWORD precision, SWORD scale, SWORD nullable );
     CDFASTCALL ~ODBC_Field();
-    SWORD FASTCALL GetDataType() const                      { return mDataType; }
-    SWORD FASTCALL GetCDataType() const;
-    UDWORD FASTCALL GetSize() const                         { return mDataSize; }
+    SWORD FASTCALL ODBC_Type() const                        { return m_ODBC_type; }
+    SWORD FASTCALL C_Type() const                           { return m_C_type; }
     UDWORD FASTCALL GetDataSize() const                     { return mDataSize; }
     const std::string& GetName() const                      { return mName; }
     SQLPOINTER FASTCALL GetBuffer();

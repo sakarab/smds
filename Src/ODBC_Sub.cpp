@@ -28,7 +28,10 @@
 #include <stdexcept>
 // #include <sstream>
 #include <boost/smart_ptr.hpp>
+#include "dsConn_Intf.h"
 //---------------------------------------------------------------------------
+
+using namespace smds;
 
 SQLRETURN CheckReturn( SQLRETURN ret )
 {
@@ -70,83 +73,98 @@ void DescribeError( short handle_type, void *handle )
 }
 */
 
-void FASTCALL ODBCtoCtype( SWORD& data_type, UDWORD& data_size, SWORD& decimal_digits )
+TypeRaw     DataTypeMap[23] =
 {
-    switch ( data_type )
-    {
-        case SQL_CHAR           :                         // CHAR(n) Character string of fixed string length n.
-            break;
-        case SQL_VARCHAR        :                         // VARCHAR(n) Variable-length character string with a maximum string length n.
-            break;
-        case SQL_LONGVARCHAR    :                         // LONG VARCHAR Variable length character data. Maximum length is data source–dependent.[9]
-            break;
-        case SQL_WCHAR          :                         // WCHAR(n) Unicode character string of fixed string length n
-            break;
-        case SQL_WVARCHAR       :                         // VARWCHAR(n) Unicode variable-length character string with a maximum string length n
-            break;
-        case SQL_WLONGVARCHAR   :                         // LONGWVARCHAR Unicode variable-length character data. Maximum length is data source–dependent
-            break;
-        case SQL_DECIMAL        :                         // DECIMAL(p,s) Signed, exact, numeric value with a precision of at least p and scale s. (The maximum precision is driver-defined.)(1 <= p <= 15; s <= p).[4]
-            break;
-        case SQL_NUMERIC        :                         // NUMERIC(p,s) Signed, exact, numeric value with a precision p and scale s (1 <= p <= 15; s <= p).[4]
-            break;
-        case SQL_SMALLINT       :                         // SMALLINT Exact numeric value with precision 5 and scale 0(signed:–32,768 <= n <= 32,767, unsigned:0 <= n <= 65,535)[3].
-            break;
-        case SQL_INTEGER        :                         // INTEGER Exact numeric value with precision 10 and scale 0(signed:–2[31] <= n <= 2[31] – 1, unsigned:0 <= n <= 2[32] – 1)[3].
-            break;
-        case SQL_REAL           :                         // REAL Signed, approximate, numeric value with a binary precision 24 (zero or absolute value 10[–38] to 10[38]).
-            break;
-        case SQL_FLOAT          :                         // FLOAT(p) Signed, approximate, numeric value with a binary precision of at least p. (The maximum precision is driver-defined.)[5]
-            break;
-        case SQL_DOUBLE         :                         // DOUBLE PRECISION Signed, approximate, numeric value with a binary precision 53 (zero or absolute value 10[–308] to 10[308]).
-            break;
-        case SQL_BIT            :                         // BIT Single bit binary data.[8]
-            break;
-        case SQL_TINYINT        :                         // TINYINT Exact numeric value with precision 3 and scale 0(signed:–128 <= n <= 127,unsigned:0 <= n <= 255)[3].
-            break;
-        case SQL_BIGINT         :                         // BIGINT Exact numeric value with precision 19 (if signed) or 20 (if unsigned) and scale 0(signed:–2[63] <= n <= 2[63] – 1,unsigned:0 <= n <= 2[64] – 1)[3],[9].
-            break;
-        case SQL_BINARY         :                         // BINARY(n) Binary data of fixed length n.[9]
-            break;
-        case SQL_VARBINARY      :                         // VARBINARY(n) Variable length binary data of maximum length n. The maximum is set by the user.[9]
-            break;
-        case SQL_LONGVARBINARY  :                         // LONG VARBINARY Variable length binary data. Maximum length is data source–dependent.[9]
-            break;
-        case SQL_TYPE_DATE      :                         // [6] DATE Year, month, and day fields, conforming to the rules of the Gregorian calendar. (See "Constraints of the Gregorian Calendar," later in this appendix.)
-            break;
-        case SQL_TYPE_TIME      :                         // [6] TIME(p) Hour, minute, and second fields, with valid values for hours of 00 to 23, valid values for minutes of 00 to 59, and valid values for seconds of 00 to 61. Precision p indicates the seconds precision.
-            break;
-        case SQL_TYPE_TIMESTAMP :                         // [6] TIMESTAMP(p) Year, month, day, hour, minute, and second fields, with valid values as defined for the DATE and TIME data types.
-            break;
+    { SQL_CHAR                      , SQL_C_CHAR            , cFieldDataType_ftChar      , 0                            },  // CHAR(n) Character string of fixed string length n.
+    { SQL_VARCHAR                   , SQL_C_CHAR            , cFieldDataType_ftChar      , 0                            },  // VARCHAR(n) Variable-length character string with a maximum string length n.
+    { SQL_LONGVARCHAR               , SQL_C_CHAR            , cFieldDataType_ftString    , 0                            },  // LONG VARCHAR Variable length character data. Maximum length is data source–dependent.[9]
+    { SQL_WCHAR                     , SQL_C_CHAR            , cFieldDataType_ftChar      , 0                            },  // WCHAR(n) Unicode character string of fixed string length n
+    { SQL_WVARCHAR                  , SQL_C_CHAR            , cFieldDataType_ftChar      , 0                            },  // VARWCHAR(n) Unicode variable-length character string with a maximum string length n
+    { SQL_WLONGVARCHAR              , SQL_C_CHAR            , cFieldDataType_ftString    , 0                            },  // LONGWVARCHAR Unicode variable-length character data. Maximum length is data source–dependent
+    { SQL_DECIMAL                   , SQL_C_DOUBLE          , cFieldDataType_ftDouble    , sizeof(double)               },  // DECIMAL(p,s) Signed, exact, numeric value with a precision of at least p and scale s. (The maximum precision is driver-defined.)(1 <= p <= 15; s <= p).[4]
+    { SQL_NUMERIC                   , SQL_C_DOUBLE          , cFieldDataType_ftDouble    , sizeof(double)               },  // NUMERIC(p,s) Signed, exact, numeric value with a precision p and scale s (1 <= p <= 15; s <= p).[4]
+    { SQL_SMALLINT                  , SQL_C_SSHORT          , cFieldDataType_ftShort     , sizeof(short)                },  // SMALLINT Exact numeric value with precision 5 and scale 0(signed:–32,768 <= n <= 32,767, unsigned:0 <= n <= 65,535)[3].
+    { SQL_INTEGER                   , SQL_C_SLONG           , cFieldDataType_ftInteger   , sizeof(int)                  },  // INTEGER Exact numeric value with precision 10 and scale 0(signed:–2[31] <= n <= 2[31] – 1, unsigned:0 <= n <= 2[32] – 1)[3].
+    { SQL_REAL                      , SQL_C_DOUBLE          , cFieldDataType_ftDouble    , sizeof(double)               },  // REAL Signed, approximate, numeric value with a binary precision 24 (zero or absolute value 10[–38] to 10[38]).
+    { SQL_FLOAT                     , SQL_C_DOUBLE          , cFieldDataType_ftDouble    , sizeof(double)               },  // FLOAT(p) Signed, approximate, numeric value with a binary precision of at least p. (The maximum precision is driver-defined.)[5]
+    { SQL_DOUBLE                    , SQL_C_DOUBLE          , cFieldDataType_ftDouble    , sizeof(double)               },  // DOUBLE PRECISION Signed, approximate, numeric value with a binary precision 53 (zero or absolute value 10[–308] to 10[308]).
+    { SQL_BIT                       , SQL_C_BIT             , cFieldDataType_ftBool      , sizeof(char)                 },  // BIT Single bit binary data.[8]
+    { SQL_TINYINT                   , SQL_C_STINYINT        , cFieldDataType_ftByte      , sizeof(char)                 },  // TINYINT Exact numeric value with precision 3 and scale 0(signed:–128 <= n <= 127,unsigned:0 <= n <= 255)[3].
+    { SQL_BIGINT                    , SQL_C_SBIGINT         , cFieldDataType_ftLong      , sizeof(long long)            },  // BIGINT Exact numeric value with precision 19 (if signed) or 20 (if unsigned) and scale 0(signed:–2[63] <= n <= 2[63] – 1,unsigned:0 <= n <= 2[64] – 1)[3],[9].
+    { SQL_BINARY                    , SQL_C_BINARY          , cFieldDataType_ftBlobn     , 0                            },  // BINARY(n) Binary data of fixed length n.[9]
+    { SQL_VARBINARY                 , SQL_C_BINARY          , cFieldDataType_ftBlobn     , 0                            },  // VARBINARY(n) Variable length binary data of maximum length n. The maximum is set by the user.[9]
+    { SQL_LONGVARBINARY             , SQL_C_BINARY          , cFieldDataType_ftBlob      , 0                            },  // LONG VARBINARY Variable length binary data. Maximum length is data source–dependent.[9]
+    { SQL_TYPE_DATE                 , SQL_C_TYPE_DATE       , cFieldDataType_ftDate      , sizeof(SQL_DATE_STRUCT)      },  // [6] DATE Year, month, and day fields, conforming to the rules of the Gregorian calendar. (See "Constraints of the Gregorian Calendar," later in this appendix.)
+    { SQL_TYPE_TIME                 , SQL_C_TYPE_TIME       , cFieldDataType_ftTime      , sizeof(SQL_TIME_STRUCT)      },  // [6] TIME(p) Hour, minute, and second fields, with valid values for hours of 00 to 23, valid values for minutes of 00 to 59, and valid values for seconds of 00 to 61. Precision p indicates the seconds precision.
+    { SQL_TYPE_TIMESTAMP            , SQL_C_TYPE_TIMESTAMP  , cFieldDataType_ftDateTime  , sizeof(SQL_TIMESTAMP_STRUCT) },  // [6] TIMESTAMP(p) Year, month, day, hour, minute, and second fields, with valid values as defined for the DATE and TIME data types.
+//  { SQL_TYPE_UTCDATETIME          , 0                     , 0                          , 0                            },  // UTCDATETIME Year, month, day, hour, minute, second, utchour, and utcminute fields. The utchour and utcminute fields have 1/10th microsecond precision.
+//  { SQL_TYPE_UTCTIME              , 0                     , 0                          , 0                            },  // UTCTIME Hour, minute, second, utchour, and utcminute fields. The utchour and utcminute fields have 1/10th microsecond precision..
+//  { SQL_INTERVAL_MONTH            , 0                     , 0                          , 0                            },  // [7] INTERVAL MONTH(p) Number of months between two dates; p is the interval leading precision.
+//  { SQL_INTERVAL_YEAR             , 0                     , 0                          , 0                            },  // [7] INTERVAL YEAR(p) Number of years between two dates; p is the interval leading precision.
+//  { SQL_INTERVAL_YEAR_TO_MONTH    , 0                     , 0                          , 0                            },  // [7] INTERVAL YEAR(p) TO MONTH Number of years and months between two dates; p is the interval leading precision.
+//  { SQL_INTERVAL_DAY              , 0                     , 0                          , 0                            },  // [7] INTERVAL DAY(p) Number of days between two dates; p is the interval leading precision.
+//  { SQL_INTERVAL_HOUR             , 0                     , 0                          , 0                            },  // [7] INTERVAL HOUR(p) Number of hours between two date/times; p is the interval leading precision.
+//  { SQL_INTERVAL_MINUTE           , 0                     , 0                          , 0                            },  // [7] INTERVAL MINUTE(p) Number of minutes between two date/times; p is the interval leading precision.
+//  { SQL_INTERVAL_SECOND           , 0                     , 0                          , 0                            },  // [7] INTERVAL SECOND(p,q) Number of seconds between two date/times; p is the interval leading precision and q is the interval seconds precision.
+//  { SQL_INTERVAL_DAY_TO_HOUR      , 0                     , 0                          , 0                            },  // [7] INTERVAL DAY(p) TO HOUR Number of days/hours between two date/times; p is the interval leading precision.
+//  { SQL_INTERVAL_DAY_TO_MINUTE    , 0                     , 0                          , 0                            },  // [7] INTERVAL DAY(p) TO MINUTE Number of days/hours/minutes between two date/times; p is the interval leading precision.
+//  { SQL_INTERVAL_DAY_TO_SECOND    , 0                     , 0                          , 0                            },  // [7] INTERVAL DAY(p) TO SECOND(q) Number of days/hours/minutes/seconds between two date/times; p is the interval leading precision and q is the interval seconds precision.
+//  { SQL_INTERVAL_HOUR_TO_MINUTE   , 0                     , 0                          , 0                            },  // [7] INTERVAL HOUR(p) TO MINUTE Number of hours/minutes between two date/times; p is the interval leading precision.
+//  { SQL_INTERVAL_HOUR_TO_SECOND   , 0                     , 0                          , 0                            },  // [7] INTERVAL HOUR(p) TO SECOND(q) Number of hours/minutes/seconds between two date/times; p is the interval leading precision and q is the interval seconds precision.
+//  { SQL_INTERVAL_MINUTE_TO_SECOND , 0                     , 0                          , 0                            },  // [7] INTERVAL MINUTE(p) TO SECOND(q) Number of minutes/seconds between two date/times; p is the interval leading precision and q is the interval seconds precision.
+    { SQL_GUID                      , SQL_C_GUID            , cFieldDataType_ftGUID      , sizeof(SQLGUID)              }   // GUID Fixed length Globally Unique Identifier.
+};
+
 /*
-        case SQL_TYPE_UTCDATETIME                        // UTCDATETIME Year, month, day, hour, minute, second, utchour, and utcminute fields. The utchour and utcminute fields have 1/10th microsecond precision.
-        case SQL_TYPE_UTCTIME                            // UTCTIME Hour, minute, second, utchour, and utcminute fields. The utchour and utcminute fields have 1/10th microsecond precision..
-        case SQL_INTERVAL_MONTH                          // [7] INTERVAL MONTH(p) Number of months between two dates; p is the interval leading precision.
-        case SQL_INTERVAL_YEAR                           // [7] INTERVAL YEAR(p) Number of years between two dates; p is the interval leading precision.
-        case SQL_INTERVAL_YEAR_TO_MONTH                  // [7] INTERVAL YEAR(p) TO MONTH Number of years and months between two dates; p is the interval leading precision.
-        case SQL_INTERVAL_DAY                            // [7] INTERVAL DAY(p) Number of days between two dates; p is the interval leading precision.
-        case SQL_INTERVAL_HOUR                           // [7] INTERVAL HOUR(p) Number of hours between two date/times; p is the interval leading precision.
-        case SQL_INTERVAL_MINUTE                         // [7] INTERVAL MINUTE(p) Number of minutes between two date/times; p is the interval leading precision.
-        case SQL_INTERVAL_SECOND                         // [7] INTERVAL SECOND(p,q) Number of seconds between two date/times; p is the interval leading precision and q is the interval seconds precision.
-        case SQL_INTERVAL_DAY_TO_HOUR                    // [7] INTERVAL DAY(p) TO HOUR Number of days/hours between two date/times; p is the interval leading precision.
-        case SQL_INTERVAL_DAY_TO_MINUTE                  // [7] INTERVAL DAY(p) TO MINUTE Number of days/hours/minutes between two date/times; p is the interval leading precision.
-        case SQL_INTERVAL_DAY_TO_SECOND                  // [7] INTERVAL DAY(p) TO SECOND(q) Number of days/hours/minutes/seconds between two date/times; p is the interval leading precision and q is the interval seconds precision.
-        case SQL_INTERVAL_HOUR_TO_MINUTE                 // [7] INTERVAL HOUR(p) TO MINUTE Number of hours/minutes between two date/times; p is the interval leading precision.
-        case SQL_INTERVAL_HOUR_TO_SECOND                 // [7] INTERVAL HOUR(p) TO SECOND(q) Number of hours/minutes/seconds between two date/times; p is the interval leading precision and q is the interval seconds precision.
-        case SQL_INTERVAL_MINUTE_TO_SECOND               // [7] INTERVAL MINUTE(p) TO SECOND(q) Number of minutes/seconds between two date/times; p is the interval leading precision and q is the interval seconds precision.
+SWORD FASTCALL ODBCtoCtype( SWORD odbc_data_type )
+{
+    for ( int n = 0 ; n < sizeof(DataTypeMap)/sizeof(DataTypeMap[0]) ; ++n )
+        if ( DataTypeMap[n].OdbcType == odbc_data_type )
+            return DataTypeMap[n].DriverCType;
+    throw std::runtime_error( "ODBC: Unsupported database type." );
+}
 */
-        case SQL_GUID           :                         // GUID Fixed length Globally Unique Identifier.
-            break;
-    }
+
+const TypeRaw * FASTCALL TypeRawFromODBCtype( SWORD odbc_data_type )
+{
+    TypeRaw     *result = &DataTypeMap[0];
+
+    for ( int n = 0 ; n < sizeof(DataTypeMap)/sizeof(DataTypeMap[0]) ; ++n, ++result )
+        if ( result->OdbcType == odbc_data_type )
+            return result;
+    throw std::runtime_error( "ODBC: Unsupported database type." );
+}
+
+
+bool FASTCALL NoMaxSizedType( SWORD odbc_data_type )
+{
+    return false;
 }
 
 //***********************************************************************
 //******    ODBC_Field
 //***********************************************************************
-CDFASTCALL ODBC_Field::ODBC_Field( const std::string name, SWORD data_type, UDWORD data_size, SWORD decimal_digits, SWORD nullable )
-    : mDataType(data_type), mDataSize(data_size), mDecimalDigits(decimal_digits), mNullable(nullable), mIndicator(0),
-      mName(name), mVecBuff( data_size <= BUFFER_SWITCH ? 0 : data_size )
+CDFASTCALL ODBC_Field::ODBC_Field( const std::string name, const TypeRaw *data_type, UDWORD precision, SWORD scale, SWORD nullable )
+    : m_ODBC_type(data_type->OdbcType), mPrecision(precision), mScale(scale), mNullable(nullable), mIndicator(0),
+      mName(name), mVecBuff() // mVecBuff( precision <= BUFFER_SWITCH ? 0 : data_size )
 {
+    if ( (m_ODBC_type == SQL_DECIMAL || m_ODBC_type == SQL_NUMERIC) && mScale == 0 && mPrecision <= 19 )
+    {
+        if ( mPrecision <= 3 )
+            data_type = TypeRawFromODBCtype( SQL_TINYINT );
+        else if ( mPrecision <= 5 )
+            data_type = TypeRawFromODBCtype( SQL_SMALLINT );
+        else if ( mPrecision <= 10 )
+            data_type = TypeRawFromODBCtype( SQL_INTEGER );
+        else // if ( mPrecision <= 19 )
+            data_type = TypeRawFromODBCtype( SQL_BIGINT );
+    }
+    m_C_type = data_type->DriverCType;
+    m_DS_type = data_type->DatasetType;
+    if ( data_type->BinarySize != 0 )
+        mDataSize = data_type->BinarySize;
+    else
+        mDataSize = precision;
 }
 
 CDFASTCALL ODBC_Field::~ODBC_Field()
@@ -165,13 +183,6 @@ SQLLEN FASTCALL ODBC_Field::GetBufferLength()
     if ( mDataSize <= BUFFER_SWITCH )
         return BUFFER_SWITCH;
     return mDataSize;
-}
-
-SWORD FASTCALL ODBC_Field::GetCDataType() const
-{
-    if ( mDataType == SQL_CHAR || mDataType == SQL_VARCHAR || mDataType == SQL_LONGVARCHAR )
-        return SQL_C_CHAR;
-    return mDataType;
 }
 
 //***********************************************************************
@@ -258,7 +269,7 @@ void FASTCALL ODBC_Statement::GetFieldAttributes( int idx, char *name, unsigned 
     name[name_buffer_length] = '\0';
     name_buffer_required_length = field.GetName().length() + 1;
     field_data_size = field.GetDataSize();
-    field_data_type = field.GetCDataType();
+    field_data_type = field.C_Type();
 }
 
 void FASTCALL ODBC_Statement::ExecSql( const char *sql )
@@ -281,35 +292,35 @@ void FASTCALL ODBC_Statement::ExecSql( const char *sql )
     for ( SWORD n = 1 ; n <= nCols ; ++n )
     {
         SWORD   data_type;                  // column data type
-        SWORD   decimal_digits;             // column scale
+        UDWORD  precision;                  // precision on the column
+        SWORD   scale;                      // column scale
         SWORD   nullable;                   // nullable column ?
         SWORD   name_length;                // column data length
-        UDWORD  data_size;                  // precision on the column
 
         SQLRETURN   ret = CheckReturn( SQLDescribeCol( mStatement, n, reinterpret_cast<unsigned char *>(&field_name.front()),
-                                                       field_name_size, &name_length, &data_type, &data_size, &decimal_digits,
+                                                       field_name_size, &name_length, &data_type, &precision, &scale,
                                                        &nullable ) );
         if ( ret == SQL_SUCCESS_WITH_INFO )
         {
             field_name.resize( name_length + 1 );
             field_name_size = static_cast<SWORD>(field_name.size() - 1);
             CheckReturn( SQLDescribeCol( mStatement, n, reinterpret_cast<unsigned char *>(&field_name.front()), field_name_size,
-                                         &name_length, &data_type, &data_size, &decimal_digits, &nullable ) );
+                                         &name_length, &data_type, &precision, &scale, &nullable ) );
         }
-
+/*
         unsigned int    n_data_size;
 
         CheckReturn( SQLColAttribute( mStatement, n, SQL_DESC_OCTET_LENGTH, 0, 0, 0, &n_data_size ) );
         if ( data_type != SQL_CHAR && data_type != SQL_VARCHAR && data_type != SQL_LONGVARCHAR )
             data_size = n_data_size;
-
-        mFields.push_back( ODBC_Field( &field_name.front(), data_type, data_size, decimal_digits, nullable ) );
+*/
+        mFields.push_back( ODBC_Field( &field_name.front(), TypeRawFromODBCtype( data_type ), precision, scale, nullable ) );
     }
     for ( SWORD n = 1 ; n <= nCols ; ++n )
     {
         ODBC_Field&     field = mFields[n-1];
 
-        CheckReturn( SQLBindCol( mStatement, n, field.GetCDataType(), field.GetBuffer(),
+        CheckReturn( SQLBindCol( mStatement, n, field.C_Type(), field.GetBuffer(),
                                  field.GetBufferLength(), field.GetIndicatorAddress() ) );
     }
     Next();
