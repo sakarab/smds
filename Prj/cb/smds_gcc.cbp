@@ -52,10 +52,14 @@
 		<Unit filename="..\..\Src\dsExceptions.h" />
 		<Unit filename="..\..\Src\dsFields.cpp" />
 		<Unit filename="..\..\Src\dsFields.h" />
+		<Unit filename="..\..\Src\dsGUID.cpp" />
+		<Unit filename="..\..\Src\dsGUID.h" />
 		<Unit filename="..\..\Src\dsIndex.cpp" />
 		<Unit filename="..\..\Src\dsIndex.h" />
 		<Unit filename="..\..\Src\dsRecord.cpp" />
 		<Unit filename="..\..\Src\dsRecord.h" />
+		<Unit filename="..\..\Src\dsSerialization.cpp" />
+		<Unit filename="..\..\Src\dsSerialization.h" />
 		<Unit filename="..\..\Src\dsSmartPtr.cpp" />
 		<Unit filename="..\..\Src\dsSmartPtr.h" />
 		<Unit filename="..\..\Src\dsStream.cpp" />

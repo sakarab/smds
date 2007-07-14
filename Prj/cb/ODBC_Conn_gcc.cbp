@@ -11,7 +11,6 @@
 				<Option object_output="obj\Debug\" />
 				<Option type="3" />
 				<Option compiler="gcc" />
-				<Option createStaticLib="1" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -38,6 +37,7 @@
 		<Unit filename="..\..\Src\ODBC_Conn.cpp" />
 		<Unit filename="..\..\Src\ODBC_Sub.cpp" />
 		<Unit filename="..\..\Src\ODBC_Sub.h" />
+		<Unit filename="..\..\Src\smDS_ODBCConn_vc.def" />
 		<Extensions>
 			<code_completion />
 		</Extensions>
