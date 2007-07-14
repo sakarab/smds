@@ -24,165 +24,133 @@
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
 #include "dsStream.h"
+#include "dsODBCtypes.h"
 #include <ctime>
 
 namespace smds
 {
 
-#if defined(SM_DS_DATE_IS_DOUBLE)
+class dbDate;
+class dbTime;
+class dbDateTime;
 
-class cDate
+namespace detail
 {
-private:
-    friend cStream& FASTCALL operator << ( cStream& st, const cDate a );
-    friend cStream& FASTCALL operator >> ( cStream& st, cDate& a );
-    double  mValue;
-public:
-    CDFASTCALL cDate() : mValue(0)                                      {} // empty
-    explicit CDFASTCALL cDate( const double& value ) : mValue(value)    {} // empty
-    double FASTCALL AsDouble() const                                    { return ( mValue ); }
-    bool operator <= ( const cDate& right )                             { return ( mValue <= right.mValue ); }
-    bool operator < ( const cDate& right )                              { return ( mValue < right.mValue ); }
+
+typedef long    dbDate_Internal;
+typedef long    dbTime_Internal;
+
+struct dbDateTime_Internal
+{
+    dbDate_Internal     date;
+    dbTime_Internal     time;
 };
 
-class cTime
-{
-private:
-    friend cStream& FASTCALL operator << ( cStream& st, const cTime a );
-    friend cStream& FASTCALL operator >> ( cStream& st, cTime& a );
-    double  mValue;
-public:
-    CDFASTCALL cTime() : mValue(0)                                      {} // empty
-    explicit CDFASTCALL cTime( const double& value ) : mValue(value)    {} // empty
-    double FASTCALL AsDouble() const                                    { return ( mValue ); }
-    bool operator <= ( const cTime& right )                             { return ( mValue <= right.mValue ); }
-    bool operator < ( const cTime& right )                              { return ( mValue < right.mValue ); }
+dbDate FASTCALL CreateDbDate( const dbDate_Internal& date );
+dbTime FASTCALL CreateDbTime( const dbTime_Internal& time );
+dbDateTime FASTCALL CreateDbDateTime( const dbDateTime_Internal& date_time );
+
 };
-
-class cDateTime
-{
-private:
-    //friend double operator - ( const cDateTime& left, const cDateTime& right );
-    //friend bool operator <= ( const cDateTime& left, const cDateTime& right );
-    //friend bool operator < ( const cDateTime& left, const cDateTime& right );
-    friend cStream& FASTCALL operator << ( cStream& st, const cDateTime a );
-    friend cStream& FASTCALL operator >> ( cStream& st, cDateTime& a );
-    double  mValue;
-public:
-    CDFASTCALL cDateTime() : mValue(0)                                      {} // empty
-    explicit CDFASTCALL cDateTime( const double& value ) : mValue(value)    {} // empty
-    double FASTCALL AsDouble() const                                        { return ( mValue ); }
-    double FASTCALL Date() const                                            { return ( static_cast<double>(static_cast<int>(mValue)) ); }
-    cDateTime& FASTCALL operator += ( int days )
-    {
-        mValue += days;
-        return ( *this );
-    }
-    cDateTime& FASTCALL operator -= ( int days )
-    {
-        mValue -= days;
-        return ( *this );
-    }
-    cDateTime FASTCALL operator + ( int days )
-    {
-        cDateTime   tmp( *this );
-
-        tmp += days;
-        return ( tmp );
-    }
-    bool operator <= ( const cDateTime& right )                         { return ( mValue <= right.mValue ); }
-    bool operator < ( const cDateTime& right )                          { return ( mValue < right.mValue ); }
-};
-
-//inline double operator - ( const cDateTime& left, const cDateTime& right )
-//{
-//    return ( left.mValue - right.mValue );
-//}
-//
-//inline bool operator <= ( const cDateTime& left, const cDateTime& right )
-//{
-//    return ( left.mValue <= right.mValue );
-//}
-//
-//inline bool operator < ( const cDateTime& left, const cDateTime& right )
-//{
-//    return ( left.mValue < right.mValue );
-//}
-
-cStream& FASTCALL operator << ( cStream& st, const cDateTime a );
-cStream& FASTCALL operator >> ( cStream& st, cDateTime& a );
-
-#else
 
 //***********************************************************************
 //******    dbDate
 //***********************************************************************
-// exactly like tagDATE_STRUCT
-struct dbDate_tag
-{
-    short           year;
-    unsigned short  month;
-    unsigned short  day;
-};
-
 class dbDate
 {
 private:
-    dbDate_tag      mData;
+    friend cStream& FASTCALL operator << ( cStream& st, const dbDate a );
+    friend cStream& FASTCALL operator >> ( cStream& st, dbDate& a );
+    friend dbDate FASTCALL detail::CreateDbDate( const detail::dbDate_Internal& date );
+
+    detail::dbDate_Internal     mValue;
+
+    explicit CDFASTCALL dbDate( const detail::dbDate_Internal& date ) : mValue(date)        {} // empty
 public:
-    explicit CDFASTCALL dbDate( const dbDate_tag& date );
+    CDFASTCALL dbDate() : mValue()                                                          {} // empty
     explicit CDFASTCALL dbDate( const std::tm& date );
-    explicit CDFASTCALL dbDate( const double& date );
-    CDFASTCALL dbDate( short year, unsigned short month, unsigned short day );
-
-    bool operator < ( const dbDate& right );
-
-    short FASTCALL GetYear() const                  { return mData.year; }
-    unsigned short FASTCALL GetMonth() const        { return mData.month; }
-    unsigned short FASTCALL GetDay() const          { return mData.day; }
+    explicit CDFASTCALL dbDate( const double& value );
+    detail::dbDate_Internal FASTCALL AsInternal() const                                     { return mValue; }
+    double FASTCALL AsDouble() const;
 };
 
 //***********************************************************************
 //******    dbTime
 //***********************************************************************
-// exactly like tagTIME_STRUCT
-struct dbTime_tag
+class dbTime
 {
-    unsigned short  hour;
-    unsigned short  minute;
-    unsigned short  second;
+private:
+    friend cStream& FASTCALL operator << ( cStream& st, const dbTime a );
+    friend cStream& FASTCALL operator >> ( cStream& st, dbTime& a );
+    friend dbTime FASTCALL detail::CreateDbTime( const detail::dbTime_Internal& time );
+
+    detail::dbTime_Internal     mValue;
+
+    explicit CDFASTCALL dbTime( const detail::dbTime_Internal& time ) : mValue(time)        {} // empty
+public:
+    CDFASTCALL dbTime() : mValue()                                                          {} // empty
+    explicit CDFASTCALL dbTime( const std::tm& date );
+    explicit CDFASTCALL dbTime( const double& value );
+    detail::dbTime_Internal FASTCALL AsInternal() const                                     { return mValue; }
+    double FASTCALL AsDouble() const;
 };
 
 //***********************************************************************
 //******    dbDateTime
 //***********************************************************************
-// exactly like tagTIMESTAMP_STRUCT
-struct dbDateTime_tag
-{
-    short           year;
-    unsigned short  month;
-    unsigned short  day;
-    unsigned short  hour;
-    unsigned short  minute;
-    unsigned short  second;
-    unsigned long   fraction;
-};
-
 class dbDateTime
 {
-private:
-    dbDateTime_tag  mData;
 public:
-    explicit CDFASTCALL dbDateTime( const dbDate_tag& date );
-    explicit CDFASTCALL dbDateTime( const std::tm& date );
-    explicit CDFASTCALL dbDateTime( const double& date );
-    CDFASTCALL dbDateTime( short year, unsigned short month, unsigned short day );
+private:
+    friend cStream& FASTCALL operator << ( cStream& st, const dbDateTime a );
+    friend cStream& FASTCALL operator >> ( cStream& st, dbDateTime& a );
+    friend dbDateTime FASTCALL detail::CreateDbDateTime( const detail::dbDateTime_Internal& date_time );
 
-    bool operator < ( const dbDateTime& right );
+    detail::dbDateTime_Internal     mValue;
+
+    explicit CDFASTCALL dbDateTime( const detail::dbDateTime_Internal& date_time ) : mValue(date_time)     {} // empty
+public:
+    CDFASTCALL dbDateTime();
+    explicit CDFASTCALL dbDateTime( const std::tm& date_time );
+    explicit CDFASTCALL dbDateTime( const double& date_time );
+
+    const detail::dbDateTime_Internal& FASTCALL AsInternal() const                          { return mValue; }
+    double FASTCALL AsDouble() const;
 };
 
-#endif
+cStream& FASTCALL operator << ( cStream& st, const dbDateTime a );
+cStream& FASTCALL operator >> ( cStream& st, dbDateTime& a );
+
+namespace detail
+{
+
+inline dbDate FASTCALL CreateDbDate( const detail::dbDate_Internal& date )
+{
+    return dbDate( date );
+}
+
+inline dbTime FASTCALL CreateDbTime( const detail::dbTime_Internal& time )
+{
+    return dbTime( time );
+}
+
+inline dbDateTime FASTCALL CreateDbDateTime( const detail::dbDateTime_Internal& date_time )
+{
+    return dbDateTime( date_time );
+}
+
+bool operator < ( const detail::dbDateTime_Internal& left, const detail::dbDateTime_Internal& right );
+bool operator > ( const detail::dbDateTime_Internal& left, const detail::dbDateTime_Internal& right );
+
+};
+
+//***********************************************************************
+//******    free functions
+//***********************************************************************
+detail::dbDate_Internal LongEncodeDate( const DATE_STRUCT& date );
+detail::dbTime_Internal LongEncodeTime( const TIME_STRUCT& time );
+detail::dbDateTime_Internal LongEncodeDateTime( const TIMESTAMP_STRUCT& date_time );
 
 }; // smds
 //---------------------------------------------------------------------------
 #endif
+

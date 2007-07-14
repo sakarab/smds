@@ -52,46 +52,54 @@ protected:
     void FASTCALL Nullify( const cFieldDef& field_def )             { mRawBuffer->Nullify( field_def ); }
 
     bool FASTCALL ReadBool( const cFieldDef& field_def ) const;
-    char FASTCALL ReadChar( const cFieldDef& field_def ) const;
-    wchar_t FASTCALL ReadWChar( const cFieldDef& field_def ) const;
+    char FASTCALL ReadByte( const cFieldDef& field_def ) const;
+    //wchar_t FASTCALL ReadWChar( const cFieldDef& field_def ) const;
     short FASTCALL ReadShort( const cFieldDef& field_def ) const;
     int FASTCALL ReadInteger( const cFieldDef& field_def ) const;
-    long FASTCALL ReadLong( const cFieldDef& field_def ) const;
+    long long FASTCALL ReadLongLong( const cFieldDef& field_def ) const;
     double FASTCALL ReadFloat( const cFieldDef& field_def ) const;
-    cDateTime FASTCALL ReadDate( const cFieldDef& field_def ) const;
+    dbDate FASTCALL ReadDate( const cFieldDef& field_def ) const;
+    dbTime FASTCALL ReadTime( const cFieldDef& field_def ) const;
+    dbDateTime FASTCALL ReadDateTime( const cFieldDef& field_def ) const;
     ds_string FASTCALL ReadString( const cFieldDef& field_def ) const;
-    Variant FASTCALL ReadVariant( const cFieldDef& field_def ) const                    { return ( mRawBuffer->ReadVariant( field_def ) ); }
+    Variant FASTCALL ReadVariant( const cFieldDef& field_def ) const                    { return mRawBuffer->ReadVariant( field_def ); }
 
     void FASTCALL WriteBool( const cFieldDef& field_def, bool value );
     void FASTCALL WriteChar( const cFieldDef& field_def, char value );
-    void FASTCALL WriteWChar( const cFieldDef& field_def, wchar_t value );
+    // void FASTCALL WriteWChar( const cFieldDef& field_def, wchar_t value );
     void FASTCALL WriteShort( const cFieldDef& field_def, short value );
     void FASTCALL WriteInteger( const cFieldDef& field_def, int value );
-    void FASTCALL WriteLong( const cFieldDef& field_def, long value );
+    void FASTCALL WriteLongLong( const cFieldDef& field_def, long long value );
     void FASTCALL WriteFloat( const cFieldDef& field_def, double value );
-    void FASTCALL WriteDate( const cFieldDef& field_def, const cDateTime& value );
+    void FASTCALL WriteDate( const cFieldDef& field_def, const dbDate& value );
+    void FASTCALL WriteTime( const cFieldDef& field_def, const dbTime& value );
+    void FASTCALL WriteDateTime( const cFieldDef& field_def, const dbDateTime& value );
     void FASTCALL WriteString( const cFieldDef& field_def, const ds_string& value );
     void FASTCALL WriteString( const cFieldDef& field_def, const char *value );
     void FASTCALL WriteVariant( const cFieldDef& field_def, const Variant& value )      { mRawBuffer->WriteVariant( field_def, value ); }
 
     bool FASTCALL ReadBool( const cFieldDef_& field_def ) const;
-    char FASTCALL ReadChar( const cFieldDef_& field_def ) const;
-    wchar_t FASTCALL ReadWChar( const cFieldDef_& field_def ) const;
+    char FASTCALL ReadByte( const cFieldDef_& field_def ) const;
+    //wchar_t FASTCALL ReadWChar( const cFieldDef_& field_def ) const;
     short FASTCALL ReadShort( const cFieldDef_& field_def ) const;
     int FASTCALL ReadInteger( const cFieldDef_& field_def ) const;
-    long FASTCALL ReadLong( const cFieldDef_& field_def ) const;
+    long long FASTCALL ReadLongLong( const cFieldDef_& field_def ) const;
     double FASTCALL ReadFloat( const cFieldDef_& field_def ) const;
-    cDateTime FASTCALL ReadDate( const cFieldDef_& field_def ) const;
+    dbDate FASTCALL ReadDate( const cFieldDef_& field_def ) const;
+    dbTime FASTCALL ReadTime( const cFieldDef_& field_def ) const;
+    dbDateTime FASTCALL ReadDateTime( const cFieldDef_& field_def ) const;
     ds_string FASTCALL ReadString( const cFieldDef_& field_def ) const;
 
     void FASTCALL WriteBool( const cFieldDef_& field_def, bool value );
     void FASTCALL WriteChar( const cFieldDef_& field_def, char value );
-    void FASTCALL WriteWChar( const cFieldDef_& field_def, wchar_t value );
+    //void FASTCALL WriteWChar( const cFieldDef_& field_def, wchar_t value );
     void FASTCALL WriteShort( const cFieldDef_& field_def, short value );
     void FASTCALL WriteInteger( const cFieldDef_& field_def, int value );
-    void FASTCALL WriteLong( const cFieldDef_& field_def, long value );
+    void FASTCALL WriteLongLong( const cFieldDef_& field_def, long long value );
     void FASTCALL WriteFloat( const cFieldDef_& field_def, double value );
-    void FASTCALL WriteDate( const cFieldDef_& field_def, const cDateTime& value );
+    void FASTCALL WriteDate( const cFieldDef_& field_def, const dbDate& value );
+    void FASTCALL WriteTime( const cFieldDef_& field_def, const dbTime& value );
+    void FASTCALL WriteDateTime( const cFieldDef_& field_def, const dbDateTime& value );
     void FASTCALL WriteString( const cFieldDef_& field_def, const ds_string& value );
     void FASTCALL WriteString( const cFieldDef_& field_def, const char *value );
 public:
@@ -119,34 +127,40 @@ protected:
     void FASTCALL Nullify( const cFieldDef& field_def );
 
     bool FASTCALL ReadBool( const cFieldDef& field_def ) const;
-    char FASTCALL ReadChar( const cFieldDef& field_def ) const;
-    wchar_t FASTCALL ReadWChar( const cFieldDef& field_def ) const;
+    char FASTCALL ReadByte( const cFieldDef& field_def ) const;
+    //wchar_t FASTCALL ReadWChar( const cFieldDef& field_def ) const;
     short FASTCALL ReadShort( const cFieldDef& field_def ) const;
     int FASTCALL ReadInteger( const cFieldDef& field_def ) const;
     long FASTCALL ReadLong( const cFieldDef& field_def ) const;
     double FASTCALL ReadFloat( const cFieldDef& field_def ) const;
-    cDateTime FASTCALL ReadDate( const cFieldDef& field_def ) const;
+    dbDate FASTCALL ReadDate( const cFieldDef& field_def ) const;
+    dbTime FASTCALL ReadTime( const cFieldDef& field_def ) const;
+    dbDateTime FASTCALL ReadDateTime( const cFieldDef& field_def ) const;
     ds_string FASTCALL ReadString( const cFieldDef& field_def ) const;
 
     void FASTCALL WriteBool( const cFieldDef& field_def, bool value );
     void FASTCALL WriteChar( const cFieldDef& field_def, char value );
-    void FASTCALL WriteWChar( const cFieldDef& field_def, wchar_t value );
+    //void FASTCALL WriteWChar( const cFieldDef& field_def, wchar_t value );
     void FASTCALL WriteShort( const cFieldDef& field_def, short value );
     void FASTCALL WriteInteger( const cFieldDef& field_def, int value );
     void FASTCALL WriteLong( const cFieldDef& field_def, long value );
     void FASTCALL WriteFloat( const cFieldDef& field_def, double value );
-    void FASTCALL WriteDate( const cFieldDef& field_def, const cDateTime& value );
+    void FASTCALL WriteDate( const cFieldDef& field_def, const dbDate& value );
+    void FASTCALL WriteTime( const cFieldDef& field_def, const dbTime& value );
+    void FASTCALL WriteDateTime( const cFieldDef& field_def, const dbDateTime& value );
     void FASTCALL WriteString( const cFieldDef& field_def, const ds_string& value );
     void FASTCALL WriteString( const cFieldDef& field_def, const char *value );
 
     bool FASTCALL ReadBool( const cFieldDef_& field_def ) const;
-    char FASTCALL ReadChar( const cFieldDef_& field_def ) const;
-    wchar_t FASTCALL ReadWChar( const cFieldDef_& field_def ) const;
+    char FASTCALL ReadByte( const cFieldDef_& field_def ) const;
+    //wchar_t FASTCALL ReadWChar( const cFieldDef_& field_def ) const;
     short FASTCALL ReadShort( const cFieldDef_& field_def ) const;
     int FASTCALL ReadInteger( const cFieldDef_& field_def ) const;
-    long FASTCALL ReadLong( const cFieldDef_& field_def ) const;
+    long long FASTCALL ReadLongLong( const cFieldDef_& field_def ) const;
     double FASTCALL ReadFloat( const cFieldDef_& field_def ) const;
-    cDateTime FASTCALL ReadDate( const cFieldDef_& field_def ) const;
+    dbDate FASTCALL ReadDate( const cFieldDef_& field_def ) const;
+    dbTime FASTCALL ReadTime( const cFieldDef_& field_def ) const;
+    dbDateTime FASTCALL ReadDateTime( const cFieldDef_& field_def ) const;
     ds_string FASTCALL ReadString( const cFieldDef_& field_def ) const;
 
     void FASTCALL WriteBool( const cFieldDef_& field_def, bool value );
@@ -154,9 +168,11 @@ protected:
     void FASTCALL WriteWChar( const cFieldDef_& field_def, wchar_t value );
     void FASTCALL WriteShort( const cFieldDef_& field_def, short value );
     void FASTCALL WriteInteger( const cFieldDef_& field_def, int value );
-    void FASTCALL WriteLong( const cFieldDef_& field_def, long value );
+    void FASTCALL WriteLongLong( const cFieldDef_& field_def, long long value );
     void FASTCALL WriteFloat( const cFieldDef_& field_def, double value );
-    void FASTCALL WriteDate( const cFieldDef_& field_def, const cDateTime& value );
+    void FASTCALL WriteDate( const cFieldDef_& field_def, const dbDate& value );
+    void FASTCALL WriteTime( const cFieldDef_& field_def, const dbTime& value );
+    void FASTCALL WriteDateTime( const cFieldDef_& field_def, const dbDateTime& value );
     void FASTCALL WriteString( const cFieldDef_& field_def, const ds_string& value );
     void FASTCALL WriteString( const cFieldDef_& field_def, const char *value );
 public:
@@ -180,14 +196,14 @@ public:
 
     bool FASTCALL AsBoolean() const;
     void FASTCALL AsBoolean( bool value );
-    char FASTCALL AsChar() const;
-    void FASTCALL AsChar( char value );
+    char FASTCALL AsByte() const;
+    void FASTCALL AsByte( char value );
     int  FASTCALL AsInteger() const;
     void FASTCALL AsInteger( int value );
     double  FASTCALL AsDouble() const;
     void FASTCALL AsDouble( double value );
-    cDateTime FASTCALL AsDateTime() const;
-    void FASTCALL AsDateTime( const cDateTime& value );
+    dbDateTime FASTCALL AsDateTime() const;
+    void FASTCALL AsDateTime( const dbDateTime& value );
     ds_string FASTCALL AsString() const;
     void FASTCALL AsString( const ds_string& value );
     Variant FASTCALL AsVariant() const                      { return ( ReadVariant( *mFieldDef ) ); }

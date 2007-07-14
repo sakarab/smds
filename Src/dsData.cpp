@@ -27,6 +27,7 @@
 #include "dsIndex.h"
 #include "dsCompareControlers.h"
 #include <sstream>
+#include <stdexcept>
 
 namespace smds
 {
@@ -231,12 +232,12 @@ cIndex_ptr FASTCALL Table::NewIndex( const spFieldSortCompare& cmp_func )
     return cIndex_ptr( new Index( GetData(), cmp_func ) );
 }
 
-void FASTCALL Table::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size )
+void FASTCALL Table::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
 {
     GetData()->AddField( name, kind, data_type, size );
 }
 
-void FASTCALL Table::AddField( const char *name, cFieldKind kind, cFieldDataType data_type, unsigned short size )
+void FASTCALL Table::AddField( const char *name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
 {
     AddField( ds_string( name ), kind, data_type, size );
 }
@@ -247,14 +248,14 @@ namespace
 class cFieldValuesAcceptor : public IFieldValuesAcceptor
 {
 private:
-    detail::cRawBuffer&     mRawBuffer;
-    const cFieldDefs&       mFieldDefs;
+    detail::cRawBuffer&                 mRawBuffer;
+    std::vector<const cFieldDef *>&     mLocalMap;
     // non copyable
     CDFASTCALL cFieldValuesAcceptor( const cFieldValuesAcceptor& src );
     cFieldValuesAcceptor& FASTCALL operator = ( const cFieldValuesAcceptor& src );
 public:
-    CDFASTCALL cFieldValuesAcceptor( detail::cRawBuffer& raw_buffer, const cFieldDefs& field_defs )
-        : mRawBuffer(raw_buffer), mFieldDefs(field_defs)
+    CDFASTCALL cFieldValuesAcceptor( detail::cRawBuffer& raw_buffer, std::vector<const cFieldDef *>& local_map )
+        : mRawBuffer(raw_buffer), mLocalMap(local_map)
     {
     }
     virtual ~cFieldValuesAcceptor()
@@ -267,51 +268,76 @@ public:
     virtual ULONG __stdcall Release()                                                   { return 0xFFFFFFFFU; }
 #endif
     // IFieldValuesAcceptor
-    virtual bool __stdcall FieldValue( const char *field_name, int field_data_type, const void *data, void *buff, int field_data_size )
+    virtual bool __stdcall FieldValue( int field_idx, void *buff, unsigned int field_data_size )
     {
-        const cFieldDef&    field_def = data == 0 ? mFieldDefs.FieldByName( field_name ) : *static_cast<const cFieldDef *>(data);
+        const cFieldDef     *field_def = mLocalMap[field_idx];
+
+        if ( field_def == 0 )
+            return true;
 
         if ( buff == 0 )
-            mRawBuffer.Nullify( field_def );
-        else switch ( field_data_type )
+            mRawBuffer.Nullify( *field_def );
+        else switch ( field_def->DataType() )
         {
             case cFieldDataType_ftBool     :
-                mRawBuffer.WriteBool( field_def, *reinterpret_cast<bool *>(buff) );
+            {
+                bool    value = *reinterpret_cast<char *>(buff) != 0;
+
+                mRawBuffer.WriteBool( *field_def, value );
                 break;
-            case cFieldDataType_ftChar     :
-                mRawBuffer.WriteChar( field_def, *reinterpret_cast<char *>(buff) );
-                break;
-            case cFieldDataType_ftWChar    :
-                mRawBuffer.WriteWChar( field_def, *reinterpret_cast<wchar_t *>(buff) );
+            }
+            case cFieldDataType_ftByte     :
+                mRawBuffer.WriteByte( *field_def, *reinterpret_cast<char *>(buff) );
                 break;
             case cFieldDataType_ftShort    :
-                mRawBuffer.WriteShort( field_def, *reinterpret_cast<short *>(buff) );
+                mRawBuffer.WriteShort( *field_def, *reinterpret_cast<short *>(buff) );
                 break;
             case cFieldDataType_ftInteger  :
-                mRawBuffer.WriteInteger( field_def, *reinterpret_cast<int *>(buff) );
+                mRawBuffer.WriteInteger( *field_def, *reinterpret_cast<int *>(buff) );
                 break;
-            case cFieldDataType_ftLong     :
-                mRawBuffer.WriteLong( field_def, *reinterpret_cast<long *>(buff) );
+            case cFieldDataType_ftLongLong     :
+                mRawBuffer.WriteLongLong( *field_def, *reinterpret_cast<long long *>(buff) );
                 break;
             case cFieldDataType_ftDouble   :
-                mRawBuffer.WriteFloat( field_def, *reinterpret_cast<double *>(buff) );
+                mRawBuffer.WriteFloat( *field_def, *reinterpret_cast<double *>(buff) );
+                break;
+/////////////////////////////////////////////////////////////////
+            // all of the folowing need fixing
+            case cFieldDataType_ftDate :
+                mRawBuffer.WriteDate( *field_def, LongEncodeDate( *reinterpret_cast<DATE_STRUCT *>(buff) ) );
+                break;
+            case cFieldDataType_ftTime :
+                mRawBuffer.WriteTime( *field_def, LongEncodeTime( *reinterpret_cast<TIME_STRUCT *>(buff) ) );
                 break;
             case cFieldDataType_ftDateTime :
-                mRawBuffer.WriteDate( field_def, cDateTime( *reinterpret_cast<double *>(buff) ) );
+                mRawBuffer.WriteDateTime( *field_def, LongEncodeDateTime( *reinterpret_cast<TIMESTAMP_STRUCT *>(buff) ) );
+                break;
+            case cFieldDataType_ftGUID     :
+                mRawBuffer.WriteGUID( *field_def, *reinterpret_cast<SQLGUID *>(buff) );
                 break;
             case cFieldDataType_ftString   :
-                mRawBuffer.WriteString( field_def, reinterpret_cast<char *>(buff) );
+                mRawBuffer.WriteString( *field_def, reinterpret_cast<char *>(buff) );
                 break;
-            //case cFieldDataType_ftWString  :
-            //    mRawBuffer.WriteWString( field_def, reinterpret_cast<wchar_t *>(buff) );
-            //    break;
-            //case cFieldDataType_ftBlob     :
-            //    mRawBuffer.WriteBlob( field_def, reinterpret_cast<wchar_t *>(buff) );
-            //    break;
-            default                        : return ( false );
+            case cFieldDataType_ftWString  :
+                // mRawBuffer.WriteWString( field_def, reinterpret_cast<wchar_t *>(buff) );
+                break;
+            case cFieldDataType_ftBlob     :
+                // mRawBuffer.WriteBlob( field_def, reinterpret_cast<wchar_t *>(buff) );
+                break;
+/////////////////////////////////////////////////////////////////
+            default                        : return false;
         }
-        return ( true );
+        return true;
     }
+};
+
+struct DriverField
+{
+    int             idx;
+    std::string     name;
+    unsigned long   data_size;
+    int             data_type;
+    unsigned short  scale;
 };
 
 }; // namespace
@@ -328,32 +354,65 @@ void FASTCALL Table::Open( const Database& database, const char *where_clause )
 
     provider->OpenSql( sql.c_str() );
 
-    provider->InitDataTransfer();
+    const spFieldDefs               sp_field_defs = GetData()->GetFieldDefs();
+    bool                            have_fields = sp_field_defs->Count() != 0;
+    int                             provider_field_count = provider->GetFieldCount();
 
-    const cFieldDefs&   field_defs = *GetData()->GetFieldDefs().get();
+    unsigned int                    name_buffer_length = 100;
+    boost::scoped_array<char>       name_buffer( new char[name_buffer_length] );
+    unsigned int                    name_buffer_required_length;
+    unsigned int                    field_data_size;
+    int                             field_data_type;
+    const cFieldDef                 *ds_field;
+    std::vector<const cFieldDef *>  local_map;
 
-    for ( cFieldDefs::const_iterator n = field_defs.begin(), eend = field_defs.end() ; n != eend ; ++n )
-        if ( n->Kind() == fkData )
-#ifdef SM_DS_STRING_AS_STRING
-            provider->StepInitDataTransfer( n->Name().c_str(), n->DataSize_(), n->DataType(), &(*n) );
-#else
-            provider->StepInitDataTransfer( n->Name().c_str(), n->Size_(), n->DataType(), &(*n) );
-#endif
-    provider->EndInitDataTransfer();
+    for ( int n = 0 ; n < provider_field_count ; ++n )
+    {
+        provider->GetFieldAttributes( n, name_buffer.get(), name_buffer_length, name_buffer_required_length,
+                                      field_data_size, field_data_type );
+        if ( name_buffer_required_length > name_buffer_length )
+        {
+            name_buffer_length = name_buffer_required_length + name_buffer_required_length / 2;
+            name_buffer.reset( new char[name_buffer_length] );
+            provider->GetFieldAttributes( n, name_buffer.get(), name_buffer_length, name_buffer_required_length,
+                                          field_data_size, field_data_type );
+        }
+        name_buffer[name_buffer_required_length - 1] = 0;
+        if ( ! have_fields )
+        {
+            ds_field = &sp_field_defs->AddField( ds_string( name_buffer.get() ), fkData,
+                                                 static_cast<cFieldDataType>(field_data_type), field_data_size );
+        }
+        else
+        {
+            ds_field = sp_field_defs->FindField( name_buffer.get() );
+
+            if ( ds_field != 0 )
+            {
+                cFieldDataType      data_type = ds_field->DataType();
+
+                if ( data_type != static_cast<cFieldDataType>(field_data_type) )
+                    throw std::runtime_error( "Field type or size mismatch!!!!" );
+                if ( data_type != ftDate && data_type != ftTime && data_type != ftDateTime && ds_field->DataSize() != field_data_size )
+                    throw std::runtime_error( "Field type or size mismatch!!!!" );
+            }
+        }
+        local_map.push_back( ds_field );
+    }
 
     while ( ! provider->Eof() )
     {
         // insert a buffer
         detail::Data::value_type        rec = NewBuffer_usUnmodified();
         detail::cRawBuffer&             raw = rec->GetOriginalData();
-        cFieldValuesAcceptor            acceptor( raw, field_defs );
+        cFieldValuesAcceptor            acceptor( raw, local_map );
 
         if ( ! provider->GetFieldValues( &acceptor ) )
             break;
+
         GetData()->AddBuffer_ptr( rec );
         provider->Next();
     }
-    provider->EndDataTransfer();
     provider->CloseSql();
 #if defined(SM_DS_ENABLE_NOTIFY)
     GetData()->NotifyOpened();
@@ -388,33 +447,22 @@ void FASTCALL cTableReader::ReadFieldValue( cStream& st, const detail::cRawBuffe
         st << true;
         switch ( field.DataType() )
         {
-            case ftBool     : st.WriteBuffer( rb.buffer_field_cast<bool *>(field.Offset()), sizeof(bool) );             break;
-            case ftChar     : st.WriteBuffer( rb.buffer_field_cast<char *>(field.Offset()), sizeof(char) );             break;
-            case ftWChar    : st.WriteBuffer( rb.buffer_field_cast<wchar_t *>(field.Offset()), sizeof(wchar_t) );       break;
-            case ftShort    : st.WriteBuffer( rb.buffer_field_cast<short *>(field.Offset()), sizeof(short) );           break;
-            case ftInteger  : st.WriteBuffer( rb.buffer_field_cast<int *>(field.Offset()), sizeof(int) );               break;
-            case ftLong     : st.WriteBuffer( rb.buffer_field_cast<long *>(field.Offset()), sizeof(long) );             break;
-            case ftDouble   : st.WriteBuffer( rb.buffer_field_cast<double *>(field.Offset()), sizeof(double) );         break;
-            case ftDateTime : st.WriteBuffer( rb.buffer_field_cast<cDateTime *>(field.Offset()), sizeof(cDateTime) );   break;
-#ifdef SM_DS_STRING_AS_STRING
+            case ftBool     : st.WriteBuffer( rb.buffer_field_cast<bool *>(field.Offset()), sizeof(bool) );                         break;
+            // case ftChar     : st.WriteBuffer( rb.buffer_field_cast<char *>(field.Offset()), sizeof(char) );                         break;
+            // case ftWChar    : st.WriteBuffer( rb.buffer_field_cast<wchar_t *>(field.Offset()), sizeof(wchar_t) );                   break;
+            case ftShort    : st.WriteBuffer( rb.buffer_field_cast<short *>(field.Offset()), sizeof(short) );                       break;
+            case ftInteger  : st.WriteBuffer( rb.buffer_field_cast<int *>(field.Offset()), sizeof(int) );                           break;
+            case ftLongLong : st.WriteBuffer( rb.buffer_field_cast<long long *>(field.Offset()), sizeof(long long) );               break;
+            case ftDouble   : st.WriteBuffer( rb.buffer_field_cast<double *>(field.Offset()), sizeof(double) );                     break;
+            case ftDateTime : st.WriteBuffer( rb.buffer_field_cast<detail::dbDateTime_Internal *>(field.Offset()), sizeof(detail::dbDateTime_Internal) ); break;
             case ftString   :
             {
-                const ds_string&    str( *(rb.buffer_field_cast<ds_string *>(field.Offset())) );
+                const ds_string&    str( **rb.string_ptr_ptr( field.Offset() ) );
 
                 st << str;
                 // st.WriteBuffer( str.c_str(), std::min<ds_string::size_type>( str.size(), field.DataSize_() ) );
                 break;
             }
-#else
-            case ftString   :
-            {
-                const char  *str = rb.buffer_field_cast<char *>(field.Offset());
-
-                st << str;
-                //st.WriteBuffer( str, rb.BufferStringLen( str, field.Size_() ) );
-                break;
-            }
-#endif
             //case ftWString  : st.WriteBuffer( rb.buffer_field_cast<char *>(field.Offset()), static_cast<unsigned short>(size * sizeof(wchar_t));                break;
             //case ftBlob     : st.WriteBuffer( rb.buffer_field_cast<char *>(field.Offset()), sizeof(shared_ptr< std::vector<char> >);                break;
             default         : throw eUnknownFieldType();
@@ -433,12 +481,7 @@ Variant FASTCALL cTableReader::GetTablePacket( Table& table )
 
     st << field_defs->Count();
     for ( cFieldDefs::iterator n = field_defs->begin(), eend = field_defs->end() ; n != eend ; ++n )
-        st << n->Index() << n->Offset() << n->Name() << n->Kind() << n->DataType()
-#ifdef SM_DS_STRING_AS_STRING
-           << n->DataSize_();
-#else
-           << n->Size_();
-#endif
+        st << n->Index() << n->Offset() << n->Name() << n->Kind() << n->DataType() << n->DataSize();
 
     record_iterator     rec = table.GetIterator();
 
@@ -513,12 +556,7 @@ void FASTCALL cTableWriter::ReadFieldDefs( cStream& st, Table& table, bool is_ty
     for ( int n = field_count_start ; n < field_count ; ++n )
     {
         st >> field_def;
-        table.AddField( field_def.Name(), field_def.Kind(), field_def.DataType(),
-#ifdef SM_DS_STRING_AS_STRING
-                        field_def.DataSize_() );
-#else
-                        field_def.Size_() );
-#endif
+        table.AddField( field_def.Name(), field_def.Kind(), field_def.DataType(), field_def.DataSize() );
     }
 }
 
@@ -544,14 +582,15 @@ void FASTCALL cTableWriter::ReadFieldValue( cStream& st, detail::cRawBuffer& rb,
                 rb.WriteBool( field, v );
                 break;
             }
-            case ftChar     :
+            case ftByte     :
             {
                 char    v;
 
                 st >> v;
-                rb.WriteChar( field, v );
+                rb.WriteByte( field, v );
                 break;
             }
+/*
             case ftWChar    :
             {
                 wchar_t     v;
@@ -560,6 +599,7 @@ void FASTCALL cTableWriter::ReadFieldValue( cStream& st, detail::cRawBuffer& rb,
                 rb.WriteWChar( field, v );
                 break;
             }
+*/
             case ftShort    :
             {
                 short   v;
@@ -576,12 +616,12 @@ void FASTCALL cTableWriter::ReadFieldValue( cStream& st, detail::cRawBuffer& rb,
                 rb.WriteInteger( field, v );
                 break;
             }
-            case ftLong     :
+            case ftLongLong :
             {
-                long    v;
+                long long   v;
 
                 st >> v;
-                rb.WriteLong( field, v );
+                rb.WriteLongLong( field, v );
                 break;
             }
             case ftDouble   :
@@ -594,10 +634,10 @@ void FASTCALL cTableWriter::ReadFieldValue( cStream& st, detail::cRawBuffer& rb,
             }
             case ftDateTime :
             {
-                cDateTime   v;
+                dbDateTime      v;
 
                 st >> v;
-                rb.WriteDate( field, v );
+                rb.WriteDateTime( field, v );
                 break;
             }
             case ftString   :

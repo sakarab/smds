@@ -49,16 +49,40 @@ void FASTCALL cRawBuffer::SetNull( const cFieldDef_& field_def, bool value )
 
 bool FASTCALL cRawBuffer::IsNull( const cFieldDef& field_def ) const
 {
-    return ( TestBit( field_def.Index() ) );
+    return TestBit( field_def.Index() );
 }
 
 bool FASTCALL cRawBuffer::IsNull( const cFieldDef_& field_def ) const
 {
-    return ( TestBit( field_def.mIndex ) );
+    return TestBit( field_def.mIndex );
 }
 
 void FASTCALL cRawBuffer::Nullify( const cFieldDef& field_def )
 {
+    if ( field_def.DataType() == ftString )
+    {
+        if ( ds_string **data = string_ptr_ptr( field_def.Offset() ) )
+        {
+            delete *data;
+            *data = 0;
+        }
+    }
+    else if ( field_def.DataType() == ftWString )
+    {
+        if ( ds_wstring **data = wstring_ptr_ptr( field_def.Offset() ) )
+        {
+            delete *data;
+            *data = 0;
+        }
+    }
+    else if ( field_def.DataType() == ftBlob )
+    {
+        if ( var_blob_type **data = blob_ptr_ptr( field_def.Offset() ) )
+        {
+            delete *data;
+            *data = 0;
+        }
+    }
     SetBit( field_def.Index(), true );
 }
 
@@ -68,17 +92,19 @@ Variant FASTCALL cRawBuffer::ReadVariant( const cFieldDef& field_def ) const
         return ( Variant() );
     else switch ( field_def.DataType() )
     {
-        case ftBool     : return ( Variant( ReadBoolNN( field_def ) ) );
-        case ftChar     : return ( Variant( ReadCharNN( field_def ) ) );
-        case ftWChar    : return ( Variant( ReadWCharNN( field_def ) ) );
-        case ftShort    : return ( Variant( ReadShortNN( field_def ) ) );
-        case ftInteger  : return ( Variant( ReadIntegerNN( field_def ) ) );
-        case ftLong     : return ( Variant( ReadLongNN( field_def ) ) );
-        case ftDouble   : return ( Variant( ReadFloatNN( field_def ) ) );
-        case ftDateTime : return ( Variant( ReadDateNN( field_def ) ) );
-        case ftString   : return ( Variant( ReadStringNN( field_def ) ) );
-        //case ftWString  : return ( Variant( ReadWStringNN( field_def ) ) );
-        //case ftBlob     : return ( Variant( ReadBlobNN( field_def ) ) );
+        case ftBool     : return Variant( ReadBoolNN( field_def ) );
+        case ftByte     : return Variant( ReadByteNN( field_def ) );
+        case ftShort    : return Variant( ReadShortNN( field_def ) );
+        case ftInteger  : return Variant( ReadIntegerNN( field_def ) );
+        case ftLongLong : return Variant( ReadLongLongNN( field_def ) );
+        case ftDouble   : return Variant( ReadFloatNN( field_def ) );
+        case ftDate     : return Variant( ReadDateNN( field_def ) );
+        case ftTime     : return Variant( ReadTimeNN( field_def ) );
+        case ftDateTime : return Variant( ReadDateTimeNN( field_def ) );
+        case ftGUID     : return Variant( ReadGUIDNN( field_def ) );
+        case ftString   : return Variant( ReadStringNN( field_def ) );
+        //case ftWString  : return Variant( ReadWStringNN( field_def ) );
+        //case ftBlob     : return Variant( ReadBlobNN( field_def ) );
         default         : throw eVariantConversion();
     }
 }
@@ -86,31 +112,32 @@ Variant FASTCALL cRawBuffer::ReadVariant( const cFieldDef& field_def ) const
 void FASTCALL cRawBuffer::WriteVariant( const cFieldDef& field_def, const Variant& value )
 {
     if ( value.IsNull() )
-        return ( Nullify( field_def ) );
+        Nullify( field_def );
     else switch ( field_def.DataType() )
     {
         case ftBool     : WriteBool( field_def, value.AsBool() );               break;
-        case ftChar     : WriteChar( field_def, value.AsChar() );               break;
-        case ftWChar    : WriteWChar( field_def, value.AsWChar() );             break;
+        case ftByte     : WriteByte( field_def, value.AsByte() );               break;
         case ftShort    : WriteShort( field_def, value.AsShort() );             break;
         case ftInteger  : WriteInteger( field_def, value.AsInt() );             break;
-        case ftLong     : WriteLong( field_def, value.AsLong() );               break;
+        case ftLongLong : WriteLongLong( field_def, value.AsLongLong() );       break;
         case ftDouble   : WriteFloat( field_def, value.AsDouble() );            break;
-        case ftDateTime : WriteDate( field_def, value.AsDateTime() );           break;
+        case ftDate     : WriteDate( field_def, value.AsDate() );               break;
+        case ftTime     : WriteTime( field_def, value.AsTime() );               break;
+        case ftDateTime : WriteDateTime( field_def, value.AsDateTime() );       break;
+        case ftGUID     : WriteGUID( field_def, value.AsGUID() );               break;
         case ftString   : WriteString( field_def, value.AsString() );           break;
         //case ftWString  : WriteString( *mFieldDef, value.AsWString() );        break;
+        //case ftBlog     : WriteString( *mFieldDef, value.AsWString() );        break;
         default         : throw eVariantConversion();
     }
 }
 
-#ifdef SM_DS_STRING_AS_STRING
 ds_string& FASTCALL cRawBuffer::empty_string()
 {
     static  ds_string   empty;
 
-    return ( empty );
+    return empty;
 }
-#endif
 
 //***********************************************************************
 //******    DoubleBuffer
@@ -338,7 +365,7 @@ void FASTCALL Data::Delete( int idx )
     mData.erase( tmp );
 }
 
-void FASTCALL Data::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size )
+void FASTCALL Data::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
 {
     mFieldDefs->AddField( name, kind, data_type, size );
 }

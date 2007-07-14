@@ -17,7 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug8|Win32"
-			OutputDirectory="$(SolutionDir)..\..\Bin"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets=".\Dbg.vsprops"
@@ -40,10 +40,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
 				AdditionalIncludeDirectories="..\..\Test;..\..\Src;&quot;$(LOKI_INC)&quot;;&quot;$(BOOST_INC)&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;_HAS_ITERATOR_DEBUGGING=1;NO_CDFASTCALL"
-				MinimalRebuild="false"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;_HAS_ITERATOR_DEBUGGING=0;NO_CDFASTCALL"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
@@ -51,8 +49,6 @@
 				BrowseInformation="1"
 				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="3"
-				CompileAs="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

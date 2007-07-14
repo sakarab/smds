@@ -33,18 +33,15 @@ const int cFieldDataType_ftBool      = 0;            // one byte
 const int cFieldDataType_ftByte      = 1;            // one byte
 const int cFieldDataType_ftShort     = 2;            // two bytes
 const int cFieldDataType_ftInteger   = 3;            // four bytes
-const int cFieldDataType_ftLong      = 4;            // eight bytes
+const int cFieldDataType_ftLongLong  = 4;            // eight bytes
 const int cFieldDataType_ftDouble    = 5;
 const int cFieldDataType_ftDate      = 6;
 const int cFieldDataType_ftTime      = 7;
 const int cFieldDataType_ftDateTime  = 8;
 const int cFieldDataType_ftGUID      = 9;
-const int cFieldDataType_ftChar      = 10;           // CHAR(n)
-const int cFieldDataType_ftString    = 11;           // VARCHAR
-const int cFieldDataType_ftWChar     = 12;           // WCHAR(n)
-const int cFieldDataType_ftWString   = 13;           // VARWCHAR
-const int cFieldDataType_ftBlobn     = 14;           // fixed length blob
-const int cFieldDataType_ftBlob      = 15;           // variable length blob
+const int cFieldDataType_ftString    = 10;           // VARCHAR
+const int cFieldDataType_ftWString   = 11;           // VARWCHAR
+const int cFieldDataType_ftBlob      = 12;           // variable length blob
 
 class IDataConnection;
 class IDataProvider;
@@ -72,7 +69,7 @@ class IFieldValuesAcceptor
 #endif
 {
 public:
-    virtual bool __stdcall FieldValue( const char *field_name, int field_data_type, const void *data, void *buff, int field_data_size ) = 0;
+    virtual bool __stdcall FieldValue( int field_idx, void *buff, unsigned int field_data_size ) = 0;
     virtual ~IFieldValuesAcceptor()                                                             {} // empty;
 };
 
@@ -93,13 +90,10 @@ public:
 
     virtual std::size_t __stdcall GetFieldCount() = 0;
     virtual void __stdcall GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
-                                               unsigned int& name_buffer_required_length, int& field_data_size, int& field_data_type ) = 0;
+                                               unsigned int& name_buffer_required_length,
+                                               unsigned int& field_data_size, int& field_data_type ) = 0;
 
-    virtual void __stdcall InitDataTransfer() = 0;
-    virtual void __stdcall StepInitDataTransfer( const char *field_name, int field_data_size, int field_data_type, const void *data ) = 0;
-    virtual void __stdcall EndInitDataTransfer() = 0;
     virtual bool __stdcall GetFieldValues( IFieldValuesAcceptor *values_acceptor ) = 0;
-    virtual void __stdcall EndDataTransfer() = 0;
 
     virtual void __stdcall StartTransaction() = 0;
     virtual void __stdcall Commit() = 0;

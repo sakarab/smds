@@ -59,32 +59,34 @@ int SortCompare::CompareInvocationCount = 0;
 
 int FASTCALL CmpBool( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
-    return ( mItem1->ReadBoolNN( field ) - mItem2->ReadBoolNN( field ) );
+    return mItem1->ReadBoolNN( field ) - mItem2->ReadBoolNN( field );
 }
 
-int FASTCALL CmpChar( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+int FASTCALL CmpByte( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
-    return ( mItem1->ReadCharNN( field ) - mItem2->ReadCharNN( field ) );
-}
-
-int FASTCALL CmpWChar( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
-{
-    return ( mItem1->ReadWCharNN( field ) - mItem2->ReadWCharNN( field ) );
+    return mItem1->ReadByteNN( field ) - mItem2->ReadByteNN( field );
 }
 
 int FASTCALL CmpShort( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
-    return ( mItem1->ReadShortNN( field ) - mItem2->ReadShortNN( field ) );
+    return mItem1->ReadShortNN( field ) - mItem2->ReadShortNN( field );
 }
 
 int FASTCALL CmpInteger( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
-    return ( mItem1->ReadIntegerNN( field ) - mItem2->ReadIntegerNN( field ) );
+    return mItem1->ReadIntegerNN( field ) - mItem2->ReadIntegerNN( field );
 }
 
-int FASTCALL CmpLong( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+int FASTCALL CmpLongLong( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
-    return ( mItem1->ReadLongNN( field ) - mItem2->ReadLongNN( field ) );
+    long long   val = mItem1->ReadLongLongNN( field ) - mItem2->ReadLongLongNN( field );
+    int         result = 0;
+
+    if ( val < 0 )
+        --result;
+    else if ( val > 0 )
+        ++result;
+    return result;
 }
 
 int FASTCALL CmpFloat( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
@@ -96,29 +98,71 @@ int FASTCALL CmpFloat( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& 
         --result;
     else if ( val > 0 )
         ++result;
-    return ( result );
+    return result;
 }
 
 int FASTCALL CmpDate( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
-    double  val = mItem1->ReadFloatNN( field ) - mItem2->ReadFloatNN( field );
-    int     result = 0;
+    const detail::dbDate_Internal&      val_one = mItem1->ReadDateNNref( field );
+    const detail::dbDate_Internal&      val_two = mItem2->ReadDateNNref( field );
+    int                                 result = 0;
 
-    if ( val < 0 )
+    if ( val_one < val_two )
         --result;
-    else if ( val > 0 )
+    else if ( val_one > val_two )
         ++result;
-    return ( result );
+    return result;
+}
+
+int FASTCALL CmpTime( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+{
+    const detail::dbTime_Internal&      val_one = mItem1->ReadTimeNNref( field );
+    const detail::dbTime_Internal&      val_two = mItem2->ReadTimeNNref( field );
+    int                                 result = 0;
+
+    if ( val_one < val_two )
+        --result;
+    else if ( val_one > val_two )
+        ++result;
+    return result;
+}
+
+int FASTCALL CmpDateTime( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+{
+    const detail::dbDateTime_Internal&      val_one = mItem1->ReadDateTimeNNref( field );
+    const detail::dbDateTime_Internal&      val_two = mItem2->ReadDateTimeNNref( field );
+    int                                     result = 0;
+
+#if defined ( __BORLANDC__ )
+    if ( operator < ( val_one, val_two ) )
+        --result;
+    else if ( operator > ( val_one, val_two ) )
+        ++result;
+#else
+    if ( val_one < val_two )
+        --result;
+    else if ( val_one > val_two )
+        ++result;
+#endif
+    return result;
+}
+
+int FASTCALL CmpGUID( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+{
+    const dbGUID&   val_one = mItem1->ReadGUIDNN( field );
+    const dbGUID&   val_two = mItem2->ReadGUIDNN( field );
+
+    return std::memcmp( &val_one.AsInternal(), &val_two.AsInternal(), sizeof(detail::dbGUID_Internal) );
 }
 
 int FASTCALL CmpString( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
-    return ( strcmp( mItem1->ReadStringNN( field ).c_str(), mItem2->ReadStringNN( field ).c_str() ) );
+    return strcmp( mItem1->ReadStringNN( field ).c_str(), mItem2->ReadStringNN( field ).c_str() );
 }
 
 int FASTCALL CmpString_i( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
-    return ( StringCompare( mItem1->ReadStringNN( field ), mItem2->ReadStringNN( field ) ) );
+    return StringCompare( mItem1->ReadStringNN( field ), mItem2->ReadStringNN( field ) );
 }
 
 CompareFunction FASTCALL GetCompareFunction( const cFieldDef& field, cFindField::CaseOption case_option )
@@ -126,15 +170,18 @@ CompareFunction FASTCALL GetCompareFunction( const cFieldDef& field, cFindField:
     switch ( field.DataType() )
     {
         case ftBool         : return ( CmpBool );
-        case ftChar         : return ( CmpChar );
-        case ftWChar        : return ( CmpWChar );
+        case ftByte         : return ( CmpByte );
         case ftShort        : return ( CmpShort );
         case ftInteger      : return ( CmpInteger );
-        case ftLong         : return ( CmpLong );
+        case ftLongLong     : return ( CmpLongLong );
         case ftDouble       : return ( CmpFloat );
-        case ftDateTime     : return ( CmpDate );
+        case ftDate         : return ( CmpDate );
+        case ftTime         : return ( CmpTime );
+        case ftDateTime     : return ( CmpDateTime );
+        case ftGUID         : return ( CmpGUID );
         case ftString       : return ( case_option == cFindField::CaseSensitive ? CmpString : CmpString_i );
         case ftWString      : throw eNotApplicableOperation();
+        case ftBlob         : throw eNotApplicableOperation();
         default             : throw eNotApplicableOperation();
     }
 }

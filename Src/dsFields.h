@@ -38,8 +38,8 @@ enum cFieldKind         { fkData, fkInternalCalc };
 /* TODO -osakarab : Rename cFieldDataType to FieldDataType */
 enum cFieldDataType
 {
-    ftBool, ftByte, ftShort, ftInteger, ftLong, ftDouble, ftDate, ftTime, ftDateTime, ftGUID, ftChar, ftString, ftWChar,
-    ftWString, ftBlobn, ftBlob
+    ftBool, ftByte, ftShort, ftInteger, ftLongLong, ftDouble, ftDate, ftTime, ftDateTime, ftGUID, ftString,
+    ftWString, ftBlob
 };
 
 inline cStream& FASTCALL operator << ( cStream& st, const cFieldKind a )        { return ( st.WriteBuffer( &a, sizeof(cFieldKind) ) ); }
@@ -61,7 +61,8 @@ public:
     const char *        mName;
     cFieldKind          mKind;
     cFieldDataType      mDataType;
-    unsigned short      mSize;
+    // unsigned short      mRawSize;
+    unsigned int        mDataSize;
 };
 
 //***********************************************************************
@@ -97,17 +98,15 @@ private:
     ds_string           mName;
     cFieldKind          mKind;
     cFieldDataType      mDataType;
-    unsigned short      mSize_;
-#ifdef SM_DS_STRING_AS_STRING
-    unsigned short      mDataSize_;
-#endif
+    unsigned short      mRawSize;
+    unsigned int        mDataSize;
     CDFASTCALL cFieldDef()                                      {} // empty
     // noncopyable
     //FASTCALL cFieldDef( const cFieldDef& src );
     //cFieldDef& FASTCALL operator=( const cFieldDef& src );
 public:
     CDFASTCALL cFieldDef( unsigned short idx, int offset, const ds_string& name,
-                          cFieldKind kind, cFieldDataType data_type, unsigned short size );
+                          cFieldKind kind, cFieldDataType data_type, unsigned int size );
     CDFASTCALL ~cFieldDef();
     bool FASTCALL operator == ( const cFieldDef& other ) const;
     bool FASTCALL operator != ( const cFieldDef& other ) const          { return ( !(*this == other) ); }
@@ -116,10 +115,8 @@ public:
     const ds_string& FASTCALL Name() const                              { return ( mName ); }
     cFieldKind FASTCALL Kind() const                                    { return ( mKind ); }
     cFieldDataType FASTCALL DataType() const                            { return ( mDataType ); }
-    unsigned short FASTCALL Size_() const                               { return ( mSize_ ); }
-#ifdef SM_DS_STRING_AS_STRING
-    unsigned short FASTCALL DataSize_() const                           { return ( mDataSize_ ); }
-#endif
+    unsigned short FASTCALL RawSize() const                             { return ( mRawSize ); }
+    unsigned int FASTCALL DataSize() const                              { return ( mDataSize ); }
 };
 
 cStream& FASTCALL operator << ( cStream& st, const cFieldDef a );
@@ -165,7 +162,7 @@ private:
     cFieldDefContainer          mFieldDefs;
     cFieldDefSortedContainer    mFieldDefSorted;
 
-    const cFieldDef FASTCALL MakeFieldDef( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size );
+    const cFieldDef FASTCALL MakeFieldDef( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size );
     void FASTCALL ConstructSorted();
     // non copyable
     CDFASTCALL cFieldDefs( const cFieldDefs& src );
@@ -188,9 +185,11 @@ public:
 
     //bool FASTCALL equal( const cFieldDefs& field_defs ) const;
     //const cFieldDef& FASTCALL Fields( int idx ) const;
-    const cFieldDef& FASTCALL AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size );
+    const cFieldDef& FASTCALL AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size );
     const cFieldDef& FASTCALL FieldByName( const ds_string& field_name ) const;
     const cFieldDef& FASTCALL FieldByName( const char *field_name ) const;
+    const cFieldDef * FASTCALL FindField( const ds_string& field_name ) const;
+    const cFieldDef * FASTCALL FindField( const char *field_name ) const;
 };
 
 typedef shared_ptr<cFieldDefs>      spFieldDefs;

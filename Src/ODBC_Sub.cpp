@@ -75,11 +75,11 @@ void DescribeError( short handle_type, void *handle )
 
 TypeRaw     DataTypeMap[23] =
 {
-    { SQL_CHAR                      , SQL_C_CHAR            , cFieldDataType_ftChar      , 0                            },  // CHAR(n) Character string of fixed string length n.
-    { SQL_VARCHAR                   , SQL_C_CHAR            , cFieldDataType_ftChar      , 0                            },  // VARCHAR(n) Variable-length character string with a maximum string length n.
+    { SQL_CHAR                      , SQL_C_CHAR            , cFieldDataType_ftString    , 0                            },  // CHAR(n) Character string of fixed string length n.
+    { SQL_VARCHAR                   , SQL_C_CHAR            , cFieldDataType_ftString    , 0                            },  // VARCHAR(n) Variable-length character string with a maximum string length n.
     { SQL_LONGVARCHAR               , SQL_C_CHAR            , cFieldDataType_ftString    , 0                            },  // LONG VARCHAR Variable length character data. Maximum length is data source–dependent.[9]
-    { SQL_WCHAR                     , SQL_C_CHAR            , cFieldDataType_ftChar      , 0                            },  // WCHAR(n) Unicode character string of fixed string length n
-    { SQL_WVARCHAR                  , SQL_C_CHAR            , cFieldDataType_ftChar      , 0                            },  // VARWCHAR(n) Unicode variable-length character string with a maximum string length n
+    { SQL_WCHAR                     , SQL_C_CHAR            , cFieldDataType_ftString    , 0                            },  // WCHAR(n) Unicode character string of fixed string length n
+    { SQL_WVARCHAR                  , SQL_C_CHAR            , cFieldDataType_ftString    , 0                            },  // VARWCHAR(n) Unicode variable-length character string with a maximum string length n
     { SQL_WLONGVARCHAR              , SQL_C_CHAR            , cFieldDataType_ftString    , 0                            },  // LONGWVARCHAR Unicode variable-length character data. Maximum length is data source–dependent
     { SQL_DECIMAL                   , SQL_C_DOUBLE          , cFieldDataType_ftDouble    , sizeof(double)               },  // DECIMAL(p,s) Signed, exact, numeric value with a precision of at least p and scale s. (The maximum precision is driver-defined.)(1 <= p <= 15; s <= p).[4]
     { SQL_NUMERIC                   , SQL_C_DOUBLE          , cFieldDataType_ftDouble    , sizeof(double)               },  // NUMERIC(p,s) Signed, exact, numeric value with a precision p and scale s (1 <= p <= 15; s <= p).[4]
@@ -90,9 +90,9 @@ TypeRaw     DataTypeMap[23] =
     { SQL_DOUBLE                    , SQL_C_DOUBLE          , cFieldDataType_ftDouble    , sizeof(double)               },  // DOUBLE PRECISION Signed, approximate, numeric value with a binary precision 53 (zero or absolute value 10[–308] to 10[308]).
     { SQL_BIT                       , SQL_C_BIT             , cFieldDataType_ftBool      , sizeof(char)                 },  // BIT Single bit binary data.[8]
     { SQL_TINYINT                   , SQL_C_STINYINT        , cFieldDataType_ftByte      , sizeof(char)                 },  // TINYINT Exact numeric value with precision 3 and scale 0(signed:–128 <= n <= 127,unsigned:0 <= n <= 255)[3].
-    { SQL_BIGINT                    , SQL_C_SBIGINT         , cFieldDataType_ftLong      , sizeof(long long)            },  // BIGINT Exact numeric value with precision 19 (if signed) or 20 (if unsigned) and scale 0(signed:–2[63] <= n <= 2[63] – 1,unsigned:0 <= n <= 2[64] – 1)[3],[9].
-    { SQL_BINARY                    , SQL_C_BINARY          , cFieldDataType_ftBlobn     , 0                            },  // BINARY(n) Binary data of fixed length n.[9]
-    { SQL_VARBINARY                 , SQL_C_BINARY          , cFieldDataType_ftBlobn     , 0                            },  // VARBINARY(n) Variable length binary data of maximum length n. The maximum is set by the user.[9]
+    { SQL_BIGINT                    , SQL_C_SBIGINT         , cFieldDataType_ftLongLong  , sizeof(long long)            },  // BIGINT Exact numeric value with precision 19 (if signed) or 20 (if unsigned) and scale 0(signed:–2[63] <= n <= 2[63] – 1,unsigned:0 <= n <= 2[64] – 1)[3],[9].
+    { SQL_BINARY                    , SQL_C_BINARY          , cFieldDataType_ftBlob      , 0                            },  // BINARY(n) Binary data of fixed length n.[9]
+    { SQL_VARBINARY                 , SQL_C_BINARY          , cFieldDataType_ftBlob      , 0                            },  // VARBINARY(n) Variable length binary data of maximum length n. The maximum is set by the user.[9]
     { SQL_LONGVARBINARY             , SQL_C_BINARY          , cFieldDataType_ftBlob      , 0                            },  // LONG VARBINARY Variable length binary data. Maximum length is data source–dependent.[9]
     { SQL_TYPE_DATE                 , SQL_C_TYPE_DATE       , cFieldDataType_ftDate      , sizeof(SQL_DATE_STRUCT)      },  // [6] DATE Year, month, and day fields, conforming to the rules of the Gregorian calendar. (See "Constraints of the Gregorian Calendar," later in this appendix.)
     { SQL_TYPE_TIME                 , SQL_C_TYPE_TIME       , cFieldDataType_ftTime      , sizeof(SQL_TIME_STRUCT)      },  // [6] TIME(p) Hour, minute, and second fields, with valid values for hours of 00 to 23, valid values for minutes of 00 to 59, and valid values for seconds of 00 to 61. Precision p indicates the seconds precision.
@@ -129,16 +129,10 @@ const TypeRaw * FASTCALL TypeRawFromODBCtype( SWORD odbc_data_type )
 {
     TypeRaw     *result = &DataTypeMap[0];
 
-    for ( int n = 0 ; n < sizeof(DataTypeMap)/sizeof(DataTypeMap[0]) ; ++n, ++result )
+    for ( unsigned int n = 0 ; n < sizeof(DataTypeMap)/sizeof(DataTypeMap[0]) ; ++n, ++result )
         if ( result->OdbcType == odbc_data_type )
             return result;
     throw std::runtime_error( "ODBC: Unsupported database type." );
-}
-
-
-bool FASTCALL NoMaxSizedType( SWORD odbc_data_type )
-{
-    return false;
 }
 
 //***********************************************************************
@@ -148,6 +142,7 @@ CDFASTCALL ODBC_Field::ODBC_Field( const std::string name, const TypeRaw *data_t
     : m_ODBC_type(data_type->OdbcType), mPrecision(precision), mScale(scale), mNullable(nullable), mIndicator(0),
       mName(name), mVecBuff() // mVecBuff( precision <= BUFFER_SWITCH ? 0 : data_size )
 {
+    // SQL type transilation. Better to provide an interface to handle it.
     if ( (m_ODBC_type == SQL_DECIMAL || m_ODBC_type == SQL_NUMERIC) && mScale == 0 && mPrecision <= 19 )
     {
         if ( mPrecision <= 3 )
@@ -159,12 +154,15 @@ CDFASTCALL ODBC_Field::ODBC_Field( const std::string name, const TypeRaw *data_t
         else // if ( mPrecision <= 19 )
             data_type = TypeRawFromODBCtype( SQL_BIGINT );
     }
-    m_C_type = data_type->DriverCType;
+    m_C_type = data_type->OdbcCType;
     m_DS_type = data_type->DatasetType;
+
     if ( data_type->BinarySize != 0 )
         mDataSize = data_type->BinarySize;
     else
         mDataSize = precision;
+    if ( mDataSize > BUFFER_SWITCH )
+        mVecBuff.resize( mDataSize <= LONG_DATA ? mDataSize : LONG_DATA_BUFFER );
 }
 
 CDFASTCALL ODBC_Field::~ODBC_Field()
@@ -182,7 +180,7 @@ SQLLEN FASTCALL ODBC_Field::GetBufferLength()
 {
     if ( mDataSize <= BUFFER_SWITCH )
         return BUFFER_SWITCH;
-    return mDataSize;
+    return mVecBuff.size();
 }
 
 //***********************************************************************
@@ -199,7 +197,7 @@ CDFASTCALL ODBC_Env::~ODBC_Env()
     SQLFreeHandle( SQL_HANDLE_ENV, mEnvironment );
 }
 
-void FASTCALL ODBC_Env::SetOdbcVersion( int version )
+void FASTCALL ODBC_Env::SetOdbcVersion( unsigned long version )
 {
     CheckReturn( SQLSetEnvAttr( mEnvironment, SQL_ATTR_ODBC_VERSION, reinterpret_cast<SQLPOINTER>(version), 0 ) );
 }
@@ -255,10 +253,11 @@ CDFASTCALL ODBC_Statement::~ODBC_Statement()
 }
 
 void FASTCALL ODBC_Statement::GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
-                                                  std::size_t& name_buffer_required_length, int& field_data_size, int& field_data_type )
+                                                  std::size_t& name_buffer_required_length,
+                                                  unsigned int& field_data_size, int& field_data_type )
 {
     ODBC_Field&     field = mFields[idx];
-    std::size_t          copy_len;
+    std::size_t     copy_len;
 
     if ( name_buffer_length > field.GetName().length() )
         copy_len = field.GetName().length();
@@ -266,10 +265,10 @@ void FASTCALL ODBC_Statement::GetFieldAttributes( int idx, char *name, unsigned 
         copy_len = name_buffer_length - 1;
 
     std::strncpy( name, field.GetName().c_str(), copy_len );
-    name[name_buffer_length] = '\0';
+    name[name_buffer_length - 1] = '\0';
     name_buffer_required_length = field.GetName().length() + 1;
     field_data_size = field.GetDataSize();
-    field_data_type = field.C_Type();
+    field_data_type = field.DS_Type();
 }
 
 void FASTCALL ODBC_Statement::ExecSql( const char *sql )
@@ -287,7 +286,7 @@ void FASTCALL ODBC_Statement::ExecSql( const char *sql )
     CheckReturn( SQLNumResultCols( mStatement, &nCols ) );
 
     std::vector<char>   field_name( 50 );
-    SWORD               field_name_size = static_cast<SWORD>(field_name.size() - 1);
+    SWORD               field_name_size = static_cast<SWORD>(field_name.size());
 
     for ( SWORD n = 1 ; n <= nCols ; ++n )
     {
@@ -302,26 +301,20 @@ void FASTCALL ODBC_Statement::ExecSql( const char *sql )
                                                        &nullable ) );
         if ( ret == SQL_SUCCESS_WITH_INFO )
         {
-            field_name.resize( name_length + 1 );
-            field_name_size = static_cast<SWORD>(field_name.size() - 1);
+            field_name.resize( name_length + 1 + (name_length + 1) / 2 );
+            field_name_size = static_cast<SWORD>(field_name.size());
             CheckReturn( SQLDescribeCol( mStatement, n, reinterpret_cast<unsigned char *>(&field_name.front()), field_name_size,
                                          &name_length, &data_type, &precision, &scale, &nullable ) );
         }
-/*
-        unsigned int    n_data_size;
-
-        CheckReturn( SQLColAttribute( mStatement, n, SQL_DESC_OCTET_LENGTH, 0, 0, 0, &n_data_size ) );
-        if ( data_type != SQL_CHAR && data_type != SQL_VARCHAR && data_type != SQL_LONGVARCHAR )
-            data_size = n_data_size;
-*/
         mFields.push_back( ODBC_Field( &field_name.front(), TypeRawFromODBCtype( data_type ), precision, scale, nullable ) );
     }
     for ( SWORD n = 1 ; n <= nCols ; ++n )
     {
         ODBC_Field&     field = mFields[n-1];
 
-        CheckReturn( SQLBindCol( mStatement, n, field.C_Type(), field.GetBuffer(),
-                                 field.GetBufferLength(), field.GetIndicatorAddress() ) );
+        if ( ! field.IsLongData() )
+            CheckReturn( SQLBindCol( mStatement, n, field.C_Type(), field.GetBuffer(),
+                                     field.GetBufferLength(), field.GetIndicatorAddress() ) );
     }
     Next();
 }

@@ -26,61 +26,48 @@
 #include "dsExceptions.h"
 #include "dsSmartPtr.h"
 #include "dsDateTime.h"
+#include "dsGUID.h"
 #include "dsVariant.h"
 
 namespace smds
 {
 
-namespace detail
+namespace
 {
-// cFieldDataType_sync
-unsigned short GetFieldDataSize( cFieldDataType data_type, unsigned short size )
-{
-    unsigned short  result;
 
-    switch ( data_type )
-    {
-        case ftBool :
-            result = sizeof(bool);
-            break;
-        case ftChar :
-            result = sizeof(char);
-            break;
-        case ftWChar :
-            result = sizeof(wchar_t);
-            break;
-        case ftShort :
-            result = sizeof(short);
-            break;
-        case ftInteger :
-            result = sizeof(int);
-            break;
-        case ftLong :
-            result = sizeof(long);
-            break;
-        case ftDouble :
-            result = sizeof(double);
-            break;
-        case ftDateTime :
-            result = sizeof(cDateTime);
-            break;
-        case ftString :
-#ifdef SM_DS_STRING_AS_STRING
-            result = sizeof(ds_string);
-#else
-            result = size;
-#endif
-            break;
-        //case ftWString :
-        //    result = static_cast<unsigned short>(size * sizeof(wchar_t));
-        //    break;
-        case ftBlob :
-            result = sizeof(var_blob_type);
-            break;
-        default :
-            throw eUnknownFieldType();
-    }
-    return ( result );
+struct TypeSizeMap
+{
+    cFieldDataType  DataType;
+    unsigned short  RawSize;
+};
+
+// cFieldDataType_sync
+// sorted by TypeSizeMap.DataType
+static const TypeSizeMap TypeSizeMaps[] =
+{
+    { ftBool, sizeof(bool) },
+    { ftByte, sizeof(char) },
+    { ftShort, sizeof(short) },
+    { ftInteger, sizeof(int) },
+    { ftLongLong, sizeof(long long) },
+    { ftDouble, sizeof(double) },
+    { ftDate, sizeof(detail::dbDate_Internal) },
+    { ftTime, sizeof(detail::dbTime_Internal) },
+    { ftDateTime, sizeof(detail::dbDateTime_Internal) },
+    { ftGUID, sizeof(detail::dbGUID_Internal) },
+    { ftString, sizeof(ds_string *) },
+    { ftWString, sizeof(ds_wstring *) },
+    { ftBlob, sizeof(var_blob_type *) }
+};
+
+unsigned short GetFieldRawSize( cFieldDataType data_type )
+{
+    return TypeSizeMaps[data_type].RawSize;
+}
+
+bool IsFixedSizeDataType( cFieldDataType data_type )
+{
+    return ( data_type != ftString && data_type != ftWString && data_type != ftBlob );
 }
 
 }; // namespace detail
@@ -89,13 +76,10 @@ unsigned short GetFieldDataSize( cFieldDataType data_type, unsigned short size )
 //******    cFieldDef
 //***********************************************************************
 CDFASTCALL cFieldDef::cFieldDef( unsigned short idx, int offset, const ds_string& name,
-                                 cFieldKind kind, cFieldDataType data_type, unsigned short size )
+                                 cFieldKind kind, cFieldDataType data_type, unsigned int size )
     : mIndex(idx), mOffset(offset), mName(name), mKind(kind), mDataType(data_type),
-#ifdef SM_DS_STRING_AS_STRING
-    mSize_(detail::GetFieldDataSize( data_type, size )), mDataSize_(size)
-#else
-      mSize_(size)
-#endif
+      mRawSize(GetFieldRawSize( data_type )), 
+      mDataSize(IsFixedSizeDataType( data_type ) ? mRawSize : size)
 {
 }
 
@@ -112,33 +96,21 @@ bool FASTCALL cFieldDef::operator == ( const cFieldDef& other ) const
         && mName == other.mName
         && mKind == other.mKind
         && mDataType == other.mDataType
-        && mSize_ == other.mSize_
-#ifdef SM_DS_STRING_AS_STRING
-        && mDataSize_ == other.mDataSize_
-#endif
+        && mRawSize == other.mRawSize
+        && mDataSize == other.mDataSize
     );
 }
 
 cStream& FASTCALL operator << ( cStream& st, const cFieldDef a )
 {
-    st << a.mIndex << a.mOffset << a.mName << a.mKind << a.mDataType
-#ifdef SM_DS_STRING_AS_STRING
-       << a.mDataSize_;
-#else
-       << a.mSize_;
-#endif
+    st << a.mIndex << a.mOffset << a.mName << a.mKind << a.mDataType << a.mDataSize;
     return ( st );
 }
 
 cStream& FASTCALL operator >> ( cStream& st, cFieldDef& a )
 {
-    st >> a.mIndex >> a.mOffset >> a.mName >> a.mKind >> a.mDataType
-#ifdef SM_DS_STRING_AS_STRING
-       >> a.mDataSize_;
-    a.mSize_ = detail::GetFieldDataSize( a.mDataType, 0 );
-#else
-       >> a.mSize_;
-#endif
+    st >> a.mIndex >> a.mOffset >> a.mName >> a.mKind >> a.mDataType >> a.mDataSize;
+    a.mRawSize = GetFieldRawSize( a.mDataType );
     return ( st );
 }
 
@@ -168,12 +140,12 @@ CDFASTCALL cFieldDefs::cFieldDefs( const detail::cFieldDefs_& field_defs )
         const detail::cFieldDef_&   field_def = field_defs.mFieldDefs[n];
 
         mFieldDefs.push_back( cFieldDef( field_def.mIndex, field_def.mOffset, field_def.mName,
-                                         field_def.mKind, field_def.mDataType, field_def.mSize ) );
+                                         field_def.mKind, field_def.mDataType, field_def.mDataSize ) );
     }
 
     const cFieldDef&    field_def = mFieldDefs.back();
 
-    mBufferSize = field_def.Offset() + field_def.Size_();
+    mBufferSize = field_def.Offset() + field_def.RawSize();
     ConstructSorted();
 }
 
@@ -226,7 +198,7 @@ void FASTCALL cFieldDefs::ConstructSorted()
     std::sort( mFieldDefSorted.begin(), mFieldDefSorted.end(), cSortByFieldName() );
 }
 
-const cFieldDef FASTCALL cFieldDefs::MakeFieldDef( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size )
+const cFieldDef FASTCALL cFieldDefs::MakeFieldDef( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
 {
     int     offset;
 
@@ -236,10 +208,9 @@ const cFieldDef FASTCALL cFieldDefs::MakeFieldDef( const ds_string& name, cField
     {
         const cFieldDef&    last = mFieldDefs.back();
 
-        offset = last.Offset() + last.Size_();
+        offset = last.Offset() + last.RawSize();
     }
-    return ( cFieldDef( static_cast<unsigned short>(mFieldDefs.size()), offset, name,
-                        kind, data_type, detail::GetFieldDataSize( data_type, size ) ) );
+    return ( cFieldDef( static_cast<unsigned short>(mFieldDefs.size()), offset, name, kind, data_type, size ) );
 }
 
 //void FASTCALL cFieldDefs::clear()
@@ -249,7 +220,7 @@ const cFieldDef FASTCALL cFieldDefs::MakeFieldDef( const ds_string& name, cField
 //    mBufferSize = 0;
 //}
 
-const cFieldDef& FASTCALL cFieldDefs::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size )
+const cFieldDef& FASTCALL cFieldDefs::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
 {
     cFieldDef   field = MakeFieldDef( name, kind, data_type, size );
 
@@ -262,7 +233,7 @@ const cFieldDef& FASTCALL cFieldDefs::AddField( const ds_string& name, cFieldKin
 
     cFieldDef&      result = mFieldDefs.back();
 
-    mBufferSize += result.Size_();
+    mBufferSize += result.RawSize();
     mFieldDefSorted.insert( pos.first, detail::cFieldNameMap( result.Name(), result ) );
 
     return ( result );
@@ -270,29 +241,34 @@ const cFieldDef& FASTCALL cFieldDefs::AddField( const ds_string& name, cFieldKin
 
 const cFieldDef& FASTCALL cFieldDefs::FieldByName( const ds_string& field_name ) const
 {
+    const cFieldDef     *result = FindField( field_name );
+
+    if ( result == 0 )
+        throw eFieldNotFound();
+    return *result;
+}
+
+const cFieldDef& FASTCALL cFieldDefs::FieldByName( const char *field_name ) const
+{
+    return FieldByName( ds_string( field_name ) );
+}
+
+const cFieldDef * FASTCALL cFieldDefs::FindField( const ds_string& field_name ) const
+{
     const detail::cFieldNameMap     field_map( field_name );            // only "field_name" is relevant
 
     cFieldDefSortedContainer::const_iterator    pos = std::lower_bound( mFieldDefSorted.begin(), mFieldDefSorted.end(),
                                                                         field_map, cSortByFieldName() );
 
     if ( pos == mFieldDefSorted.end() || StringCompare( pos->FieldName(), field_name ) != 0  )
-        throw eFieldNotFound();
-    return ( pos->FieldDef() );
+        return 0;
+    return &pos->FieldDef();
 }
 
-const cFieldDef& FASTCALL cFieldDefs::FieldByName( const char *field_name ) const
+const cFieldDef * FASTCALL cFieldDefs::FindField( const char *field_name ) const
 {
-    return ( FieldByName( ds_string( field_name ) ) );
+    return FindField( ds_string( field_name ) );
 }
-
-/*
-const cFieldDef& FASTCALL cFieldDefs::AddField( const cFieldDef& field )
-{
-    mFieldDefs.push_back( field );
-    mBufferSize += mFieldDefs.back().Size();
-    return ( mFieldDefs.back() );
-}
-*/
 
 //---------------------------------------------------------------------------
 }; // namespace smds

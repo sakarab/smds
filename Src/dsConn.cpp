@@ -52,7 +52,7 @@ ConnMapElement  ConnMapArray[] =
 #elif ( _MSC_VER == 1400 )
     { "ODBC", "SmDS_ODBCConn_v8.dll" },
 #elif defined (__GNUG__ )
-    { "ODBC", "SmDS_ODBCConn_gcc.dll" },
+    { "ODBC", "ODBC_Conn_gcc.dll" },
 #endif
     { 0, 0 }
 };

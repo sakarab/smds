@@ -9,7 +9,7 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = smDSb6lib.lib smDS_BDEConn_b6.dll smDS_ADOConn_b6.dll smDS_ODBCConn_b6.dll smDSb6libTest.exe
+PROJECTS = smDSb6lib.lib smDS_ODBCConn_b6.dll smDS_b6exe.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -18,19 +18,11 @@ smDSb6lib.lib: smDSb6lib.bpr
   $(ROOT)\bin\bpr2mak -t$(ROOT)\bin\deflib.bmk $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 
-smDS_BDEConn_b6.dll: smDS_BDEConn_b6.bpr
-  $(ROOT)\bin\bpr2mak $**
-  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
-
-smDS_ADOConn_b6.dll: smDS_ADOConn_b6.bpr
-  $(ROOT)\bin\bpr2mak $**
-  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
-
-smDSb6libTest.exe: smDSb6libTest.bpr
-  $(ROOT)\bin\bpr2mak $**
-  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
-
 smDS_ODBCConn_b6.dll: smDS_ODBCConn_b6.bpr
+  $(ROOT)\bin\bpr2mak $**
+  $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
+
+smDS_b6exe.exe: smDS_b6exe.bpr
   $(ROOT)\bin\bpr2mak $**
   $(ROOT)\bin\make -$(MAKEFLAGS) -f$*.mak
 

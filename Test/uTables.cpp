@@ -32,6 +32,15 @@ using namespace smds::detail;
 //***********************************************************************
 //******    tblLocation
 //***********************************************************************
+struct tblLocation_map
+{
+    int     LocationID_;
+    short   LocTypeID_;
+    short   IsUser_;
+    int     SerialNo_;
+    wchar_t Drive_[2];
+};
+
 const cFieldDef_     tblLocation_data::tblLocation_Fields[] =
 {
     { 0, offsetof(tblLocation_map,LocationID_), "LocationID", fkData, ftInteger,  4 },
@@ -56,6 +65,17 @@ const cFieldDefs_& FASTCALL tblLocation_rec::GetFieldDefs()             { return
 //***********************************************************************
 //******    tblFiles
 //***********************************************************************
+struct tblFiles_map
+{
+    int                                 FileID_;
+    int                                 PathID_;
+    ds_string                           *LongFileName_;
+    int                                 fSize_;
+    smds::detail::dbDateTime_Internal   fDate_;
+    ds_string                           *Description_;
+    int                                 zipID_;
+};
+
 const cFieldDef_     tblFiles_data::tblFiles_Fields[] =
 {
     { 0, offsetof(tblFiles_map,FileID_),       "FileID",       fkData, ftInteger,    4 },

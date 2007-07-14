@@ -29,7 +29,6 @@
 #include <vector>
 #include <functional>
 #include <algorithm>
-#include <stdexcept>
 #include <boost/smart_ptr.hpp>
 #include "dsConn_Intf.h"
 #include "ODBC_Sub.h"
@@ -43,56 +42,6 @@ namespace
 class DbEngine;
 
 std::auto_ptr<ODBC_Env>     Engine;
-
-typedef SQLUSMALLINT        DayTable[13];
-
-const int DaysOffset            = 693594;
-const int HoursPerDay           = 24;
-const int MinutesPerHour        = 60;
-const int SecondsPerMinute      = 60;
-const int MillisecondsPerSecond = 1000;
-const int MinutesPerDay         = HoursPerDay * MinutesPerHour;
-const int SecondsPerDay         = MinutesPerDay * SecondsPerMinute;
-const int MillisecondsPerDay    = SecondsPerDay * MillisecondsPerSecond;
-
-DayTable MonthDays[2] =
-{
-    { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
-    { 0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }
-};
-
-bool IsLeapYear( SQLSMALLINT year )
-{
-    return (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
-}
-
-double EncodeDate( SQLSMALLINT year, SQLUSMALLINT month, SQLUSMALLINT day )
-{
-    SQLUSMALLINT    *day_table = MonthDays[IsLeapYear( year )];
-
-    if ( year < 1 || year > 9999 || month < 1 || month > 12 || day < 1 || day > day_table[month] )
-        throw std::runtime_error( "ODBC date conversion error." );
-    for ( int i = 1 ; i < month ; ++i )
-        day += day_table[i];
-    --year;
-    return ( year * 365 + year / 4 - year / 100 + year / 400 + day - DaysOffset );
-}
-
-double EncodeTime( SQLUSMALLINT hour, SQLUSMALLINT minute, SQLUSMALLINT second, SQLUINTEGER fraction )
-{
-    if ( hour >= HoursPerDay || minute >= MinutesPerHour || second >= SecondsPerMinute || fraction >= MillisecondsPerSecond )
-        throw std::runtime_error( "ODBC time conversion error." );
-    return ( ( hour * (MinutesPerHour * SecondsPerMinute * MillisecondsPerSecond) +
-               minute * (SecondsPerMinute * MillisecondsPerSecond) +
-               second * MillisecondsPerSecond +
-               fraction ) / static_cast<double>(MillisecondsPerDay) );
-}
-
-double EncodeDateTime( SQLSMALLINT year, SQLUSMALLINT month, SQLUSMALLINT day,
-                       SQLUSMALLINT hour, SQLUSMALLINT minute, SQLUSMALLINT second, SQLUINTEGER fraction )
-{
-    return EncodeDate( year, month, day ) + EncodeTime( hour, minute, second, fraction );
-}
 
 //***********************************************************************
 //******    cDataConnection
@@ -128,30 +77,8 @@ class cDataProvider : public IDataProvider
 private:
     typedef ODBC_Field      native_field_type;
 
-    struct FieldFieldPair
-    {
-        native_field_type       *mNativeField;
-        std::string             mFieldName;
-        int                     mFieldDataSize;
-        int                     mFieldDataType;
-        const void              *mData;
-        FieldFieldPair( native_field_type *native_field, const char *field_name, int data_size, int data_type, const void *data )
-            : mNativeField(native_field), mFieldName(field_name), mFieldDataSize(data_size),
-              mFieldDataType(data_type), mData(data)
-        {
-        }
-    };
-
-    struct SortCmpByFieldDef : public std::binary_function<FieldFieldPair, FieldFieldPair, bool>
-    {
-        bool operator() ( const FieldFieldPair& item1, const FieldFieldPair& item2 )
-        {
-            return ( _stricmp( item1.mFieldName.c_str(), item2.mFieldName.c_str() ) < 0 );
-        }
-    };
-    cDataConnection                 *mDataConnection;
-    std::vector<FieldFieldPair>     mFieldPairMap;
-    ODBC_Statement                  mStatement;
+    cDataConnection         *mDataConnection;
+    ODBC_Statement          mStatement;
     // noncopyable
     cDataProvider( const cDataProvider& src );
     cDataProvider& operator=( const cDataProvider& src );
@@ -170,14 +97,10 @@ protected:
 
     virtual std::size_t __stdcall GetFieldCount();
     virtual void __stdcall GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
-                                               std::size_t& name_buffer_required_length, int& field_data_size, int& field_data_type );
-
-    virtual void __stdcall InitDataTransfer();
-    virtual void __stdcall StepInitDataTransfer( const char *field_name, int field_data_size, int field_data_type, const void *data );
-    virtual void __stdcall EndInitDataTransfer();
+                                               std::size_t& name_buffer_required_length,
+                                               unsigned int& field_data_size, int& field_data_type );
 
     virtual bool __stdcall GetFieldValues( IFieldValuesAcceptor *values_acceptor );
-    virtual void __stdcall EndDataTransfer();
 
     virtual void __stdcall StartTransaction();
     virtual void __stdcall Commit();
@@ -284,95 +207,27 @@ unsigned int __stdcall cDataProvider::GetFieldCount()
 }
 
 void __stdcall cDataProvider::GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
-                                                  std::size_t& name_buffer_required_length, int& field_data_size, int& field_data_type )
+                                                  std::size_t& name_buffer_required_length,
+                                                  unsigned int& field_data_size, int& field_data_type )
 {
     mStatement.GetFieldAttributes( idx, name, name_buffer_length, name_buffer_required_length, field_data_size, field_data_type );
-}
-
-void __stdcall cDataProvider::InitDataTransfer()
-{
-    mFieldPairMap.clear();
-}
-
-void __stdcall cDataProvider::StepInitDataTransfer( const char *field_name, int field_data_size, int field_data_type, const void *data )
-{
-    mFieldPairMap.push_back( FieldFieldPair( mStatement.FieldByName( field_name ), field_name, field_data_size, field_data_type, data ) );
-
-    std::vector<FieldFieldPair>::value_type&    pair_ptr = mFieldPairMap.back();
-
-    if ( static_cast<long>(pair_ptr.mNativeField->GetDataSize()) > field_data_size )
-        throw std::runtime_error( "DataSize mismatch!!!!" );
-}
-
-void __stdcall cDataProvider::EndInitDataTransfer()
-{
-    std::sort( mFieldPairMap.begin(), mFieldPairMap.end(), SortCmpByFieldDef() );
 }
 
 bool __stdcall cDataProvider::GetFieldValues( IFieldValuesAcceptor *values_acceptor )
 {
     bool        result = false;
 
-    for ( std::vector<FieldFieldPair>::iterator n = mFieldPairMap.begin(), eend = mFieldPairMap.end() ; n != eend ; ++n )
+    for ( unsigned int n = 0 ; n < mStatement.GetFieldCount() ; ++n )
     {
-        native_field_type   *field = n->mNativeField;
+        native_field_type   *field = mStatement.FieldByIndex( n );
 
         if ( field->IsNull() )
-            values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, 0, n->mFieldDataSize );
-        else switch ( n->mFieldDataType )
-        {
-            case cFieldDataType_ftBool :
-                result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                break;
-            case cFieldDataType_ftChar :
-                result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                break;
-            case cFieldDataType_ftWChar :
-                break;
-            case cFieldDataType_ftShort :
-                result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                break;
-            case cFieldDataType_ftInteger :
-                result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                break;
-            case cFieldDataType_ftLong :
-                result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                break;
-            case cFieldDataType_ftDouble :
-                result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                break;
-            case cFieldDataType_ftDateTime :
-            {
-                SQL_TIMESTAMP_STRUCT    *tm = reinterpret_cast<SQL_TIMESTAMP_STRUCT *>(field->GetBuffer());
-                double                  aa = EncodeDateTime( tm->year, tm->month, tm->day, tm->hour, tm->minute, tm->second, tm->fraction );
-
-                // result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, &aa, sizeof(aa) );
-            }
-                break;
-            case cFieldDataType_ftString :
-                {
-                    /* TODO -osakarab : Need a conversion here */
-                    //if ( field->GetCDataType() == SQL_C_WCHAR )
-                    //{
-                    //}
-                    //else
-                        result = values_acceptor->FieldValue( n->mFieldName.c_str(), n->mFieldDataType, n->mData, field->GetBuffer(), n->mFieldDataSize );
-                }
-                break;
-            case cFieldDataType_ftWString :
-                break;
-            case cFieldDataType_ftBlob :
-                break;
-        }
+            result = values_acceptor->FieldValue( n, 0, field->GetDataSize() );
+        else
+            result = values_acceptor->FieldValue( n, field->GetBuffer(), field->GetDataSize() );
     }
 
     return result;
-}
-
-void __stdcall cDataProvider::EndDataTransfer()
-{
-    mFieldPairMap.clear();
 }
 
 void __stdcall cDataProvider::StartTransaction()
@@ -418,3 +273,4 @@ int WINAPI DllEntryPoint( HINSTANCE /*hinst*/, unsigned long /*reason*/, void* /
     return 1;
 }
 //---------------------------------------------------------------------------
+

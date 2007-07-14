@@ -33,7 +33,7 @@
 struct TypeRaw
 {
     SWORD   OdbcType;
-    SWORD   DriverCType;
+    SWORD   OdbcCType;
     int     DatasetType;
     int     BinarySize;
 };
@@ -45,8 +45,9 @@ class ODBC_Field
 {
 private:
     enum { BUFFER_SWITCH = 16 };
+    enum { LONG_DATA = 256 };
+    enum { LONG_DATA_BUFFER = 1024 };
 
-    // const TypeRaw     * mDataType;
     SWORD               m_ODBC_type;
     UDWORD              mPrecision;
     SWORD               mScale;
@@ -63,12 +64,14 @@ public:
     CDFASTCALL ~ODBC_Field();
     SWORD FASTCALL ODBC_Type() const                        { return m_ODBC_type; }
     SWORD FASTCALL C_Type() const                           { return m_C_type; }
+    int FASTCALL DS_Type() const                            { return m_DS_type; }
     UDWORD FASTCALL GetDataSize() const                     { return mDataSize; }
     const std::string& GetName() const                      { return mName; }
     SQLPOINTER FASTCALL GetBuffer();
     SQLLEN FASTCALL GetBufferLength();
     SQLLEN * FASTCALL GetIndicatorAddress()                 { return &mIndicator; }
     bool FASTCALL IsNull() const                            { return mIndicator == SQL_NULL_DATA; }
+    bool FASTCALL IsLongData() const                        { return ( mDataSize > LONG_DATA ); }
 };
 
 //***********************************************************************
@@ -86,7 +89,7 @@ public:
     CDFASTCALL ~ODBC_Env();
     SQLHANDLE GetHandle() const                         { return mEnvironment; }
 
-    void FASTCALL SetOdbcVersion( int version );                                // SQL_ATTR_ODBC_VERSION
+    void FASTCALL SetOdbcVersion( unsigned long version );      // SQL_ATTR_ODBC_VERSION
 };
 
 //***********************************************************************
@@ -126,7 +129,7 @@ public:
 
     std::size_t FASTCALL GetFieldCount()                            { return mFields.size(); }
     void FASTCALL GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
-                                      std::size_t& name_buffer_required_length, int& field_data_size, int& field_data_type );
+                                      std::size_t& name_buffer_required_length, unsigned int& field_data_size, int& field_data_type );
 
     void FASTCALL ExecSql( const char *sql );
     void FASTCALL CloseSql();
@@ -134,6 +137,7 @@ public:
     bool FASTCALL Eof() const                                       { return mIsEof; }
 
     ODBC_Field * FASTCALL FieldByName( const char *field_name );
+    ODBC_Field * FASTCALL FieldByIndex( int idx )                   { return &mFields[idx]; }
 };
 
 //---------------------------------------------------------------------------

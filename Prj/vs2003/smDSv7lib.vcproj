@@ -134,10 +134,16 @@
 				RelativePath="..\..\Src\dsFields.cpp">
 			</File>
 			<File
+				RelativePath="..\..\Src\dsGUID.cpp">
+			</File>
+			<File
 				RelativePath="..\..\Src\dsIndex.cpp">
 			</File>
 			<File
 				RelativePath="..\..\Src\dsRecord.cpp">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsSerialization.cpp">
 			</File>
 			<File
 				RelativePath="..\..\Src\dsSmartPtr.cpp">
@@ -190,10 +196,19 @@
 				RelativePath="..\..\Src\dsFields.h">
 			</File>
 			<File
+				RelativePath="..\..\Src\dsGUID.h">
+			</File>
+			<File
 				RelativePath="..\..\Src\dsIndex.h">
 			</File>
 			<File
+				RelativePath="..\..\Src\dsODBCtypes.h">
+			</File>
+			<File
 				RelativePath="..\..\Src\dsRecord.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsSerialization.h">
 			</File>
 			<File
 				RelativePath="..\..\Src\dsSmartPtr.h">

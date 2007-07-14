@@ -35,7 +35,7 @@
     <SYSDEFINES value="NO_STRICT;_RTLDLL;USEPACKAGES"/>
     <MAINSOURCE value="smDSb6libTest.cpp"/>
     <INCLUDEPATH value="..\..\Test;..\..\Src;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="..\..\Src;..\..\Test;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <LIBPATH value="..\..\Test;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w8092 -w8091 -w8090 -w8089 -w8087 -wprc -wuse -wucp -wstv -wstu -wsig 
       -wpin -w-par -wnod -wnak -w-8027 -w-8026 -wdef -wcln -wbbf -wasm -wamp -wamb"/>
     <OTHERFILES value=""/>

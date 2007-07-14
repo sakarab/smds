@@ -290,11 +290,14 @@ void FASTCALL CompileTest( tblFiles_ptr ds )
     tblFiles::iterator      data_iter = ds->GetIterator();
 
     data_iter.First();
-    data_iter->SetFileID( 5 );
-    data_iter.OldValues()->GetFileID();
+    if ( ! data_iter.eof() )
+    {
+        data_iter->SetFileID( 5 );
+        data_iter.OldValues()->GetFileID();
 
-    data_iter.OldValues().FieldByName( "fSize" )->AsBoolean();
-    data_iter.FieldByName( "fSize" )->AsBoolean( true );
+        data_iter.OldValues().FieldByName( "fSize" )->AsBoolean();
+        data_iter.FieldByName( "fSize" )->AsBoolean( true );
+    }
 }
 
 //***********************************************************************
@@ -422,9 +425,9 @@ void Test( tblFiles_ptr ds, ErrorReporter error_reporter, void *user_data )
     CompileTest( ds );
     TestVariant();
 
-    Variant     packet = cTableReader::GetTablePacket( ds );
+    //Variant     packet = cTableReader::GetTablePacket( ds );
 
-    cTableWriter::SetTableData( ds, packet );
+    //cTableWriter::SetTableData( ds, packet );
 }
 
 //---------------------------------------------------------------------------

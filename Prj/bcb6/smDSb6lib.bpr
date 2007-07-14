@@ -9,7 +9,8 @@
       OutC6lib\dsRecord.obj OutC6lib\dsVariant.obj OutC6lib\dsDateTime.obj 
       OutC6lib\dsSmartPtr.obj OutC6lib\dsSysOpen.obj 
       OutC6lib\dsCompareControlers.obj OutC6lib\dsStream.obj 
-      OutC6lib\dsUtils.obj OutC6lib\dsCompare.obj OutC6lib\dsIndex.obj"/>
+      OutC6lib\dsUtils.obj OutC6lib\dsCompare.obj OutC6lib\dsIndex.obj 
+      OutC6lib\dsGUID.obj OutC6lib\dsSerialization.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -66,6 +67,8 @@
       <FILE FILENAME="..\..\Src\dsUtils.cpp" FORMNAME="" UNITNAME="dsUtils" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Src\dsCompare.cpp" FORMNAME="" UNITNAME="dsCompare" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Src\dsIndex.cpp" FORMNAME="" UNITNAME="dsIndex" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsGUID.cpp" FORMNAME="" UNITNAME="dsGUID" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsSerialization.cpp" FORMNAME="" UNITNAME="dsSerialization" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

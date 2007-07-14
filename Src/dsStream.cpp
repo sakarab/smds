@@ -69,7 +69,7 @@ CDFASTCALL cAttachedStreamBuffer::cAttachedStreamBuffer()
 
 cStreamBuff::size_type FASTCALL cAttachedStreamBuffer::GetPosition()
 {
-    return ( mPosition );
+    return mPosition;
 }
 
 void FASTCALL cAttachedStreamBuffer::SetPosition( size_type pos )
@@ -82,7 +82,7 @@ void FASTCALL cAttachedStreamBuffer::SetPosition( size_type pos )
 
 cStreamBuff::size_type FASTCALL cAttachedStreamBuffer::GetSize()
 {
-    return ( mBuffer->size() );
+    return mBuffer->size();
 }
 
 void FASTCALL cAttachedStreamBuffer::SetSize( size_type new_size )
@@ -105,7 +105,7 @@ cStreamBuff::size_type FASTCALL cAttachedStreamBuffer::Read( void *buffer, size_
             mPosition += result;
         }
     }
-    return ( result );
+    return result;
 }
 
 cStreamBuff::size_type FASTCALL cAttachedStreamBuffer::Write( const void *buffer, size_type count )
@@ -126,7 +126,7 @@ cStreamBuff::size_type FASTCALL cAttachedStreamBuffer::Write( const void *buffer
             mPosition = new_pos;
         }
     }
-    return ( count );
+    return count;
 }
 
 cStreamBuff::size_type FASTCALL cAttachedStreamBuffer::Seek( seek_size_type offset, seek_mode origin )
@@ -139,7 +139,7 @@ cStreamBuff::size_type FASTCALL cAttachedStreamBuffer::Seek( seek_size_type offs
     }
     if ( mPosition > mBuffer->size() )
         mBuffer->resize( mPosition );
-    return ( mPosition );
+    return mPosition;
 }
 
 //***********************************************************************
@@ -224,6 +224,5 @@ CDFASTCALL cMemoryStream::~cMemoryStream()
 {
 }
 
-};
+}; // namespace smds
 //---------------------------------------------------------------------------
-

@@ -35,100 +35,58 @@ namespace detail
 //***********************************************************************
 //******    cRawRecordPtr
 //***********************************************************************
-/*
-bool FASTCALL cRawRecordPtr::ReadBool( const cFieldDef& field_def ) const               { return ( mRawBuffer->ReadBool( field_def ) ); }
-char FASTCALL cRawRecordPtr::ReadChar( const cFieldDef& field_def ) const               { return ( mRawBuffer->ReadChar( field_def ) ); }
-wchar_t FASTCALL cRawRecordPtr::ReadWChar( const cFieldDef& field_def ) const           { return ( mRawBuffer->ReadWChar( field_def ) ); }
-short FASTCALL cRawRecordPtr::ReadShort( const cFieldDef& field_def ) const             { return ( mRawBuffer->ReadShort( field_def ) ); }
-int FASTCALL cRawRecordPtr::ReadInteger( const cFieldDef& field_def ) const             { return ( mRawBuffer->ReadInteger( field_def ) ); }
-long FASTCALL cRawRecordPtr::ReadLong( const cFieldDef& field_def ) const               { return ( mRawBuffer->ReadLong( field_def ) ); }
-double FASTCALL cRawRecordPtr::ReadFloat( const cFieldDef& field_def ) const            { return ( mRawBuffer->ReadFloat( field_def ) ); }
-cDateTime FASTCALL cRawRecordPtr::ReadDate( const cFieldDef& field_def ) const          { return ( mRawBuffer->ReadDate( field_def ) ); }
-ds_string FASTCALL cRawRecordPtr::ReadString( const cFieldDef& field_def ) const        { return ( mRawBuffer->ReadString( field_def ) ); }
+bool FASTCALL cRawRecordPtr::ReadBool( const cFieldDef_& field_def ) const              { return mRawBuffer->ReadBool( field_def ); }
+char FASTCALL cRawRecordPtr::ReadByte( const cFieldDef_& field_def ) const              { return mRawBuffer->ReadByte( field_def ); }
+short FASTCALL cRawRecordPtr::ReadShort( const cFieldDef_& field_def ) const            { return mRawBuffer->ReadShort( field_def ); }
+int FASTCALL cRawRecordPtr::ReadInteger( const cFieldDef_& field_def ) const            { return mRawBuffer->ReadInteger( field_def ); }
+long long FASTCALL cRawRecordPtr::ReadLongLong( const cFieldDef_& field_def ) const     { return mRawBuffer->ReadLongLong( field_def ); }
+double FASTCALL cRawRecordPtr::ReadFloat( const cFieldDef_& field_def ) const           { return mRawBuffer->ReadFloat( field_def ); }
+dbDate FASTCALL cRawRecordPtr::ReadDate( const cFieldDef_& field_def ) const            { return mRawBuffer->ReadDate( field_def ); }
+dbTime FASTCALL cRawRecordPtr::ReadTime( const cFieldDef_& field_def ) const            { return mRawBuffer->ReadTime( field_def ); }
+dbDateTime FASTCALL cRawRecordPtr::ReadDateTime( const cFieldDef_& field_def ) const    { return mRawBuffer->ReadDateTime( field_def ); }
+ds_string FASTCALL cRawRecordPtr::ReadString( const cFieldDef_& field_def ) const       { return mRawBuffer->ReadString( field_def ); }
 
-void FASTCALL cRawRecordPtr::WriteBool( const cFieldDef& field_def, bool value )                { mRawBuffer->WriteBool( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteChar( const cFieldDef& field_def, char value )                { mRawBuffer->WriteChar( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteWChar( const cFieldDef& field_def, wchar_t value )            { mRawBuffer->WriteWChar( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteShort( const cFieldDef& field_def, short value )              { mRawBuffer->WriteShort( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteInteger( const cFieldDef& field_def, int value )              { mRawBuffer->WriteInteger( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteLong( const cFieldDef& field_def, long value )                { mRawBuffer->WriteLong( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteFloat( const cFieldDef& field_def, double value )             { mRawBuffer->WriteFloat( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteDate( const cFieldDef& field_def, const cDateTime& value )    { mRawBuffer->WriteDate( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteString( const cFieldDef& field_def, const ds_string& value )  { mRawBuffer->WriteString( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteString( const cFieldDef& field_def, const char *value )       { mRawBuffer->WriteString( field_def, value ); }
-*/
-
-bool FASTCALL cRawRecordPtr::ReadBool( const cFieldDef_& field_def ) const               { return ( mRawBuffer->ReadBool( field_def ) ); }
-char FASTCALL cRawRecordPtr::ReadChar( const cFieldDef_& field_def ) const               { return ( mRawBuffer->ReadChar( field_def ) ); }
-wchar_t FASTCALL cRawRecordPtr::ReadWChar( const cFieldDef_& field_def ) const           { return ( mRawBuffer->ReadWChar( field_def ) ); }
-short FASTCALL cRawRecordPtr::ReadShort( const cFieldDef_& field_def ) const             { return ( mRawBuffer->ReadShort( field_def ) ); }
-int FASTCALL cRawRecordPtr::ReadInteger( const cFieldDef_& field_def ) const             { return ( mRawBuffer->ReadInteger( field_def ) ); }
-long FASTCALL cRawRecordPtr::ReadLong( const cFieldDef_& field_def ) const               { return ( mRawBuffer->ReadLong( field_def ) ); }
-double FASTCALL cRawRecordPtr::ReadFloat( const cFieldDef_& field_def ) const            { return ( mRawBuffer->ReadFloat( field_def ) ); }
-cDateTime FASTCALL cRawRecordPtr::ReadDate( const cFieldDef_& field_def ) const          { return ( mRawBuffer->ReadDate( field_def ) ); }
-ds_string FASTCALL cRawRecordPtr::ReadString( const cFieldDef_& field_def ) const        { return ( mRawBuffer->ReadString( field_def ) ); }
-
-void FASTCALL cRawRecordPtr::WriteBool( const cFieldDef_& field_def, bool value )                { mRawBuffer->WriteBool( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteChar( const cFieldDef_& field_def, char value )                { mRawBuffer->WriteChar( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteWChar( const cFieldDef_& field_def, wchar_t value )            { mRawBuffer->WriteWChar( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteShort( const cFieldDef_& field_def, short value )              { mRawBuffer->WriteShort( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteInteger( const cFieldDef_& field_def, int value )              { mRawBuffer->WriteInteger( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteLong( const cFieldDef_& field_def, long value )                { mRawBuffer->WriteLong( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteFloat( const cFieldDef_& field_def, double value )             { mRawBuffer->WriteFloat( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteDate( const cFieldDef_& field_def, const cDateTime& value )    { mRawBuffer->WriteDate( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteString( const cFieldDef_& field_def, const ds_string& value )  { mRawBuffer->WriteString( field_def, value ); }
-void FASTCALL cRawRecordPtr::WriteString( const cFieldDef_& field_def, const char *value )       { mRawBuffer->WriteString( field_def, value ); }
+void FASTCALL cRawRecordPtr::WriteBool( const cFieldDef_& field_def, bool value )                   { mRawBuffer->WriteBool( field_def, value ); }
+void FASTCALL cRawRecordPtr::WriteChar( const cFieldDef_& field_def, char value )                   { mRawBuffer->WriteByte( field_def, value ); }
+void FASTCALL cRawRecordPtr::WriteShort( const cFieldDef_& field_def, short value )                 { mRawBuffer->WriteShort( field_def, value ); }
+void FASTCALL cRawRecordPtr::WriteInteger( const cFieldDef_& field_def, int value )                 { mRawBuffer->WriteInteger( field_def, value ); }
+void FASTCALL cRawRecordPtr::WriteLongLong( const cFieldDef_& field_def, long long value )          { mRawBuffer->WriteLongLong( field_def, value ); }
+void FASTCALL cRawRecordPtr::WriteFloat( const cFieldDef_& field_def, double value )                { mRawBuffer->WriteFloat( field_def, value ); }
+void FASTCALL cRawRecordPtr::WriteDate( const cFieldDef_& field_def, const dbDate& value )          { mRawBuffer->WriteDate( field_def, value ); }
+void FASTCALL cRawRecordPtr::WriteTime( const cFieldDef_& field_def, const dbTime& value )          { mRawBuffer->WriteTime( field_def, value ); }
+void FASTCALL cRawRecordPtr::WriteDateTime( const cFieldDef_& field_def, const dbDateTime& value )  { mRawBuffer->WriteDateTime( field_def, value ); }
+void FASTCALL cRawRecordPtr::WriteString( const cFieldDef_& field_def, const ds_string& value )     { mRawBuffer->WriteString( field_def, value ); }
+void FASTCALL cRawRecordPtr::WriteString( const cFieldDef_& field_def, const char *value )          { mRawBuffer->WriteString( field_def, value ); }
 
 //***********************************************************************
 //******    cRecordPtr
 //***********************************************************************
-bool FASTCALL cRecordPtr::IsNull( const cFieldDef& field_def ) const            { return ( mBuffer->IsNull( field_def ) ); }
-bool FASTCALL cRecordPtr::IsNull( const cFieldDef_& field_def ) const           { return ( mBuffer->IsNull( field_def ) ); }
-void FASTCALL cRecordPtr::Nullify( const cFieldDef& field_def )                 { mBuffer->Nullify( field_def ); }
+bool FASTCALL cRecordPtr::IsNull( const cFieldDef& field_def ) const                { return mBuffer->IsNull( field_def ); }
+bool FASTCALL cRecordPtr::IsNull( const cFieldDef_& field_def ) const               { return mBuffer->IsNull( field_def ); }
+void FASTCALL cRecordPtr::Nullify( const cFieldDef& field_def )                     { mBuffer->Nullify( field_def ); }
 
-/*
-bool FASTCALL cRecordPtr::ReadBool( const cFieldDef& field_def ) const          { return ( mBuffer->ReadBool( field_def ) ); }
-char FASTCALL cRecordPtr::ReadChar( const cFieldDef& field_def ) const          { return ( mBuffer->ReadChar( field_def ) ); }
-wchar_t FASTCALL cRecordPtr::ReadWChar( const cFieldDef& field_def ) const      { return ( mBuffer->ReadWChar( field_def ) ); }
-short FASTCALL cRecordPtr::ReadShort( const cFieldDef& field_def ) const        { return ( mBuffer->ReadShort( field_def ) ); }
-int FASTCALL cRecordPtr::ReadInteger( const cFieldDef& field_def ) const        { return ( mBuffer->ReadInteger( field_def ) ); }
-long FASTCALL cRecordPtr::ReadLong( const cFieldDef& field_def ) const          { return ( mBuffer->ReadLong( field_def ) ); }
-double FASTCALL cRecordPtr::ReadFloat( const cFieldDef& field_def ) const       { return ( mBuffer->ReadFloat( field_def ) ); }
-cDateTime FASTCALL cRecordPtr::ReadDate( const cFieldDef& field_def ) const     { return ( mBuffer->ReadDate( field_def ) ); }
-ds_string FASTCALL cRecordPtr::ReadString( const cFieldDef& field_def ) const   { return ( mBuffer->ReadString( field_def ) ); }
+bool FASTCALL cRecordPtr::ReadBool( const cFieldDef_& field_def ) const             { return mBuffer->ReadBool( field_def ); }
+char FASTCALL cRecordPtr::ReadByte( const cFieldDef_& field_def ) const             { return mBuffer->ReadByte( field_def ); }
+short FASTCALL cRecordPtr::ReadShort( const cFieldDef_& field_def ) const           { return mBuffer->ReadShort( field_def ); }
+int FASTCALL cRecordPtr::ReadInteger( const cFieldDef_& field_def ) const           { return mBuffer->ReadInteger( field_def ); }
+long long FASTCALL cRecordPtr::ReadLongLong( const cFieldDef_& field_def ) const    { return mBuffer->ReadLongLong( field_def ); }
+double FASTCALL cRecordPtr::ReadFloat( const cFieldDef_& field_def ) const          { return mBuffer->ReadFloat( field_def ); }
+dbDate FASTCALL cRecordPtr::ReadDate( const cFieldDef_& field_def ) const           { return mBuffer->ReadDate( field_def ); }
+dbTime FASTCALL cRecordPtr::ReadTime( const cFieldDef_& field_def ) const           { return mBuffer->ReadTime( field_def ); }
+dbDateTime FASTCALL cRecordPtr::ReadDateTime( const cFieldDef_& field_def ) const   { return mBuffer->ReadDateTime( field_def ); }
+ds_string FASTCALL cRecordPtr::ReadString( const cFieldDef_& field_def ) const      { return mBuffer->ReadString( field_def ); }
 
-void FASTCALL cRecordPtr::WriteBool( const cFieldDef& field_def, bool value )               { mBuffer->WriteBool( field_def, value ); }
-void FASTCALL cRecordPtr::WriteChar( const cFieldDef& field_def, char value )               { mBuffer->WriteChar( field_def, value ); }
-void FASTCALL cRecordPtr::WriteWChar( const cFieldDef& field_def, wchar_t value )           { mBuffer->WriteWChar( field_def, value ); }
-void FASTCALL cRecordPtr::WriteShort( const cFieldDef& field_def, short value )             { mBuffer->WriteShort( field_def, value ); }
-void FASTCALL cRecordPtr::WriteInteger( const cFieldDef& field_def, int value )             { mBuffer->WriteInteger( field_def, value ); }
-void FASTCALL cRecordPtr::WriteLong( const cFieldDef& field_def, long value )               { mBuffer->WriteLong( field_def, value ); }
-void FASTCALL cRecordPtr::WriteFloat( const cFieldDef& field_def, double value )            { mBuffer->WriteFloat( field_def, value ); }
-void FASTCALL cRecordPtr::WriteDate( const cFieldDef& field_def, const cDateTime& value )   { mBuffer->WriteDate( field_def, value ); }
-void FASTCALL cRecordPtr::WriteString( const cFieldDef& field_def, const ds_string& value ) { mBuffer->WriteString( field_def, value ); }
-void FASTCALL cRecordPtr::WriteString( const cFieldDef& field_def, const char *value )      { mBuffer->WriteString( field_def, value ); }
-*/
-
-bool FASTCALL cRecordPtr::ReadBool( const cFieldDef_& field_def ) const          { return ( mBuffer->ReadBool( field_def ) ); }
-char FASTCALL cRecordPtr::ReadChar( const cFieldDef_& field_def ) const          { return ( mBuffer->ReadChar( field_def ) ); }
-wchar_t FASTCALL cRecordPtr::ReadWChar( const cFieldDef_& field_def ) const      { return ( mBuffer->ReadWChar( field_def ) ); }
-short FASTCALL cRecordPtr::ReadShort( const cFieldDef_& field_def ) const        { return ( mBuffer->ReadShort( field_def ) ); }
-int FASTCALL cRecordPtr::ReadInteger( const cFieldDef_& field_def ) const        { return ( mBuffer->ReadInteger( field_def ) ); }
-long FASTCALL cRecordPtr::ReadLong( const cFieldDef_& field_def ) const          { return ( mBuffer->ReadLong( field_def ) ); }
-double FASTCALL cRecordPtr::ReadFloat( const cFieldDef_& field_def ) const       { return ( mBuffer->ReadFloat( field_def ) ); }
-cDateTime FASTCALL cRecordPtr::ReadDate( const cFieldDef_& field_def ) const     { return ( mBuffer->ReadDate( field_def ) ); }
-ds_string FASTCALL cRecordPtr::ReadString( const cFieldDef_& field_def ) const   { return ( mBuffer->ReadString( field_def ) ); }
-
-void FASTCALL cRecordPtr::WriteBool( const cFieldDef_& field_def, bool value )               { mBuffer->WriteBool( field_def, value ); }
-void FASTCALL cRecordPtr::WriteChar( const cFieldDef_& field_def, char value )               { mBuffer->WriteChar( field_def, value ); }
-void FASTCALL cRecordPtr::WriteWChar( const cFieldDef_& field_def, wchar_t value )           { mBuffer->WriteWChar( field_def, value ); }
-void FASTCALL cRecordPtr::WriteShort( const cFieldDef_& field_def, short value )             { mBuffer->WriteShort( field_def, value ); }
-void FASTCALL cRecordPtr::WriteInteger( const cFieldDef_& field_def, int value )             { mBuffer->WriteInteger( field_def, value ); }
-void FASTCALL cRecordPtr::WriteLong( const cFieldDef_& field_def, long value )               { mBuffer->WriteLong( field_def, value ); }
-void FASTCALL cRecordPtr::WriteFloat( const cFieldDef_& field_def, double value )            { mBuffer->WriteFloat( field_def, value ); }
-void FASTCALL cRecordPtr::WriteDate( const cFieldDef_& field_def, const cDateTime& value )   { mBuffer->WriteDate( field_def, value ); }
-void FASTCALL cRecordPtr::WriteString( const cFieldDef_& field_def, const ds_string& value ) { mBuffer->WriteString( field_def, value ); }
-void FASTCALL cRecordPtr::WriteString( const cFieldDef_& field_def, const char *value )      { mBuffer->WriteString( field_def, value ); }
+void FASTCALL cRecordPtr::WriteBool( const cFieldDef_& field_def, bool value )                  { mBuffer->WriteBool( field_def, value ); }
+void FASTCALL cRecordPtr::WriteChar( const cFieldDef_& field_def, char value )                  { mBuffer->WriteByte( field_def, value ); }
+void FASTCALL cRecordPtr::WriteShort( const cFieldDef_& field_def, short value )                { mBuffer->WriteShort( field_def, value ); }
+void FASTCALL cRecordPtr::WriteInteger( const cFieldDef_& field_def, int value )                { mBuffer->WriteInteger( field_def, value ); }
+void FASTCALL cRecordPtr::WriteLongLong( const cFieldDef_& field_def, long long value )         { mBuffer->WriteLongLong( field_def, value ); }
+void FASTCALL cRecordPtr::WriteFloat( const cFieldDef_& field_def, double value )               { mBuffer->WriteFloat( field_def, value ); }
+void FASTCALL cRecordPtr::WriteDate( const cFieldDef_& field_def, const dbDate& value )         { mBuffer->WriteDate( field_def, value ); }
+void FASTCALL cRecordPtr::WriteTime( const cFieldDef_& field_def, const dbTime& value )         { mBuffer->WriteTime( field_def, value ); }
+void FASTCALL cRecordPtr::WriteDateTime( const cFieldDef_& field_def, const dbDateTime& value ) { mBuffer->WriteDateTime( field_def, value ); }
+void FASTCALL cRecordPtr::WriteString( const cFieldDef_& field_def, const ds_string& value )    { mBuffer->WriteString( field_def, value ); }
+void FASTCALL cRecordPtr::WriteString( const cFieldDef_& field_def, const char *value )         { mBuffer->WriteString( field_def, value ); }
 
 //***********************************************************************
 //******    cRecordIterator
@@ -309,12 +267,12 @@ void FASTCALL cFieldProxyRecordHelper::AsBoolean( bool value )
     AsVariant( Variant( value ) );
 }
 
-char FASTCALL cFieldProxyRecordHelper::AsChar() const
+char FASTCALL cFieldProxyRecordHelper::AsByte() const
 {
-    return ( AsVariant().AsChar() );
+    return ( AsVariant().AsByte() );
 }
 
-void FASTCALL cFieldProxyRecordHelper::AsChar( char value )
+void FASTCALL cFieldProxyRecordHelper::AsByte( char value )
 {
     AsVariant( Variant( value ) );
 }
@@ -339,12 +297,12 @@ void FASTCALL cFieldProxyRecordHelper::AsDouble( double value )
     AsVariant( Variant( value ) );
 }
 
-cDateTime FASTCALL cFieldProxyRecordHelper::AsDateTime() const
+dbDateTime FASTCALL cFieldProxyRecordHelper::AsDateTime() const
 {
     return ( AsVariant().AsDateTime() );
 }
 
-void FASTCALL cFieldProxyRecordHelper::AsDateTime( const cDateTime& value )
+void FASTCALL cFieldProxyRecordHelper::AsDateTime( const dbDateTime& value )
 {
     AsVariant( Variant( value ) );
 }

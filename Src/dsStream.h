@@ -134,30 +134,34 @@ public:
 	// cStreamBuff::size_type FASTCALL CopyFrom( cStream& source, cStreamBuff::size_type count );
 };
 
-inline cStream& FASTCALL operator << ( cStream& st, const bool a )              { return ( st.WriteBuffer( &a, sizeof(bool) ) ); }
-inline cStream& FASTCALL operator << ( cStream& st, const char a )              { return ( st.WriteBuffer( &a, sizeof(char) ) ); }
-inline cStream& FASTCALL operator << ( cStream& st, const unsigned char a )     { return ( st.WriteBuffer( &a, sizeof(unsigned char) ) ); }
-inline cStream& FASTCALL operator << ( cStream& st, const wchar_t a )           { return ( st.WriteBuffer( &a, sizeof(wchar_t) ) ); }
-inline cStream& FASTCALL operator << ( cStream& st, const short a )             { return ( st.WriteBuffer( &a, sizeof(short) ) ); }
-inline cStream& FASTCALL operator << ( cStream& st, const unsigned short a )    { return ( st.WriteBuffer( &a, sizeof(unsigned short) ) ); }
-inline cStream& FASTCALL operator << ( cStream& st, const int a )               { return ( st.WriteBuffer( &a, sizeof(int) ) ); }
-inline cStream& FASTCALL operator << ( cStream& st, const unsigned int a )      { return ( st.WriteBuffer( &a, sizeof(unsigned int) ) ); }
-inline cStream& FASTCALL operator << ( cStream& st, const long a )              { return ( st.WriteBuffer( &a, sizeof(long) ) ); }
-inline cStream& FASTCALL operator << ( cStream& st, const unsigned long a )     { return ( st.WriteBuffer( &a, sizeof(unsigned long) ) ); }
-inline cStream& FASTCALL operator << ( cStream& st, const double a )            { return ( st.WriteBuffer( &a, sizeof(double) ) ); }
+inline cStream& FASTCALL operator << ( cStream& st, const bool a )                  { return st.WriteBuffer( &a, sizeof(bool) ); }
+inline cStream& FASTCALL operator << ( cStream& st, const char a )                  { return st.WriteBuffer( &a, sizeof(char) ); }
+inline cStream& FASTCALL operator << ( cStream& st, const unsigned char a )         { return st.WriteBuffer( &a, sizeof(unsigned char) ); }
+inline cStream& FASTCALL operator << ( cStream& st, const wchar_t a )               { return st.WriteBuffer( &a, sizeof(wchar_t) ); }
+inline cStream& FASTCALL operator << ( cStream& st, const short a )                 { return st.WriteBuffer( &a, sizeof(short) ); }
+inline cStream& FASTCALL operator << ( cStream& st, const unsigned short a )        { return st.WriteBuffer( &a, sizeof(unsigned short) ); }
+inline cStream& FASTCALL operator << ( cStream& st, const int a )                   { return st.WriteBuffer( &a, sizeof(int) ); }
+inline cStream& FASTCALL operator << ( cStream& st, const unsigned int a )          { return st.WriteBuffer( &a, sizeof(unsigned int) ); }
+inline cStream& FASTCALL operator << ( cStream& st, const long a )                  { return st.WriteBuffer( &a, sizeof(long) ); }
+inline cStream& FASTCALL operator << ( cStream& st, const unsigned long a )         { return st.WriteBuffer( &a, sizeof(unsigned long) ); }
+inline cStream& FASTCALL operator << ( cStream& st, const long long a )             { return st.WriteBuffer( &a, sizeof(long long) ); }
+inline cStream& FASTCALL operator << ( cStream& st, const unsigned long long a )    { return st.WriteBuffer( &a, sizeof(unsigned long long) ); }
+inline cStream& FASTCALL operator << ( cStream& st, const double a )                { return st.WriteBuffer( &a, sizeof(double) ); }
 cStream& FASTCALL operator << ( cStream& st, const char *a );
 
-inline cStream& FASTCALL operator >> ( cStream& st, bool& a )               { return ( st.ReadBuffer( &a, sizeof(bool) ) ); }
-inline cStream& FASTCALL operator >> ( cStream& st, char& a )               { return ( st.ReadBuffer( &a, sizeof(char) ) ); }
-inline cStream& FASTCALL operator >> ( cStream& st, unsigned char& a )      { return ( st.ReadBuffer( &a, sizeof(unsigned char) ) ); }
-inline cStream& FASTCALL operator >> ( cStream& st, wchar_t& a )            { return ( st.ReadBuffer( &a, sizeof(wchar_t) ) ); }
-inline cStream& FASTCALL operator >> ( cStream& st, short& a )              { return ( st.ReadBuffer( &a, sizeof(short) ) ); }
-inline cStream& FASTCALL operator >> ( cStream& st, unsigned short& a )     { return ( st.ReadBuffer( &a, sizeof(unsigned short) ) ); }
-inline cStream& FASTCALL operator >> ( cStream& st, int& a )                { return ( st.ReadBuffer( &a, sizeof(int) ) ); }
-inline cStream& FASTCALL operator >> ( cStream& st, unsigned int& a )       { return ( st.ReadBuffer( &a, sizeof(unsigned int) ) ); }
-inline cStream& FASTCALL operator >> ( cStream& st, long& a )               { return ( st.ReadBuffer( &a, sizeof(long) ) ); }
-inline cStream& FASTCALL operator >> ( cStream& st, unsigned long& a )      { return ( st.ReadBuffer( &a, sizeof(unsigned long) ) ); }
-inline cStream& FASTCALL operator >> ( cStream& st, double& a )             { return ( st.ReadBuffer( &a, sizeof(double) ) ); }
+inline cStream& FASTCALL operator >> ( cStream& st, bool& a )               { return st.ReadBuffer( &a, sizeof(bool) ); }
+inline cStream& FASTCALL operator >> ( cStream& st, char& a )               { return st.ReadBuffer( &a, sizeof(char) ); }
+inline cStream& FASTCALL operator >> ( cStream& st, unsigned char& a )      { return st.ReadBuffer( &a, sizeof(unsigned char) ); }
+inline cStream& FASTCALL operator >> ( cStream& st, wchar_t& a )            { return st.ReadBuffer( &a, sizeof(wchar_t) ); }
+inline cStream& FASTCALL operator >> ( cStream& st, short& a )              { return st.ReadBuffer( &a, sizeof(short) ); }
+inline cStream& FASTCALL operator >> ( cStream& st, unsigned short& a )     { return st.ReadBuffer( &a, sizeof(unsigned short) ); }
+inline cStream& FASTCALL operator >> ( cStream& st, int& a )                { return st.ReadBuffer( &a, sizeof(int) ); }
+inline cStream& FASTCALL operator >> ( cStream& st, unsigned int& a )       { return st.ReadBuffer( &a, sizeof(unsigned int) ); }
+inline cStream& FASTCALL operator >> ( cStream& st, long& a )               { return st.ReadBuffer( &a, sizeof(long) ); }
+inline cStream& FASTCALL operator >> ( cStream& st, unsigned long& a )      { return st.ReadBuffer( &a, sizeof(unsigned long) ); }
+inline cStream& FASTCALL operator >> ( cStream& st, long long& a )          { return st.ReadBuffer( &a, sizeof(long long) ); }
+inline cStream& FASTCALL operator >> ( cStream& st, unsigned long long& a ) { return st.ReadBuffer( &a, sizeof(unsigned long long) ); }
+inline cStream& FASTCALL operator >> ( cStream& st, double& a )             { return st.ReadBuffer( &a, sizeof(double) ); }
 // cStream& FASTCALL operator >> ( cStream& st, const char *a );
 
 //***********************************************************************

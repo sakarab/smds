@@ -164,8 +164,8 @@ public:
 
     const ds_string& GetTableName()                     { return ( mTableName ); }
 
-    void FASTCALL AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned short size );
-    void FASTCALL AddField( const char *name, cFieldKind kind, cFieldDataType data_type, unsigned short size );
+    void FASTCALL AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size );
+    void FASTCALL AddField( const char *name, cFieldKind kind, cFieldDataType data_type, unsigned int size );
     void FASTCALL Open( const Database& database, const char *where_clause );
     void FASTCALL Close();
 

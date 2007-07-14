@@ -94,7 +94,7 @@
 ** if defined date-time classes use internally a double for the representation
 ** else they use the corresponding ODBC structs
 ***********************************************************************************/
-#define SM_DS_DATE_IS_DOUBLE
+// depricated #define SM_DS_DATE_IS_DOUBLE
 
 /**********************************************************************************
 ** Comment this to enable asserts in boost library

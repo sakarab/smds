@@ -8,22 +8,6 @@
 using namespace smds;
 
 //--------------------------------------------------------------------
-class InitOle
-{
-private:
-	bool	inited;
-public:
-    InitOle()
-		: inited(SUCCEEDED(::CoInitialize(0)))
-	{
-	}
-    ~InitOle()
-	{
-		if ( inited )
-			::CoUninitialize();
-	}
-};
-
 void __fastcall dsDatasetModify( tblFiles::iterator ds, const ds_string& descr )
 {
     //ds_string   descr( "File" );
@@ -107,8 +91,6 @@ void FASTCALL ErrorReporter_( void *user_data, const char *error )
 int main()
 {
     _set_sbh_threshold( 1016 );
-
-    InitOle		guard;
 
     // DbEngine        transport = SelectDbEngine( "BDE" );
     // Database        connection = transport.NewConnection( BDE_DirData_Conn );
