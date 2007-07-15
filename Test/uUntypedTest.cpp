@@ -28,6 +28,42 @@
 
 using namespace smds;
 
+namespace
+{
+
+//***********************************************************************
+//******    WhileLoop
+//***********************************************************************
+void FASTCALL WhileLoop( record_iterator ptr )
+{
+    while ( ! ptr.eof() )
+        ++ptr;
+}
+//***********************************************************************
+//******    ForLoop
+//***********************************************************************
+void FASTCALL ForLoop( record_iterator ptr )
+{
+    for ( int n = 0, end = ptr.RecordCount() ; n < end ; ++n )
+        ++ptr;
+}
+//***********************************************************************
+//******    CheckNull
+//***********************************************************************
+int FASTCALL CountNulls( record_iterator ptr )
+{
+    int                 result = 0;
+    // const cFieldDef&    zipID_field = table->GetFieldDefs()->FieldByName( "zipID" );
+
+    ptr.First();
+    for ( int n = 0, end = ptr.RecordCount() ; n < end ; ++n, ++ptr )
+        if ( ptr.FieldByName( "zipID" )->IsNull() )
+            ++result;
+    return result;
+}
+
+};
+
 void FASTCALL UntypedTest( Database& database )
 {
     spTable     table( new Table( "tblFiles" ) );
@@ -40,7 +76,11 @@ void FASTCALL UntypedTest( Database& database )
     table->AddField( "Description",  fkData, ftString,   255 );
     table->AddField( "zipID",        fkData, ftInteger,  4 );
 
-    // table->Open( database, 0 );
+    table->Open( database, 0 );
+
+    WhileLoop( table->GetIterator() );
+    ForLoop( table->GetIterator() );
+    CountNulls( table->GetIterator() );
 }
 //---------------------------------------------------------------------------
 
