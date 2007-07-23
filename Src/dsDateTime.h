@@ -115,6 +115,7 @@ public:
 
     const detail::dbDateTime_Internal& FASTCALL AsInternal() const                          { return mValue; }
     double FASTCALL AsDouble() const;
+    std::tm FASTCALL AsTM() const;
 };
 
 cStream& FASTCALL operator << ( cStream& st, const dbDateTime a );

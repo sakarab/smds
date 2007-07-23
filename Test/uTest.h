@@ -29,5 +29,6 @@ typedef void (FASTCALL *ErrorReporter)( void *user_data, const char *error );
 
 tblFiles_ptr GetTblFiles( smds::Database& database );
 void Test( tblFiles_ptr ds, ErrorReporter error_reporter, void *user_data );
+void TestAlign();
 //---------------------------------------------------------------------------
 #endif

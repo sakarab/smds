@@ -30,8 +30,183 @@
 #include "dsSysOpen.h"
 #include "dsExceptions.h"
 //---------------------------------------------------------------------------
+#include <iostream>
+#include <boost/type_traits.hpp>
 
 using namespace smds;
+
+template <std::size_t offset, class T> class aligned_offset
+{
+private:
+    enum { modulo = offset % boost::alignment_of<int>::value };
+public:
+    enum { value = (modulo == 0 ? offset : offset + boost::alignment_of<int>::value - modulo) };
+};
+
+
+const int prev_offset = 9;
+const int new_offset = prev_offset + sizeof(int);
+const int aa = new_offset + boost::alignment_of<int>::value - (new_offset % boost::alignment_of<int>::value);
+const int bb = aligned_offset< new_offset, int >::value;
+
+/*
+template
+<
+    int index_,
+    const char *name_,
+    smds::cFieldKind field_kind_,
+    smds::cFieldDataType field_data_type_,
+    std::size_t size_
+>
+struct field_def
+{
+    enum { index = index_ };
+    typedef field_kind;
+    typedef field_data_type;
+};
+*/
+
+template <smds::cFieldDataType field_data_type, std::size_t data_size> struct field_trait       {}; // empty
+
+template <std::size_t data_size> struct field_trait<ftBool, data_size>
+{
+    typedef bool    type;
+    enum { size = sizeof(type) };
+};
+
+template <std::size_t data_size> struct field_trait<ftByte, data_size>
+{
+    typedef char    type;
+    enum { size = sizeof(type) };
+};
+
+template <std::size_t data_size> struct field_trait<ftShort, data_size>
+{
+    typedef short   type;
+    enum { size = sizeof(type) };
+};
+
+template <std::size_t data_size> struct field_trait<ftInteger, data_size>
+{
+    typedef int     type;
+    enum { size = sizeof(type) };
+};
+
+template <std::size_t data_size> struct field_trait<ftLongLong, data_size>
+{
+    typedef long long   type;
+    enum { size = sizeof(type) };
+};
+
+template <std::size_t data_size> struct field_trait<ftDouble, data_size>
+{
+    typedef double  type;
+    enum { size = sizeof(type) };
+};
+
+template <std::size_t data_size> struct field_trait<ftDate, data_size>
+{
+    typedef detail::dbDate_Internal     type;
+    enum { size = sizeof(type) };
+};
+
+template <std::size_t data_size> struct field_trait<ftTime, data_size>
+{
+    typedef detail::dbTime_Internal     type;
+    enum { size = sizeof(type) };
+};
+
+template <std::size_t data_size> struct field_trait<ftDateTime, data_size>
+{
+    typedef detail::dbDateTime_Internal     type;
+    enum { size = sizeof(type) };
+};
+
+template <std::size_t data_size> struct field_trait<ftGUID, data_size>
+{
+    typedef detail::dbGUID_Internal     type;
+    enum { size = sizeof(type) };
+};
+
+template <std::size_t data_size> struct field_trait<ftString, data_size>
+{
+    typedef ds_string *     type;
+    enum { size = data_size };
+};
+
+//template <> struct field_trait<ftWString>   { enum { size = sizeof(short) };  typedef short   type; };
+//template <> struct field_trait<ftBlob>      { enum { size = sizeof(short) };  typedef short   type; };
+
+int cc = field_trait<ftShort,0>::size;
+
+#define SM_DS_FIELD_0( array_name, index, name, field_kind, field_data_type, size_ ) \
+    { index, \
+      0, \
+      name, \
+      field_kind, \
+      field_data_type, \
+      field_trait<field_data_type, size_>::size }
+
+#define SM_DS_FIELD( array_name, index, name, field_kind, field_data_type, size_ ) \
+    { index, \
+      aligned_offset<array_name[index-1].mOffset, field_trait<field_data_type, size_>::type>::value, \
+      name, \
+      field_kind, \
+      field_data_type, \
+      field_trait<field_data_type, size_>::size }
+
+const detail::cFieldDef_     tblDummy_Fields[] =
+{
+    { 0, 0, "LocationID", fkData, ftInteger,  4 },
+    { 1, tblDummy_Fields[0].mOffset + 5,  "LocTypeID",  fkData, ftShort,    2 },
+    { 2, tblDummy_Fields[1].mOffset + 5,  "IsUser",     fkData, ftShort,    2 },
+    { 3, tblDummy_Fields[2].mOffset + 5,  "SerialNo",   fkData, ftInteger,  4 },
+    { 4, tblDummy_Fields[3].mOffset + 5,  "Drive",      fkData, ftString,   4 }
+};
+
+struct tblFiles_mapmap
+{
+    int                                 FileID_;
+    int                                 PathID_;
+    ds_string                           *LongFileName_;
+    int                                 fSize_;
+    smds::detail::dbDateTime_Internal   fDate_;
+    ds_string                           *Description_;
+    int                                 zipID_;
+};
+
+const detail::cFieldDef_     tblFiles_Fields[] =
+{
+    { 0, offsetof(tblFiles_mapmap,FileID_),       "FileID",       fkData, ftInteger,    4 },
+    { 1, offsetof(tblFiles_mapmap,PathID_),       "PathID",       fkData, ftInteger,    4 },
+    { 2, offsetof(tblFiles_mapmap,LongFileName_), "LongFileName", fkData, ftString,   255 },
+    { 3, offsetof(tblFiles_mapmap,fSize_),        "fSize",        fkData, ftInteger,    4 },
+    { 4, offsetof(tblFiles_mapmap,fDate_),        "fDate",        fkData, ftDateTime,   8 },
+    { 5, offsetof(tblFiles_mapmap,Description_),  "Description",  fkData, ftString,   255 },
+    { 6, offsetof(tblFiles_mapmap,zipID_),        "zipID",        fkData, ftInteger,    4 },
+};
+
+/*
+const detail::cFieldDef_     tblFiles_Fields_2[] =
+{
+    SM_DS_FIELD_0( tblFiles_Fields_2, 0, "FileID", fkData, ftInteger, 0 ),
+    SM_DS_FIELD  ( tblFiles_Fields_2, 1, "PathID", fkData, ftInteger, 0 ),
+    SM_DS_FIELD  ( tblFiles_Fields_2, 2, "LongFileName", fkData, ftString, 255 ),
+    SM_DS_FIELD  ( tblFiles_Fields_2, 3, "fSize", fkData, ftInteger, 0 ),
+    SM_DS_FIELD  ( tblFiles_Fields_2, 4, "fDate", fkData, ftDateTime, 0 ),
+    SM_DS_FIELD  ( tblFiles_Fields_2, 5, "Description", fkData, ftString, 255 ),
+    SM_DS_FIELD  ( tblFiles_Fields_2, 6, "zipID", fkData, ftInteger, 0 )
+};
+*/
+
+void TestAlign()
+{
+    std::cout << "alignment = " << boost::alignment_of<int>::value << " offset = " << bb << '\n';
+
+    for ( int n = 0 ; n < 5 ; ++n )
+        std::cout << n << " " << tblDummy_Fields[n].mOffset << '\n';
+
+}
 
 //***********************************************************************
 //******    GetTblFiles
@@ -359,12 +534,8 @@ int FASTCALL foo2( tblFiles::index::iterator iter )
 //***********************************************************************
 //******    Test
 //***********************************************************************
-// void dummy_main();
-
 void Test( tblFiles_ptr ds, ErrorReporter error_reporter, void *user_data )
 {
-//    dummy_main();
-
     tblFiles::iterator      iter = ds->GetIterator();
 
     WhileLoop( iter );

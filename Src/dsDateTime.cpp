@@ -122,6 +122,86 @@ inline double InternalDateTimeToDouble( const detail::dbDateTime_Internal& date_
     return InternalDateToDouble( date_time.date ) + InternalTimeToDouble( date_time.time );
 }
 
+
+inline void DivMod( int dividend, int divisor, int& result, int& remainder )
+{
+    result = dividend / divisor;
+    remainder = dividend % divisor;
+}
+
+bool InternalDecodeDate( detail::dbDate_Internal date, int& year, int& month, int& day )
+{
+    const int   D1 = 365;
+    const int   D4 = D1 * 4 + 1;
+    const int   D100 = D4 * 25 - 1;
+    const int   D400 = D100 * 4 + 1;
+
+    if ( date <= 0 )
+    {
+        year = 0;
+        month = 0;
+        day = 0;
+        return false;
+    }
+    else
+    {
+        int     T = date;
+        int     DOW = T % 7 + 1;
+        int     Y, M, D, I;
+        bool    result;
+
+        --T;
+        Y = 1;
+        while ( T >= D400 )
+        {
+            T -= D400;
+            Y += 400;
+        }
+        DivMod( T, D100, I, D );
+        if ( I == 4 )
+        {
+            --I;
+            D += D100;
+        }
+        Y += (I * 100);
+        DivMod( D, D4, I, D );
+        Y += (I * 4);
+        DivMod( D, D1, I, D );
+        if ( I == 4 )
+        {
+            --I;
+            D += D1;
+        }
+        Y += I;
+        result = IsLeapYear( Y );
+
+        SQLUSMALLINT    *day_table = MonthDays[result];
+
+        M = 1;
+        while ( true )
+        {
+            I = day_table[M];
+            if ( D < I )
+                break;
+            D -= I;
+            ++M;
+        }
+        year = Y;
+        month = M;
+        day = D + 1;
+        return result;
+    }
+}
+
+void InternalDecodeTime( detail::dbTime_Internal time, int& hour, int& minute, int& second, int& fraction )
+{
+    int     MinCount, MSecCount;
+
+    DivMod( time, SecondsPerMinute * MillisecondsPerSecond, MinCount, MSecCount );
+    DivMod( MinCount, MinutesPerHour, hour, minute );
+    DivMod( MSecCount, MillisecondsPerSecond, second, fraction );
+}
+
 }; // namespace
 
 detail::dbDate_Internal LongEncodeDate( const DATE_STRUCT& date )
@@ -168,6 +248,16 @@ CDFASTCALL dbDateTime::dbDateTime()
 double FASTCALL dbDateTime::AsDouble() const
 {
     return InternalDateTimeToDouble( mValue );
+}
+
+std::tm FASTCALL dbDateTime::AsTM() const
+{
+    std::tm     result;
+    int         dummy;
+
+    InternalDecodeDate( mValue.date, result.tm_year, result.tm_mon, result.tm_mday );
+    InternalDecodeTime( mValue.date, result.tm_hour, result.tm_min, result.tm_sec, dummy );
+    return result;
 }
 
 cStream& FASTCALL operator << ( cStream& st, const dbDateTime a )

@@ -106,6 +106,8 @@ int main()
 
 	try
 	{
+        TestAlign();
+
         tblFiles_ptr    files = GetTblFiles( database );
 
         Test( files, ErrorReporter_, 0 );

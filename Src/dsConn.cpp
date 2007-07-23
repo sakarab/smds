@@ -32,6 +32,17 @@ namespace smds
 namespace
 {
 
+// Use this define until how dlltool woks is found.
+
+#if defined (__GNUG__ )
+    #define CREATE_DATA_CONNECTION      "CreateDataConnection"
+    #define DELETE_DATA_CONNECTION      "DeleteDataConnection"
+#else
+    #define CREATE_DATA_CONNECTION      "_CreateDataConnection"
+    #define DELETE_DATA_CONNECTION      "_DeleteDataConnection"
+#endif
+
+
 // Connection name to DLL map
 struct ConnMapElement
 {
@@ -52,7 +63,8 @@ ConnMapElement  ConnMapArray[] =
 #elif ( _MSC_VER == 1400 )
     { "ODBC", "SmDS_ODBCConn_v8.dll" },
 #elif defined (__GNUG__ )
-    { "ODBC", "ODBC_Conn_gcc.dll" },
+//    { "ODBC", "ODBC_Conn_gcc.dll" },
+    { "ODBC", "smDS_ODBCConn_cbx.dll" },
 #endif
     { 0, 0 }
 };
@@ -78,8 +90,8 @@ CDFASTCALL DbEngine::DbEngine( const char *dll_name )
     mData->mDLL = ::LoadLibrary( dll_name );
     if ( mData->mDLL == 0 )
         throw eDllLoadError();
-    mData->mDatabase_Ctor = reinterpret_cast<Database_Ctor>(::GetProcAddress( mData->mDLL, "_CreateDataConnection" ));
-    mData->mDatabase_Dtor = reinterpret_cast<Database_Dtor>(::GetProcAddress( mData->mDLL, "_DeleteDataConnection" ));
+    mData->mDatabase_Ctor = reinterpret_cast<Database_Ctor>(::GetProcAddress( mData->mDLL, CREATE_DATA_CONNECTION ));
+    mData->mDatabase_Dtor = reinterpret_cast<Database_Dtor>(::GetProcAddress( mData->mDLL, DELETE_DATA_CONNECTION ));
     if ( mData->mDatabase_Ctor == 0 || mData->mDatabase_Dtor == 0 )
         throw eDllLoadError();
 }

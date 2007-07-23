@@ -4,6 +4,8 @@
 #include "uUntypedTest.h"
 #include "uConnectionStrings.h"
 
+#include <fstream>
+
 using namespace smds;
 
 void __fastcall dsDatasetModify( tblFiles::iterator ds, const ds_string& descr )
@@ -16,6 +18,66 @@ void __fastcall dsDatasetModify( tblFiles::iterator ds, const ds_string& descr )
         ds->SetFileID( n );
         ds->SetPathID( n );
         ds->SetDescription( descr );
+    }
+}
+
+void CreateInsertSqls( tblFiles_ptr ds )
+{
+    std::ofstream           os( "insert.sql" );
+    tblFiles::iterator      rec = ds->GetIterator();
+
+    for ( int n = 0, eend = ds->RecordCount() ; n < eend ; ++n, ++rec )
+    {
+        os << "insert into tblFiles (FileID,PathID,LongFileName,fSize,fDate,Description,zipID) values (";
+
+        if ( rec->FileID_IsNull() )
+            os << "NULL";
+        else
+            os << rec->GetFileID();
+        os << ", ";
+
+        if ( rec->PathID_IsNull() )
+            os << "NULL";
+        else
+            os << rec->GetPathID();
+        os << ", ";
+
+        if ( rec->LongFileName_IsNull() )
+            os << "NULL";
+        else
+            os << "\"" << rec->GetLongFileName().c_str() << "\"";
+        os << ", ";
+
+        if ( rec->fSize_IsNull() )
+            os << "NULL";
+        else
+            os << rec->GetfSize();
+        os << ", ";
+
+        if ( rec->fDate_IsNull() )
+            os << "NULL";
+        else
+        {
+            std::tm     tm = rec->GetfDate().AsTM();
+
+            char    buff[100];
+
+            std::sprintf( buff, "'%d-%d-%d'", tm.tm_year, tm.tm_mon, tm.tm_mday );
+            os << buff;
+        }
+        os << ", ";
+
+        if ( rec->Description_IsNull() )
+            os << "NULL";
+        else
+            os << "\"" << rec->GetDescription().c_str() << "\"";
+        os << ", ";
+
+        if ( rec->zipID_IsNull() )
+            os << "NULL";
+        else
+            os << rec->GetzipID();
+        os << ");\n";
     }
 }
 
@@ -102,8 +164,11 @@ int main()
 
 	try
 	{
+        TestAlign();
+
         tblFiles_ptr    files = GetTblFiles( database );
 
+        CreateInsertSqls( files );
         Test( files, ErrorReporter_, 0 );
         Output( files );
         RunProfile( database );
