@@ -1,9 +1,14 @@
-#include <malloc.h>
 #include <iostream>
 #include "uTest.h"
 #include "uProfile.h"
 #include "uUntypedTest.h"
 #include "uConnectionStrings.h"
+
+#if defined (_MSC_VER)
+    #include <malloc.h>
+#endif
+
+#include <fstream>
 
 using namespace smds;
 
@@ -18,6 +23,66 @@ void __fastcall dsDatasetModify( tblFiles::iterator ds, const ds_string& descr )
         ds->SetFileID( n );
         ds->SetPathID( n );
         ds->SetDescription( descr );
+    }
+}
+
+void CreateInsertSqls( tblFiles_ptr ds )
+{
+    std::ofstream           os( "insert.sql" );
+    tblFiles::iterator      rec = ds->GetIterator();
+
+    for ( int n = 0, eend = ds->RecordCount() ; n < eend ; ++n, ++rec )
+    {
+        os << "insert into tblFiles (FileID,PathID,LongFileName,fSize,fDate,Description,zipID) values (";
+
+        if ( rec->FileID_IsNull() )
+            os << "NULL";
+        else
+            os << rec->GetFileID();
+        os << ", ";
+
+        if ( rec->PathID_IsNull() )
+            os << "NULL";
+        else
+            os << rec->GetPathID();
+        os << ", ";
+
+        if ( rec->LongFileName_IsNull() )
+            os << "NULL";
+        else
+            os << "\"" << rec->GetLongFileName().c_str() << "\"";
+        os << ", ";
+
+        if ( rec->fSize_IsNull() )
+            os << "NULL";
+        else
+            os << rec->GetfSize();
+        os << ", ";
+
+        if ( rec->fDate_IsNull() )
+            os << "NULL";
+        else
+        {
+            std::tm     tm = rec->GetfDate().AsTM();
+
+            char    buff[100];
+
+            std::sprintf( buff, "'%d-%d-%d'", tm.tm_year, tm.tm_mon, tm.tm_mday );
+            os << buff;
+        }
+        os << ", ";
+
+        if ( rec->Description_IsNull() )
+            os << "NULL";
+        else
+            os << "\"" << rec->GetDescription().c_str() << "\"";
+        os << ", ";
+
+        if ( rec->zipID_IsNull() )
+            os << "NULL";
+        else
+            os << rec->GetzipID();
+        os << ");\n";
     }
 }
 
@@ -90,7 +155,9 @@ void FASTCALL ErrorReporter_( void *user_data, const char *error )
 
 int main()
 {
-    _set_sbh_threshold( 1016 );
+#if defined (_MSC_VER)
+    _set_sbh_threshold( 1016 );     // run normal speed when debuger is present
+#endif
 
     // DbEngine        transport = SelectDbEngine( "BDE" );
     // Database        connection = transport.NewConnection( BDE_DirData_Conn );
@@ -110,6 +177,7 @@ int main()
 
         tblFiles_ptr    files = GetTblFiles( database );
 
+        CreateInsertSqls( files );
         Test( files, ErrorReporter_, 0 );
         Output( files );
         RunProfile( database );

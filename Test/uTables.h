@@ -127,39 +127,39 @@ public:
         : smds::detail::cRecordPtr(double_buffer)
     {
     }
-    tblFiles_rec * FASTCALL operator->()                         { return this; }
-    const tblFiles_rec * FASTCALL operator->() const             { return this; }
+    tblFiles_rec * FASTCALL operator->()                            { return this; }
+    const tblFiles_rec * FASTCALL operator->() const                { return this; }
     static const smds::detail::cFieldDefs_& FASTCALL GetFieldDefs();
 
-    int FASTCALL GetFileID() const                               { return ReadInteger( tblFiles_Fields[0] ); }
-    void FASTCALL SetFileID( int value )                         { WriteInteger( tblFiles_Fields[0], value ); }
-    bool FASTCALL FileID_IsNull() const                          { return IsNull( tblFiles_Fields[0] ); }
+    int FASTCALL GetFileID() const                                  { return ReadInteger( tblFiles_Fields[0] ); }
+    void FASTCALL SetFileID( int value )                            { WriteInteger( tblFiles_Fields[0], value ); }
+    bool FASTCALL FileID_IsNull() const                             { return IsNull( tblFiles_Fields[0] ); }
 
-    int FASTCALL GetPathID() const                              { return ReadInteger( tblFiles_Fields[1] ); }
-    void FASTCALL SetPathID( int value )                        { WriteInteger( tblFiles_Fields[1], value ); }
-    bool FASTCALL PathID_IsNull() const                         { return IsNull( tblFiles_Fields[1] ); }
+    int FASTCALL GetPathID() const                                  { return ReadInteger( tblFiles_Fields[1] ); }
+    void FASTCALL SetPathID( int value )                            { WriteInteger( tblFiles_Fields[1], value ); }
+    bool FASTCALL PathID_IsNull() const                             { return IsNull( tblFiles_Fields[1] ); }
 
-    ds_string FASTCALL GetLongFileName() const                  { return ReadString( tblFiles_Fields[2] ); }
-    void FASTCALL SetLongFileName( const ds_string& value )     { WriteString( tblFiles_Fields[2], value ); }
-    void FASTCALL SetLongFileName( const char *value )          { WriteString( tblFiles_Fields[2], value ); }
-    bool FASTCALL LongFileName_IsNull() const                   { return IsNull( tblFiles_Fields[2] ); }
+    ds_string FASTCALL GetLongFileName() const                      { return ReadString( tblFiles_Fields[2] ); }
+    void FASTCALL SetLongFileName( const ds_string& value )         { WriteString( tblFiles_Fields[2], value ); }
+    void FASTCALL SetLongFileName( const char *value )              { WriteString( tblFiles_Fields[2], value ); }
+    bool FASTCALL LongFileName_IsNull() const                       { return IsNull( tblFiles_Fields[2] ); }
 
-    int  FASTCALL GetfSize() const                              { return ReadInteger( tblFiles_Fields[3] ); }
-    void FASTCALL SetfSize( int value )                         { WriteInteger( tblFiles_Fields[3], value ); }
-    bool FASTCALL fSize_IsNull() const                          { return IsNull( tblFiles_Fields[3] ); }
+    int  FASTCALL GetfSize() const                                  { return ReadInteger( tblFiles_Fields[3] ); }
+    void FASTCALL SetfSize( int value )                             { WriteInteger( tblFiles_Fields[3], value ); }
+    bool FASTCALL fSize_IsNull() const                              { return IsNull( tblFiles_Fields[3] ); }
 
-    smds::dbDateTime FASTCALL GetfDate() const                  { return ReadDateTime( tblFiles_Fields[4] ); }
-    void FASTCALL SetfDate( const smds::dbDateTime& value )     { WriteDateTime( tblFiles_Fields[4], value ); }
-    bool FASTCALL fDate_IsNull() const                          { return IsNull( tblFiles_Fields[4] ); }
+    smds::dbDateTime FASTCALL GetfDate() const                      { return ReadDateTime( tblFiles_Fields[4] ); }
+    void FASTCALL SetfDate( const smds::dbDateTime& value )         { WriteDateTime( tblFiles_Fields[4], value ); }
+    bool FASTCALL fDate_IsNull() const                              { return IsNull( tblFiles_Fields[4] ); }
 
-    ds_string FASTCALL GetDescription() const                   { return ReadString( tblFiles_Fields[5] ); }
-    void FASTCALL SetDescription( const ds_string& value )      { WriteString( tblFiles_Fields[5], value ); }
-    void FASTCALL SetDescription( const char *value )           { WriteString( tblFiles_Fields[5], value ); }
-    bool FASTCALL Description_IsNull() const                    { return IsNull( tblFiles_Fields[5] ); }
+    ds_string FASTCALL GetDescription() const                       { return ReadString( tblFiles_Fields[5] ); }
+    void FASTCALL SetDescription( const ds_string& value )          { WriteString( tblFiles_Fields[5], value ); }
+    void FASTCALL SetDescription( const char *value )               { WriteString( tblFiles_Fields[5], value ); }
+    bool FASTCALL Description_IsNull() const                        { return IsNull( tblFiles_Fields[5] ); }
 
-    int  FASTCALL GetzipID() const                              { return ReadInteger( tblFiles_Fields[6] ); }
-    void FASTCALL SetzipID( int value )                         { WriteInteger( tblFiles_Fields[6], value ); }
-    bool FASTCALL zipID_IsNull() const                          { return IsNull( tblFiles_Fields[6] ); }
+    int  FASTCALL GetzipID() const                                  { return ReadInteger( tblFiles_Fields[6] ); }
+    void FASTCALL SetzipID( int value )                             { WriteInteger( tblFiles_Fields[6], value ); }
+    bool FASTCALL zipID_IsNull() const                              { return IsNull( tblFiles_Fields[6] ); }
 };
 
 typedef smds::cuTable<tblFiles_rec>                 tblFiles;

@@ -146,7 +146,7 @@ bool InternalDecodeDate( detail::dbDate_Internal date, int& year, int& month, in
     else
     {
         int     T = date;
-        int     DOW = T % 7 + 1;
+        // int     DOW = T % 7 + 1;
         int     Y, M, D, I;
         bool    result;
 

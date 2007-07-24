@@ -99,25 +99,6 @@ const cFieldDefs_    tblFiles_data::tblFiles_FieldDef =
 
 const cFieldDefs_& FASTCALL tblFiles_rec::GetFieldDefs()                    { return ( tblFiles_FieldDef ); }
 
-/*
-int FASTCALL tblFiles_rec::GetFileID() const                                { return ( ReadInteger( tblFiles_Fields[0] ) ); }
-void FASTCALL tblFiles_rec::SetFileID( int value )                          { WriteInteger( tblFiles_Fields[0], value ); }
-int FASTCALL tblFiles_rec::GetPathID() const                                { return ( ReadInteger( tblFiles_Fields[1] ) ); }
-void FASTCALL tblFiles_rec::SetPathID( int value )                          { WriteInteger( tblFiles_Fields[1], value ); }
-ds_string FASTCALL tblFiles_rec::GetLongFileName() const                    { return ( ReadString( tblFiles_Fields[2] ) ); }
-void FASTCALL tblFiles_rec::SetLongFileName( const ds_string& value )       { WriteString( tblFiles_Fields[2], value ); }
-void FASTCALL tblFiles_rec::SetLongFileName( const char *value )            { WriteString( tblFiles_Fields[2], value ); }
-int  FASTCALL tblFiles_rec::GetfSize() const                                { return ( ReadInteger( tblFiles_Fields[3] ) ); }
-void FASTCALL tblFiles_rec::SetfSize( int value )                           { WriteInteger( tblFiles_Fields[3], value ); }
-ds::cDateTime FASTCALL tblFiles_rec::GetfDate() const                       { return ( ReadDate( tblFiles_Fields[4] ) ); }
-void FASTCALL tblFiles_rec::SetfDate( const ds::cDateTime& value )          { WriteDate( tblFiles_Fields[4], value ); }
-ds_string FASTCALL tblFiles_rec::GetDescription() const                     { return ( ReadString( tblFiles_Fields[5] ) ); }
-void FASTCALL tblFiles_rec::SetDescription( const ds_string& value )        { WriteString( tblFiles_Fields[5], value ); }
-void FASTCALL tblFiles_rec::SetDescription( const char *value )             { WriteString( tblFiles_Fields[5], value ); }
-int  FASTCALL tblFiles_rec::GetzipID() const                                { return ( ReadInteger( tblFiles_Fields[6] ) ); }
-void FASTCALL tblFiles_rec::SetzipID( int value )                           { WriteInteger( tblFiles_Fields[6], value ); }
-*/
-
 //***********************************************************************
 //******    tblSLD
 //***********************************************************************

@@ -41,7 +41,7 @@
 			<Add directory="..\..\Src" />
 			<Add directory="..\..\Test" />
 		</Compiler>
-		<Unit filename="..\..\Test\main_cb_exe.cpp" />
+		<Unit filename="..\..\Test\main_exe.cpp" />
 		<Unit filename="..\..\Test\uConnectionStrings.cpp" />
 		<Unit filename="..\..\Test\uConnectionStrings.h" />
 		<Unit filename="..\..\Test\uProfile.cpp" />

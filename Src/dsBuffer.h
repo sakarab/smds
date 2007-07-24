@@ -808,57 +808,57 @@ public:
     dbDateTime FASTCALL ReadDateTime( const cFieldDef& field_def ) const        { return GetReadRow().ReadDateTime( field_def ); }
     ds_string FASTCALL ReadString( const cFieldDef& field_def ) const           { return GetReadRow().ReadString( field_def ); }
 
-    void FASTCALL DoubleBuffer::WriteBool( const cFieldDef& field_def, bool value )
+    void FASTCALL WriteBool( const cFieldDef& field_def, bool value )
     {
         GetUpdateRow().WriteBool( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteByte( const cFieldDef& field_def, char value )
+    void FASTCALL WriteByte( const cFieldDef& field_def, char value )
     {
         GetUpdateRow().WriteByte( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteShort( const cFieldDef& field_def, short value )
+    void FASTCALL WriteShort( const cFieldDef& field_def, short value )
     {
         GetUpdateRow().WriteShort( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteInteger( const cFieldDef& field_def, int value )
+    void FASTCALL WriteInteger( const cFieldDef& field_def, int value )
     {
         GetUpdateRow().WriteInteger( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteLongLong( const cFieldDef& field_def, long long value )
+    void FASTCALL WriteLongLong( const cFieldDef& field_def, long long value )
     {
         GetUpdateRow().WriteLongLong( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteFloat( const cFieldDef& field_def, double value )
+    void FASTCALL WriteFloat( const cFieldDef& field_def, double value )
     {
         GetUpdateRow().WriteFloat( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteDate( const cFieldDef& field_def, const dbDate& value )
+    void FASTCALL WriteDate( const cFieldDef& field_def, const dbDate& value )
     {
         GetUpdateRow().WriteDate( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteTime( const cFieldDef& field_def, const dbTime& value )
+    void FASTCALL WriteTime( const cFieldDef& field_def, const dbTime& value )
     {
         GetUpdateRow().WriteTime( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteDateTime( const cFieldDef& field_def, const dbDateTime& value )
+    void FASTCALL WriteDateTime( const cFieldDef& field_def, const dbDateTime& value )
     {
         GetUpdateRow().WriteDateTime( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteString(const cFieldDef& field_def, const ds_string& value )
+    void FASTCALL WriteString(const cFieldDef& field_def, const ds_string& value )
     {
         GetUpdateRow().WriteString( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteString( const cFieldDef& field_def, const char *value )
+    void FASTCALL WriteString( const cFieldDef& field_def, const char *value )
     {
         GetUpdateRow().WriteString( field_def, value );
         UpdateRecordStatus();
@@ -875,22 +875,22 @@ public:
     dbDateTime FASTCALL ReadDateTime( const cFieldDef_& field_def ) const       { return GetReadRow().ReadDateTime( field_def ); }
     ds_string FASTCALL ReadString( const cFieldDef_& field_def ) const          { return GetReadRow().ReadString( field_def ); }
 
-    void FASTCALL DoubleBuffer::WriteBool( const cFieldDef_& field_def, bool value )
+    void FASTCALL WriteBool( const cFieldDef_& field_def, bool value )
     {
         GetUpdateRow().WriteBool( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteByte( const cFieldDef_& field_def, char value )
+    void FASTCALL WriteByte( const cFieldDef_& field_def, char value )
     {
         GetUpdateRow().WriteByte( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteShort( const cFieldDef_& field_def, short value )
+    void FASTCALL WriteShort( const cFieldDef_& field_def, short value )
     {
         GetUpdateRow().WriteShort( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteInteger( const cFieldDef_& field_def, int value )
+    void FASTCALL WriteInteger( const cFieldDef_& field_def, int value )
     {
         GetUpdateRow().WriteInteger( field_def, value );
         UpdateRecordStatus();
@@ -900,32 +900,32 @@ public:
         GetUpdateRow().WriteLongLong( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteFloat( const cFieldDef_& field_def, double value )
+    void FASTCALL WriteFloat( const cFieldDef_& field_def, double value )
     {
         GetUpdateRow().WriteFloat( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteDate( const cFieldDef_& field_def, const dbDate& value )
+    void FASTCALL WriteDate( const cFieldDef_& field_def, const dbDate& value )
     {
         GetUpdateRow().WriteDate( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteTime( const cFieldDef_& field_def, const dbTime& value )
+    void FASTCALL WriteTime( const cFieldDef_& field_def, const dbTime& value )
     {
         GetUpdateRow().WriteTime( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteDateTime( const cFieldDef_& field_def, const dbDateTime& value )
+    void FASTCALL WriteDateTime( const cFieldDef_& field_def, const dbDateTime& value )
     {
         GetUpdateRow().WriteDateTime( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteString(const cFieldDef_& field_def, const ds_string& value )
+    void FASTCALL WriteString(const cFieldDef_& field_def, const ds_string& value )
     {
         GetUpdateRow().WriteString( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteString( const cFieldDef_& field_def, const char *value )
+    void FASTCALL WriteString( const cFieldDef_& field_def, const char *value )
     {
         GetUpdateRow().WriteString( field_def, value );
         UpdateRecordStatus();

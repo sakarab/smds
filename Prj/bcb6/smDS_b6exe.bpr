@@ -4,10 +4,10 @@
   <MACROS>
     <VERSION value="BCB.06.00"/>
     <PROJECT value="..\..\Bin\smDS_b6exe.exe"/>
-    <OBJFILES value="OutC6exe\main_cb_exe.obj OutC6exe\uUntypedTest.obj 
-      OutC6exe\uCompileTest.obj OutC6exe\uConnectionStrings.obj 
-      OutC6exe\uProfile1.obj OutC6exe\uProfile.obj OutC6exe\uTables.obj 
-      OutC6exe\uTest.obj"/>
+    <OBJFILES value="OutC6exe\uUntypedTest.obj OutC6exe\uCompileTest.obj 
+      OutC6exe\uConnectionStrings.obj OutC6exe\uProfile1.obj 
+      OutC6exe\uProfile.obj OutC6exe\uTables.obj OutC6exe\uTest.obj 
+      OutC6exe\main_exe.obj"/>
     <RESFILES value="smDS_b6exe.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -59,7 +59,6 @@
   <FILELIST>
       <FILE FILENAME="smDS_b6exe.res" FORMNAME="" UNITNAME="smDS_b6exe.res" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="smDS_b6exe.bpf" FORMNAME="" UNITNAME="smDS_b6exe" CONTAINERID="BPF" DESIGNCLASS="" LOCALCOMMAND=""/>
-      <FILE FILENAME="..\..\Test\main_cb_exe.cpp" FORMNAME="" UNITNAME="main_cb_exe" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Test\uUntypedTest.cpp" FORMNAME="" UNITNAME="uUntypedTest.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Test\uCompileTest.cpp" FORMNAME="" UNITNAME="uCompileTest.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Test\uConnectionStrings.cpp" FORMNAME="" UNITNAME="uConnectionStrings.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
@@ -68,6 +67,7 @@
       <FILE FILENAME="..\..\Test\uTables.cpp" FORMNAME="" UNITNAME="uTables.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Test\uTest.cpp" FORMNAME="" UNITNAME="uTest.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="smDSb6lib.lib" FORMNAME="" UNITNAME="smDSb6lib.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Test\main_exe.cpp" FORMNAME="" UNITNAME="main_exe" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
