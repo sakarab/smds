@@ -49,12 +49,12 @@ void FASTCALL cRawBuffer::SetNull( const cFieldDef_& field_def, bool value )
 
 bool FASTCALL cRawBuffer::IsNull( const cFieldDef& field_def ) const
 {
-    return TestBit( field_def.Index() );
+    return (mData.get() == 0) || TestBit( field_def.Index() );
 }
 
 bool FASTCALL cRawBuffer::IsNull( const cFieldDef_& field_def ) const
 {
-    return TestBit( field_def.mIndex );
+    return (mData.get() == 0) || TestBit( field_def.mIndex );
 }
 
 void FASTCALL cRawBuffer::Nullify( const cFieldDef& field_def )

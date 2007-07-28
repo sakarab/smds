@@ -26,6 +26,14 @@ void __fastcall dsDatasetModify( tblFiles::iterator ds, const ds_string& descr )
     }
 }
 
+bool HasAlienChars( const ds_string& str )
+{
+    for ( int n = 0, eend = str.size() ; n < eend ; ++n )
+        if ( str[n] < 0 )
+            return true;
+    return false;
+}
+
 void CreateInsertSqls( tblFiles_ptr ds )
 {
     std::ofstream           os( "insert.sql" );
@@ -33,6 +41,11 @@ void CreateInsertSqls( tblFiles_ptr ds )
 
     for ( int n = 0, eend = ds->RecordCount() ; n < eend ; ++n, ++rec )
     {
+        if ( ! rec->LongFileName_IsNull() && HasAlienChars( rec->GetLongFileName() ) )
+            std::cout << "LongFileName : " << rec->GetFileID() << '\n';
+        if ( ! rec->Description_IsNull() && HasAlienChars( rec->GetDescription() ) )
+            std::cout << "Description : " << rec->GetFileID() << '\n';
+
         os << "insert into tblFiles (FileID,PathID,LongFileName,fSize,fDate,Description,zipID) values (";
 
         if ( rec->FileID_IsNull() )
@@ -168,8 +181,11 @@ int main()
     // DbEngine        engine = SelectDbEngine( "DAO" );
     // Database        database = engine.NewConnection( DAO_Dirdata_Conn );
 
+    // DbEngine        engine = SelectDbEngine( "ODBC" );
+    // Database        database = engine.NewConnection( ODBC_MsSql_DirData_Conn );
+
     DbEngine        engine = SelectDbEngine( "ODBC" );
-    Database        database = engine.NewConnection( ODBC_DirData_Conn );
+    Database        database = engine.NewConnection( ODBC_Access_DirData_Conn );
 
 	try
 	{
@@ -195,3 +211,4 @@ int main()
 	}
     return 0;
 }
+

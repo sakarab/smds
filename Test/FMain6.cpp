@@ -47,7 +47,7 @@ void FASTCALL ErrorReporter_( void *user_data, const char *error )
 __fastcall TfrmMain::TfrmMain(TComponent* Owner)
     : TForm(Owner),
       mEngine( SelectDbEngine( "ODBC" ) ),
-      mDatabase( mEngine.NewConnection( ODBC_DirData_Conn ) )
+      mDatabase( mEngine.NewConnection( ODBC_Access_DirData_Conn ) )
 {
 }
 //---------------------------------------------------------------------------

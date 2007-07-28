@@ -23,7 +23,8 @@
 #define uConnectionStringsH
 //---------------------------------------------------------------------------
 extern const char *BDE_DirData_Conn;
-extern const char *ODBC_DirData_Conn;
+extern const char *ODBC_Access_DirData_Conn;
+extern const char *ODBC_MsSql_DirData_Conn;
 extern const char *ODBC_SEn_Conn;
 extern const char *ODBC_Marine_Conn;
 extern const char *BDE_SENDATA_Conn;
