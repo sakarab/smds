@@ -10,7 +10,7 @@
       OutC6lib\dsSmartPtr.obj OutC6lib\dsSysOpen.obj 
       OutC6lib\dsCompareControlers.obj OutC6lib\dsStream.obj 
       OutC6lib\dsUtils.obj OutC6lib\dsCompare.obj OutC6lib\dsIndex.obj 
-      OutC6lib\dsGUID.obj OutC6lib\dsSerialization.obj"/>
+      OutC6lib\dsGUID.obj OutC6lib\dsSerialization.obj OutC6lib\mlWinDll.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -19,7 +19,7 @@
     <LIBFILES value=""/>
     <LIBRARIES value=""/>
     <PACKAGES value=""/>
-    <PATHCPP value=".;..\..\Src"/>
+    <PATHCPP value=".;..\..\Src;..\..\Src\Win32"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -27,15 +27,16 @@
     <USERDEFINES value=""/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT"/>
     <MAINSOURCE value="smDSb6lib.bpf"/>
-    <INCLUDEPATH value="..\..\Src;$(BOOST_INC);$(BCB)\include"/>
-    <LIBPATH value="..\..\Src;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\..\Src\Win32;..\..\Src;$(BOOST_INC);$(BCB)\include"/>
+    <LIBPATH value="..\..\Src\Win32;..\..\Src;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w8092 -w8091 -w8090 -w8089 -w8087 -wprc -wuse -wucp -wstv -wstu -wsig 
       -wpin -wnod -wnak -w-8027 -w-8026 -wdef -wcln -wbbf -wasm -wamp -wamb"/>
     <LISTFILE value=""/>
     <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I..\..\Src -I$(BOOST_INC) -I$(BCB)\include -src_suffix cpp -boa"/>
+    <IDLCFLAGS value="-I..\..\Src\Win32 -I..\..\Src -I$(BOOST_INC) -I$(BCB)\include -src_suffix 
+      cpp -boa"/>
     <CFLAG1 value="-Og -Ov -Q -Vx -Ve -X- -a8 -6 -b- -d -k- -y -v -vi -c -tW -tWM"/>
     <PFLAGS value="-N2OutC6lib -N0OutC6lib -$YD -$T -$C- -$A8 -v -JPHNE -M"/>
     <AFLAGS value="/mx /w2 /zd"/>
@@ -69,6 +70,7 @@
       <FILE FILENAME="..\..\Src\dsIndex.cpp" FORMNAME="" UNITNAME="dsIndex" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Src\dsGUID.cpp" FORMNAME="" UNITNAME="dsGUID" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Src\dsSerialization.cpp" FORMNAME="" UNITNAME="dsSerialization" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\Win32\mlWinDll.cpp" FORMNAME="" UNITNAME="mlWinDll" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>

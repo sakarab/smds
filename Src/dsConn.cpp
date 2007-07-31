@@ -24,79 +24,15 @@
 #endif
 
 #include "dsConn.h"
-#include "dsExceptions.h"
 //---------------------------------------------------------------------------
 namespace smds
 {
 
-namespace
-{
-
-// Use this define until how dlltool woks is found.
-
-#if defined (__GNUG__ )
-    #define CREATE_DATA_CONNECTION      "CreateDataConnection"
-    #define DELETE_DATA_CONNECTION      "DeleteDataConnection"
-#else
-    #define CREATE_DATA_CONNECTION      "_CreateDataConnection"
-    #define DELETE_DATA_CONNECTION      "_DeleteDataConnection"
-#endif
-
-
-// Connection name to DLL map
-struct ConnMapElement
-{
-    const char  *name;
-    const char  *dll_name;
-};
-
-ConnMapElement  ConnMapArray[] =
-{
-    { "ADO",  "smDS_ADOConn_b6.dll" },
-    { "DAO",  "smDS_DAOConn_b6.dll" },
-    { "BDE",  "smDS_BDEConn_b6.dll" },
-    { "SAS",  "SmDS_SASConn_d7.dll" },
-#if defined(__BORLANDC__)
-    { "ODBC", "SmDS_ODBCConn_b6.dll" },
-#elif ( _MSC_VER == 1310 )
-    { "ODBC", "SmDS_ODBCConn_v7.dll" },
-#elif ( _MSC_VER == 1400 )
-    { "ODBC", "SmDS_ODBCConn_v8.dll" },
-#elif defined (__GNUG__ )
-//    { "ODBC", "ODBC_Conn_gcc.dll" },
-    { "ODBC", "smDS_ODBCConn_cbx.dll" },
-#endif
-    { 0, 0 }
-};
-
-};
-
-//---------------------------------------------------------------------------
-
-DbEngine FASTCALL SelectDbEngine( const char *name )
-{
-    for ( int n = 0 ; ConnMapArray[n].name != 0 ; ++n )
-        if ( std::strcmp( ConnMapArray[n].name, name ) == 0 )
-            return ( DbEngine( ConnMapArray[n].dll_name ) );
-    throw eDllLoadError();
-}
-
 //***********************************************************************
 //******    DbEngine
 //***********************************************************************
-CDFASTCALL DbEngine::DbEngine( const char *dll_name )
-    : mData(new cDbEngine_impl())
-{
-    mData->mDLL = ::LoadLibrary( dll_name );
-    if ( mData->mDLL == 0 )
-        throw eDllLoadError();
-    mData->mDatabase_Ctor = reinterpret_cast<Database_Ctor>(::GetProcAddress( mData->mDLL, CREATE_DATA_CONNECTION ));
-    mData->mDatabase_Dtor = reinterpret_cast<Database_Dtor>(::GetProcAddress( mData->mDLL, DELETE_DATA_CONNECTION ));
-    if ( mData->mDatabase_Ctor == 0 || mData->mDatabase_Dtor == 0 )
-        throw eDllLoadError();
-}
-
-CDFASTCALL DbEngine::~DbEngine()
+CDFASTCALL DbEngine::DbEngine( shared_ptr<IModuleLoader> module_loader )
+    : mData(module_loader)
 {
 }
 

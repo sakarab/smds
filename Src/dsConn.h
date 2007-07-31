@@ -23,10 +23,9 @@
 #define SM_DS_CONN_H
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
-#include <windows.h>
 #include "dsConn_Intf.h"
 #include "dsTypes.h"
-#include "dsSmartPtr.h"
+#include "dsModuleLoad.h"
 //---------------------------------------------------------------------------
 namespace smds
 {
@@ -40,41 +39,12 @@ class DataTransfer;
 class DbEngine
 {
 private:
-    class cDbEngine_impl
-#ifdef SM_DS_USE_SMALL_SHARED_PTR
-    : public boost::shared_in_base<long>
-#endif
-    {
-    private:
-        cDbEngine_impl( const cDbEngine_impl& src );
-        cDbEngine_impl& operator = ( const cDbEngine_impl& src );
-    public:
-        HMODULE                 mDLL;
-        Database_Ctor           mDatabase_Ctor;
-        Database_Dtor           mDatabase_Dtor;
-
-        CDFASTCALL cDbEngine_impl()
-            : mDLL(0),
-              mDatabase_Ctor(0), mDatabase_Dtor(0)
-        {
-        }
-        CDFASTCALL ~cDbEngine_impl()
-        {
-            if ( mDLL != 0 )
-                ::FreeLibrary( mDLL );
-        }
-    };
-    shared_ptr<cDbEngine_impl>           mData;
+    shared_ptr<IModuleLoader>   mData;
 public:
-    CDFASTCALL DbEngine( const char *dll_name );
-    CDFASTCALL DbEngine( const DbEngine& src )
-        : mData(src.mData)
-    {
-    }
-    CDFASTCALL ~DbEngine();
+    CDFASTCALL DbEngine( shared_ptr<IModuleLoader> module_loader );
 
-    Database_Ctor FASTCALL Database_Constructor() const     { return ( mData->mDatabase_Ctor ); }
-    Database_Dtor FASTCALL Database_Destructor() const      { return ( mData->mDatabase_Dtor ); }
+    Database_Ctor FASTCALL Database_Constructor() const     { return ( mData->GetCreateDataConnection() ); }
+    Database_Dtor FASTCALL Database_Destructor() const      { return ( mData->GetDeleteDataConnection() ); }
 
     Database FASTCALL NewConnection( const ds_string& connection_string );
 };
@@ -91,6 +61,7 @@ private:
 #endif
     {
     private:
+        // noncpyable
         cDatabase_impl( const cDatabase_impl& src );
         cDatabase_impl& operator = ( const cDatabase_impl& src );
     public:
@@ -130,6 +101,7 @@ private:
 #endif
     {
     private:
+        // noncpyable
         cDataTransferData( const cDataTransferData& src );
         cDataTransferData& operator = ( const cDataTransferData& src );
     public:
@@ -154,8 +126,7 @@ public:
     IDataProvider * FASTCALL GetDataTransfer() const           { return ( mData->mTransfer ); }
 };
 
-DbEngine FASTCALL SelectDbEngine( const char *name );
-
 };
 //---------------------------------------------------------------------------
 #endif
+

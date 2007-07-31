@@ -166,12 +166,12 @@ public:
     bool FASTCALL IsNull() const                        { return ( mVariantType == vtNull ); }
     VariantTypeID VarType() const                       { return mVariantType; }
 
-    bool FASTCALL Variant::AsBool() const               { return ( ToLongType() != 0 ); }
-    char FASTCALL Variant::AsByte() const               { return static_cast<char>(ToLongType()); }
-    short FASTCALL Variant::AsShort() const             { return static_cast<short>(ToLongType()); }
-    int FASTCALL Variant::AsInt() const                 { return static_cast<int>(ToLongType()); }
-    long FASTCALL Variant::AsLong() const               { return ToLongType(); }
-    long long FASTCALL Variant::AsLongLong() const      { return ToLongLongType(); }
+    bool FASTCALL AsBool() const                        { return ( ToLongType() != 0 ); }
+    char FASTCALL AsByte() const                        { return static_cast<char>(ToLongType()); }
+    short FASTCALL AsShort() const                      { return static_cast<short>(ToLongType()); }
+    int FASTCALL AsInt() const                          { return static_cast<int>(ToLongType()); }
+    long FASTCALL AsLong() const                        { return ToLongType(); }
+    long long FASTCALL AsLongLong() const               { return ToLongLongType(); }
     double FASTCALL AsDouble() const;
     dbDate FASTCALL AsDate() const;
     dbTime FASTCALL AsTime() const;

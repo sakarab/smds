@@ -172,23 +172,12 @@ int main()
     _set_sbh_threshold( 1016 );     // run normal speed when debuger is present
 #endif
 
-    // DbEngine        transport = SelectDbEngine( "BDE" );
-    // Database        connection = transport.NewConnection( BDE_DirData_Conn );
-
-    // DbEngine        engine = SelectDbEngine( "ADO" );
-    // Database        database = engine.NewConnection( ADO_Dirdata_Conn );
-
-    // DbEngine        engine = SelectDbEngine( "DAO" );
-    // Database        database = engine.NewConnection( DAO_Dirdata_Conn );
-
-    // DbEngine        engine = SelectDbEngine( "ODBC" );
-    // Database        database = engine.NewConnection( ODBC_MsSql_DirData_Conn );
-
-    DbEngine        engine = SelectDbEngine( "ODBC" );
-    Database        database = engine.NewConnection( ODBC_Access_DirData_Conn );
-
 	try
 	{
+        shared_ptr<WinDllML>    module_loader( new WinDllML( SM_DS_TEST_BACKEND ) );
+        DbEngine                engine( module_loader );
+        Database                database = engine.NewConnection( ODBC_Access_DirData_Conn );
+
         TestAlign();
 
         tblFiles_ptr    files = GetTblFiles( database );

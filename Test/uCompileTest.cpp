@@ -27,6 +27,7 @@
 #include <dsData.h>
 #include <dsIndex.h>
 #include "uTables.h"
+#include "uTest.h"
 //---------------------------------------------------------------------------
 
 using namespace smds;
@@ -39,7 +40,8 @@ void ConvertTypedData( tblFiles::index_ptr& idx )
 void Tutorial()
 {
     // Select engine
-    DbEngine        engine = SelectDbEngine( "ADO" );
+    shared_ptr<WinDllML>    module_loader( new WinDllML( SM_DS_TEST_BACKEND ) );
+    DbEngine                engine( module_loader );
 
     // connect to database
     Database        database = engine.NewConnection( "" );

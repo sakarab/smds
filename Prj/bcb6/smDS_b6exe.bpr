@@ -33,14 +33,14 @@
     <USERDEFINES value=""/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL;_RTLDLL"/>
     <MAINSOURCE value="smDS_b6exe.bpf"/>
-    <INCLUDEPATH value="..\..\Test;..\..\Src;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl"/>
+    <INCLUDEPATH value="..\..\Test;..\..\Src;..\..\Src\Win32;$(BOOST_INC);$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="..\..\Test;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w8092 -w8091 -w8090 -w8089 -w8087 -wprc -wuse -wucp -wstv -wstu -wsig 
       -wpin -wnod -wnak -w-8027 -w-8026 -wdef -wcln -wbbf -wasm -wamp -wamb"/>
     <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I..\..\Test -I..\..\Src -I$(BOOST_INC) -I$(BCB)\include 
+    <IDLCFLAGS value="-I..\..\Test -I..\..\Src -I..\..\Src\Win32 -I$(BOOST_INC) -I$(BCB)\include 
       -I$(BCB)\include\vcl -src_suffix cpp -boa"/>
     <CFLAG1 value="-Og -Ov -H=OutC6exe\vcl.csm -Q -Vx -Ve -X- -a8 -6 -b- -d -k- -y -v -vi 
       -tWC -tWM -c"/>

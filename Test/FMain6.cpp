@@ -28,6 +28,7 @@
 #include "uProfile.h"
 #include "uUntypedTest.h"
 #include "uConnectionStrings.h"
+#include "mlWinDll.h"
 //---------------------------------------------------------------------------
 #pragma resource "*.dfm"
 TfrmMain *frmMain;
@@ -46,7 +47,7 @@ void FASTCALL ErrorReporter_( void *user_data, const char *error )
 //---------------------------------------------------------------------------
 __fastcall TfrmMain::TfrmMain(TComponent* Owner)
     : TForm(Owner),
-      mEngine( SelectDbEngine( "ODBC" ) ),
+      mEngine( shared_ptr<WinDllML>( new WinDllML( SM_DS_TEST_BACKEND ) ) ),
       mDatabase( mEngine.NewConnection( ODBC_Access_DirData_Conn ) )
 {
 }
