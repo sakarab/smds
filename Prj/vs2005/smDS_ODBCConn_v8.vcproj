@@ -120,7 +120,7 @@
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="$(BOOST_INC)"
+				AdditionalIncludeDirectories="&quot;$(BOOST_INC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V8_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_CPP_OVERLOAD_SECURE_NAMES=0;_SECURE_SCL=0;NO_CDFASTCALL"
 				StringPooling="true"
 				RuntimeLibrary="2"

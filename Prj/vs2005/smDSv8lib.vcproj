@@ -109,7 +109,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="Src;&quot;$(LOKI_INC)&quot;;&quot;$(BOOST_INC)&quot;"
+				AdditionalIncludeDirectories="..\..\Src;..\..\Src\Win32;&quot;$(LOKI_INC)&quot;;&quot;$(BOOST_INC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_CPP_OVERLOAD_SECURE_NAMES=0;_SECURE_SCL=0;NO_CDFASTCALL"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -220,6 +220,10 @@
 				RelativePath="..\..\Src\dsVariant.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\Src\Win32\mlWinDll.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -316,6 +320,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Src\dsVariant.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\Win32\mlWinDll.h"
 				>
 			</File>
 			<File

@@ -28,7 +28,7 @@
 #include "uProfile.h"
 #include "uUntypedTest.h"
 #include "uConnectionStrings.h"
-#include "mlWinDll.h"
+#include "dsModuleLoad.h"
 //---------------------------------------------------------------------------
 #pragma resource "*.dfm"
 TfrmMain *frmMain;

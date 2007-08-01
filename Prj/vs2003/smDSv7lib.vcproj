@@ -63,7 +63,7 @@
 				InlineFunctionExpansion="1"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="3"
-				AdditionalIncludeDirectories="..\..\Src;\Include;\Src\boost_1_33_1"
+				AdditionalIncludeDirectories="..\..\Src;..\..\Src\Win32;\Include;\Src\boost_1_33_1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;NO_CDFASTCALL"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -160,6 +160,9 @@
 			<File
 				RelativePath="..\..\Src\dsVariant.cpp">
 			</File>
+			<File
+				RelativePath="..\..\Src\Win32\mlWinDll.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -233,6 +236,9 @@
 			</File>
 			<File
 				RelativePath="..\..\Src\dsVariant.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\Win32\mlWinDll.h">
 			</File>
 		</Filter>
 		<Filter
