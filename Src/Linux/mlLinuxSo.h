@@ -46,7 +46,7 @@ private:
         CDFASTCALL So_Guard( const char *so_name )
         {
         }
-        CDFASTCALL ~Dll_Guard()
+        CDFASTCALL ~So_Guard()
         {
         }
         void * FASTCALL GetProcAddress( const char * proc_name )

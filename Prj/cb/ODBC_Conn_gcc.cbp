@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="ODBC_Conn_gcc" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../../Bin/ODBC_Conn_gcc.so" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="../../Bin/ODBC_Conn_gcc.so" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createStaticLib="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-DLINUX" />
+			<Add option="-DNO_CDFASTCALL" />
+			<Add option="-DNO_FASTCALL" />
+			<Add option="-DNO_STDCALL" />
+			<Add directory="$(BOOST_INC)" />
+		</Compiler>
+		<Linker>
+			<Add library="odbc" />
+		</Linker>
+		<Unit filename="../../Src/ODBC_Conn.cpp" />
+		<Unit filename="../../Src/ODBC_Sub.cpp" />
+		<Unit filename="../../Src/ODBC_Sub.h" />
+		<Unit filename="../../Src/smDS_ODBCConn_vc.def" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

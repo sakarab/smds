@@ -51,7 +51,7 @@ class SortCompare
 {
 private:
     friend class Tablebase;
-    friend class Index;
+    friend class smds::Index;
     friend class Data;
     // non copyable
     CDFASTCALL SortCompare( const SortCompare& src );

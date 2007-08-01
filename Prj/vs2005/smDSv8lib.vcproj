@@ -109,7 +109,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\Src;..\..\Src\Win32;&quot;$(LOKI_INC)&quot;;&quot;$(BOOST_INC)&quot;"
+				AdditionalIncludeDirectories="..\..\Src;&quot;$(LOKI_INC)&quot;;&quot;$(BOOST_INC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_CPP_OVERLOAD_SECURE_NAMES=0;_SECURE_SCL=0;NO_CDFASTCALL"
 				StringPooling="true"
 				RuntimeLibrary="2"

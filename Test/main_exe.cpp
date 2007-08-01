@@ -13,7 +13,7 @@
 using namespace smds;
 
 //--------------------------------------------------------------------
-void __fastcall dsDatasetModify( tblFiles::iterator ds, const ds_string& descr )
+void FASTCALL dsDatasetModify( tblFiles::iterator ds, const ds_string& descr )
 {
     //ds_string   descr( "File" );
 
@@ -174,7 +174,11 @@ int main()
 
 	try
 	{
+#if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
         shared_ptr<WinDllML>    module_loader( new WinDllML( SM_DS_TEST_BACKEND ) );
+#elif defined (LINUX)
+        shared_ptr<LinuxSoML>   module_loader( new LinuxSoML( SM_DS_TEST_BACKEND ) );
+#endif
         DbEngine                engine( module_loader );
         Database                database = engine.NewConnection( ODBC_Access_DirData_Conn );
 
@@ -196,7 +200,7 @@ int main()
 	}
 	catch ( std::exception& e )
 	{
-		::MessageBox( 0, e.what(), 0, MB_OK );
+	    std::cout << "\nException :" << e.what() << '\n';
 	}
     return 0;
 }

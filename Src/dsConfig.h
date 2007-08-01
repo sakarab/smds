@@ -182,4 +182,12 @@
     #endif
 #endif
 
+#if ! defined( STDCALL )
+    #ifdef	NO_STDCALL
+        #define	STDCALL
+    #else
+        #define	STDCALL		    __stdcall
+    #endif
+#endif
+
 #endif

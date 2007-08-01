@@ -19,9 +19,12 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#include <windows.h>
 #ifndef __GNUG__
 #pragma hdrstop
+#endif
+
+#if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
+    #include <windows.h>
 #endif
 
 #include <memory>
@@ -56,13 +59,13 @@ private:
 protected:
 #if defined ( SM_USE_COM_DELPHI_INTERFACE )
     // IUnknown
-    virtual HRESULT __stdcall QueryInterface( REFIID riid, void **ppvObject );
-    virtual ULONG __stdcall AddRef();
-    virtual ULONG __stdcall Release();
+    virtual HRESULT STDCALL QueryInterface( REFIID riid, void **ppvObject );
+    virtual ULONG STDCALL AddRef();
+    virtual ULONG STDCALL Release();
 #endif
     // IDatabase
-    virtual IDataProvider *     __stdcall CreateDataProvider();
-    virtual void                __stdcall DestroyDataProvider( IDataProvider *connection );
+    virtual IDataProvider *     STDCALL CreateDataProvider();
+    virtual void                STDCALL DestroyDataProvider( IDataProvider *connection );
 public:
     cDataConnection( ODBC_Env& env, const char *connection_string );
     ~cDataConnection();
@@ -85,27 +88,27 @@ private:
 protected:
 #if defined ( SM_USE_COM_DELPHI_INTERFACE )
     // IUnknown
-    virtual HRESULT __stdcall QueryInterface( REFIID riid, void **ppvObject );
-    virtual ULONG __stdcall AddRef();
-    virtual ULONG __stdcall Release();
+    virtual HRESULT STDCALL QueryInterface( REFIID riid, void **ppvObject );
+    virtual ULONG STDCALL AddRef();
+    virtual ULONG STDCALL Release();
 #endif
     // IDataTransfer
-    virtual void __stdcall OpenSql( const char *sql );
-    virtual void __stdcall CloseSql();
-    virtual bool __stdcall Eof();
-    virtual void __stdcall Next();
+    virtual void STDCALL OpenSql( const char *sql );
+    virtual void STDCALL CloseSql();
+    virtual bool STDCALL Eof();
+    virtual void STDCALL Next();
 
-    virtual std::size_t __stdcall GetFieldCount();
-    virtual void __stdcall GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+    virtual std::size_t STDCALL GetFieldCount();
+    virtual void STDCALL GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
                                                std::size_t& name_buffer_required_length,
                                                unsigned int& field_data_size, int& field_data_type );
 
-    virtual bool __stdcall GetFieldValues( IFieldValuesAcceptor *values_acceptor );
+    virtual bool STDCALL GetFieldValues( IFieldValuesAcceptor *values_acceptor );
 
-    virtual void __stdcall StartTransaction();
-    virtual void __stdcall Commit();
-    virtual void __stdcall RollBack();
-    virtual void __stdcall ExecSql( const char *sql );
+    virtual void STDCALL StartTransaction();
+    virtual void STDCALL Commit();
+    virtual void STDCALL RollBack();
+    virtual void STDCALL ExecSql( const char *sql );
 public:
     cDataProvider( cDataConnection *conn );
     ~cDataProvider();
@@ -126,28 +129,28 @@ cDataConnection::~cDataConnection()
 }
 
 #if defined ( SM_USE_COM_DELPHI_INTERFACE )
-HRESULT __stdcall cDataConnection::QueryInterface( REFIID riid, void **ppvObject )
+HRESULT STDCALL cDataConnection::QueryInterface( REFIID riid, void **ppvObject )
 {
     return E_NOINTERFACE;
 }
 
-ULONG __stdcall cDataConnection::AddRef()
+ULONG STDCALL cDataConnection::AddRef()
 {
     return -1;
 }
 
-ULONG __stdcall cDataConnection::Release()
+ULONG STDCALL cDataConnection::Release()
 {
     return -1;
 }
 #endif
 
-IDataProvider * __stdcall cDataConnection::CreateDataProvider()
+IDataProvider * STDCALL cDataConnection::CreateDataProvider()
 {
     return ( new cDataProvider( this ) );
 }
 
-void __stdcall cDataConnection::DestroyDataProvider( IDataProvider *connection )
+void STDCALL cDataConnection::DestroyDataProvider( IDataProvider *connection )
 {
     delete connection;
 }
@@ -165,55 +168,55 @@ cDataProvider::~cDataProvider()
 }
 
 #if defined ( SM_USE_COM_DELPHI_INTERFACE )
-HRESULT __stdcall cDataProvider::QueryInterface( REFIID riid, void **ppvObject )
+HRESULT STDCALL cDataProvider::QueryInterface( REFIID riid, void **ppvObject )
 {
     return E_NOINTERFACE;
 }
 
-ULONG __stdcall cDataProvider::AddRef()
+ULONG STDCALL cDataProvider::AddRef()
 {
     return -1;
 }
 
-ULONG __stdcall cDataProvider::Release()
+ULONG STDCALL cDataProvider::Release()
 {
     return -1;
 }
 #endif
 
-void __stdcall cDataProvider::OpenSql( const char *sql )
+void STDCALL cDataProvider::OpenSql( const char *sql )
 {
     mStatement.ExecSql( sql );
 }
 
-bool __stdcall cDataProvider::Eof()
+bool STDCALL cDataProvider::Eof()
 {
     return mStatement.Eof();
 }
 
-void __stdcall cDataProvider::Next()
+void STDCALL cDataProvider::Next()
 {
     mStatement.Next();
 }
 
-void __stdcall cDataProvider::CloseSql()
+void STDCALL cDataProvider::CloseSql()
 {
     mStatement.CloseSql();
 }
 
-unsigned int __stdcall cDataProvider::GetFieldCount()
+unsigned int STDCALL cDataProvider::GetFieldCount()
 {
     return mStatement.GetFieldCount();
 }
 
-void __stdcall cDataProvider::GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+void STDCALL cDataProvider::GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
                                                   std::size_t& name_buffer_required_length,
                                                   unsigned int& field_data_size, int& field_data_type )
 {
     mStatement.GetFieldAttributes( idx, name, name_buffer_length, name_buffer_required_length, field_data_size, field_data_type );
 }
 
-bool __stdcall cDataProvider::GetFieldValues( IFieldValuesAcceptor *values_acceptor )
+bool STDCALL cDataProvider::GetFieldValues( IFieldValuesAcceptor *values_acceptor )
 {
     bool        result = false;
 
@@ -230,19 +233,19 @@ bool __stdcall cDataProvider::GetFieldValues( IFieldValuesAcceptor *values_accep
     return result;
 }
 
-void __stdcall cDataProvider::StartTransaction()
+void STDCALL cDataProvider::StartTransaction()
 {
 }
 
-void __stdcall cDataProvider::Commit()
+void STDCALL cDataProvider::Commit()
 {
 }
 
-void __stdcall cDataProvider::RollBack()
+void STDCALL cDataProvider::RollBack()
 {
 }
 
-void __stdcall cDataProvider::ExecSql( const char *sql )
+void STDCALL cDataProvider::ExecSql( const char *sql )
 {
 }
 
@@ -268,9 +271,11 @@ void DeleteDataConnection( IDatabase *connection )
 
 }; // extern "C"
 
+#if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
 int WINAPI DllEntryPoint( HINSTANCE /*hinst*/, unsigned long /*reason*/, void* /*lpReserved*/ )
 {
     return 1;
 }
+#endif
 //---------------------------------------------------------------------------
 

@@ -63,7 +63,7 @@
 				InlineFunctionExpansion="1"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="3"
-				AdditionalIncludeDirectories="..\..\Src;..\..\Src\Win32;\Include;\Src\boost_1_33_1"
+				AdditionalIncludeDirectories="..\..\Src;\Include;\Src\boost_1_33_1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;NO_CDFASTCALL"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"

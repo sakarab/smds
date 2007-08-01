@@ -263,12 +263,12 @@ public:
     }
 #if defined ( SM_USE_COM_DELPHI_INTERFACE )
     // IUnknown
-    virtual HRESULT __stdcall QueryInterface( REFIID /*riid*/, void ** /*ppvObject*/ )  { return E_NOINTERFACE; }
-    virtual ULONG __stdcall AddRef()                                                    { return 0xFFFFFFFFU; }
-    virtual ULONG __stdcall Release()                                                   { return 0xFFFFFFFFU; }
+    virtual HRESULT STDCALL QueryInterface( REFIID /*riid*/, void ** /*ppvObject*/ )  { return E_NOINTERFACE; }
+    virtual ULONG STDCALL AddRef()                                                    { return 0xFFFFFFFFU; }
+    virtual ULONG STDCALL Release()                                                   { return 0xFFFFFFFFU; }
 #endif
     // IFieldValuesAcceptor
-    virtual bool __stdcall FieldValue( int field_idx, void *buff, unsigned int field_data_size )
+    virtual bool STDCALL FieldValue( int field_idx, void *buff, unsigned int field_data_size )
     {
         const cFieldDef     *field_def = mLocalMap[field_idx];
 

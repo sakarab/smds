@@ -55,8 +55,8 @@ class IDatabase
 #endif
 {
 public:
-    virtual IDataProvider * __stdcall CreateDataProvider() = 0;
-    virtual void            __stdcall DestroyDataProvider( IDataProvider * conn ) = 0;
+    virtual IDataProvider * STDCALL CreateDataProvider() = 0;
+    virtual void            STDCALL DestroyDataProvider( IDataProvider * conn ) = 0;
     virtual ~IDatabase()                                                                        {} // empty;
 };
 
@@ -69,7 +69,7 @@ class IFieldValuesAcceptor
 #endif
 {
 public:
-    virtual bool __stdcall FieldValue( int field_idx, void *buff, unsigned int field_data_size ) = 0;
+    virtual bool STDCALL FieldValue( int field_idx, void *buff, unsigned int field_data_size ) = 0;
     virtual ~IFieldValuesAcceptor()                                                             {} // empty;
 };
 
@@ -82,23 +82,23 @@ class IDataProvider
 #endif
 {
 public:
-    virtual void __stdcall OpenSql( const char *sql ) = 0;
-    virtual void __stdcall CloseSql() = 0;
+    virtual void STDCALL OpenSql( const char *sql ) = 0;
+    virtual void STDCALL CloseSql() = 0;
 
-    virtual bool __stdcall Eof() = 0;
-    virtual void __stdcall Next() = 0;
+    virtual bool STDCALL Eof() = 0;
+    virtual void STDCALL Next() = 0;
 
-    virtual std::size_t __stdcall GetFieldCount() = 0;
-    virtual void __stdcall GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+    virtual std::size_t STDCALL GetFieldCount() = 0;
+    virtual void STDCALL GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
                                                unsigned int& name_buffer_required_length,
                                                unsigned int& field_data_size, int& field_data_type ) = 0;
 
-    virtual bool __stdcall GetFieldValues( IFieldValuesAcceptor *values_acceptor ) = 0;
+    virtual bool STDCALL GetFieldValues( IFieldValuesAcceptor *values_acceptor ) = 0;
 
-    virtual void __stdcall StartTransaction() = 0;
-    virtual void __stdcall Commit() = 0;
-    virtual void __stdcall RollBack() = 0;
-    virtual void __stdcall ExecSql( const char *sql ) = 0;
+    virtual void STDCALL StartTransaction() = 0;
+    virtual void STDCALL Commit() = 0;
+    virtual void STDCALL RollBack() = 0;
+    virtual void STDCALL ExecSql( const char *sql ) = 0;
 
     virtual ~IDataProvider()                                                                    {} // empty;
 };

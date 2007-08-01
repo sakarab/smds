@@ -72,7 +72,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="3"
-				AdditionalIncludeDirectories="..\..\Test;..\..\Src;..\..\Src\Win32;\Include;\Src\boost_1_33_1"
+				AdditionalIncludeDirectories="..\..\Test;..\..\Src;\Include;\Src\boost_1_33_1"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;NO_CDFASTCALL"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"

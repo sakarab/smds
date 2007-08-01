@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Workspace">
+		<Project filename="smds_gcc.cbp" />
+		<Project filename="smds_gexe.cbp" active="1">
+			<Depends filename="smds_gcc.cbp" />
+			<Depends filename="ODBC_Conn_gcc.cbp" />
+		</Project>
+		<Project filename="ODBC_Conn_gcc.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>

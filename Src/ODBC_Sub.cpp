@@ -19,14 +19,15 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#include <windows.h>
 #ifndef __GNUG__
 #pragma hdrstop
 #endif
 
+#if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
+    #include <windows.h>
+#endif
 #include "ODBC_Sub.h"
 #include <stdexcept>
-// #include <sstream>
 #include <boost/smart_ptr.hpp>
 #include "dsConn_Intf.h"
 //---------------------------------------------------------------------------

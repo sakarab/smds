@@ -282,8 +282,8 @@ public:
 class cRecordIterator
 {
 private:
-    friend class cTableReader;
-    friend class Tablebase;
+    friend class smds::cTableReader;
+    friend class smds::Tablebase;
     friend class Table;
     friend class Index;
 

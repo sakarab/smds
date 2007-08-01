@@ -33,8 +33,6 @@ class dbGUID;
 namespace detail
 {
 
-extern GUID     abcd;
-
 typedef SQLGUID     dbGUID_Internal;
 
 dbGUID FASTCALL CreateDbGUID( const dbGUID_Internal& guid );

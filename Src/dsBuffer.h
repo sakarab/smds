@@ -65,7 +65,7 @@ private:
 
     friend class Table;
     friend class DoubleBuffer;
-    friend class cTableReader;
+    friend class smds::cTableReader;
 
     boost::scoped_array<char>   mData;
     quantum                     *mNullBits;
@@ -895,7 +895,7 @@ public:
         GetUpdateRow().WriteInteger( field_def, value );
         UpdateRecordStatus();
     }
-    void FASTCALL DoubleBuffer::WriteLongLong( const cFieldDef_& field_def, long long value )
+    void FASTCALL WriteLongLong( const cFieldDef_& field_def, long long value )
     {
         GetUpdateRow().WriteLongLong( field_def, value );
         UpdateRecordStatus();

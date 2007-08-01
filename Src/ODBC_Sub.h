@@ -23,7 +23,9 @@
 #define ODBC_SubH
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
-#include <windows.h>
+#if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
+    #include <windows.h>
+#endif
 #include <sql.h>
 #include <sqlext.h>
 #include <vector>
@@ -150,6 +152,14 @@ int _stricmp( const char * str1, const char * str2 )
     return std::stricmp( str1, str2 );
 }
 #endif
+
+#if defined (LINUX)
+inline int _stricmp( const char * str1, const char * str2 )
+{
+    return strcasecmp( str1, str2 );
+}
+#endif
+
 
 //---------------------------------------------------------------------------
 #endif
