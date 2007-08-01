@@ -205,6 +205,9 @@
 				RelativePath="..\..\Src\dsIndex.h">
 			</File>
 			<File
+				RelativePath="..\..\Src\dsModuleLoad.h">
+			</File>
+			<File
 				RelativePath="..\..\Src\dsODBCtypes.h">
 			</File>
 			<File

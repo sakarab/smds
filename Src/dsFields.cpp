@@ -28,6 +28,7 @@
 #include "dsDateTime.h"
 #include "dsGUID.h"
 #include "dsVariant.h"
+#include <boost/type_traits.hpp>
 
 namespace smds
 {
@@ -70,7 +71,14 @@ bool IsFixedSizeDataType( cFieldDataType data_type )
     return ( data_type != ftString && data_type != ftWString && data_type != ftBlob );
 }
 
-}; // namespace detail
+template <class T> int FASTCALL aligned_offset( std::size_t end_offset )
+{
+    std::size_t     modulo = end_offset % boost::alignment_of<T>::value;
+
+    return ( modulo == 0 ? end_offset : end_offset + boost::alignment_of<T>::value - modulo );
+}
+
+}; // namespace
 
 //***********************************************************************
 //******    cFieldDef
@@ -78,7 +86,7 @@ bool IsFixedSizeDataType( cFieldDataType data_type )
 CDFASTCALL cFieldDef::cFieldDef( unsigned short idx, int offset, const ds_string& name,
                                  cFieldKind kind, cFieldDataType data_type, unsigned int size )
     : mIndex(idx), mOffset(offset), mName(name), mKind(kind), mDataType(data_type),
-      mRawSize(GetFieldRawSize( data_type )), 
+      mRawSize(GetFieldRawSize( data_type )),
       mDataSize(IsFixedSizeDataType( data_type ) ? mRawSize : size)
 {
 }
@@ -210,6 +218,23 @@ const cFieldDef FASTCALL cFieldDefs::MakeFieldDef( const ds_string& name, cField
 
         offset = last.Offset() + last.RawSize();
     }
+    switch ( data_type )
+    {
+        case ftBool     : offset = aligned_offset<bool>( offset );                          break;
+        case ftByte     : offset = aligned_offset<char>( offset );                          break;
+        case ftShort    : offset = aligned_offset<short>( offset );                         break;
+        case ftInteger  : offset = aligned_offset<int>( offset );                           break;
+        case ftLongLong : offset = aligned_offset<long long>( offset );                     break;
+        case ftDouble   : offset = aligned_offset<double>( offset );                        break;
+        case ftDate     : offset = aligned_offset<detail::dbDate_Internal>( offset );       break;
+        case ftTime     : offset = aligned_offset<detail::dbTime_Internal>( offset );       break;
+        case ftDateTime : offset = aligned_offset<detail::dbDateTime_Internal>( offset );   break;
+        case ftGUID     : offset = aligned_offset<detail::dbGUID_Internal>( offset );       break;
+        case ftString   : offset = aligned_offset<ds_string *>( offset );                   break;
+        case ftWString  : offset = aligned_offset<ds_wstring *>( offset );                  break;
+        case ftBlob     : offset = aligned_offset<var_blob_type *>( offset );               break;
+        default : throw eUnknownFieldType();
+    };
     return ( cFieldDef( static_cast<unsigned short>(mFieldDefs.size()), offset, name, kind, data_type, size ) );
 }
 
@@ -233,10 +258,10 @@ const cFieldDef& FASTCALL cFieldDefs::AddField( const ds_string& name, cFieldKin
 
     cFieldDef&      result = mFieldDefs.back();
 
-    mBufferSize += result.RawSize();
+    mBufferSize = result.Offset() + result.RawSize();
     mFieldDefSorted.insert( pos.first, detail::cFieldNameMap( result.Name(), result ) );
 
-    return ( result );
+    return result;
 }
 
 const cFieldDef& FASTCALL cFieldDefs::FieldByName( const ds_string& field_name ) const

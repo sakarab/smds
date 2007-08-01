@@ -46,10 +46,10 @@ public:
 
 }; // namespace smds
 
-#if defined (__WIN32__) || defined (__WIN32) || defined (WIN32)
+#if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
     #include "mlWinDll.h"
 #elif defined (LINUX)
-    #include "mlWinDll.h"
+    #include "mlLinuxSo.h"
 #else
     #error "No platform specified"
 #endif

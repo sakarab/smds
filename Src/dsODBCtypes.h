@@ -25,7 +25,7 @@
 #include "dsConfig.h"
 //---------------------------------------------------------------------------
 
-#if defined (WIN32) || defined (__WIN32__)
+#if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
     #include <windows.h>
     #if ! defined (ODBCVER)
         #define ODBCVER     0x0350

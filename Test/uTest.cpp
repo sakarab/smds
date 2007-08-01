@@ -38,16 +38,16 @@ using namespace smds;
 template <std::size_t offset, class T> class aligned_offset
 {
 private:
-    enum { modulo = offset % boost::alignment_of<int>::value };
+    enum { modulo = offset % boost::alignment_of<T>::value };
 public:
-    enum { value = (modulo == 0 ? offset : offset + boost::alignment_of<int>::value - modulo) };
+    enum { value = (modulo == 0 ? offset : offset + boost::alignment_of<T>::value - modulo) };
 };
 
 
-const int prev_offset = 9;
-const int new_offset = prev_offset + sizeof(int);
-const int aa = new_offset + boost::alignment_of<int>::value - (new_offset % boost::alignment_of<int>::value);
-const int bb = aligned_offset< new_offset, int >::value;
+const int prev_offset = 8;
+const int end_offset = prev_offset + sizeof(int);
+//const int aa = new_offset + boost::alignment_of<int>::value - (new_offset % boost::alignment_of<int>::value);
+const int bb = aligned_offset< end_offset, int >::value;
 
 /*
 template
@@ -203,8 +203,8 @@ void TestAlign()
 {
     std::cout << "alignment = " << boost::alignment_of<int>::value << " offset = " << bb << '\n';
 
-    for ( int n = 0 ; n < 5 ; ++n )
-        std::cout << n << " " << tblDummy_Fields[n].mOffset << '\n';
+    //for ( int n = 0 ; n < 5 ; ++n )
+    //    std::cout << n << " " << tblDummy_Fields[n].mOffset << '\n';
 
 }
 
