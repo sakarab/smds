@@ -174,11 +174,7 @@ int main()
 
 	try
 	{
-#if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
-        shared_ptr<WinDllML>    module_loader( new WinDllML( SM_DS_TEST_BACKEND ) );
-#elif defined (LINUX)
-        shared_ptr<LinuxSoML>   module_loader( new LinuxSoML( SM_DS_TEST_BACKEND ) );
-#endif
+        spModuleLoader          module_loader = GetOsModuleLoader( SM_DS_TEST_BACKEND );
         DbEngine                engine( module_loader );
         Database                database = engine.NewConnection( ODBC_Access_DirData_Conn );
 

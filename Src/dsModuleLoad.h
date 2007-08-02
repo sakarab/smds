@@ -54,6 +54,24 @@ public:
     #error "No platform specified"
 #endif
 
+namespace smds
+{
+
+#if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
+    class WinDllML;
+    typedef WinDllML        OsModuleLoader;
+#elif defined (LINUX)
+    class LinuxSoML;
+    typedef LinuxSoML       OsModuleLoader;
+#else
+    #error "No platform specified"
+#endif
+
+typedef shared_ptr<OsModuleLoader>  spModuleLoader;
+spModuleLoader FASTCALL GetOsModuleLoader( const char *dll_name );
+
+}; // namespace smds
+
 //---------------------------------------------------------------------------
 #endif
 

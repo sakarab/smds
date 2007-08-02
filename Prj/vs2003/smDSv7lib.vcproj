@@ -140,6 +140,9 @@
 				RelativePath="..\..\Src\dsIndex.cpp">
 			</File>
 			<File
+				RelativePath="..\..\Src\dsModuleLoad.cpp">
+			</File>
+			<File
 				RelativePath="..\..\Src\dsRecord.cpp">
 			</File>
 			<File

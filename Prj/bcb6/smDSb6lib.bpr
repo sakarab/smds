@@ -10,7 +10,8 @@
       OutC6lib\dsSmartPtr.obj OutC6lib\dsSysOpen.obj 
       OutC6lib\dsCompareControlers.obj OutC6lib\dsStream.obj 
       OutC6lib\dsUtils.obj OutC6lib\dsCompare.obj OutC6lib\dsIndex.obj 
-      OutC6lib\dsGUID.obj OutC6lib\dsSerialization.obj OutC6lib\mlWinDll.obj"/>
+      OutC6lib\dsGUID.obj OutC6lib\dsSerialization.obj OutC6lib\mlWinDll.obj 
+      OutC6lib\dsModuleLoad.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -71,6 +72,7 @@
       <FILE FILENAME="..\..\Src\dsGUID.cpp" FORMNAME="" UNITNAME="dsGUID" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Src\dsSerialization.cpp" FORMNAME="" UNITNAME="dsSerialization" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\Src\Win32\mlWinDll.cpp" FORMNAME="" UNITNAME="mlWinDll" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Src\dsModuleLoad.cpp" FORMNAME="" UNITNAME="dsModuleLoad" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
