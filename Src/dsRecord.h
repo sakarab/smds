@@ -303,8 +303,8 @@ protected:
     typedef cRawRecordProxy<cRawRecordPtr>      OldValuesProxy;
 
     DoubleBuffer * FASTCALL GetDoubleBuffer() const;
-    ConstContainerReferanceType FASTCALL GetData() const        { return ( mContainer ); }
-    Data::size_type FASTCALL GetIndex() const                   { return ( mIdx ); }
+    ConstContainerReferanceType FASTCALL GetData() const        { return mContainer; }
+    Data::size_type FASTCALL GetIndex() const                   { return mIdx; }
     void FASTCALL SetIndex( Data::size_type idx )               { mIdx = idx; }
 
     CDFASTCALL cRecordIterator( spData& container );
@@ -344,6 +344,7 @@ public:
     void FASTCALL GotoMark( void *mark )                { mIdx = reinterpret_cast<detail::Data::size_type>(mark); }
     cUpdateStatus FASTCALL GetUpdateStatus() const      { return ( GetDoubleBuffer()->GetUpdateStatus() ); }
 
+    Variant FASTCALL Value( const cFieldDef& field_def ) const;
     const OldValuesProxy FASTCALL OldValues()
     {
         return ( OldValuesProxy( GetDoubleBuffer()->GetOriginalData(), *mContainer->GetFieldDefs().get() ) );
@@ -354,7 +355,8 @@ public:
     bool FASTCALL Locate( const Variant& value, const cFindField& field );
     bool FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields );
 
-    void FASTCALL Delete()                              { mContainer->Delete( mIdx ); }
+    void FASTCALL Delete()                                                      { mContainer->Delete( mIdx ); }
+    const spFieldDefs& FASTCALL GetFieldDefs() const                            { return mContainer->GetFieldDefs(); }
 };
 
 //***********************************************************************

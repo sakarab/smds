@@ -215,6 +215,11 @@ bool FASTCALL cRecordIterator::Locate( const OpenValues& values, const OpenFindF
     return result.first;
 }
 
+Variant FASTCALL cRecordIterator::Value( const cFieldDef& field_def ) const
+{
+    return GetDoubleBuffer()->GetActiveData().ReadVariant( field_def );
+}
+
 //***********************************************************************
 //******    cRangeIterator
 //***********************************************************************

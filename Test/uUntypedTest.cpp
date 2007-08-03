@@ -53,11 +53,12 @@ void FASTCALL ForLoop( record_iterator ptr )
 int FASTCALL CountNulls( record_iterator ptr )
 {
     int                 result = 0;
-    // const cFieldDef&    zipID_field = table->GetFieldDefs()->FieldByName( "zipID" );
+    const cFieldDef&    zipID_field = ptr.GetFieldDefs()->FieldByName( "zipID" );
 
     ptr.First();
     for ( int n = 0, end = ptr.RecordCount() ; n < end ; ++n, ++ptr )
-        if ( ptr.FieldByName( "zipID" )->IsNull() )
+        if ( ptr.Value( zipID_field ).IsNull() )
+        //if ( ptr.FieldByName( "zipID" )->IsNull() )
             ++result;
     return result;
 }

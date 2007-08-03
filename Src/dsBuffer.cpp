@@ -89,7 +89,7 @@ void FASTCALL cRawBuffer::Nullify( const cFieldDef& field_def )
 Variant FASTCALL cRawBuffer::ReadVariant( const cFieldDef& field_def ) const
 {
     if ( IsNull( field_def ) )
-        return ( Variant() );
+        return Variant();
     else switch ( field_def.DataType() )
     {
         case ftBool     : return Variant( ReadBoolNN( field_def ) );
