@@ -23,6 +23,7 @@
 #define SM_DS_STRING_H
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
+#include "dsCommon.h"
 #include <string>
 #include "dsStream.h"
 //---------------------------------------------------------------------------
@@ -172,23 +173,6 @@ bool FASTCALL operator < ( const wstring_tag& lhs, const wstring_tag::value_type
 bool FASTCALL operator == ( const wstring_tag& lhs, const wstring_tag& rhs );
 bool FASTCALL operator == ( const wstring_tag::value_type *, const wstring_tag& );
 bool FASTCALL operator == ( const wstring_tag&, const wstring_tag::value_type * );
-
-inline int FASTCALL StringCompare( const char *str1, const char *str2 );
-
-#if defined ( __BORLANDC__ )
-inline int FASTCALL StringCompare( const char *str1, const char *str2 )     { return stricmp( str1, str2 ); }
-#endif
-
-#if defined ( _MSC_VER )
-inline int FASTCALL StringCompare( const char *str1, const char *str2 )     { return _stricmp( str1, str2 ); }
-#endif
-
-#if defined ( __GNUG__ )
-    #if defined (__WIN32__)
-    #endif
-    #if defined (__linux__)
-    #endif
-#endif
 
 inline int FASTCALL StringCompare( const string_tag& str1, const string_tag& str2 )
 {

@@ -30,6 +30,7 @@
 #include <stdexcept>
 #include <boost/smart_ptr.hpp>
 #include "dsConn_Intf.h"
+#include "dsCommon.h"
 //---------------------------------------------------------------------------
 
 using namespace smds;
@@ -338,7 +339,7 @@ void FASTCALL ODBC_Statement::Next()
 ODBC_Field * FASTCALL ODBC_Statement::FieldByName( const char *field_name )
 {
     for ( std::vector<ODBC_Field>::iterator it = mFields.begin(), eend = mFields.end() ; it != eend ; ++it )
-        if ( _stricmp( it->GetName().c_str(), field_name ) == 0 )
+        if ( StringCompare( it->GetName().c_str(), field_name ) == 0 )
             return &(*it);
     throw std::runtime_error( "ODBC FieldByName error." );
 }

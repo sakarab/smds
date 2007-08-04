@@ -56,7 +56,7 @@ private:
             if ( mDLL != 0 )
                 ::FreeLibrary( mDLL );
         }
-        void * FASTCALL GetProcAddress( const char * proc_name )
+        FARPROC FASTCALL GetProcAddress( const char * proc_name )
         {
             return ::GetProcAddress( mDLL, proc_name );
         }

@@ -168,14 +168,6 @@ typedef smds::shared_ptr<tblFiles>                  tblFiles_ptr;
 //***********************************************************************
 //******    tblSLD
 //***********************************************************************
-//#ifdef SM_DS_STRING_AS_STRING
-//    #define STRING_FM(name,size)    ds_string name
-//    typedef ds_string               STRING_RET;
-//#else
-//    #define STRING_FM(name,size)    char    name[size]
-//    typedef ds_string               STRING_RET;
-//#endif
-//
 //class tblSLD_map
 //{
 //private:

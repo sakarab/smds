@@ -204,4 +204,3 @@ typedef shared_ptr<detail::cFilterCompareBase>      cFilterCompareBase_ptr;
 }; // namespace smds
 //---------------------------------------------------------------------------
 #endif
-

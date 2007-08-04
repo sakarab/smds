@@ -1,6 +1,0 @@
-Version 0.1.1
--------------
-2007-04-12 GCC (mingw) compilation
-2007-04-17 Directory reconstruction
-2007-04-17 Added CodeBlocks project
-2007-04-18 Changed namespace from "ds" to "smds"

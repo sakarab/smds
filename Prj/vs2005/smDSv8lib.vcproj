@@ -239,6 +239,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Src\dsCommon.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Src\dsCompare.h"
 				>
 			</File>

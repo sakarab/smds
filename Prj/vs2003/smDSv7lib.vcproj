@@ -175,6 +175,9 @@
 				RelativePath="..\..\Src\dsBuffer.h">
 			</File>
 			<File
+				RelativePath="..\..\Src\dsCommon.h">
+			</File>
+			<File
 				RelativePath="..\..\Src\dsCompare.h">
 			</File>
 			<File

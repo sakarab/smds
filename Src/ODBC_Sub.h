@@ -146,20 +146,5 @@ public:
 
 SQLRETURN CheckReturn( SQLRETURN ret );
 
-#if defined(__BORLANDC__)
-int _stricmp( const char * str1, const char * str2 )
-{
-    return std::stricmp( str1, str2 );
-}
-#endif
-
-#if defined (LINUX)
-inline int _stricmp( const char * str1, const char * str2 )
-{
-    return strcasecmp( str1, str2 );
-}
-#endif
-
-
 //---------------------------------------------------------------------------
 #endif

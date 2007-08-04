@@ -55,14 +55,6 @@
 //#define SM_DS_DEBUG_ITERATORS
 
 /**********************************************************************************
-** When SM_DS_STRING_AS_STRING is defined then the raw record buffer class
-** (cRawBuffer) holds strings as ds_string.
-** When SM_DS_STRING_AS_STRING is --NOT-- defined then the raw record buffer class
-** (cRawBuffer) holds strings as char arrays
-***********************************************************************************/
-#define SM_DS_STRING_AS_STRING
-
-/**********************************************************************************
 ** Uncomment this line to get faster (but less safe) iterator.
 ** The gain is not so mush at speed then is code size.
 ** This will take effect only if SM_DS_DEBUG is --NOT-- defined

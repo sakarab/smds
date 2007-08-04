@@ -28,7 +28,7 @@
 
 using namespace smds;
 
-namespace
+namespace untyped
 {
 
 //***********************************************************************
@@ -50,7 +50,7 @@ void FASTCALL ForLoop( record_iterator ptr )
 //***********************************************************************
 //******    CheckNull
 //***********************************************************************
-int FASTCALL CountNulls( record_iterator ptr )
+int FASTCALL CountNulls_1( record_iterator ptr )
 {
     int                 result = 0;
     const cFieldDef&    zipID_field = ptr.GetFieldDefs()->FieldByName( "zipID" );
@@ -58,12 +58,27 @@ int FASTCALL CountNulls( record_iterator ptr )
     ptr.First();
     for ( int n = 0, end = ptr.RecordCount() ; n < end ; ++n, ++ptr )
         if ( ptr.Value( zipID_field ).IsNull() )
-        //if ( ptr.FieldByName( "zipID" )->IsNull() )
             ++result;
     return result;
 }
 
-};
+//***********************************************************************
+//******    CheckNull
+//***********************************************************************
+int FASTCALL CountNulls_2( record_iterator ptr )
+{
+    int                 result = 0;
+
+    ptr.First();
+    for ( int n = 0, end = ptr.RecordCount() ; n < end ; ++n, ++ptr )
+        if ( ptr.FieldByName( "zipID" )->IsNull() )
+            ++result;
+    return result;
+}
+
+}; // namespace untyped
+
+using namespace untyped;
 
 void FASTCALL UntypedTest( Database& database )
 {
@@ -81,7 +96,7 @@ void FASTCALL UntypedTest( Database& database )
 
     WhileLoop( table->GetIterator() );
     ForLoop( table->GetIterator() );
-    CountNulls( table->GetIterator() );
+    CountNulls_1( table->GetIterator() );
+    CountNulls_2( table->GetIterator() );
 }
 //---------------------------------------------------------------------------
-
