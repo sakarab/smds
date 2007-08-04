@@ -64,6 +64,8 @@
 		<Unit filename="../../Src/dsGUID.h" />
 		<Unit filename="../../Src/dsIndex.cpp" />
 		<Unit filename="../../Src/dsIndex.h" />
+		<Unit filename="../../Src/dsModuleLoad.cpp" />
+		<Unit filename="../../Src/dsModuleLoad.h" />
 		<Unit filename="../../Src/dsRecord.cpp" />
 		<Unit filename="../../Src/dsRecord.h" />
 		<Unit filename="../../Src/dsSerialization.cpp" />
