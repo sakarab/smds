@@ -39,7 +39,7 @@ public:
     {
     private:
         typedef Table::iterator                                 inherited;
-        typedef detail::cRawRecordProxy<typename RECORD::raw>   OldValuesProxy;
+        typedef detail::cOldValuesProxy<typename RECORD::raw>   OldValuesProxy;
 
         friend class cuTable<RECORD>;
     protected:
@@ -183,7 +183,7 @@ public:
     private:
         typedef Index::iterator                                 inherited;
         friend class cuIndex<RECORD>;
-        typedef detail::cRawRecordProxy<typename RECORD::raw>   OldValuesProxy;
+        typedef detail::cOldValuesProxy<typename RECORD::raw>   OldValuesProxy;
     protected:
         CDFASTCALL iterator( detail::spData& container, const spSortCompare& cmp )
             : inherited(container,cmp)                                                {} // empty
@@ -239,7 +239,7 @@ public:
     private:
         typedef Index::range_iterator                           inherited;
         friend class cuIndex<RECORD>;
-        typedef detail::cRawRecordProxy<typename RECORD::raw>   OldValuesProxy;
+        typedef detail::cOldValuesProxy<typename RECORD::raw>   OldValuesProxy;
     protected:
         CDFASTCALL range_iterator( detail::spData& container, detail::Data::size_type start,
                                    detail::Data::size_type end, const spSortCompare& cmp );

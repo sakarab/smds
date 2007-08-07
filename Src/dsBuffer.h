@@ -278,17 +278,6 @@ public:
         return *(buffer_field_cast<char *>(field_def.Offset()));
     }
 //---------------------------------------------------------------------------
-//    wchar_t FASTCALL ReadWChar( const cFieldDef& field_def ) const
-//    {
-//        if ( IsNull( field_def ) )
-//#if defined SM_DS_NULL_VALUE_EXCEPTION
-//            throw eNullFieldValue();
-//#else
-//            return 0;
-//#endif
-//        return *(buffer_field_cast<wchar_t *>(field_def.Offset()));
-//    }
-//---------------------------------------------------------------------------
     short FASTCALL ReadShort( const cFieldDef& field_def ) const
     {
         if ( IsNull( field_def ) )
@@ -385,11 +374,6 @@ public:
         *(buffer_field_cast<char *>(field_def.Offset())) = value;
         SetNull( field_def, false );
     }
-    //void FASTCALL WriteWChar( const cFieldDef& field_def, wchar_t value )
-    //{
-    //    *(buffer_field_cast<wchar_t *>(field_def.Offset())) = value;
-    //    SetNull( field_def, false );
-    //}
     void FASTCALL WriteShort( const cFieldDef& field_def, short value )
     {
         *(buffer_field_cast<short *>(field_def.Offset())) = value;
@@ -494,17 +478,6 @@ public:
         return *(buffer_field_cast<char *>(field_def.mOffset));
     }
 //---------------------------------------------------------------------------
-//    wchar_t FASTCALL ReadWChar( const cFieldDef_& field_def ) const
-//    {
-//        if ( IsNull( field_def ) )
-//#if defined SM_DS_NULL_VALUE_EXCEPTION
-//            throw eNullFieldValue();
-//#else
-//            return 0;
-//#endif
-//        return *(buffer_field_cast<wchar_t *>(field_def.mOffset));
-//    }
-//---------------------------------------------------------------------------
     short FASTCALL ReadShort( const cFieldDef_& field_def ) const
     {
         if ( IsNull( field_def ) )
@@ -603,11 +576,6 @@ public:
         *(buffer_field_cast<char *>(field_def.mOffset)) = value;
         SetNull( field_def, false );
     }
-    //void FASTCALL WriteWChar( const cFieldDef_& field_def, wchar_t value )
-    //{
-    //    *(buffer_field_cast<wchar_t *>(field_def.mOffset)) = value;
-    //    SetNull( field_def, false );
-    //}
     void FASTCALL WriteShort( const cFieldDef_& field_def, short value )
     {
         *(buffer_field_cast<short *>(field_def.mOffset)) = value;
@@ -807,6 +775,7 @@ public:
     dbTime FASTCALL ReadTime( const cFieldDef& field_def ) const                { return GetReadRow().ReadTime( field_def ); }
     dbDateTime FASTCALL ReadDateTime( const cFieldDef& field_def ) const        { return GetReadRow().ReadDateTime( field_def ); }
     ds_string FASTCALL ReadString( const cFieldDef& field_def ) const           { return GetReadRow().ReadString( field_def ); }
+    Variant FASTCALL ReadVariant( const cFieldDef& field_def ) const            { return GetReadRow().ReadVariant( field_def ); }
 
     void FASTCALL WriteBool( const cFieldDef& field_def, bool value )
     {
@@ -861,6 +830,12 @@ public:
     void FASTCALL WriteString( const cFieldDef& field_def, const char *value )
     {
         GetUpdateRow().WriteString( field_def, value );
+        UpdateRecordStatus();
+    }
+
+    void FASTCALL WriteVariant( const cFieldDef& field_def, const Variant& value )
+    {
+        GetUpdateRow().WriteVariant( field_def, value );
         UpdateRecordStatus();
     }
 

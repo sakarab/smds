@@ -71,7 +71,8 @@ public:
     class range_iterator : private iterator
     {
     private:
-        typedef iterator            inherited;
+        typedef iterator                        inherited;
+        typedef detail::cDoubleFieldProxy       cFieldProxy;
         friend class Index;
 
         detail::Data::size_type     mStart;
@@ -116,8 +117,8 @@ public:
         void FASTCALL GotoMark( void *mark )    { SetIndex( reinterpret_cast<detail::Data::size_type>(mark) ); }
 
         const OldValuesProxy FASTCALL OldValues()                           { return iterator::OldValues(); }
-        detail::cFieldProxy FieldByName( const ds_string& field_name )      { return iterator::FieldByName( field_name ); }
-        detail::cFieldProxy FieldByName( const char *field_name )           { return iterator::FieldByName( field_name ); }
+        cFieldProxy FieldByName( const ds_string& field_name )              { return iterator::FieldByName( field_name ); }
+        cFieldProxy FieldByName( const char *field_name )                   { return iterator::FieldByName( field_name ); }
         bool FASTCALL Find( const Variant& value );
         bool FASTCALL Find( const OpenValues& values );
     };

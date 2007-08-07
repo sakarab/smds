@@ -76,6 +76,32 @@ int FASTCALL CountNulls_2( record_iterator ptr )
     return result;
 }
 
+//***********************************************************************
+//******    dsDatasetModify
+//***********************************************************************
+void FASTCALL dsDatasetModify_1( record_iterator ds, const ds_string& descr )
+{
+    const cFieldDef&    FileID_field = ds.GetFieldDefs()->FieldByName( "FileID" );
+    const cFieldDef&    fSize_field = ds.GetFieldDefs()->FieldByName( "fSize" );
+    const cFieldDef&    Description_field = ds.GetFieldDefs()->FieldByName( "Description" );
+    const Variant       vdescr( descr );
+
+    ds.First();
+    for ( int n = 0, end = ds.RecordCount() ; n < end ; ++n, ++ds )
+    {
+        ds.Value( FileID_field, n );
+        ds.Value( fSize_field, n );
+        ds.Value( Description_field, vdescr );
+    }
+}
+
+void FASTCALL dsDatasetModify( record_iterator ds )
+{
+    ds_string   sstr( 200, 'h' );
+
+    dsDatasetModify_1( ds, sstr );
+}
+
 }; // namespace untyped
 
 using namespace untyped;

@@ -109,7 +109,7 @@ union varTag
     const ds_string& FASTCALL GetString() const         { return ( *reinterpret_cast<const ds_string *>(&mString[0]) ); }
     const ds_wstring& FASTCALL GetWString() const       { return ( *reinterpret_cast<const ds_wstring *>(&mWString[0]) ); }
     const std::vector<char>& FASTCALL GetBlob() const   { return ( *reinterpret_cast<const var_blob_type *>(&mBlob[0]) ); }
-    std::vector<char>& FASTCALL GetBlob()               { return ( *reinterpret_cast<var_blob_type *>(mBlob) ); }   // sam. reconcider
+    std::vector<char>& FASTCALL GetBlob()               { return ( *reinterpret_cast<var_blob_type *>(mBlob) ); }   // sam. reconsider
 };
 
 }; // namespace detail

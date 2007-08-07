@@ -126,24 +126,26 @@ protected:
     char FASTCALL ReadByte( const cFieldDef& field_def ) const;
     short FASTCALL ReadShort( const cFieldDef& field_def ) const;
     int FASTCALL ReadInteger( const cFieldDef& field_def ) const;
-    long FASTCALL ReadLong( const cFieldDef& field_def ) const;
+    long long FASTCALL ReadLongLong( const cFieldDef& field_def ) const;
     double FASTCALL ReadFloat( const cFieldDef& field_def ) const;
     dbDate FASTCALL ReadDate( const cFieldDef& field_def ) const;
     dbTime FASTCALL ReadTime( const cFieldDef& field_def ) const;
     dbDateTime FASTCALL ReadDateTime( const cFieldDef& field_def ) const;
     ds_string FASTCALL ReadString( const cFieldDef& field_def ) const;
+    Variant FASTCALL ReadVariant( const cFieldDef& field_def ) const;
 
     void FASTCALL WriteBool( const cFieldDef& field_def, bool value );
-    void FASTCALL WriteChar( const cFieldDef& field_def, char value );
+    void FASTCALL WriteByte( const cFieldDef& field_def, char value );
     void FASTCALL WriteShort( const cFieldDef& field_def, short value );
     void FASTCALL WriteInteger( const cFieldDef& field_def, int value );
-    void FASTCALL WriteLong( const cFieldDef& field_def, long value );
+    void FASTCALL WriteLongLong( const cFieldDef& field_def, long long value );
     void FASTCALL WriteFloat( const cFieldDef& field_def, double value );
     void FASTCALL WriteDate( const cFieldDef& field_def, const dbDate& value );
     void FASTCALL WriteTime( const cFieldDef& field_def, const dbTime& value );
     void FASTCALL WriteDateTime( const cFieldDef& field_def, const dbDateTime& value );
     void FASTCALL WriteString( const cFieldDef& field_def, const ds_string& value );
     void FASTCALL WriteString( const cFieldDef& field_def, const char *value );
+    void FASTCALL WriteVariant( const cFieldDef& field_def, const Variant& value );
 
     bool FASTCALL ReadBool( const cFieldDef_& field_def ) const;
     char FASTCALL ReadByte( const cFieldDef_& field_def ) const;
@@ -157,8 +159,7 @@ protected:
     ds_string FASTCALL ReadString( const cFieldDef_& field_def ) const;
 
     void FASTCALL WriteBool( const cFieldDef_& field_def, bool value );
-    void FASTCALL WriteChar( const cFieldDef_& field_def, char value );
-    void FASTCALL WriteWChar( const cFieldDef_& field_def, wchar_t value );
+    void FASTCALL WriteByte( const cFieldDef_& field_def, char value );
     void FASTCALL WriteShort( const cFieldDef_& field_def, short value );
     void FASTCALL WriteInteger( const cFieldDef_& field_def, int value );
     void FASTCALL WriteLongLong( const cFieldDef_& field_def, long long value );
@@ -176,85 +177,134 @@ public:
 };
 
 //***********************************************************************
-//******    cFieldProxyRecordHelper
+//******    cRawFieldProxyHelper
 //***********************************************************************
-class cFieldProxyRecordHelper : private cRawRecordPtr
+class cRawFieldProxyHelper : private cRawRecordPtr
 {
 private:
     typedef cRawRecordPtr   inherited;
 private:
-    const cFieldDef           *mFieldDef;
+    const cFieldDef         *mFieldDef;
 public:
-    CDFASTCALL cFieldProxyRecordHelper( cRawBuffer& raw_buffer, const cFieldDef& field_def )
-        : cRawRecordPtr(raw_buffer), mFieldDef(&field_def)
+    CDFASTCALL cRawFieldProxyHelper( cRawBuffer& buffer, const cFieldDef& field_def )
+        : inherited(buffer), mFieldDef(&field_def)
     {} // empty
 
     bool FASTCALL IsNull() const                            { return inherited::IsNull( *mFieldDef ); }
 
-    bool FASTCALL AsBoolean() const                         { return ReadBool( *mFieldDef ); }
-    char FASTCALL AsByte() const                            { return ReadByte( *mFieldDef ); }
-    int  FASTCALL AsInteger() const                         { return ReadInteger( *mFieldDef ); }
-    double FASTCALL AsDouble() const                        { return ReadFloat( *mFieldDef ); }
-    dbDate FASTCALL AsDate() const                          { return ReadDate( *mFieldDef ); }
-    dbTime FASTCALL AsTime() const                          { return ReadTime( *mFieldDef ); }
-    dbDateTime FASTCALL AsDateTime() const                  { return ReadDateTime( *mFieldDef ); }
-    ds_string FASTCALL AsString() const                     { return ReadString( *mFieldDef ); }
+    bool FASTCALL AsBoolean() const;
+    char FASTCALL AsByte() const;
+    int  FASTCALL AsInteger() const;
+    double FASTCALL AsDouble() const;
+    dbDate FASTCALL AsDate() const;
+    dbTime FASTCALL AsTime() const;
+    dbDateTime FASTCALL AsDateTime() const;
+    ds_string FASTCALL AsString() const;
     Variant FASTCALL AsVariant() const                      { return ReadVariant( *mFieldDef ); }
 
-    void FASTCALL AsBoolean( bool value )                   { WriteBool( *mFieldDef, value ); }
-    void FASTCALL AsByte( char value )                      { WriteByte( *mFieldDef, value ); }
-    void FASTCALL AsInteger( int value )                    { WriteInteger( *mFieldDef, value ); }
-    void FASTCALL AsDouble( double value )                  { WriteFloat( *mFieldDef, value ); }
-    void FASTCALL AsDate( const dbDate& value )             { WriteDate( *mFieldDef, value ); }
-    void FASTCALL AsTime( const dbTime& value )             { WriteTime( *mFieldDef, value ); }
-    void FASTCALL AsDateTime( const dbDateTime& value )     { WriteDateTime( *mFieldDef, value ); }
-    void FASTCALL AsString( const ds_string& value )        { WriteString( *mFieldDef, value ); }
+    void FASTCALL AsBoolean( bool value );
+    void FASTCALL AsByte( char value );
+    void FASTCALL AsInteger( int value );
+    void FASTCALL AsDouble( double value );
+    void FASTCALL AsDateTime( const dbDateTime& value );
+    void FASTCALL AsString( const ds_string& value );
     void FASTCALL AsVariant( const Variant& value )         { WriteVariant( *mFieldDef, value ); }
 };
 
 //***********************************************************************
-//******    cFieldProxy
+//******    cDoubleFieldProxyHelper
 //***********************************************************************
-class cFieldProxy
+class cDoubleFieldProxyHelper : private cRecordPtr
 {
 private:
-    cFieldProxyRecordHelper     mHelper;
+    typedef cRecordPtr      inherited;
+private:
+    const cFieldDef         *mFieldDef;
 public:
-    CDFASTCALL cFieldProxy( cRawBuffer& raw_buffer, const cFieldDef& field_def )
-        : mHelper(raw_buffer, field_def)                            {} // empty
-    cFieldProxyRecordHelper * FASTCALL operator->()                 { return ( &mHelper ); }
-    const cFieldProxyRecordHelper * FASTCALL operator->() const     { return ( &mHelper ); }
+    CDFASTCALL cDoubleFieldProxyHelper( DoubleBuffer& buffer, const cFieldDef& field_def )
+        : inherited(buffer), mFieldDef(&field_def)
+    {} // empty
+
+    bool FASTCALL IsNull() const                            { return inherited::IsNull( *mFieldDef ); }
+
+    bool FASTCALL AsBoolean() const;
+    char FASTCALL AsByte() const;
+    int  FASTCALL AsInteger() const;
+    double FASTCALL AsDouble() const;
+    dbDate FASTCALL AsDate() const;
+    dbTime FASTCALL AsTime() const;
+    dbDateTime FASTCALL AsDateTime() const;
+    ds_string FASTCALL AsString() const;
+    Variant FASTCALL AsVariant() const                      { return inherited::ReadVariant( *mFieldDef ); }
+
+    void FASTCALL AsBoolean( bool value );
+    void FASTCALL AsByte( char value );
+    void FASTCALL AsInteger( int value );
+    void FASTCALL AsDouble( double value );
+    void FASTCALL AsDate( const dbDate& value );
+    void FASTCALL AsTime( const dbTime& value );
+    void FASTCALL AsDateTime( const dbDateTime& value );
+    void FASTCALL AsString( const ds_string& value );
+    void FASTCALL AsVariant( const Variant& value )         { inherited::WriteVariant( *mFieldDef, value ); }
 };
 
 //***********************************************************************
-//******    cRawRecordProxy
+//******    cRawFieldProxy
 //***********************************************************************
-template <typename RESULT_TYPE> class cRawRecordProxy
+class cRawFieldProxy
+{
+private:
+    cRawFieldProxyHelper        mHelper;
+public:
+    CDFASTCALL cRawFieldProxy( cRawBuffer& buffer, const cFieldDef& field_def )
+        : mHelper(buffer, field_def)                                {} // empty
+    cRawFieldProxyHelper * FASTCALL operator->()                    { return ( &mHelper ); }
+    const cRawFieldProxyHelper * FASTCALL operator->() const        { return ( &mHelper ); }
+};
+
+//***********************************************************************
+//******    cDoubleFieldProxy
+//***********************************************************************
+class cDoubleFieldProxy
+{
+private:
+    cDoubleFieldProxyHelper     mHelper;
+public:
+    CDFASTCALL cDoubleFieldProxy( DoubleBuffer& buffer, const cFieldDef& field_def )
+        : mHelper(buffer, field_def)                                {} // empty
+    cDoubleFieldProxyHelper * FASTCALL operator->()                 { return ( &mHelper ); }
+    const cDoubleFieldProxyHelper * FASTCALL operator->() const     { return ( &mHelper ); }
+};
+
+//***********************************************************************
+//******    cOldValuesProxy
+//***********************************************************************
+template <typename RESULT_TYPE> class cOldValuesProxy
 {
 private:
     cRawBuffer          *mRawBuffer;
     const cFieldDefs    *mFieldDefs;
 public:
-    CDFASTCALL cRawRecordProxy( cRawBuffer& raw_buffer, const cFieldDefs& field_defs  )
+    CDFASTCALL cOldValuesProxy( cRawBuffer& raw_buffer, const cFieldDefs& field_defs  )
         : mRawBuffer(&raw_buffer), mFieldDefs(&field_defs)      {} // empty
-    const RESULT_TYPE FASTCALL operator*() const                { return ( RESULT_TYPE( *mRawBuffer ) ); }
-    const RESULT_TYPE FASTCALL operator->() const               { return ( RESULT_TYPE( *mRawBuffer ) ); }
+    const RESULT_TYPE FASTCALL operator*() const                { return RESULT_TYPE( *mRawBuffer ); }
+    const RESULT_TYPE FASTCALL operator->() const               { return RESULT_TYPE( *mRawBuffer ); }
 
-    cFieldProxy FieldByName( const ds_string& field_name )
+    cRawFieldProxy FieldByName( const ds_string& field_name )
     {
-        return ( cFieldProxy( *mRawBuffer, mFieldDefs->FieldByName( field_name ) ) );
+        return cRawFieldProxy( *mRawBuffer, mFieldDefs->FieldByName( field_name ) );
     }
-    cFieldProxy FieldByName( const char *field_name )
+    cRawFieldProxy FieldByName( const char *field_name )
     {
-        return ( cFieldProxy( *mRawBuffer, mFieldDefs->FieldByName( field_name ) ) );
+        return cRawFieldProxy( *mRawBuffer, mFieldDefs->FieldByName( field_name ) );
     }
-    const cFieldProxy FieldByName( const ds_string& field_name ) const
+    const cRawFieldProxy FieldByName( const ds_string& field_name ) const
     {
-        return ( cFieldProxy( *mRawBuffer, mFieldDefs->FieldByName( field_name ) ) );
+        return cRawFieldProxy( *mRawBuffer, mFieldDefs->FieldByName( field_name ) );
     }
-    const cFieldProxy FieldByName( const char *field_name ) const
+    const cRawFieldProxy FieldByName( const char *field_name ) const
     {
-        return ( cFieldProxy( *mRawBuffer, mFieldDefs->FieldByName( field_name ) ) );
+        return cRawFieldProxy( *mRawBuffer, mFieldDefs->FieldByName( field_name ) );
     }
 /*
     cFieldProxy operator[]( int idx )
@@ -300,7 +350,8 @@ private:
     Data::size_type         mIdx;
     ContainerPointerType    mContainer;
 protected:
-    typedef cRawRecordProxy<cRawRecordPtr>      OldValuesProxy;
+    typedef cOldValuesProxy<cRawRecordPtr>      OldValuesProxy;
+    typedef cDoubleFieldProxy                   cFieldProxy;
 
     DoubleBuffer * FASTCALL GetDoubleBuffer() const;
     ConstContainerReferanceType FASTCALL GetData() const        { return mContainer; }
@@ -335,19 +386,20 @@ public:
         if ( mIdx > 0 )
             --mIdx;
     }
-    bool FASTCALL eof() const                           { return ( mIdx >= mContainer->size() ); }
+    bool FASTCALL eof() const                           { return mIdx >= mContainer->size(); }
     bool FASTCALL bof() const                           { return ( mIdx == 0 ); }
     void FASTCALL First()                               { mIdx = 0; }
     void FASTCALL Last()                                { mIdx = mContainer->size() - 1; }
-    int FASTCALL RecordCount() const                    { return ( mContainer->size() ); }
-    void * FASTCALL GetMark() const                     { return ( reinterpret_cast<void *>(mIdx) ); }
+    int FASTCALL RecordCount() const                    { return mContainer->size(); }
+    void * FASTCALL GetMark() const                     { return reinterpret_cast<void *>(mIdx); }
     void FASTCALL GotoMark( void *mark )                { mIdx = reinterpret_cast<detail::Data::size_type>(mark); }
-    cUpdateStatus FASTCALL GetUpdateStatus() const      { return ( GetDoubleBuffer()->GetUpdateStatus() ); }
+    cUpdateStatus FASTCALL GetUpdateStatus() const      { return GetDoubleBuffer()->GetUpdateStatus(); }
 
     Variant FASTCALL Value( const cFieldDef& field_def ) const;
+    void FASTCALL Value( const cFieldDef& field_def, const Variant val );
     const OldValuesProxy FASTCALL OldValues()
     {
-        return ( OldValuesProxy( GetDoubleBuffer()->GetOriginalData(), *mContainer->GetFieldDefs().get() ) );
+        return OldValuesProxy( GetDoubleBuffer()->GetOriginalData(), *mContainer->GetFieldDefs().get() );
     }
 
     cFieldProxy FASTCALL FieldByName( const ds_string& field_name );
@@ -493,6 +545,7 @@ class cRecord
 private:
     friend class Tablebase;
     friend class cTableWriter;
+    typedef detail::cDoubleFieldProxy       cFieldProxy;
 
     detail::Data::value_type    mRecord;
     spFieldDefs                 mFieldDefs;
@@ -501,9 +554,9 @@ protected:
 public:
     CDFASTCALL cRecord( const detail::Data::value_type& container, const spFieldDefs& field_defs );
     CDFASTCALL ~cRecord();
-    void FASTCALL CommitUpdates()                               { mRecord->CommitUpdates(); }
-    detail::cFieldProxy FieldByName( const ds_string& field_name );
-    detail::cFieldProxy FieldByName( const char *field_name );
+    void FASTCALL CommitUpdates()                                       { mRecord->CommitUpdates(); }
+    cFieldProxy FieldByName( const ds_string& field_name );
+    cFieldProxy FieldByName( const char *field_name );
 };
 
 //***********************************************************************
