@@ -1,0 +1,5 @@
+1. cRecordPtr is a cDoubleBuffer wrapper.
+2. cRawRecordPtr is a cRawBuffer wrapper.
+
+3. TODO. Check if having a string instance in the record buffer is faster then having a char array.
+         Don't initialize it when dbNull. Check if initialized with dbNull.

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="..\..\Test\uProfile.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3590" topLine="159" />
+	</File>
+	<File name="..\..\Test\uProfile.h" open="0" top="0" tabpos="0">
+		<Cursor position="0" topLine="1" />
+	</File>
+	<File name="..\..\Test\uProfile1.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3468" topLine="86" />
+	</File>
+	<File name="..\..\Test\uProfile1.h" open="0" top="0" tabpos="0">
+		<Cursor position="2534" topLine="37" />
+	</File>
+	<File name="..\..\Test\uTables.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2650" topLine="44" />
+	</File>
+	<File name="..\..\Test\uTables.h" open="0" top="0" tabpos="0">
+		<Cursor position="4777" topLine="92" />
+	</File>
+	<File name="..\..\Test\uTest.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="4946" topLine="49" />
+	</File>
+</CodeBlocks_layout_file>

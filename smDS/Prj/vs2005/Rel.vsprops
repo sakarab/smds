@@ -7,56 +7,26 @@
 	<Tool
 		Name="VCCLCompilerTool"
 		Optimization="2"
+		InlineFunctionExpansion="1"
+		OmitFramePointers="true"
+		PreprocessorDefinitions="_SCL_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_SECURE_SCL=0;_CRT_SECURE_CPP_OVERLOAD_SECURE_NAMES=0;NO_CDFASTCALL"
 		StringPooling="true"
 		RuntimeLibrary="2"
 		BufferSecurityCheck="false"
+		EnableFunctionLevelLinking="true"
 		WarningLevel="4"
-		DebugInformationFormat="3"
+		DebugInformationFormat="0"
 		CompileAs="0"
 	/>
 	<Tool
 		Name="VCLinkerTool"
 		LinkIncremental="1"
-		GenerateDebugInformation="true"
+		OptimizeReferences="2"
+		EnableCOMDATFolding="2"
 	/>
 	<UserMacro
-		Name="LOKI_INC"
-		Value="G:\Include"
-		PerformEnvironmentSet="true"
-	/>
-	<UserMacro
-		Name="LOKI_LIB"
-		Value="G:\Src\Libs\Loki\Prj\r80vs"
-		PerformEnvironmentSet="true"
-	/>
-	<UserMacro
-		Name="BOOST_INC"
-		Value="G:\Src\boost_1_33_1"
-		PerformEnvironmentSet="true"
-	/>
-	<UserMacro
-		Name="BOOST_LIB"
-		Value="G:\Lib\Vs80"
-		PerformEnvironmentSet="true"
-	/>
-	<UserMacro
-		Name="WX"
-		Value="G:\Src\Libs\wxWidgets"
-		PerformEnvironmentSet="true"
-	/>
-	<UserMacro
-		Name="WX_INC"
-		Value="$(WX)\include"
-		PerformEnvironmentSet="true"
-	/>
-	<UserMacro
-		Name="WX_MSVC_INC"
-		Value="$(WX)\include\msvc"
-		PerformEnvironmentSet="true"
-	/>
-	<UserMacro
-		Name="WX_LIB"
-		Value="G:\Lib\Vs80\dll"
+		Name="D"
+		Value=""
 		PerformEnvironmentSet="true"
 	/>
 </VisualStudioPropertySheet>

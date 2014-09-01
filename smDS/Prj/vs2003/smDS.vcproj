@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="smDS"
-	ProjectGUID="{9A67882F-40C7-4204-B549-43C6C6C3EFE3}"
+	ProjectGUID="{0527CA00-2D00-44DE-B223-ABDDB3F48DF6}"
 	RootNamespace="smDS"
 	Keyword="Win32Proj">
 	<Platforms>
@@ -12,34 +12,29 @@
 	</Platforms>
 	<Configurations>
 		<Configuration
-			Name="Debug|Win32"
-			OutputDirectory="Debug"
-			IntermediateDirectory="Debug"
-			ConfigurationType="2"
+			Name="Debug_Static|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SMDS_EXPORTS"
-				MinimalRebuild="TRUE"
+				AdditionalIncludeDirectories="..\..\Src;G:\Src\Libs\Loki_2\include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;NO_CDFASTCALL"
+				StringPooling="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="4"/>
+				TreatWChar_tAsBuiltInType="TRUE"
+				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="TRUE"
+				WarningLevel="4"
+				DebugInformationFormat="3"
+				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/smDS.dll"
-				LinkIncremental="2"
-				ModuleDefinitionFile="smDS.def"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/smDS.pdb"
-				SubSystem="2"
-				ImportLibrary="$(OutDir)/smDS.lib"
-				TargetMachine="1"/>
+				Name="VCLibrarianTool"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -55,26 +50,116 @@
 			<Tool
 				Name="VCXMLDataGeneratorTool"/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release_Static|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			ConfigurationType="4"
+			CharacterSet="2"
+			WholeProgramOptimization="TRUE">
+			<Tool
+				Name="VCCLCompilerTool"
+				GlobalOptimizations="TRUE"
+				InlineFunctionExpansion="1"
+				OmitFramePointers="TRUE"
+				OptimizeForProcessor="3"
+				AdditionalIncludeDirectories="..\..\Src;G:\Src\Libs\Loki_2\include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;NO_CDFASTCALL"
+				StringPooling="TRUE"
+				RuntimeLibrary="0"
+				BufferSecurityCheck="FALSE"
+				EnableFunctionLevelLinking="TRUE"
+				TreatWChar_tAsBuiltInType="TRUE"
+				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="TRUE"
+				WarningLevel="4"
+				DebugInformationFormat="3"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
 			<Tool
 				Name="VCManagedWrapperGeneratorTool"/>
 			<Tool
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
-			OutputDirectory=".\"
-			IntermediateDirectory="Release"
-			ConfigurationType="2"
+			Name="Debug_RTL|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="1"
-				FavorSizeOrSpeed="2"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\..\Src;G:\Src\Libs\Loki_2\include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;NO_CDFASTCALL"
+				StringPooling="TRUE"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				TreatWChar_tAsBuiltInType="TRUE"
+				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="TRUE"
+				WarningLevel="4"
+				DebugInformationFormat="3"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Release_RTL|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			ConfigurationType="4"
+			CharacterSet="2"
+			WholeProgramOptimization="TRUE">
+			<Tool
+				Name="VCCLCompilerTool"
+				GlobalOptimizations="TRUE"
+				InlineFunctionExpansion="1"
 				OmitFramePointers="TRUE"
-				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="Src;\Include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SMDS_EXPORTS;DLL_BUILD"
+				OptimizeForProcessor="3"
+				AdditionalIncludeDirectories="..\..\Src;G:\Src\Libs\Loki_2\include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;NO_CDFASTCALL"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
@@ -82,30 +167,13 @@
 				TreatWChar_tAsBuiltInType="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName="$(IntDir)/vc70.pdb"
-				BrowseInformation="2"
 				WarningLevel="4"
-				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"
-				CompileAs="0"
-				DisableSpecificWarnings="4251;4702"/>
+				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="Loki71vs.lib"
-				OutputFile="$(OutDir)/smDS.dll"
-				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="\Lib"
-				ModuleDefinitionFile="Src\smDS.def"
-				GenerateDebugInformation="TRUE"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				ImportLibrary="$(IntDir)/smDS.lib"
-				TargetMachine="1"/>
+				Name="VCLibrarianTool"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -120,8 +188,6 @@
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
 			<Tool
 				Name="VCManagedWrapperGeneratorTool"/>
 			<Tool
@@ -139,7 +205,19 @@
 				RelativePath="..\..\Src\dsBuffer.cpp">
 			</File>
 			<File
+				RelativePath="..\..\Src\dsCompare.cpp">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsCompareControlers.cpp">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsConn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\Src\dsData.cpp">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsDateTime.cpp">
 			</File>
 			<File
 				RelativePath="..\..\Src\dsExceptions.cpp">
@@ -148,13 +226,37 @@
 				RelativePath="..\..\Src\dsFields.cpp">
 			</File>
 			<File
+				RelativePath="..\..\Src\dsGUID.cpp">
+			</File>
+			<File
 				RelativePath="..\..\Src\dsIndex.cpp">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsModuleLoad.cpp">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsRecord.cpp">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsSerialization.cpp">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsSmartPtr.cpp">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsStream.cpp">
 			</File>
 			<File
 				RelativePath="..\..\Src\dsString.cpp">
 			</File>
 			<File
-				RelativePath="..\..\Src\main_dll.cpp">
+				RelativePath="..\..\Src\dsUtils.cpp">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsVariant.cpp">
+			</File>
+			<File
+				RelativePath="..\..\Src\Win32\mlWinDll.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -165,10 +267,28 @@
 				RelativePath="..\..\Src\dsBuffer.h">
 			</File>
 			<File
+				RelativePath="..\..\Src\dsCommon.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsCompare.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsCompareControlers.h">
+			</File>
+			<File
 				RelativePath="..\..\Src\dsConfig.h">
 			</File>
 			<File
+				RelativePath="..\..\Src\dsConn.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsConn_Intf.h">
+			</File>
+			<File
 				RelativePath="..\..\Src\dsData.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsDateTime.h">
 			</File>
 			<File
 				RelativePath="..\..\Src\dsExceptions.h">
@@ -177,26 +297,55 @@
 				RelativePath="..\..\Src\dsFields.h">
 			</File>
 			<File
+				RelativePath="..\..\Src\dsGUID.h">
+			</File>
+			<File
 				RelativePath="..\..\Src\dsIndex.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsModuleLoad.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsODBCtypes.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsRecord.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsSerialization.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsSmartPtr.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsStream.h">
 			</File>
 			<File
 				RelativePath="..\..\Src\dsString.h">
 			</File>
 			<File
+				RelativePath="..\..\Src\dsSysOpen.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsTypedData.h">
+			</File>
+			<File
 				RelativePath="..\..\Src\dsTypes.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsUtils.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\dsVariant.h">
+			</File>
+			<File
+				RelativePath="..\..\Src\Win32\mlWinDll.h">
 			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
-		</Filter>
-		<Filter
-			Name="Misc"
-			Filter="">
-			<File
-				RelativePath="..\..\Src\smDS.def">
-			</File>
 		</Filter>
 	</Files>
 	<Globals>

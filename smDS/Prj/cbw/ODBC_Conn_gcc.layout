@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="..\..\Src\ODBC_Conn.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2851" topLine="66" />
+	</File>
+	<File name="..\..\Src\ODBC_Sub.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="20079" topLine="315" />
+	</File>
+	<File name="..\..\Src\ODBC_Sub.h" open="0" top="0" tabpos="0">
+		<Cursor position="6553" topLine="135" />
+	</File>
+</CodeBlocks_layout_file>

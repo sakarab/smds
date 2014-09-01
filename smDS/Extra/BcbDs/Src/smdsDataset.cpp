@@ -17,23 +17,25 @@ __fastcall TsmdsDataset::~TsmdsDataset()
 TGetResult __fastcall TsmdsDataset::GetRecord(char * Buffer, TGetMode GetMode, bool DoCheck)
 {
 }
-
+//---------------------------------------------------------------------------
 void __fastcall TsmdsDataset::InternalClose()
 {
 }
-
+//---------------------------------------------------------------------------
 void __fastcall TsmdsDataset::InternalHandleException()
 {
 }
-
+//---------------------------------------------------------------------------
 void __fastcall TsmdsDataset::InternalInitFieldDefs()
 {
 }
-
+//---------------------------------------------------------------------------
 void __fastcall TsmdsDataset::InternalOpen()
 {
 }
-
+//---------------------------------------------------------------------------
 bool __fastcall TsmdsDataset::IsCursorOpen()
 {
 }
+//---------------------------------------------------------------------------
+

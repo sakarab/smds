@@ -1,0 +1,48 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{DFB2B6BA-382E-4EDD-9563-AA182C073DD9}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="smDSb10lib.cbproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="smDSb10libTest.cbproj">
+				<Dependencies>smDSb10lib.cbproj</Dependencies>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="smDSb10lib">
+			<MSBuild Projects="smDSb10lib.cbproj"/>
+		</Target>
+		<Target Name="smDSb10lib:Clean">
+			<MSBuild Projects="smDSb10lib.cbproj" Targets="Clean"/>
+		</Target>
+		<Target Name="smDSb10lib:Make">
+			<MSBuild Projects="smDSb10lib.cbproj" Targets="Make"/>
+		</Target>
+		<Target Name="smDSb10libTest" DependsOnTargets="smDSb10lib">
+			<MSBuild Projects="smDSb10libTest.cbproj"/>
+		</Target>
+		<Target Name="smDSb10libTest:Clean" DependsOnTargets="smDSb10lib:Clean">
+			<MSBuild Projects="smDSb10libTest.cbproj" Targets="Clean"/>
+		</Target>
+		<Target Name="smDSb10libTest:Make" DependsOnTargets="smDSb10lib:Make">
+			<MSBuild Projects="smDSb10libTest.cbproj" Targets="Make"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="smDSb10lib;smDSb10libTest"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="smDSb10lib:Clean;smDSb10libTest:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="smDSb10lib:Make;smDSb10libTest:Make"/>
+		</Target>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
+	</Project>

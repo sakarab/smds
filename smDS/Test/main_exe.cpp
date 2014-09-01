@@ -168,36 +168,44 @@ void FASTCALL ErrorReporter_( void *user_data, const char *error )
 
 int main()
 {
-#if defined (_MSC_VER)
+#if ( _MSC_VER < 1600 )
     _set_sbh_threshold( 1016 );     // run normal speed when debuger is present
 #endif
 
 	try
 	{
         spModuleLoader          module_loader = GetOsModuleLoader( SM_DS_TEST_BACKEND );
-        DbEngine                engine( module_loader );
-        Database                database = engine.NewConnection( ODBC_Access_DirData_Conn );
 
-        TestAlign();
+        // catch exceptions while module is alive
+        try
+        {
+            DbEngine                engine( module_loader );
+            Database                database = engine.NewConnection( ODBC_Access_DirData_Conn );
 
-        tblFiles_ptr    files = GetTblFiles( database );
+            TestAlign();
 
-        CreateInsertSqls( files );
-        Test( files, ErrorReporter_, 0 );
-        Output( files );
-        RunProfile( database );
-        UntypedTest( database );
+            tblFiles_ptr    files = GetTblFiles( database );
 
-        std::cout << "press enter" << std::endl;
+            CreateInsertSqls( files );
+            Test( files, ErrorReporter_, 0 );
+            Output( files );
+            RunProfile( database );
+            UntypedTest( database );
 
-        char    ch;
+            std::cout << "press enter" << std::endl;
 
-        std::cin.get( ch );
-	}
+            char    ch;
+
+            std::cin.get( ch );
+	    }
+	    catch ( std::exception& e )
+	    {
+	        std::cout << "\nException :" << e.what() << '\n';
+	    }
+    }
 	catch ( std::exception& e )
 	{
 	    std::cout << "\nException :" << e.what() << '\n';
 	}
     return 0;
 }
-

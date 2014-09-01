@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="..\..\Src\Win32\mlWinDll.h" open="0" top="0" tabpos="0">
+		<Cursor position="2180" topLine="40" />
+	</File>
+	<File name="..\..\Src\dsBuffer.h" open="0" top="0" tabpos="0">
+		<Cursor position="31482" topLine="720" />
+	</File>
+	<File name="..\..\Src\dsConn.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2937" topLine="54" />
+	</File>
+	<File name="..\..\Src\dsConn.h" open="0" top="0" tabpos="0">
+		<Cursor position="2177" topLine="36" />
+	</File>
+	<File name="..\..\Src\dsData.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1187" topLine="5" />
+	</File>
+	<File name="..\..\Src\dsDateTime.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="6345" topLine="158" />
+	</File>
+	<File name="..\..\Src\dsDateTime.h" open="0" top="0" tabpos="0">
+		<Cursor position="1268" topLine="0" />
+	</File>
+	<File name="..\..\Src\dsExceptions.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1310" topLine="0" />
+	</File>
+	<File name="..\..\Src\dsExceptions.h" open="0" top="0" tabpos="0">
+		<Cursor position="2706" topLine="35" />
+	</File>
+	<File name="..\..\Src\dsFields.h" open="0" top="0" tabpos="0">
+		<Cursor position="0" topLine="5" />
+	</File>
+	<File name="..\..\Src\dsIndex.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="10859" topLine="282" />
+	</File>
+	<File name="..\..\Src\dsSmartPtr.h" open="0" top="0" tabpos="0">
+		<Cursor position="2389" topLine="44" />
+	</File>
+	<File name="..\..\Src\dsString.h" open="0" top="0" tabpos="0">
+		<Cursor position="10467" topLine="166" />
+	</File>
+	<File name="..\..\Src\dsTypedData.h" open="0" top="0" tabpos="0">
+		<Cursor position="0" topLine="307" />
+	</File>
+</CodeBlocks_layout_file>

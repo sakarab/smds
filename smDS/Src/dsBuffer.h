@@ -249,6 +249,18 @@ private:
     void FASTCALL SetNull( const cFieldDef_& field_def, bool value )            ; // { mNull[field_def.mIndex] = value; }
 
     char * FASTCALL raw_data() const                                            { return ( mData.get() ); }
+//---------------------------------------------------------------------------
+    template <class T> T value_reader( const cFieldDef& field_def ) const
+    {
+        if ( IsNull( field_def ) )
+#if defined SM_DS_NULL_VALUE_EXCEPTION
+            throw eNullFieldValue();
+#else
+            return T();
+#endif
+        return *(buffer_field_cast<T *>(field_def.Offset()));
+    }
+//---------------------------------------------------------------------------
 public:
     bool FASTCALL IsNull( const cFieldDef& field_def ) const            ; // { return ( mNull[field_def.Index()] ); }
     bool FASTCALL IsNull( const cFieldDef_& field_def ) const           ; // { return ( mNull[field_def.mIndex] ); }
@@ -258,64 +270,32 @@ public:
 //---------------------------------------------------------------------------
     bool FASTCALL ReadBool( const cFieldDef& field_def ) const
     {
-        if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
-            throw eNullFieldValue();
-#else
-            return false;
-#endif
-        return *(buffer_field_cast<bool *>(field_def.Offset()));
+        return value_reader<bool>( field_def );
     }
 //---------------------------------------------------------------------------
     char FASTCALL ReadByte( const cFieldDef& field_def ) const
     {
-        if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
-            throw eNullFieldValue();
-#else
-            return 0;
-#endif
-        return *(buffer_field_cast<char *>(field_def.Offset()));
+        return value_reader<char>( field_def );
     }
 //---------------------------------------------------------------------------
     short FASTCALL ReadShort( const cFieldDef& field_def ) const
     {
-        if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
-            throw eNullFieldValue();
-#else
-            return 0;
-#endif
-        return *(buffer_field_cast<short *>(field_def.Offset()));
+        return value_reader<short>( field_def );
     }
 //---------------------------------------------------------------------------
     int FASTCALL ReadInteger( const cFieldDef& field_def ) const
     {
-        if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
-            throw eNullFieldValue();
-#else
-            return 0;
-#endif
-        return *(buffer_field_cast<int *>(field_def.Offset()));
+        return value_reader<int>( field_def );
     }
 //---------------------------------------------------------------------------
     long long FASTCALL ReadLongLong( const cFieldDef& field_def ) const
     {
-        if ( IsNull( field_def ) )
-#if defined SM_DS_NULL_VALUE_EXCEPTION
-            throw eNullFieldValue();
-#else
-            return 0;
-#endif
-        return *(buffer_field_cast<long long *>(field_def.Offset()));
+        return value_reader<long long>( field_def );
     }
 //---------------------------------------------------------------------------
     double FASTCALL ReadFloat( const cFieldDef& field_def ) const
     {
-        if ( IsNull( field_def ) )
-            throw eNullFieldValue();
-        return *(buffer_field_cast<double *>(field_def.Offset()));
+        return value_reader<double>( field_def );
     }
 //---------------------------------------------------------------------------
     dbDate FASTCALL ReadDate( const cFieldDef& field_def ) const
@@ -326,7 +306,7 @@ public:
 #else
             return dbDateTime();
 #endif
-        return detail::CreateDbDate( *(buffer_field_cast<detail::dbDate_Internal *>(field_def.Offset())) );
+        return CreateDbDate( *(buffer_field_cast<dbDate_Internal *>(field_def.Offset())) );
     }
 //---------------------------------------------------------------------------
     dbTime FASTCALL ReadTime( const cFieldDef& field_def ) const
@@ -337,7 +317,7 @@ public:
 #else
             return dbDateTime();
 #endif
-        return detail::CreateDbTime( *(buffer_field_cast<detail::dbTime_Internal *>(field_def.Offset())) );
+        return CreateDbTime( *(buffer_field_cast<dbTime_Internal *>(field_def.Offset())) );
     }
 //---------------------------------------------------------------------------
     dbDateTime FASTCALL ReadDateTime( const cFieldDef& field_def ) const
@@ -348,7 +328,7 @@ public:
 #else
             return dbDateTime();
 #endif
-        return detail::CreateDbDateTime( *(buffer_field_cast<detail::dbDateTime_Internal *>(field_def.Offset())) );
+        return CreateDbDateTime( *(buffer_field_cast<dbDateTime_Internal *>(field_def.Offset())) );
     }
 //---------------------------------------------------------------------------
     const ds_string& FASTCALL ReadString( const cFieldDef& field_def ) const
@@ -396,42 +376,42 @@ public:
     }
     void FASTCALL WriteDate( const cFieldDef& field_def, const dbDate& value )
     {
-        *(buffer_field_cast<detail::dbDate_Internal *>(field_def.Offset())) = value.AsInternal();
+        *(buffer_field_cast<dbDate_Internal *>(field_def.Offset())) = value.AsInternal();
         SetNull( field_def, false );
     }
-    void FASTCALL WriteDate( const cFieldDef& field_def, const detail::dbDate_Internal& value )
+    void FASTCALL WriteDate( const cFieldDef& field_def, const dbDate_Internal& value )
     {
-        *(buffer_field_cast<detail::dbDate_Internal *>(field_def.Offset())) = value;
+        *(buffer_field_cast<dbDate_Internal *>(field_def.Offset())) = value;
         SetNull( field_def, false );
     }
     void FASTCALL WriteTime( const cFieldDef& field_def, const dbTime& value )
     {
-        *(buffer_field_cast<detail::dbTime_Internal *>(field_def.Offset())) = value.AsInternal();
+        *(buffer_field_cast<dbTime_Internal *>(field_def.Offset())) = value.AsInternal();
         SetNull( field_def, false );
     }
-    void FASTCALL WriteTime( const cFieldDef& field_def, const detail::dbTime_Internal& value )
+    void FASTCALL WriteTime( const cFieldDef& field_def, const dbTime_Internal& value )
     {
-        *(buffer_field_cast<detail::dbTime_Internal *>(field_def.Offset())) = value;
+        *(buffer_field_cast<dbTime_Internal *>(field_def.Offset())) = value;
         SetNull( field_def, false );
     }
-    void FASTCALL WriteDateTime( const cFieldDef& field_def, const detail::dbDateTime_Internal& value )
+    void FASTCALL WriteDateTime( const cFieldDef& field_def, const dbDateTime_Internal& value )
     {
-        *(buffer_field_cast<detail::dbDateTime_Internal *>(field_def.Offset())) = value;
+        *(buffer_field_cast<dbDateTime_Internal *>(field_def.Offset())) = value;
         SetNull( field_def, false );
     }
     void FASTCALL WriteDateTime( const cFieldDef& field_def, const dbDateTime& value )
     {
-        *(buffer_field_cast<detail::dbDateTime_Internal *>(field_def.Offset())) = value.AsInternal();
+        *(buffer_field_cast<dbDateTime_Internal *>(field_def.Offset())) = value.AsInternal();
         SetNull( field_def, false );
     }
-    void FASTCALL WriteGUID( const cFieldDef& field_def, const detail::dbGUID_Internal& value )
+    void FASTCALL WriteGUID( const cFieldDef& field_def, const dbGUID_Internal& value )
     {
-        *(buffer_field_cast<detail::dbGUID_Internal *>(field_def.Offset())) = value;
+        *(buffer_field_cast<dbGUID_Internal *>(field_def.Offset())) = value;
         SetNull( field_def, false );
     }
     void FASTCALL WriteGUID( const cFieldDef& field_def, const dbGUID& value )
     {
-        *(buffer_field_cast<detail::dbGUID_Internal *>(field_def.Offset())) = value.AsInternal();
+        *(buffer_field_cast<dbGUID_Internal *>(field_def.Offset())) = value.AsInternal();
         SetNull( field_def, false );
     }
     void FASTCALL WriteString( const cFieldDef& field_def, const ds_string& value )
@@ -530,7 +510,7 @@ public:
 #else
             return dbDateTime();
 #endif
-        return CreateDbDate( *(buffer_field_cast<detail::dbDate_Internal *>(field_def.mOffset)) );
+        return CreateDbDate( *(buffer_field_cast<dbDate_Internal *>(field_def.mOffset)) );
     }
 //---------------------------------------------------------------------------
     dbTime FASTCALL ReadTime( const cFieldDef_& field_def ) const
@@ -541,7 +521,7 @@ public:
 #else
             return dbDateTime();
 #endif
-        return CreateDbTime( *(buffer_field_cast<detail::dbTime_Internal *>(field_def.mOffset)) );
+        return CreateDbTime( *(buffer_field_cast<dbTime_Internal *>(field_def.mOffset)) );
     }
 //---------------------------------------------------------------------------
     dbDateTime FASTCALL ReadDateTime( const cFieldDef_& field_def ) const
@@ -552,7 +532,7 @@ public:
 #else
             return dbDateTime();
 #endif
-        return detail::CreateDbDateTime( *(buffer_field_cast<detail::dbDateTime_Internal *>(field_def.mOffset)) );
+        return CreateDbDateTime( *(buffer_field_cast<dbDateTime_Internal *>(field_def.mOffset)) );
     }
 //---------------------------------------------------------------------------
     const ds_string& FASTCALL ReadString( const cFieldDef_& field_def ) const
@@ -598,17 +578,17 @@ public:
     }
     void FASTCALL WriteDate( const cFieldDef_& field_def, const dbDate& value )
     {
-        *(buffer_field_cast<detail::dbDate_Internal *>(field_def.mOffset)) = value.AsInternal();
+        *(buffer_field_cast<dbDate_Internal *>(field_def.mOffset)) = value.AsInternal();
         SetNull( field_def, false );
     }
     void FASTCALL WriteTime( const cFieldDef_& field_def, const dbTime& value )
     {
-        *(buffer_field_cast<detail::dbTime_Internal *>(field_def.mOffset)) = value.AsInternal();
+        *(buffer_field_cast<dbTime_Internal *>(field_def.mOffset)) = value.AsInternal();
         SetNull( field_def, false );
     }
     void FASTCALL WriteDateTime( const cFieldDef_& field_def, const dbDateTime& value )
     {
-        *(buffer_field_cast<detail::dbDateTime_Internal *>(field_def.mOffset)) = value.AsInternal();
+        *(buffer_field_cast<dbDateTime_Internal *>(field_def.mOffset)) = value.AsInternal();
         SetNull( field_def, false );
     }
     void FASTCALL WriteString( const cFieldDef_& field_def, const ds_string& value )
@@ -658,35 +638,35 @@ public:
     }
     dbDate FASTCALL ReadDateNN( const cFieldDef& field_def ) const
     {
-        return CreateDbDate( *(buffer_field_cast<detail::dbDate_Internal *>(field_def.Offset())) );
+        return CreateDbDate( *(buffer_field_cast<dbDate_Internal *>(field_def.Offset())) );
     }
-    const detail::dbDate_Internal& FASTCALL ReadDateNNref( const cFieldDef& field_def ) const
+    const dbDate_Internal& FASTCALL ReadDateNNref( const cFieldDef& field_def ) const
     {
-        return *(buffer_field_cast<detail::dbDate_Internal *>(field_def.Offset()));
+        return *(buffer_field_cast<dbDate_Internal *>(field_def.Offset()));
     }
     dbTime FASTCALL ReadTimeNN( const cFieldDef& field_def ) const
     {
-        return CreateDbTime( *(buffer_field_cast<detail::dbTime_Internal *>(field_def.Offset())) );
+        return CreateDbTime( *(buffer_field_cast<dbTime_Internal *>(field_def.Offset())) );
     }
-    const detail::dbTime_Internal& FASTCALL ReadTimeNNref( const cFieldDef& field_def ) const
+    const dbTime_Internal& FASTCALL ReadTimeNNref( const cFieldDef& field_def ) const
     {
-        return *(buffer_field_cast<detail::dbTime_Internal *>(field_def.Offset()));
+        return *(buffer_field_cast<dbTime_Internal *>(field_def.Offset()));
     }
     dbDateTime FASTCALL ReadDateTimeNN( const cFieldDef& field_def ) const
     {
-        return detail::CreateDbDateTime( *(buffer_field_cast<detail::dbDateTime_Internal *>(field_def.Offset())) );
+        return CreateDbDateTime( *(buffer_field_cast<dbDateTime_Internal *>(field_def.Offset())) );
     }
-    const detail::dbDateTime_Internal& FASTCALL ReadDateTimeNNref( const cFieldDef& field_def ) const
+    const dbDateTime_Internal& FASTCALL ReadDateTimeNNref( const cFieldDef& field_def ) const
     {
-        return *(buffer_field_cast<detail::dbDateTime_Internal *>(field_def.Offset()));
+        return *(buffer_field_cast<dbDateTime_Internal *>(field_def.Offset()));
     }
     dbGUID FASTCALL ReadGUIDNN( const cFieldDef& field_def ) const
     {
-        return detail::CreateDbGUID( *(buffer_field_cast<detail::dbGUID_Internal *>(field_def.Offset())) );
+        return CreateDbGUID( *(buffer_field_cast<dbGUID_Internal *>(field_def.Offset())) );
     }
-    const detail::dbGUID_Internal& FASTCALL ReadGUIDNNref( const cFieldDef& field_def ) const
+    const dbGUID_Internal& FASTCALL ReadGUIDNNref( const cFieldDef& field_def ) const
     {
-        return *(buffer_field_cast<detail::dbGUID_Internal *>(field_def.Offset()));
+        return *(buffer_field_cast<dbGUID_Internal *>(field_def.Offset()));
     }
     const ds_string& FASTCALL ReadStringNN( const cFieldDef& field_def ) const
     {
