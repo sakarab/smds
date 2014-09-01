@@ -35,6 +35,8 @@
     #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn_v9.dll"
 #elif ( _MSC_VER == 1600 )
     #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn_v10.dll"
+#elif ( _MSC_VER == 1800 )
+    #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn.dll"
 #elif defined (__GNUG__ )
     //#define SM_DS_TEST_BACKEND      "ODBC_Conn_gcc.dll"
     #define SM_DS_TEST_BACKEND      "smDS_ODBCConn_cbx.dll"

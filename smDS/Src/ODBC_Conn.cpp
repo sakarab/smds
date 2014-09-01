@@ -98,10 +98,10 @@ protected:
     virtual bool STDCALL Eof();
     virtual void STDCALL Next();
 
-    virtual std::size_t STDCALL GetFieldCount();
+    virtual std::size_t STDCALL GetFieldCount() override;
     virtual void STDCALL GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
-                                               std::size_t& name_buffer_required_length,
-                                               unsigned int& field_data_size, int& field_data_type );
+                                             std::size_t& name_buffer_required_length,
+                                             unsigned int& field_data_size, int& field_data_type ) override;
 
     virtual bool STDCALL GetFieldValues( IFieldValuesAcceptor *values_acceptor );
 
@@ -204,14 +204,14 @@ void STDCALL cDataProvider::CloseSql()
     mStatement.CloseSql();
 }
 
-unsigned int STDCALL cDataProvider::GetFieldCount()
+std::size_t STDCALL cDataProvider::GetFieldCount()
 {
     return mStatement.GetFieldCount();
 }
 
 void STDCALL cDataProvider::GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
-                                                  std::size_t& name_buffer_required_length,
-                                                  unsigned int& field_data_size, int& field_data_type )
+                                                std::size_t& name_buffer_required_length,
+                                                unsigned int& field_data_size, int& field_data_type )
 {
     mStatement.GetFieldAttributes( idx, name, name_buffer_length, name_buffer_required_length, field_data_size, field_data_type );
 }

@@ -16,7 +16,7 @@
 	/>
 	<UserMacro
 		Name="BOOST_DIR"
-		Value="G:\Src\boost_1_53_0"
+		Value="G:\Src\boost_1_56_0"
 		PerformEnvironmentSet="true"
 	/>
 	<UserMacro

@@ -293,7 +293,7 @@ void FASTCALL ODBC_Statement::ExecSql( const char *sql )
     for ( SWORD n = 1 ; n <= nCols ; ++n )
     {
         SWORD   data_type;                  // column data type
-        UDWORD  precision;                  // precision on the column
+        SQLULEN precision;                  // precision on the column
         SWORD   scale;                      // column scale
         SWORD   nullable;                   // nullable column ?
         SWORD   name_length;                // column data length

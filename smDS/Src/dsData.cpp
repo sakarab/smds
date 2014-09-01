@@ -360,7 +360,7 @@ void FASTCALL Table::Open( const Database& database, const char *where_clause )
 
     unsigned int                    name_buffer_length = 100;
     boost::scoped_array<char>       name_buffer( new char[name_buffer_length] );
-    unsigned int                    name_buffer_required_length;
+    std::size_t                     name_buffer_required_length;
     unsigned int                    field_data_size;
     int                             field_data_type;
     const cFieldDef                 *ds_field;

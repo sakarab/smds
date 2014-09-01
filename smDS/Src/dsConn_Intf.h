@@ -90,8 +90,8 @@ public:
 
     virtual std::size_t STDCALL GetFieldCount() = 0;
     virtual void STDCALL GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
-                                               unsigned int& name_buffer_required_length,
-                                               unsigned int& field_data_size, int& field_data_type ) = 0;
+                                             std::size_t& name_buffer_required_length,
+                                             unsigned int& field_data_size, int& field_data_type ) = 0;
 
     virtual bool STDCALL GetFieldValues( IFieldValuesAcceptor *values_acceptor ) = 0;
 
