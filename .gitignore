@@ -1,0 +1,15 @@
+*.cfg
+*.ddp
+*.dof
+*.dsk
+*.local
+OutC*
+/smDS/Prj/BcbXE/Debug
+/DataSetOther/SmDS_Gen/OutC6
+*.res
+*.suo
+*.user
+*.bpi
+*.ods
+*.xls
+*.zip
