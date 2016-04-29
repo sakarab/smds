@@ -1,206 +1,264 @@
-﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-		<PropertyGroup>
-			<ProjectGuid>{A2EDF1A9-08DA-4767-A17C-E0A17452F1A1}</ProjectGuid>
-			<ProjectType>CppStaticLibrary</ProjectType>
-			<Base>True</Base>
-			<Config Condition="'$(Config)'==''">Debug</Config>
-			<ProjectVersion>12.3</ProjectVersion>
-			<Platform>Win32</Platform>
-			<AppType>StaticLibrary</AppType>
-			<FrameworkType>None</FrameworkType>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
-			<Base>true</Base>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
-			<Cfg_1>true</Cfg_1>
-			<CfgParent>Base</CfgParent>
-			<Base>true</Base>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
-			<Cfg_2>true</Cfg_2>
-			<CfgParent>Base</CfgParent>
-			<Base>true</Base>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Base)'!=''">
-			<IntermediateOutputDir>.\$(Config)\$(MSBuildProjectName)</IntermediateOutputDir>
-			<FinalOutputDir>.\$(Config)</FinalOutputDir>
-			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;$(DCC_UnitAlias)</DCC_UnitAlias>
-			<IncludePath>..\..\Src\;$(IncludePath)</IncludePath>
-			<TASM_Defines>NO_STRICT;_RTLDLL;$(TASM_Defines)</TASM_Defines>
-			<BRCC_Defines>NO_STRICT;_RTLDLL;$(BRCC_Defines)</BRCC_Defines>
-			<PackageImports>vcl.bpi;rtl.bpi;vclx.bpi;dbrtl.bpi;vcldb.bpi;adortl.bpi;dbxcds.bpi;dbexpress.bpi;vclib.bpi;ibxpress.bpi;xmlrtl.bpi;vclactnband.bpi;inet.bpi;IntrawebDB_90_100.bpi;Intraweb_90_100.bpi;vclie.bpi;inetdbbde.bpi;inetdbxpress.bpi;indy.bpi;soaprtl.bpi;dsnap.bpi;bcbie.bpi;bdertl.bpi;teeui.bpi;teedb.bpi;tee.bpi;vcldbx.bpi;dsnapcon.bpi;websnap.bpi;webdsnap.bpi</PackageImports>
-			<DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
-			<DCC_UnitSearchPath>..\..\Src;Src;Prog\DataSet\smDS;..\..\..;$(BDS)\lib;$(BDS)\lib\obj;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-			<DCC_ResourcePath>..\..\Src;Src;Prog\DataSet\smDS;$(DCC_ResourcePath)</DCC_ResourcePath>
-			<ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
-			<BRCC_IncludePath>..\..\Src;$(BOOST_INC);$(BDS)\include;$(BDS)\include\dinkumware;$(BDS)\include\vcl;$(BRCC_IncludePath)</BRCC_IncludePath>
-			<BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
-			<BCC_OptimizeForSpeed>true</BCC_OptimizeForSpeed>
-			<TASM_IncludePath>..\..\Src;$(BOOST_INC);$(BDS)\include;$(BDS)\include\dinkumware;$(BDS)\include\vcl;$(TASM_IncludePath)</TASM_IncludePath>
-			<DCC_IncludePath>..\..\Src;Src;Prog\DataSet\smDS;..\..\..;$(BDS)\lib;$(BDS)\lib\obj;$(DCC_IncludePath)</DCC_IncludePath>
-			<BCC_IncludePath>..\..\Src;$(BDS)\include;$(BDS)\include\dinkumware;$(BCC_IncludePath)</BCC_IncludePath>
-			<BCC_Defines>NO_STRICT;_RTLDLL;$(BCC_Defines)</BCC_Defines>
-			<TLIB_CaseSensitive>true</TLIB_CaseSensitive>
-			<DCC_AdditionalSwitches> -$T+</DCC_AdditionalSwitches>
-			<BCC_SmartPCHCache>false</BCC_SmartPCHCache>
-			<AllPackageLibs>rtl.lib</AllPackageLibs>
-			<BCC_GenerateWindowsApp>true</BCC_GenerateWindowsApp>
-			<OutputExt>lib</OutputExt>
-			<BCC_PCHWithExternalTypeFiles>false</BCC_PCHWithExternalTypeFiles>
-			<BCC_UserSuppliedOptions> -tWM -wpin -w-dig -wdef -wstl -wamp -wuse -wbbf -Q -6 -wcln -wucp -wstv -wnak -Vx -wnod -wamb -wstu -wasm -wpar -wprc -d -Ve -wsig -wpia -w-cod</BCC_UserSuppliedOptions>
-			<TLIB_PageSize>64</TLIB_PageSize>
-			<ILINK_AdditionalOptions> -c</ILINK_AdditionalOptions>
-			<BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
-			<ILINK_LibraryPath>$(BDS)\lib;$(ILINK_LibraryPath)</ILINK_LibraryPath>
-			<DCC_ObjPath>..\..\Src;Src;Prog\DataSet\smDS;$(DCC_ObjPath)</DCC_ObjPath>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Cfg_1)'!=''">
-			<BCC_UserSuppliedOptions> -tWM -wpin -w-dig -wdef -wstl -wamp -wuse -wbbf -Q -6 -wcln -wucp -wstv -wnak -Vx -wnod -wamb -wstu -wasm -wpar -wprc -d -Ve -wsig -wpia -w-cod -r</BCC_UserSuppliedOptions>
-			<BCC_Defines>NDEBUG;$(BCC_Defines);$(BCC_Defines)</BCC_Defines>
-			<TASM_Debugging>None</TASM_Debugging>
-			<DCC_AdditionalSwitches> -$T+ -$O+</DCC_AdditionalSwitches>
-		</PropertyGroup>
-		<PropertyGroup Condition="'$(Cfg_2)'!=''">
-			<Defines>NDEBUG;$(Defines)</Defines>
-			<TASM_Debugging>None</TASM_Debugging>
-		</PropertyGroup>
-		<ItemGroup>
-			<CppCompile Include="smDSb10lib.cpp">
-				<BuildOrder>-1</BuildOrder>
-				<BuildOrder>0</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsBuffer.cpp">
-				<BuildOrder>4</BuildOrder>
-				<BuildOrder>15</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsCompare.cpp">
-				<BuildOrder>5</BuildOrder>
-				<BuildOrder>16</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsCompareControlers.cpp">
-				<BuildOrder>9</BuildOrder>
-				<BuildOrder>2</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsConn.cpp">
-				<BuildOrder>3</BuildOrder>
-				<BuildOrder>10</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsData.cpp">
-				<BuildOrder>4</BuildOrder>
-				<BuildOrder>15</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsDateTime.cpp">
-				<BuildOrder>5</BuildOrder>
-				<BuildOrder>16</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsExceptions.cpp">
-				<BuildOrder>6</BuildOrder>
-				<BuildOrder>13</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsFields.cpp">
-				<BuildOrder>7</BuildOrder>
-				<BuildOrder>14</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsIndex.cpp">
-				<BuildOrder>8</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsRecord.cpp">
-				<BuildOrder>9</BuildOrder>
-				<BuildOrder>2</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsSmartPtr.cpp">
-				<BuildOrder>3</BuildOrder>
-				<BuildOrder>10</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsStream.cpp">
-				<BuildOrder>11</BuildOrder>
-				<BuildOrder>0</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsString.cpp">
-				<BuildOrder>12</BuildOrder>
-				<BuildOrder>1</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsSysOpen.cpp">
-				<BuildOrder>6</BuildOrder>
-				<BuildOrder>13</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsUtils.cpp">
-				<BuildOrder>7</BuildOrder>
-				<BuildOrder>14</BuildOrder>
-			</CppCompile>
-			<CppCompile Include="..\..\Src\dsVariant.cpp">
-				<BuildOrder>-1</BuildOrder>
-				<BuildOrder>1</BuildOrder>
-			</CppCompile>
-			<BuildConfiguration Include="Release">
-				<Key>Cfg_2</Key>
-				<CfgParent>Base</CfgParent>
-			</BuildConfiguration>
-			<BuildConfiguration Include="Base">
-				<Key>Base</Key>
-			</BuildConfiguration>
-			<BuildConfiguration Include="Debug">
-				<Key>Cfg_1</Key>
-				<CfgParent>Base</CfgParent>
-			</BuildConfiguration>
-		</ItemGroup>
-		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Cpp.Targets')" Project="$(BDS)\Bin\CodeGear.Cpp.Targets"/>
-		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
-		<ProjectExtensions>
-			<Borland.Personality>CPlusPlusBuilder.Personality.12</Borland.Personality>
-			<Borland.ProjectType>CppStaticLibrary</Borland.ProjectType>
-			<BorlandProject>
-				<CPlusPlusBuilder.Personality>
-					<VersionInfo>
-						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>
-						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
-						<VersionInfo Name="MajorVer">1</VersionInfo>
-						<VersionInfo Name="MinorVer">0</VersionInfo>
-						<VersionInfo Name="Release">0</VersionInfo>
-						<VersionInfo Name="Build">0</VersionInfo>
-						<VersionInfo Name="Debug">False</VersionInfo>
-						<VersionInfo Name="PreRelease">False</VersionInfo>
-						<VersionInfo Name="Special">False</VersionInfo>
-						<VersionInfo Name="Private">False</VersionInfo>
-						<VersionInfo Name="DLL">False</VersionInfo>
-						<VersionInfo Name="Locale">1032</VersionInfo>
-						<VersionInfo Name="CodePage">1253</VersionInfo>
-					</VersionInfo>
-					<VersionInfoKeys>
-						<VersionInfoKeys Name="CompanyName"/>
-						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
-						<VersionInfoKeys Name="InternalName"/>
-						<VersionInfoKeys Name="LegalCopyright"/>
-						<VersionInfoKeys Name="LegalTrademarks"/>
-						<VersionInfoKeys Name="OriginalFilename"/>
-						<VersionInfoKeys Name="ProductName"/>
-						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
-						<VersionInfoKeys Name="Comments"/>
-					</VersionInfoKeys>
-					<Debugging>
-						<Debugging Name="DebugSourceDirs"/>
-					</Debugging>
-					<Parameters>
-						<Parameters Name="RemoteHost"/>
-						<Parameters Name="RemotePath"/>
-						<Parameters Name="RemoteParams"/>
-						<Parameters Name="RemoteLauncher"/>
-						<Parameters Name="UseRemoteLauncher">False</Parameters>
-						<Parameters Name="RemoteCWD"/>
-						<Parameters Name="RemoteDebug">False</Parameters>
-					</Parameters>
-					<ProjectProperties>
-						<ProjectProperties Name="AutoShowDeps">False</ProjectProperties>
-						<ProjectProperties Name="ManagePaths">True</ProjectProperties>
-						<ProjectProperties Name="VerifyPackages">True</ProjectProperties>
-					</ProjectProperties>
-				</CPlusPlusBuilder.Personality>
-				<Platforms>
-					<Platform value="Win32">True</Platform>
-				</Platforms>
-			</BorlandProject>
-			<ProjectFileVersion>12</ProjectFileVersion>
-		</ProjectExtensions>
-	</Project>
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{A2EDF1A9-08DA-4767-A17C-E0A17452F1A1}</ProjectGuid>
+        <ProjectType>CppStaticLibrary</ProjectType>
+        <Base>True</Base>
+        <Config Condition="'$(Config)'==''">Debug</Config>
+        <ProjectVersion>15.3</ProjectVersion>
+        <AppType>StaticLibrary</AppType>
+        <FrameworkType>None</FrameworkType>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <TargetedPlatforms>1</TargetedPlatforms>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+        <Base_Win32>true</Base_Win32>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
+        <Base_Win64>true</Base_Win64>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
+        <Cfg_1>true</Cfg_1>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
+        <Cfg_1_Win32>true</Cfg_1_Win32>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win64)'!=''">
+        <Cfg_1_Win64>true</Cfg_1_Win64>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
+        <Cfg_2>true</Cfg_2>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
+        <Cfg_2_Win32>true</Cfg_2_Win32>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win64)'!=''">
+        <Cfg_2_Win64>true</Cfg_2_Win64>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base)'!=''">
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Locale>1032</VerInfo_Locale>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <IntermediateOutputDir>.\$(Config)_$(Platform)\$(MSBuildProjectName)</IntermediateOutputDir>
+        <FinalOutputDir>.\$(Config)_$(Platform)</FinalOutputDir>
+        <IncludePath>..\..\Src\;$(IncludePath)</IncludePath>
+        <PackageImports>vcl.bpi;rtl.bpi;vclx.bpi;dbrtl.bpi;vcldb.bpi;adortl.bpi;dbxcds.bpi;dbexpress.bpi;vclib.bpi;ibxpress.bpi;xmlrtl.bpi;vclactnband.bpi;inet.bpi;IntrawebDB_90_100.bpi;Intraweb_90_100.bpi;vclie.bpi;inetdbbde.bpi;inetdbxpress.bpi;indy.bpi;soaprtl.bpi;dsnap.bpi;bcbie.bpi;bdertl.bpi;teeui.bpi;teedb.bpi;tee.bpi;vcldbx.bpi;dsnapcon.bpi;websnap.bpi;webdsnap.bpi;$(PackageImports)</PackageImports>
+        <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
+        <DCC_UnitSearchPath>..\..\Src;Src;Prog\DataSet\smDS;..\..\..;$(BDS)\lib;$(BDS)\lib\obj;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_ResourcePath>..\..\Src;Src;Prog\DataSet\smDS;$(DCC_ResourcePath)</DCC_ResourcePath>
+        <ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
+        <BRCC_IncludePath>..\..\Src;$(BOOST_INC);$(BDS)\include;$(BDS)\include\vcl;$(BRCC_IncludePath)</BRCC_IncludePath>
+        <BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
+        <BCC_OptimizeForSpeed>true</BCC_OptimizeForSpeed>
+        <TASM_IncludePath>..\..\Src;$(BOOST_INC);$(BDS)\include;$(BDS)\include\vcl;$(TASM_IncludePath)</TASM_IncludePath>
+        <DCC_IncludePath>..\..\Src;Src;Prog\DataSet\smDS;..\..\..;$(BDS)\lib;$(BDS)\lib\obj;$(DCC_IncludePath)</DCC_IncludePath>
+        <BCC_IncludePath>..\..\Src;$(BDS)\include;$(BCC_IncludePath)</BCC_IncludePath>
+        <TLIB_CaseSensitive>true</TLIB_CaseSensitive>
+        <DCC_AdditionalSwitches> -$T+</DCC_AdditionalSwitches>
+        <BCC_SmartPCHCache>false</BCC_SmartPCHCache>
+        <AllPackageLibs>rtl.lib</AllPackageLibs>
+        <BCC_GenerateWindowsApp>true</BCC_GenerateWindowsApp>
+        <BCC_PCHWithExternalTypeFiles>false</BCC_PCHWithExternalTypeFiles>
+        <TLIB_PageSize>64</TLIB_PageSize>
+        <ILINK_AdditionalOptions> -c</ILINK_AdditionalOptions>
+        <BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
+        <ILINK_LibraryPath>$(BDS)\lib;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <DCC_ObjPath>..\..\Src;Src;Prog\DataSet\smDS;$(DCC_ObjPath)</DCC_ObjPath>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <BCC_Defines>_RTLDLL;WIN32;$(BCC_Defines)</BCC_Defines>
+        <BCC_UserSuppliedOptions> -tWM -wpin -w-dig -wdef -wstl -wamp -wuse -wbbf -Q -6 -wcln -wucp -wstv -wnak -Vx -wnod -wamb -wstu -wasm -wpar -wprc -d -Ve -wsig -wpia -w-cod</BCC_UserSuppliedOptions>
+        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <BRCC_Defines>_RTLDLL;$(BRCC_Defines)</BRCC_Defines>
+        <TASM_Defines>_RTLDLL;$(TASM_Defines)</TASM_Defines>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <BCC_Defines>_RTLDLL;$(BCC_Defines)</BCC_Defines>
+        <TASM_Defines>_RTLDLL;$(TASM_Defines)</TASM_Defines>
+        <BRCC_Defines>_RTLDLL;$(BRCC_Defines)</BRCC_Defines>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1)'!=''">
+        <TASM_Debugging>None</TASM_Debugging>
+        <DCC_AdditionalSwitches> -$T+ -$O+</DCC_AdditionalSwitches>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <BCC_UserSuppliedOptions> -tWM -wpin -w-dig -wdef -wstl -wamp -wuse -wbbf -Q -6 -wcln -wucp -wstv -wnak -Vx -wnod -wamb -wstu -wasm -wpar -wprc -d -Ve -wsig -wpia -w-cod -r</BCC_UserSuppliedOptions>
+        <BCC_Defines>NDEBUG;$(BCC_Defines);$(BCC_Defines)</BCC_Defines>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
+        <BCC_Defines>NDEBUG;$(BCC_Defines);$(BCC_Defines)</BCC_Defines>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2)'!=''">
+        <TASM_Debugging>None</TASM_Debugging>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <Defines>NDEBUG;$(Defines)</Defines>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
+        <Defines>NDEBUG;$(Defines)</Defines>
+    </PropertyGroup>
+    <ItemGroup>
+        <CppCompile Include="smDSb10lib.cpp">
+            <BuildOrder>-1</BuildOrder>
+            <BuildOrder>0</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsBuffer.cpp">
+            <BuildOrder>4</BuildOrder>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsCompare.cpp">
+            <BuildOrder>5</BuildOrder>
+            <BuildOrder>16</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsCompareControlers.cpp">
+            <BuildOrder>9</BuildOrder>
+            <BuildOrder>2</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsConn.cpp">
+            <BuildOrder>3</BuildOrder>
+            <BuildOrder>10</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsData.cpp">
+            <BuildOrder>4</BuildOrder>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsDateTime.cpp">
+            <BuildOrder>5</BuildOrder>
+            <BuildOrder>16</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsExceptions.cpp">
+            <BuildOrder>6</BuildOrder>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsFields.cpp">
+            <BuildOrder>7</BuildOrder>
+            <BuildOrder>14</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsIndex.cpp">
+            <BuildOrder>8</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsRecord.cpp">
+            <BuildOrder>9</BuildOrder>
+            <BuildOrder>2</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsSmartPtr.cpp">
+            <BuildOrder>3</BuildOrder>
+            <BuildOrder>10</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsStream.cpp">
+            <BuildOrder>11</BuildOrder>
+            <BuildOrder>0</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsString.cpp">
+            <BuildOrder>12</BuildOrder>
+            <BuildOrder>1</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsSysOpen.cpp">
+            <BuildOrder>6</BuildOrder>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsUtils.cpp">
+            <BuildOrder>7</BuildOrder>
+            <BuildOrder>14</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsVariant.cpp">
+            <BuildOrder>-1</BuildOrder>
+            <BuildOrder>1</BuildOrder>
+        </CppCompile>
+        <BuildConfiguration Include="Release">
+            <Key>Cfg_2</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Base">
+            <Key>Base</Key>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Debug">
+            <Key>Cfg_1</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+    </ItemGroup>
+    <Import Condition="Exists('$(BDS)\Bin\CodeGear.Cpp.Targets')" Project="$(BDS)\Bin\CodeGear.Cpp.Targets"/>
+    <Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
+    <ProjectExtensions>
+        <Borland.Personality>CPlusPlusBuilder.Personality.12</Borland.Personality>
+        <Borland.ProjectType>CppStaticLibrary</Borland.ProjectType>
+        <BorlandProject>
+            <CPlusPlusBuilder.Personality>
+                <VersionInfo>
+                    <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+                    <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+                    <VersionInfo Name="MajorVer">1</VersionInfo>
+                    <VersionInfo Name="MinorVer">0</VersionInfo>
+                    <VersionInfo Name="Release">0</VersionInfo>
+                    <VersionInfo Name="Build">0</VersionInfo>
+                    <VersionInfo Name="Debug">False</VersionInfo>
+                    <VersionInfo Name="PreRelease">False</VersionInfo>
+                    <VersionInfo Name="Special">False</VersionInfo>
+                    <VersionInfo Name="Private">False</VersionInfo>
+                    <VersionInfo Name="DLL">False</VersionInfo>
+                    <VersionInfo Name="Locale">1032</VersionInfo>
+                    <VersionInfo Name="CodePage">1253</VersionInfo>
+                </VersionInfo>
+                <VersionInfoKeys>
+                    <VersionInfoKeys Name="CompanyName"/>
+                    <VersionInfoKeys Name="FileDescription"/>
+                    <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+                    <VersionInfoKeys Name="InternalName"/>
+                    <VersionInfoKeys Name="LegalCopyright"/>
+                    <VersionInfoKeys Name="LegalTrademarks"/>
+                    <VersionInfoKeys Name="OriginalFilename"/>
+                    <VersionInfoKeys Name="ProductName"/>
+                    <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+                    <VersionInfoKeys Name="Comments"/>
+                </VersionInfoKeys>
+                <Debugging>
+                    <Debugging Name="DebugSourceDirs"/>
+                </Debugging>
+                <Parameters>
+                    <Parameters Name="RemoteHost"/>
+                    <Parameters Name="RemotePath"/>
+                    <Parameters Name="RemoteParams"/>
+                    <Parameters Name="RemoteLauncher"/>
+                    <Parameters Name="UseRemoteLauncher">False</Parameters>
+                    <Parameters Name="RemoteCWD"/>
+                    <Parameters Name="RemoteDebug">False</Parameters>
+                </Parameters>
+                <ProjectProperties>
+                    <ProjectProperties Name="AutoShowDeps">False</ProjectProperties>
+                    <ProjectProperties Name="ManagePaths">True</ProjectProperties>
+                    <ProjectProperties Name="VerifyPackages">True</ProjectProperties>
+                </ProjectProperties>
+            </CPlusPlusBuilder.Personality>
+            <Platforms>
+                <Platform value="iOSDevice">False</Platform>
+                <Platform value="OSX32">False</Platform>
+                <Platform value="Win32">True</Platform>
+                <Platform value="Win64">False</Platform>
+            </Platforms>
+        </BorlandProject>
+        <ProjectFileVersion>12</ProjectFileVersion>
+    </ProjectExtensions>
+</Project>

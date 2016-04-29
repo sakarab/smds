@@ -25,6 +25,8 @@
 #include "FMain10.h"
 #include "bcbTest.h"
 #include "uTest.h"
+#include "dsModuleLoad.h"
+#include "uConnectionStrings.h"
 //---------------------------------------------------------------------------
 #pragma resource "*.dfm"
 TfrmMain *frmMain;
@@ -52,8 +54,12 @@ void __fastcall TfrmMain::Button2Click(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TfrmMain::Button1Click(TObject *Sender)
 {
+    smds::spModuleLoader    module_loader = smds::GetOsModuleLoader( SM_DS_TEST_BACKEND );
+    smds::DbEngine          engine( module_loader );
+    smds::Database          database = engine.NewConnection( ODBC_Access_DirData_Conn );
+
     lvList->Items->Count = 0;
-    mFiles = GetTblFiles();
+    mFiles = GetTblFiles( database );
     Test( mFiles, ErrorReporter_, this );
     FillList( lvList, tblFiles_rec::GetFieldDefs(), mFiles );
 }
