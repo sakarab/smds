@@ -25,6 +25,7 @@
 
 #include "dsGUID.h"
 #include <memory>
+#include <cstring>
 //---------------------------------------------------------------------------
 
 namespace smds

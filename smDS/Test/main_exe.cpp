@@ -168,7 +168,7 @@ void FASTCALL ErrorReporter_( void *user_data, const char *error )
 
 int main()
 {
-#if ( _MSC_VER < 1600 )
+#if defined (_MSC_VER) && ( _MSC_VER < 1600 )
     _set_sbh_threshold( 1016 );     // run normal speed when debuger is present
 #endif
 

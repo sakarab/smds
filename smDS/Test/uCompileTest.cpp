@@ -40,7 +40,7 @@ void ConvertTypedData( tblFiles::index_ptr& idx )
 void Tutorial()
 {
     // Select engine
-    shared_ptr<WinDllML>    module_loader( new WinDllML( SM_DS_TEST_BACKEND ) );
+    spModuleLoader          module_loader( new OsModuleLoader( SM_DS_TEST_BACKEND ) );
     DbEngine                engine( module_loader );
 
     // connect to database

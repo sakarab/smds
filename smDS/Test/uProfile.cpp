@@ -38,6 +38,8 @@ namespace
 
 #define SM_TIMER    smTimer
 
+#if defined(WIN32)
+
 //******************************************************
 // smTimer_win32
 //******************************************************
@@ -65,6 +67,7 @@ public:
         return double(count.QuadPart - mCount.QuadPart) / double( mFrequency.QuadPart) * 1000;
     }
 };
+#endif
 
 //******************************************************
 // smTimer

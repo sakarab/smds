@@ -13,3 +13,6 @@ OutC*
 *.ods
 *.xls
 *.zip
+/smDS/Prj/qtc/Debug
+/smDS/Prj/qtc/Release
+

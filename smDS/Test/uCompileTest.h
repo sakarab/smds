@@ -22,5 +22,16 @@
 #ifndef uCompileTestH
 #define uCompileTestH
 //---------------------------------------------------------------------------
+//#include <boost/shared_ptr.hpp>
+
+//#if defined(LINUX)
+//    #include <Linux/mlLinuxSo.h>
+//    typedef smds::LinuxSoML           ModuleLoader;
+//#elif defined(WIN32)
+//    #include <Win32/mlWinDll.h>
+//    typedef smds::WinDllML            ModuleLoader;
+//#endif
+
+//typedef boost::shared_ptr<ModuleLoader>         spModuleLoader;
 //---------------------------------------------------------------------------
 #endif
