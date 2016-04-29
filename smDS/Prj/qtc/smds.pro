@@ -41,6 +41,7 @@ SOURCES += ../../Src/dsBuffer.cpp \
            ../../Src/dsStream.cpp \
            ../../Src/dsString.cpp \
            ../../Src/dsUtils.cpp \
+           ../../Src/Linux/mlLinuxSo.cpp \
            ../../Src/dsVariant.cpp
 
 HEADERS += ../../Src/dsBuffer.h \
@@ -67,6 +68,7 @@ HEADERS += ../../Src/dsBuffer.h \
            ../../Src/dsTypedData.h \
            ../../Src/dsTypes.h \
            ../../Src/dsUtils.h \
+           ../../Src/Linux/mlLinuxSo.h \
            ../../Src/dsVariant.h
 
 unix {
