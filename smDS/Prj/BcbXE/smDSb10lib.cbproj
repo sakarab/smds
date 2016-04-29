@@ -64,7 +64,7 @@
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <IntermediateOutputDir>.\$(Config)_$(Platform)\$(MSBuildProjectName)</IntermediateOutputDir>
         <FinalOutputDir>.\$(Config)_$(Platform)</FinalOutputDir>
-        <IncludePath>..\..\Src\;$(IncludePath)</IncludePath>
+        <IncludePath>..\..\Src\Win32\;..\..\Src\;$(IncludePath)</IncludePath>
         <PackageImports>vcl.bpi;rtl.bpi;vclx.bpi;dbrtl.bpi;vcldb.bpi;adortl.bpi;dbxcds.bpi;dbexpress.bpi;vclib.bpi;ibxpress.bpi;xmlrtl.bpi;vclactnband.bpi;inet.bpi;IntrawebDB_90_100.bpi;Intraweb_90_100.bpi;vclie.bpi;inetdbbde.bpi;inetdbxpress.bpi;indy.bpi;soaprtl.bpi;dsnap.bpi;bcbie.bpi;bdertl.bpi;teeui.bpi;teedb.bpi;tee.bpi;vcldbx.bpi;dsnapcon.bpi;websnap.bpi;webdsnap.bpi;$(PackageImports)</PackageImports>
         <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
         <DCC_UnitSearchPath>..\..\Src;Src;Prog\DataSet\smDS;..\..\..;$(BDS)\lib;$(BDS)\lib\obj;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
@@ -157,8 +157,14 @@
             <BuildOrder>7</BuildOrder>
             <BuildOrder>14</BuildOrder>
         </CppCompile>
+        <CppCompile Include="..\..\Src\dsGUID.cpp">
+            <BuildOrder>18</BuildOrder>
+        </CppCompile>
         <CppCompile Include="..\..\Src\dsIndex.cpp">
             <BuildOrder>8</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\dsModuleLoad.cpp">
+            <BuildOrder>17</BuildOrder>
         </CppCompile>
         <CppCompile Include="..\..\Src\dsRecord.cpp">
             <BuildOrder>9</BuildOrder>
@@ -187,6 +193,9 @@
         <CppCompile Include="..\..\Src\dsVariant.cpp">
             <BuildOrder>-1</BuildOrder>
             <BuildOrder>1</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Src\Win32\mlWinDll.cpp">
+            <BuildOrder>19</BuildOrder>
         </CppCompile>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
@@ -254,7 +263,6 @@
             </CPlusPlusBuilder.Personality>
             <Platforms>
                 <Platform value="iOSDevice">False</Platform>
-                <Platform value="OSX32">False</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
             </Platforms>

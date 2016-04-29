@@ -53,6 +53,8 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DynamicRTL>true</DynamicRTL>
+        <ILINK_DisableIncrementalLinking>true</ILINK_DisableIncrementalLinking>
         <VerInfo_Locale>1032</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
@@ -92,7 +94,6 @@
         <IncludePath>$(BDSINCLUDE)\windows\vcl;$(IncludePath)</IncludePath>
         <BCC_UserSuppliedOptions> -tWM -wpin -w-dig -wdef -wstl -wamp -wuse -wbbf -Q -6 -wcln -wucp -wstv -wnak -Vx -wnod -wamb -wstu -wasm -wprc -d -Ve -wsig -wpia -w-cod</BCC_UserSuppliedOptions>
         <BRCC_Defines>_RTLDLL;NDEBUG;$(BRCC_Defines)</BRCC_Defines>
-        <Icon_MainIcon>smDSb10libTest_Icon.ico</Icon_MainIcon>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <TASM_Defines>_RTLDLL;NDEBUG;$(TASM_Defines)</TASM_Defines>
     </PropertyGroup>
@@ -108,12 +109,14 @@
         <DCC_AdditionalSwitches> -$T+ -$O+</DCC_AdditionalSwitches>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <VerInfo_Locale>1033</VerInfo_Locale>
         <BCC_UserSuppliedOptions> -tWM -wpin -w-dig -wdef -wstl -wamp -wuse -wbbf -Q -6 -wcln -wucp -wstv -wnak -Vx -wnod -wamb -wstu -wasm -wprc -d -Ve -wsig -wpia -w-cod -r</BCC_UserSuppliedOptions>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <TASM_Debugging>None</TASM_Debugging>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <VerInfo_Locale>1033</VerInfo_Locale>
         <Defines>NDEBUG;$(Defines)</Defines>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
