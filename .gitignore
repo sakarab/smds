@@ -15,4 +15,9 @@ OutC*
 *.zip
 /smDS/Prj/qtc/Debug
 /smDS/Prj/qtc/Release
-
+.vs
+*.opendb
+*.db
+Debug_*
+Release_*
+insert.sql
