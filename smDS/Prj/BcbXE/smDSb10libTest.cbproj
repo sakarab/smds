@@ -120,7 +120,7 @@
         <Defines>NDEBUG;$(Defines)</Defines>
     </PropertyGroup>
     <ItemGroup>
-        <LibFiles Include="Debug_Win32\smDSb10lib.lib" Condition="'$(Platform)'=='Win32'">
+        <LibFiles Include="smDSb10lib.lib" Condition="'$(Platform)'=='Win32'">
             <BuildOrder>8</BuildOrder>
             <IgnorePath>true</IgnorePath>
         </LibFiles>
