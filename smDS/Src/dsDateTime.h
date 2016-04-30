@@ -67,7 +67,6 @@ private:
     explicit CDFASTCALL dbDate( const detail::dbDate_Internal& date ) : mValue(date)        {} // empty
 public:
     CDFASTCALL dbDate() : mValue()                                                          {} // empty
-    CDFASTCALL dbDate( const dbDate& date ) : mValue(date.mValue)                           {} // empty
     explicit CDFASTCALL dbDate( const std::tm& date );
     explicit CDFASTCALL dbDate( const double& value );
     detail::dbDate_Internal FASTCALL AsInternal() const                                     { return mValue; }
