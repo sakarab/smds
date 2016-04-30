@@ -77,7 +77,7 @@ void FASTCALL Variant::ConstructByType( const Variant& src )             // the 
         case vtLong     : mData.mLong = src.mData.mLong;                        break;
         case vtLongLong : mData.mLongLong = src.mData.mLongLong;                break;
         case vtDouble   : mData.mDouble = src.mData.mDouble;                    break;
-        case vtDate     : mData.ConstructDate( src.mData.GetDate() );           break;
+        case vtDate     : mData.mDate( src.mData.mDate ); /*  ConstructDate( src.mData.GetDate() );*/           break;
         case vtTime     : mData.ConstructTime( src.mData.GetTime() );           break;
         case vtDateTime : mData.ConstructDateTime( src.mData.GetDateTime() );   break;
         case vtGUID     : mData.ConstructGUID( src.mData.GetGUID() );           break;

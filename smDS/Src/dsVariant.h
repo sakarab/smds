@@ -57,7 +57,8 @@ union varTag
     long                mLong;
     long long           mLongLong;
     double              mDouble;
-    char                mDate[sizeof(dbDate)];
+    //char                mDate[sizeof(dbDate)];
+    dbDate              mDate;
     char                mTime[sizeof(dbTime)];
     char                mDateTime[sizeof(dbDateTime)];
     char                mGUID[sizeof(dbGUID)];
@@ -78,7 +79,7 @@ union varTag
     CDFASTCALL varTag( unsigned long long value )  : mLongLong(value)   {}
     CDFASTCALL varTag( double value )              : mDouble(value)     {}
 
-    CDFASTCALL varTag( const dbDate& value )                            { ConstructDate( value ); }
+    CDFASTCALL varTag( const dbDate& value ) : mDate(value) {} //              { ConstructDate( value ); }
     CDFASTCALL varTag( const dbTime& value )                            { ConstructTime( value ); }
     CDFASTCALL varTag( const dbDateTime& value )                        { ConstructDateTime( value ); }
     CDFASTCALL varTag( const dbGUID& value )                            { ConstructGUID( value ); }
@@ -86,7 +87,7 @@ union varTag
     CDFASTCALL varTag( const ds_wstring& value )                        { ConstructWString( value ); }
     CDFASTCALL varTag( const var_blob_type& value )                     { ConstructBlob( value ); }
 
-    void FASTCALL ConstructDate( const dbDate& value )                  { new(&mDate[0])dbDate(value); }
+    //void FASTCALL ConstructDate( const dbDate& value )                  { new(&mDate)dbDate(value); }
     void FASTCALL ConstructTime( const dbTime& value )                  { new(&mTime[0])dbTime(value); }
     void FASTCALL ConstructDateTime( const dbDateTime& value )          { new(&mDateTime[0])dbDateTime(value); }
     void FASTCALL ConstructGUID( const dbGUID& value )                  { new(&mGUID[0])dbGUID(value); }
@@ -94,7 +95,7 @@ union varTag
     void FASTCALL ConstructWString( const ds_wstring& value )           { new(&mWString[0])ds_wstring(value); }
     void FASTCALL ConstructBlob( const std::vector<char>& value )       { new(&mBlob[0])var_blob_type(value); }
 
-    void FASTCALL DestructDate()                        { (reinterpret_cast<dbDate *>(&mDate[0]))->~dbDate(); }
+    void FASTCALL DestructDate()                        { (&mDate)->~dbDate(); }
     void FASTCALL DestructTime()                        { (reinterpret_cast<dbTime *>(&mTime[0]))->~dbTime(); }
     void FASTCALL DestructDateTime()                    { (reinterpret_cast<dbDateTime *>(&mDateTime[0]))->~dbDateTime(); }
     void FASTCALL DestructGUID()                        { (reinterpret_cast<dbGUID *>(&mGUID[0]))->~dbGUID(); }
@@ -102,7 +103,7 @@ union varTag
     void FASTCALL DestructWString()                     { (reinterpret_cast<ds_wstring *>(&mWString[0]))->~ds_wstring(); }
     void FASTCALL DestructBlob()                        { (reinterpret_cast<var_blob_type *>(&mBlob[0]))->~var_blob_type(); }
 
-    const dbDate& FASTCALL GetDate() const              { return ( *reinterpret_cast<const dbDate *>(&mDate[0]) ); }
+    const dbDate& FASTCALL GetDate() const              { return ( mDate ); }
     const dbTime& FASTCALL GetTime() const              { return ( *reinterpret_cast<const dbTime *>(&mTime[0]) ); }
     const dbDateTime& FASTCALL GetDateTime() const      { return ( *reinterpret_cast<const dbDateTime *>(&mDateTime[0]) ); }
     const dbGUID& FASTCALL GetGUID() const              { return ( *reinterpret_cast<const dbGUID *>(&mGUID[0]) ); }
@@ -150,7 +151,7 @@ public:
     CDFASTCALL Variant( long long value )           : mVariantType(vtLongLong), mData(value)                    {} // empty
     CDFASTCALL Variant( unsigned long long value )  : mVariantType(vtLongLong), mData(value)                    {} // empty
     CDFASTCALL Variant( double value )              : mVariantType(vtDouble), mData(value)                      {} // empty
-    CDFASTCALL Variant( const dbDate& value );
+    CDFASTCALL Variant( const dbDate& value );//       : mVariantType(vtDate), mData(value)                        {} // empty
     CDFASTCALL Variant( const dbTime& value );
     CDFASTCALL Variant( const dbDateTime& value );
     CDFASTCALL Variant( const dbGUID& value );
