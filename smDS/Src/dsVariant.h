@@ -29,6 +29,7 @@
 #include "dsGUID.h"
 #include <vector>
 #include "dsStream.h"
+#include <boost/variant.hpp>
 
 namespace smds
 {
@@ -41,79 +42,20 @@ enum VariantTypeID
 
 typedef std::vector<char>   var_blob_type;
 
-namespace detail
-{
-
-//***********************************************************************
-//******    varTag
-//***********************************************************************
-union varTag
-{
-    // NullType        mNull;
-    bool                mBool;
-    char                mByte;
-    short               mShort;
-    int                 mInt;
-    long                mLong;
-    long long           mLongLong;
-    double              mDouble;
-    dbDate              mDate;
-    dbTime              mTime;
-    dbDateTime          mDateTime;
-    dbGUID              mGUID;
-    char                mString[sizeof(ds_string)];
-    char                mWString[sizeof(ds_wstring)];
-    char                mBlob[sizeof(var_blob_type)];
-    CDFASTCALL varTag()                            /* : mNull() */        {}
-    CDFASTCALL varTag( bool value )                : mBool(value)       {}
-    CDFASTCALL varTag( char value )                : mByte(value)       {}
-    CDFASTCALL varTag( unsigned char value )       : mByte(value)       {}
-    CDFASTCALL varTag( short value )               : mShort(value)      {}
-    CDFASTCALL varTag( unsigned short value )      : mShort(value)      {}
-    CDFASTCALL varTag( int value )                 : mInt(value)        {}
-    CDFASTCALL varTag( unsigned int value )        : mInt(value)        {}
-    CDFASTCALL varTag( long value )                : mLong(value)       {}
-    CDFASTCALL varTag( unsigned long value )       : mLong(value)       {}
-    CDFASTCALL varTag( long long value )           : mLongLong(value)   {}
-    CDFASTCALL varTag( unsigned long long value )  : mLongLong(value)   {}
-    CDFASTCALL varTag( double value )              : mDouble(value)     {}
-    CDFASTCALL varTag( const dbDate& value )       : mDate(value)       {}
-    CDFASTCALL varTag( const dbTime& value )       : mTime(value)       {}
-    CDFASTCALL varTag( const dbDateTime& value )   : mDateTime(value)   {}
-    CDFASTCALL varTag( const dbGUID& value )       : mGUID(value)       {}
-
-    CDFASTCALL varTag( const ds_string& value )                         { ConstructString( value ); }
-    CDFASTCALL varTag( const ds_wstring& value )                        { ConstructWString( value ); }
-    CDFASTCALL varTag( const var_blob_type& value )                     { ConstructBlob( value ); }
-
-    void FASTCALL ConstructString( const ds_string& value )             { new(&mString[0])ds_string(value); }
-    void FASTCALL ConstructWString( const ds_wstring& value )           { new(&mWString[0])ds_wstring(value); }
-    void FASTCALL ConstructBlob( const std::vector<char>& value )       { new(&mBlob[0])var_blob_type(value); }
-
-    void FASTCALL DestructString()                      { (reinterpret_cast<ds_string *>(&mString[0]))->~ds_string(); }
-    void FASTCALL DestructWString()                     { (reinterpret_cast<ds_wstring *>(&mWString[0]))->~ds_wstring(); }
-    void FASTCALL DestructBlob()                        { (reinterpret_cast<var_blob_type *>(&mBlob[0]))->~var_blob_type(); }
-
-    const ds_string& FASTCALL GetString() const         { return ( *reinterpret_cast<const ds_string *>(&mString[0]) ); }
-    const ds_wstring& FASTCALL GetWString() const       { return ( *reinterpret_cast<const ds_wstring *>(&mWString[0]) ); }
-    const std::vector<char>& FASTCALL GetBlob() const   { return ( *reinterpret_cast<const var_blob_type *>(&mBlob[0]) ); }
-    std::vector<char>& FASTCALL GetBlob()               { return ( *reinterpret_cast<var_blob_type *>(mBlob) ); }   // sam. reconsider
-};
-
-} // namespace detail
-
 //***********************************************************************
 //******    Variant
 //***********************************************************************
 class Variant
 {
 private:
+    typedef boost::variant<bool, char, short, int, long, long long, double,
+                           unsigned char, unsigned short, unsigned int, unsigned long, unsigned long long,
+                           dbDate, dbTime, dbDateTime, dbGUID, ds_string, ds_wstring, var_blob_type>   VariantType;
+private:
     friend class cVariantStreamBuffer;
 
     VariantTypeID       mVariantType;
-    detail::varTag      mData;
-    void FASTCALL ConstructByType( const Variant& src );             // the source type
-    void FASTCALL DestructByType();                                  // "this" type
+    VariantType         mData;
     long FASTCALL ToLongType() const;
     long long FASTCALL ToLongLongType() const;
     long FASTCALL StringToLong( const ds_string& sstr ) const;

@@ -45,90 +45,41 @@ CDFASTCALL Variant::Variant( const ds_wstring& value ) : mVariantType(vtWString)
 CDFASTCALL Variant::Variant( const var_blob_type& value ) : mVariantType(vtBlob), mData(value)              {}
 
 CDFASTCALL Variant::Variant( const Variant& src )
-    : mVariantType(src.mVariantType)
+    : mVariantType(src.mVariantType), mData(src.mData)
 {
-    ConstructByType( src );
 }
 
 Variant& FASTCALL Variant::operator = ( const Variant& src )
 {
     if ( this != &src )
     {
-        DestructByType();
-        ConstructByType( src );
         mVariantType = src.mVariantType;
+        mData = src.mData;
     }
     return *this;
 }
 
 CDFASTCALL Variant::~Variant()
 {
-    DestructByType();
-}
-
-void FASTCALL Variant::ConstructByType( const Variant& src )             // the source type
-{
-    switch ( src.mVariantType )
-    {
-        case vtNull     :                                                       break;
-        case vtBool     : mData.mBool = src.mData.mBool;                        break;
-        case vtByte     : mData.mByte = src.mData.mByte;                        break;
-        case vtShort    : mData.mShort = src.mData.mShort;                      break;
-        case vtInteger  : mData.mInt = src.mData.mInt;                          break;
-        case vtLong     : mData.mLong = src.mData.mLong;                        break;
-        case vtLongLong : mData.mLongLong = src.mData.mLongLong;                break;
-        case vtDouble   : mData.mDouble = src.mData.mDouble;                    break;
-        case vtDate     : mData.mDate = src.mData.mDate;                        break;
-        case vtTime     : mData.mTime = src.mData.mTime;                        break;
-        case vtDateTime : mData.mDateTime = src.mData.mDateTime;                break;
-        case vtGUID     : mData.mGUID = src.mData.mGUID;                        break;
-        case vtString   : mData.ConstructString( src.mData.GetString() );       break;
-        case vtWString  : mData.ConstructWString( src.mData.GetWString() );     break;
-        case vtBlob     : mData.ConstructBlob( src.mData.GetBlob() );           break;
-        default         : throw eVariantConversion();
-    }
-}
-
-void FASTCALL Variant::DestructByType()                                  // "this" type
-{
-    switch ( mVariantType )
-    {
-        case vtNull     :                               break;
-        case vtBool     :                               break;
-        case vtByte     :                               break;
-        case vtShort    :                               break;
-        case vtInteger  :                               break;
-        case vtLong     :                               break;
-        case vtLongLong :                               break;
-        case vtDouble   :                               break;
-        case vtDate     :                               break;
-        case vtTime     :                               break;
-        case vtDateTime :                               break;
-        case vtGUID     :                               break;
-        case vtString   : mData.DestructString();       break;
-        case vtWString  : mData.DestructWString();      break;
-        case vtBlob     : mData.DestructBlob();         break;
-        default         :                               break; //    throw eVariantConversion();
-    }
 }
 
 long FASTCALL Variant::ToLongType() const
 {
     switch ( mVariantType )
     {
-        case vtNull     : throw eVariantConversion();
-        case vtBool     : return mData.mBool;
-        case vtByte     : return mData.mByte;
-        case vtShort    : return mData.mShort;
-        case vtInteger  : return mData.mInt;
-        case vtLong     : return mData.mLong;
-        case vtLongLong : return static_cast<long>(mData.mLongLong);
-        case vtDouble   : return static_cast<long>(mData.mDouble);
-        case vtDate     : return static_cast<long>(mData.mDate.AsDouble());
-        case vtTime     : return static_cast<long>(mData.mTime.AsDouble());
-        case vtDateTime : return static_cast<long>(mData.mDateTime.AsDouble());
-        case vtGUID     : throw eVariantConversion();
-        case vtString   : return StringToLong( mData.GetString() );
+        //case vtNull     : throw eVariantConversion();
+        case vtBool     : return boost::get<bool>( mData );
+        case vtByte     : return boost::get<char>( mData );
+        case vtShort    : return boost::get<short>( mData );
+        case vtInteger  : return boost::get<int>( mData );
+        case vtLong     : return boost::get<long>( mData );
+        case vtLongLong : return boost::get<long long>( mData );
+        case vtDouble   : return boost::get<double>( mData );
+        case vtDate     : return boost::get<dbDate>( mData ).AsInternal();
+        case vtTime     : return boost::get<dbTime>( mData ).AsInternal();
+        //case vtDateTime : return boost::get<dbDateTime>( mData ).AsInternal();
+        //case vtGUID     : throw eVariantConversion();
+        case vtString   : return StringToLong( boost::get<ds_string>( mData ) );
         //case vtWString  : return StringToLong( WStringToString( mData.GetWString() ) );
         //case vtBlob     : throw eVariantConversion();
         default         : throw eVariantConversion();
@@ -140,17 +91,17 @@ long long FASTCALL Variant::ToLongLongType() const
     switch ( mVariantType )
     {
         //case vtNull     : throw eVariantConversion();
-        case vtBool     : return mData.mBool;
-        case vtByte     : return mData.mByte;
-        case vtShort    : return mData.mShort;
-        case vtInteger  : return mData.mInt;
-        case vtLong     : return mData.mLong;
-        case vtLongLong : return mData.mLongLong;
-        case vtDouble   : return static_cast<long long>(mData.mDouble);
-        case vtDate     : return static_cast<long long>(mData.mDate.AsDouble());
-        case vtTime     : return static_cast<long long>(mData.mTime.AsDouble());
-        case vtDateTime : return static_cast<long long>(mData.mDateTime.AsDouble());
-        case vtGUID     : throw eVariantConversion();
+        case vtBool     : return boost::get<bool>( mData );
+        case vtByte     : return boost::get<char>( mData );
+        case vtShort    : return boost::get<short>( mData );
+        case vtInteger  : return boost::get<int>( mData );
+        case vtLong     : return boost::get<long>( mData );
+        case vtLongLong : return boost::get<long long>( mData );
+        case vtDouble   : return boost::get<double>( mData );
+        case vtDate     : return boost::get<dbDate>( mData ).AsInternal();
+        case vtTime     : return boost::get<dbTime>( mData ).AsInternal();
+        case vtDateTime : return static_cast<long long>(boost::get<dbDateTime>( mData ).AsDouble());
+        //case vtGUID     : throw eVariantConversion();
         //case vtString   : return StringToLong( mData.GetString() );
         //case vtWString  : return StringToLong( WStringToString( mData.GetWString() ) );
         //case vtBlob     : throw eVariantConversion();
@@ -232,18 +183,19 @@ double FASTCALL Variant::AsDouble() const
 {
     switch ( mVariantType )
     {
-        case vtBool     : return mData.mBool;
-        case vtByte     : return mData.mByte;
-        case vtShort    : return mData.mShort;
-        case vtInteger  : return mData.mInt;
-        case vtLong     : return mData.mLong;
-        case vtLongLong : return static_cast<double>(mData.mLongLong);
-        case vtDouble   : return mData.mDouble;
-        case vtDate     : return mData.mDate.AsDouble();
-        case vtTime     : return mData.mTime.AsDouble();
-        case vtDateTime : return mData.mDateTime.AsDouble();
-        case vtGUID     : throw eVariantConversion();
-        case vtString   : return StringToDouble( mData.GetString() );
+        //case vtNull     : throw eVariantConversion();
+        case vtBool     : return boost::get<bool>( mData );
+        case vtByte     : return boost::get<char>( mData );
+        case vtShort    : return boost::get<short>( mData );
+        case vtInteger  : return boost::get<int>( mData );
+        case vtLong     : return boost::get<long>( mData );
+        case vtLongLong : return boost::get<long long>( mData );
+        case vtDouble   : return boost::get<double>( mData );
+        case vtDate     : return boost::get<dbDate>( mData ).AsInternal();
+        case vtTime     : return boost::get<dbTime>( mData ).AsInternal();
+        case vtDateTime : return boost::get<dbDateTime>( mData ).AsDouble();
+        //case vtGUID     : throw eVariantConversion();
+        case vtString   : return StringToDouble( boost::get<ds_string>( mData ) );
         // case vtWString  : return StringToDouble( WStringToString( mData.GetWString() ) );
         // case vtBlob     : throw eVariantConversion();
         default         : throw eVariantConversion();
@@ -254,7 +206,7 @@ dbDate FASTCALL Variant::AsDate() const
 {
     switch ( mVariantType )
     {
-        case vtDate     : return mData.mDate;
+        case vtDate     : return boost::get<dbDate>( mData );
         default         : throw eVariantConversion();
     }
 }
@@ -263,7 +215,7 @@ dbTime FASTCALL Variant::AsTime() const
 {
     switch ( mVariantType )
     {
-        case vtTime     : return mData.mTime;
+        case vtTime     : return boost::get<dbTime>( mData );
         default         : throw eVariantConversion();
     }
 }
@@ -272,7 +224,7 @@ dbDateTime FASTCALL Variant::AsDateTime() const
 {
     switch ( mVariantType )
     {
-        case vtDateTime : return mData.mDateTime;
+        case vtDateTime : return boost::get<dbDateTime>( mData );
         default         : throw eVariantConversion();
     }
 }
@@ -281,7 +233,7 @@ dbGUID FASTCALL Variant::AsGUID() const
 {
     switch ( mVariantType )
     {
-        case vtGUID     : return mData.mGUID;
+        case vtGUID     : return boost::get<dbGUID>( mData );
         default         : throw eVariantConversion();
     }
 }
@@ -290,7 +242,7 @@ ds_string FASTCALL Variant::AsString() const
 {
     switch ( mVariantType )
     {
-        case vtString   : return mData.GetString();
+        case vtString   : return boost::get<ds_string>( mData );
         default         : throw eVariantConversion();
     }
 }
@@ -299,7 +251,7 @@ Variant FASTCALL Variant::VarBlobCreate()
 {
     Variant     result;
 
-    result.mData.ConstructBlob( std::vector<char>() );
+    result.mData = var_blob_type();
     result.mVariantType = vtBlob;
     return result;
 }
@@ -312,7 +264,7 @@ CDFASTCALL cVariantStreamBuffer::cVariantStreamBuffer( Variant& variant )
 {
     if ( variant.VarType() != vtBlob )
         throw eNotApplicableOperation();
-    InitBuffer( &(variant.mData.GetBlob()) );
+    InitBuffer( &(boost::get<var_blob_type>(variant.mData)) );
 }
 
 CDFASTCALL cVariantStreamBuffer::~cVariantStreamBuffer()
