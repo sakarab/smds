@@ -1,0 +1,26 @@
+How to set up a Solution in Qt Creator
+======================================
+
+==== Step 1
+Put following snippet in every .pro file:
+------------------------- snippet ---
+CONFIG(debug, debug|release) {
+    PATH_SUFFIX = Debug
+} else {
+    PATH_SUFFIX = Release
+}
+
+OBJECTS_DIR = $$_PRO_FILE_PWD_/$$PATH_SUFFIX/$$TARGET-obj
+------------------------- snippet end ---
+
+==== Step 2
+Tell QMake to specificly name the generated makefile.
+Tell Make to use that makefile.
+QMake additional arguments: -o smds-test.mk
+Make additional arguments : -f smds-test.mk
+
+==== Step 3
+In "Project->Dependencies" setup dependencies and check synchronize configurations.
+Create a new session with the loaded projects.
+Place a dummy "Makefile" in every configuration output directory.
+
