@@ -37,6 +37,7 @@
 #include "dsExceptions.h"
 #include "dsVariant.h"
 #include "dsCompare.h"
+#include <cstring>
 //---------------------------------------------------------------------------
 namespace smds
 {

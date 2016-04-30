@@ -111,6 +111,6 @@ typedef detail::OpenArray<cIndexField>      OpenIndexFields;
 typedef detail::OpenArray<Variant>          OpenValues;
 typedef detail::OpenArray<cRangeValues>     OpenRangeValues;
 
-}; // namespace smds
+} // namespace smds
 
 #endif

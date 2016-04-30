@@ -333,7 +333,7 @@ public:
     range_iterator FASTCALL GetRangeIterator( const OpenRangeValues& values )   { return range_iterator( Index::GetRangeIterator( values ) ); }
 };
 
-}; // namespace smds
+} // namespace smds
 //---------------------------------------------------------------------------
 
 #endif

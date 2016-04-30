@@ -24,6 +24,7 @@
 #endif
 #include "dsStream.h"
 #include "dsExceptions.h"
+#include <cstring>
 //---------------------------------------------------------------------------
 namespace smds
 {

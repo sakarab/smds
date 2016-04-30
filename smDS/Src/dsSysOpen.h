@@ -389,8 +389,8 @@ public:
     int FASTCALL GetCount() const                                   { return Count; }
 };
 
-}; // namespace detail
+} // namespace detail
 
-}; // namespace ds
+} // namespace ds
 //---------------------------------------------------------------------------
 #endif

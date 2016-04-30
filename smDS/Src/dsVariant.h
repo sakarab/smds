@@ -30,6 +30,7 @@
 #include <vector>
 #include "dsStream.h"
 #include <boost/variant.hpp>
+#include "dsExceptions.h"
 
 namespace smds
 {
@@ -56,14 +57,14 @@ private:
 
     VariantTypeID       mVariantType;
     VariantType         mData;
-    long ToLongType() const;
-    long long ToLongLongType() const;
-    long StringToLong( const ds_string& sstr ) const;
-    long StringToLong( const ds_wstring& sstr ) const;
-    double StringToDouble( const ds_string& sstr ) const;
-    // double FASTCALL StringToDouble( const ds_wstring& sstr ) const;
-    // ds_wstring StringToWString( const ds_string& sstr ) const;
-    // ds_string WStringToString( const ds_wstring& sstr ) const;
+
+    template <class TYPE, VariantTypeID TYPEID> TYPE strict_get() const
+    {
+        if ( TYPEID != mVariantType )
+            throw eVariantConversion();
+        return boost::get<TYPE>( mData );
+    }
+
     Variant( void *dummy );          // ambiguity baster
     Variant( const void *dummy );    // ambiguity baster
 public:
@@ -97,19 +98,19 @@ public:
     bool IsNull() const                        { return ( mVariantType == vtNull ); }
     VariantTypeID VarType() const              { return mVariantType; }
 
-    bool AsBool() const                        { return ( ToLongType() != 0 ); }
-    char AsByte() const                        { return static_cast<char>(ToLongType()); }
-    short AsShort() const                      { return static_cast<short>(ToLongType()); }
-    int AsInt() const                          { return static_cast<int>(ToLongType()); }
-    long AsLong() const                        { return ToLongType(); }
-    long long AsLongLong() const               { return ToLongLongType(); }
+    bool AsBool() const;
+    char AsByte() const;
+    short AsShort() const;
+    int AsInt() const;
+    long AsLong() const;
+    long long AsLongLong() const;
     double AsDouble() const;
     dbDate AsDate() const;
     dbTime AsTime() const;
     dbDateTime AsDateTime() const;
     dbGUID AsGUID() const;
     ds_string AsString() const;
-    // ds_string AsWString() const;
+    // ds_string WString() const;
 
     static Variant VarBlobCreate();
 };

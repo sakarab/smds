@@ -25,9 +25,6 @@
 
 #include "dsVariant.h"
 #include "dsExceptions.h"
-#include <boost/smart_ptr.hpp>
-#include <boost/lexical_cast.hpp>
-#include <cmath>
 //---------------------------------------------------------------------------
 namespace smds
 {
@@ -64,180 +61,18 @@ Variant::~Variant()
 {
 }
 
-long Variant::ToLongType() const
-{
-    switch ( mVariantType )
-    {
-        //case vtNull     : throw eVariantConversion();
-        case vtBool     : return boost::get<bool>( mData );
-        case vtByte     : return boost::get<char>( mData );
-        case vtShort    : return boost::get<short>( mData );
-        case vtInteger  : return boost::get<int>( mData );
-        case vtLong     : return boost::get<long>( mData );
-        case vtLongLong : return boost::get<long long>( mData );
-        case vtDouble   : return boost::get<double>( mData );
-        case vtDate     : return boost::get<dbDate>( mData ).AsInternal();
-        case vtTime     : return boost::get<dbTime>( mData ).AsInternal();
-        //case vtDateTime : return boost::get<dbDateTime>( mData ).AsInternal();
-        //case vtGUID     : throw eVariantConversion();
-        case vtString   : return StringToLong( boost::get<ds_string>( mData ) );
-        //case vtWString  : return StringToLong( WStringToString( mData.GetWString() ) );
-        //case vtBlob     : throw eVariantConversion();
-        default         : throw eVariantConversion();
-    }
-}
-
-long long Variant::ToLongLongType() const
-{
-    switch ( mVariantType )
-    {
-        //case vtNull     : throw eVariantConversion();
-        case vtBool     : return boost::get<bool>( mData );
-        case vtByte     : return boost::get<char>( mData );
-        case vtShort    : return boost::get<short>( mData );
-        case vtInteger  : return boost::get<int>( mData );
-        case vtLong     : return boost::get<long>( mData );
-        case vtLongLong : return boost::get<long long>( mData );
-        case vtDouble   : return boost::get<double>( mData );
-        case vtDate     : return boost::get<dbDate>( mData ).AsInternal();
-        case vtTime     : return boost::get<dbTime>( mData ).AsInternal();
-        case vtDateTime : return static_cast<long long>(boost::get<dbDateTime>( mData ).AsDouble());
-        //case vtGUID     : throw eVariantConversion();
-        //case vtString   : return StringToLong( mData.GetString() );
-        //case vtWString  : return StringToLong( WStringToString( mData.GetWString() ) );
-        //case vtBlob     : throw eVariantConversion();
-        default         : throw eVariantConversion();
-    }
-}
-
-long Variant::StringToLong( const ds_string& sstr ) const
-{
-    return boost::lexical_cast<long>(sstr);
-}
-
-long Variant::StringToLong( const ds_wstring& sstr ) const
-{
-    return boost::lexical_cast<long>( sstr );
-}
-
-double Variant::StringToDouble( const ds_string& sstr ) const
-{
-    if ( sstr.empty() )
-        throw eVariantConversion();
-
-    int                         sstr_len = sstr.size();
-    boost::scoped_array<char>   str( new char[sstr_len + 1] );
-
-    std::strcpy( str.get(), sstr.c_str() );
-
-    char                        *end_ptr = str.get();
-    double                      result = std::strtod( str.get(), &end_ptr );
-
-#if defined( __BORLANDC__ ) && ( __BORLANDC__ < 0x0570 )
-    if ( end_ptr != (str.get() + sstr_len ) || result == +std::HUGE_VAL || result == -std::HUGE_VAL )
-#else
-    if ( end_ptr != (str.get() + sstr_len ) || result == +HUGE_VAL || result == -HUGE_VAL )
-#endif
-        throw eVariantConversion();
-
-    return result;
-}
-
-//ds_wstring Variant::StringToWString( const ds_string& sstr ) const
-//{
-//    int                             sstr_len = sstr.size();
-//    boost::scoped_array<wchar_t>    buff( new wchar_t[sstr_len + 1] );
-//    wchar_t                         *dst = buff.get();
-//    const char                      *src = sstr.c_str();
-//
-//    for ( int n = 0 ; n < sstr_len ; ++n )
-//        *dst++ = *src++;
-//    *dst = 0;
-//
-//    return ds_wstring( buff.get() );
-//}
-
-//ds_string Variant::WStringToString( const ds_wstring& sstr ) const
-//{
-//    int                             sstr_len = sstr.size();
-//    boost::scoped_array<char>       buff( new char[sstr_len + 1] );
-//    char                            *dst = buff.get();
-//    const wchar_t                   *src = sstr.c_str();
-//
-//    for ( int n = 0 ; n < sstr_len ; ++n )
-//        *dst++ = static_cast<char>(*src++);
-//    *dst = 0;
-//
-//    return ds_string( buff.get() );
-//}
-
-double Variant::AsDouble() const
-{
-    switch ( mVariantType )
-    {
-        //case vtNull     : throw eVariantConversion();
-        case vtBool     : return boost::get<bool>( mData );
-        case vtByte     : return boost::get<char>( mData );
-        case vtShort    : return boost::get<short>( mData );
-        case vtInteger  : return boost::get<int>( mData );
-        case vtLong     : return boost::get<long>( mData );
-        case vtLongLong : return boost::get<long long>( mData );
-        case vtDouble   : return boost::get<double>( mData );
-        case vtDate     : return boost::get<dbDate>( mData ).AsInternal();
-        case vtTime     : return boost::get<dbTime>( mData ).AsInternal();
-        case vtDateTime : return boost::get<dbDateTime>( mData ).AsDouble();
-        //case vtGUID     : throw eVariantConversion();
-        case vtString   : return StringToDouble( boost::get<ds_string>( mData ) );
-        // case vtWString  : return StringToDouble( WStringToString( mData.GetWString() ) );
-        // case vtBlob     : throw eVariantConversion();
-        default         : throw eVariantConversion();
-    }
-}
-
-dbDate Variant::AsDate() const
-{
-    switch ( mVariantType )
-    {
-        case vtDate     : return boost::get<dbDate>( mData );
-        default         : throw eVariantConversion();
-    }
-}
-
-dbTime Variant::AsTime() const
-{
-    switch ( mVariantType )
-    {
-        case vtTime     : return boost::get<dbTime>( mData );
-        default         : throw eVariantConversion();
-    }
-}
-
-dbDateTime Variant::AsDateTime() const
-{
-    switch ( mVariantType )
-    {
-        case vtDateTime : return boost::get<dbDateTime>( mData );
-        default         : throw eVariantConversion();
-    }
-}
-
-dbGUID Variant::AsGUID() const
-{
-    switch ( mVariantType )
-    {
-        case vtGUID     : return boost::get<dbGUID>( mData );
-        default         : throw eVariantConversion();
-    }
-}
-
-ds_string Variant::AsString() const
-{
-    switch ( mVariantType )
-    {
-        case vtString   : return boost::get<ds_string>( mData );
-        default         : throw eVariantConversion();
-    }
-}
+bool Variant::AsBool() const                          { return strict_get<bool, vtBool>(); }
+char Variant::AsByte() const                          { return strict_get<char, vtByte>(); }
+short Variant::AsShort() const                        { return strict_get<short, vtShort>(); }
+int Variant::AsInt() const                            { return strict_get<int, vtInteger>(); }
+long Variant::AsLong() const                          { return strict_get<long, vtLong>(); }
+long long Variant::AsLongLong() const                 { return strict_get<long long, vtLongLong>(); }
+double Variant::AsDouble() const                      { return strict_get<double, vtDouble>(); }
+dbDate Variant::AsDate() const                        { return strict_get<dbDate, vtDate>(); }
+dbTime Variant::AsTime() const                        { return strict_get<dbTime, vtTime>(); }
+dbDateTime Variant::AsDateTime() const                { return strict_get<dbDateTime, vtDateTime>(); }
+dbGUID Variant::AsGUID() const                        { return strict_get<dbGUID, vtGUID>(); }
+ds_string Variant::AsString() const                   { return strict_get<ds_string, vtString>(); }
 
 Variant Variant::VarBlobCreate()
 {
