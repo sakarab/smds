@@ -56,62 +56,62 @@ private:
 
     VariantTypeID       mVariantType;
     VariantType         mData;
-    long FASTCALL ToLongType() const;
-    long long FASTCALL ToLongLongType() const;
-    long FASTCALL StringToLong( const ds_string& sstr ) const;
-    // long FASTCALL StringToLong( const ds_wstring& sstr ) const;
-    double FASTCALL StringToDouble( const ds_string& sstr ) const;
+    long ToLongType() const;
+    long long ToLongLongType() const;
+    long StringToLong( const ds_string& sstr ) const;
+    long StringToLong( const ds_wstring& sstr ) const;
+    double StringToDouble( const ds_string& sstr ) const;
     // double FASTCALL StringToDouble( const ds_wstring& sstr ) const;
     // ds_wstring StringToWString( const ds_string& sstr ) const;
     // ds_string WStringToString( const ds_wstring& sstr ) const;
-    CDFASTCALL Variant( void *dummy );          // ambiguity baster
-    CDFASTCALL Variant( const void *dummy );    // ambiguity baster
+    Variant( void *dummy );          // ambiguity baster
+    Variant( const void *dummy );    // ambiguity baster
 public:
-    CDFASTCALL Variant()                            : mVariantType(vtNull), mData()                             {} // empty
-    CDFASTCALL Variant( bool value )                : mVariantType(vtBool), mData(value)                        {} // empty
-    CDFASTCALL Variant( char value )                : mVariantType(vtByte), mData(value)                        {} // empty
-    CDFASTCALL Variant( unsigned char value )       : mVariantType(vtByte), mData(value)                        {} // empty
-    CDFASTCALL Variant( short value )               : mVariantType(vtShort), mData(value)                       {} // empty
-    CDFASTCALL Variant( unsigned short value )      : mVariantType(vtShort), mData(value)                       {} // empty
-    CDFASTCALL Variant( int value )                 : mVariantType(vtInteger), mData(value)                     {} // empty
-    CDFASTCALL Variant( unsigned int value )        : mVariantType(vtInteger), mData(value)                     {} // empty
-    CDFASTCALL Variant( long value )                : mVariantType(vtLong), mData(value)                        {} // empty
-    CDFASTCALL Variant( unsigned long value )       : mVariantType(vtLong), mData(value)                        {} // empty
-    CDFASTCALL Variant( long long value )           : mVariantType(vtLongLong), mData(value)                    {} // empty
-    CDFASTCALL Variant( unsigned long long value )  : mVariantType(vtLongLong), mData(value)                    {} // empty
-    CDFASTCALL Variant( double value )              : mVariantType(vtDouble), mData(value)                      {} // empty
-    CDFASTCALL Variant( const dbDate& value );
-    CDFASTCALL Variant( const dbTime& value );
-    CDFASTCALL Variant( const dbDateTime& value );
-    CDFASTCALL Variant( const dbGUID& value );
-    CDFASTCALL Variant( const char *value );
-    CDFASTCALL Variant( const ds_string& value );
-    CDFASTCALL Variant( const wchar_t *value );
-    CDFASTCALL Variant( const ds_wstring& value );
-    CDFASTCALL Variant( const var_blob_type& value );
+    Variant()                            : mVariantType(vtNull), mData()                             {} // empty
+    Variant( bool value )                : mVariantType(vtBool), mData(value)                        {} // empty
+    Variant( char value )                : mVariantType(vtByte), mData(value)                        {} // empty
+    Variant( unsigned char value )       : mVariantType(vtByte), mData(value)                        {} // empty
+    Variant( short value )               : mVariantType(vtShort), mData(value)                       {} // empty
+    Variant( unsigned short value )      : mVariantType(vtShort), mData(value)                       {} // empty
+    Variant( int value )                 : mVariantType(vtInteger), mData(value)                     {} // empty
+    Variant( unsigned int value )        : mVariantType(vtInteger), mData(value)                     {} // empty
+    Variant( long value )                : mVariantType(vtLong), mData(value)                        {} // empty
+    Variant( unsigned long value )       : mVariantType(vtLong), mData(value)                        {} // empty
+    Variant( long long value )           : mVariantType(vtLongLong), mData(value)                    {} // empty
+    Variant( unsigned long long value )  : mVariantType(vtLongLong), mData(value)                    {} // empty
+    Variant( double value )              : mVariantType(vtDouble), mData(value)                      {} // empty
+    Variant( const dbDate& value );
+    Variant( const dbTime& value );
+    Variant( const dbDateTime& value );
+    Variant( const dbGUID& value );
+    Variant( const char *value );
+    Variant( const ds_string& value );
+    Variant( const wchar_t *value );
+    Variant( const ds_wstring& value );
+    Variant( const var_blob_type& value );
 
-    CDFASTCALL Variant( const Variant& src );
-    CDFASTCALL ~Variant();
-    Variant& FASTCALL operator = ( const Variant& src );
+    Variant( const Variant& src );
+    ~Variant();
+    Variant& operator = ( const Variant& src );
 
-    bool FASTCALL IsNull() const                        { return ( mVariantType == vtNull ); }
-    VariantTypeID VarType() const                       { return mVariantType; }
+    bool IsNull() const                        { return ( mVariantType == vtNull ); }
+    VariantTypeID VarType() const              { return mVariantType; }
 
-    bool FASTCALL AsBool() const                        { return ( ToLongType() != 0 ); }
-    char FASTCALL AsByte() const                        { return static_cast<char>(ToLongType()); }
-    short FASTCALL AsShort() const                      { return static_cast<short>(ToLongType()); }
-    int FASTCALL AsInt() const                          { return static_cast<int>(ToLongType()); }
-    long FASTCALL AsLong() const                        { return ToLongType(); }
-    long long FASTCALL AsLongLong() const               { return ToLongLongType(); }
-    double FASTCALL AsDouble() const;
-    dbDate FASTCALL AsDate() const;
-    dbTime FASTCALL AsTime() const;
-    dbDateTime FASTCALL AsDateTime() const;
-    dbGUID FASTCALL AsGUID() const;
-    ds_string FASTCALL AsString() const;
-    // ds_string FASTCALL AsWString() const;
+    bool AsBool() const                        { return ( ToLongType() != 0 ); }
+    char AsByte() const                        { return static_cast<char>(ToLongType()); }
+    short AsShort() const                      { return static_cast<short>(ToLongType()); }
+    int AsInt() const                          { return static_cast<int>(ToLongType()); }
+    long AsLong() const                        { return ToLongType(); }
+    long long AsLongLong() const               { return ToLongLongType(); }
+    double AsDouble() const;
+    dbDate AsDate() const;
+    dbTime AsTime() const;
+    dbDateTime AsDateTime() const;
+    dbGUID AsGUID() const;
+    ds_string AsString() const;
+    // ds_string AsWString() const;
 
-    static Variant FASTCALL VarBlobCreate();
+    static Variant VarBlobCreate();
 };
 
 //***********************************************************************

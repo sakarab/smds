@@ -29,6 +29,7 @@
 #include "dsGUID.h"
 #include "dsVariant.h"
 #include <boost/type_traits.hpp>
+#include "dsString.h"
 
 namespace smds
 {

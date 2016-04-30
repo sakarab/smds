@@ -26,6 +26,7 @@
 #include "dsCompare.h"
 #include "dsExceptions.h"
 #include "dsCompareControlers.h"
+#include "dsString.h"
 #include <set>
 //---------------------------------------------------------------------------
 namespace smds

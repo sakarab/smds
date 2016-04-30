@@ -28,6 +28,7 @@
 #include "dsCompareControlers.h"
 #include <sstream>
 #include <stdexcept>
+#include "dsString.h"
 
 namespace smds
 {

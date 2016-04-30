@@ -26,6 +26,7 @@
 #include "dsVariant.h"
 #include "dsExceptions.h"
 #include <boost/smart_ptr.hpp>
+#include <boost/lexical_cast.hpp>
 #include <cmath>
 //---------------------------------------------------------------------------
 namespace smds
@@ -34,22 +35,22 @@ namespace smds
 //***********************************************************************
 //******    Variant
 //***********************************************************************
-CDFASTCALL Variant::Variant( const dbDate& value ) : mVariantType(vtDate), mData(value)                     {}
-CDFASTCALL Variant::Variant( const dbTime& value ) : mVariantType(vtTime), mData(value)                     {}
-CDFASTCALL Variant::Variant( const dbDateTime& value ) : mVariantType(vtDateTime), mData(value)             {}
-CDFASTCALL Variant::Variant( const dbGUID& value ) : mVariantType(vtGUID), mData(value)                     {}
-CDFASTCALL Variant::Variant( const char *value ) : mVariantType(vtString), mData(ds_string( value ))        {}
-CDFASTCALL Variant::Variant( const ds_string& value ) : mVariantType(vtString), mData(value)                {}
-CDFASTCALL Variant::Variant( const wchar_t *value ) : mVariantType(vtWString), mData(ds_wstring( value ))   {}
-CDFASTCALL Variant::Variant( const ds_wstring& value ) : mVariantType(vtWString), mData(value)              {}
-CDFASTCALL Variant::Variant( const var_blob_type& value ) : mVariantType(vtBlob), mData(value)              {}
+Variant::Variant( const dbDate& value ) : mVariantType(vtDate), mData(value)                     {}
+Variant::Variant( const dbTime& value ) : mVariantType(vtTime), mData(value)                     {}
+Variant::Variant( const dbDateTime& value ) : mVariantType(vtDateTime), mData(value)             {}
+Variant::Variant( const dbGUID& value ) : mVariantType(vtGUID), mData(value)                     {}
+Variant::Variant( const char *value ) : mVariantType(vtString), mData(ds_string( value ))        {}
+Variant::Variant( const ds_string& value ) : mVariantType(vtString), mData(value)                {}
+Variant::Variant( const wchar_t *value ) : mVariantType(vtWString), mData(ds_wstring( value ))   {}
+Variant::Variant( const ds_wstring& value ) : mVariantType(vtWString), mData(value)              {}
+Variant::Variant( const var_blob_type& value ) : mVariantType(vtBlob), mData(value)              {}
 
-CDFASTCALL Variant::Variant( const Variant& src )
+Variant::Variant( const Variant& src )
     : mVariantType(src.mVariantType), mData(src.mData)
 {
 }
 
-Variant& FASTCALL Variant::operator = ( const Variant& src )
+Variant& Variant::operator = ( const Variant& src )
 {
     if ( this != &src )
     {
@@ -59,11 +60,11 @@ Variant& FASTCALL Variant::operator = ( const Variant& src )
     return *this;
 }
 
-CDFASTCALL Variant::~Variant()
+Variant::~Variant()
 {
 }
 
-long FASTCALL Variant::ToLongType() const
+long Variant::ToLongType() const
 {
     switch ( mVariantType )
     {
@@ -86,7 +87,7 @@ long FASTCALL Variant::ToLongType() const
     }
 }
 
-long long FASTCALL Variant::ToLongLongType() const
+long long Variant::ToLongLongType() const
 {
     switch ( mVariantType )
     {
@@ -109,26 +110,17 @@ long long FASTCALL Variant::ToLongLongType() const
     }
 }
 
-long FASTCALL Variant::StringToLong( const ds_string& sstr ) const
+long Variant::StringToLong( const ds_string& sstr ) const
 {
-    if ( sstr.empty() )
-        throw eVariantConversion();
-
-    int                         sstr_len = sstr.size();
-    boost::scoped_array<char>   str( new char[sstr_len + 1] );
-
-    std::strcpy( str.get(), sstr.c_str() );
-
-    char                        *end_ptr = str.get();
-    long                        result = std::strtol( str.get(), &end_ptr, 10 );
-
-    if ( end_ptr != (str.get() + sstr_len ) )
-        throw eVariantConversion();
-
-    return result;
+    return boost::lexical_cast<long>(sstr);
 }
 
-double FASTCALL Variant::StringToDouble( const ds_string& sstr ) const
+long Variant::StringToLong( const ds_wstring& sstr ) const
+{
+    return boost::lexical_cast<long>( sstr );
+}
+
+double Variant::StringToDouble( const ds_string& sstr ) const
 {
     if ( sstr.empty() )
         throw eVariantConversion();
@@ -179,7 +171,7 @@ double FASTCALL Variant::StringToDouble( const ds_string& sstr ) const
 //    return ds_string( buff.get() );
 //}
 
-double FASTCALL Variant::AsDouble() const
+double Variant::AsDouble() const
 {
     switch ( mVariantType )
     {
@@ -202,7 +194,7 @@ double FASTCALL Variant::AsDouble() const
     }
 }
 
-dbDate FASTCALL Variant::AsDate() const
+dbDate Variant::AsDate() const
 {
     switch ( mVariantType )
     {
@@ -211,7 +203,7 @@ dbDate FASTCALL Variant::AsDate() const
     }
 }
 
-dbTime FASTCALL Variant::AsTime() const
+dbTime Variant::AsTime() const
 {
     switch ( mVariantType )
     {
@@ -220,7 +212,7 @@ dbTime FASTCALL Variant::AsTime() const
     }
 }
 
-dbDateTime FASTCALL Variant::AsDateTime() const
+dbDateTime Variant::AsDateTime() const
 {
     switch ( mVariantType )
     {
@@ -229,7 +221,7 @@ dbDateTime FASTCALL Variant::AsDateTime() const
     }
 }
 
-dbGUID FASTCALL Variant::AsGUID() const
+dbGUID Variant::AsGUID() const
 {
     switch ( mVariantType )
     {
@@ -238,7 +230,7 @@ dbGUID FASTCALL Variant::AsGUID() const
     }
 }
 
-ds_string FASTCALL Variant::AsString() const
+ds_string Variant::AsString() const
 {
     switch ( mVariantType )
     {
@@ -247,7 +239,7 @@ ds_string FASTCALL Variant::AsString() const
     }
 }
 
-Variant FASTCALL Variant::VarBlobCreate()
+Variant Variant::VarBlobCreate()
 {
     Variant     result;
 

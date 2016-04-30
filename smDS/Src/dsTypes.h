@@ -23,6 +23,7 @@
 
 #include "dsConfig.h"
 #include "dsSmartPtr.h"
+#include <string>
 
 /*
 #if defined (__BORLANDC__) && ! defined (_NO_VCL)
@@ -36,18 +37,21 @@
 #endif
 */
 
-#include "dsString.h"
+//#include "dsString.h"
 
-typedef smds::string_tag    ds_sstring;
-typedef smds::wstring_tag   ds_wstring;
-
-#if defined ( SM_UNICODE )
-    typedef ds_wstring      ds_string;
-#else
-    typedef ds_sstring      ds_string;
-#endif
+//typedef smds::string_tag    ds_sstring;
+//typedef smds::wstring_tag   ds_wstring;
+//
+//#if defined ( SM_UNICODE )
+//    typedef ds_wstring      ds_string;
+//#else
+//    typedef ds_sstring      ds_string;
+//#endif
 
 // foward declaration of types
+
+typedef std::string     ds_string;
+typedef std::wstring    ds_wstring;
 
 namespace smds
 {
