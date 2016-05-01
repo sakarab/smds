@@ -61,11 +61,11 @@ private:
     detail::spData          mData;
 #if defined(SM_DS_ENABLE_NOTIFY)
     // IDataNotify
-    virtual void FASTCALL RecordAdded( const detail::Data::value_type& value, bool locked );
-    virtual void FASTCALL RecordDeleted( const detail::Data::value_type& value );
-    virtual void FASTCALL DataOpened( detail::Data& data );
-    virtual void FASTCALL DataClosed();
-    virtual void FASTCALL UpdateLockReleased();
+    virtual void RecordAdded( const detail::Data::value_type& value, bool locked );
+    virtual void RecordDeleted( const detail::Data::value_type& value );
+    virtual void DataOpened( detail::Data& data );
+    virtual void DataClosed();
+    virtual void UpdateLockReleased();
 #endif
     // noncopyable
     CDFASTCALL Tablebase( const Tablebase& src );

@@ -100,29 +100,29 @@ Tablebase::iterator FASTCALL Tablebase::Locate( const Variant& value, const cFin
 }
 
 #if defined(SM_DS_ENABLE_NOTIFY)
-void FASTCALL Tablebase::RecordAdded( const detail::Data::value_type& value, bool )
+void Tablebase::RecordAdded( const detail::Data::value_type& value, bool )
 {
     mData->AddBuffer_ptr( value );
 }
 
-void FASTCALL Tablebase::RecordDeleted( const detail::Data::value_type& value )
+void Tablebase::RecordDeleted( const detail::Data::value_type& value )
 {
     mData->DeleteBuffer_ptr( value );
 }
 
-void FASTCALL Tablebase::DataOpened( detail::Data& )
+void Tablebase::DataOpened( detail::Data& )
 {
     // do nothing. Normally we will never come here as "Open" and "Close" can
     // be done only from "Table"
 }
 
-void FASTCALL Tablebase::DataClosed()
+void Tablebase::DataClosed()
 {
     // do nothing. Normally we will never come here as "Open" and "Close" can
     // be done only from "Table"
 }
 
-void FASTCALL Tablebase::UpdateLockReleased()
+void Tablebase::UpdateLockReleased()
 {
 }
 #endif

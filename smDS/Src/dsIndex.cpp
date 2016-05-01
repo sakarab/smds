@@ -244,7 +244,7 @@ Index::range_iterator FASTCALL Index::GetRangeIterator( const OpenRangeValues& v
 }
 
 #if defined(SM_DS_ENABLE_NOTIFY)
-void FASTCALL Index::RecordAdded( const detail::Data::value_type& value, bool locked )
+void Index::RecordAdded( const detail::Data::value_type& value, bool locked )
 {
     if ( locked )
         GetData()->AddBuffer_ptr( value );
@@ -252,22 +252,22 @@ void FASTCALL Index::RecordAdded( const detail::Data::value_type& value, bool lo
         GetData()->InsertBuffer_ptr( value, mCompare );
 }
 
-void FASTCALL Index::RecordDeleted( const detail::Data::value_type& value )
+void Index::RecordDeleted( const detail::Data::value_type& value )
 {
     GetData()->DeleteBuffer_ptr( value );
 }
 
-void FASTCALL Index::DataOpened( detail::Data& data )
+void Index::DataOpened( detail::Data& data )
 {
     UpdateIndex( data );
 }
 
-void FASTCALL Index::DataClosed()
+void Index::DataClosed()
 {
     SetData( detail::spData() );
 }
 
-void FASTCALL Index::UpdateLockReleased()
+void Index::UpdateLockReleased()
 {
     GetData()->Sort( detail::SortControler( mCompare ) );
 }
