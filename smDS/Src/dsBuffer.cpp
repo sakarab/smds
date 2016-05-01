@@ -37,27 +37,27 @@ namespace detail
 //***********************************************************************
 //******    cRawBuffer
 //***********************************************************************
-void FASTCALL cRawBuffer::SetNull( const cFieldDef& field_def, bool value )
+void cRawBuffer::SetNull( const cFieldDef& field_def, bool value )
 {
-    SetBit( field_def.Index(), value );
+    NullBits::SetBit( mNullBits, field_def.Index(), value );
 }
 
-void FASTCALL cRawBuffer::SetNull( const cFieldDef_& field_def, bool value )
+void cRawBuffer::SetNull( const cFieldDef_& field_def, bool value )
 {
-    SetBit( field_def.mIndex, value );
+    NullBits::SetBit( mNullBits, field_def.mIndex, value );
 }
 
-bool FASTCALL cRawBuffer::IsNull( const cFieldDef& field_def ) const
+bool cRawBuffer::IsNull( const cFieldDef& field_def ) const
 {
-    return (mData.get() == 0) || TestBit( field_def.Index() );
+    return (mData.get() == 0) || NullBits::TestBit( mNullBits, field_def.Index() );
 }
 
-bool FASTCALL cRawBuffer::IsNull( const cFieldDef_& field_def ) const
+bool cRawBuffer::IsNull( const cFieldDef_& field_def ) const
 {
-    return (mData.get() == 0) || TestBit( field_def.mIndex );
+    return (mData.get() == 0) || NullBits::TestBit( mNullBits, field_def.mIndex );
 }
 
-void FASTCALL cRawBuffer::Nullify( const cFieldDef& field_def )
+void cRawBuffer::Nullify( const cFieldDef& field_def )
 {
     if ( field_def.DataType() == ftString )
     {
@@ -83,10 +83,10 @@ void FASTCALL cRawBuffer::Nullify( const cFieldDef& field_def )
             *data = 0;
         }
     }
-    SetBit( field_def.Index(), true );
+    NullBits::SetBit( mNullBits, field_def.Index(), true );
 }
 
-Variant FASTCALL cRawBuffer::ReadVariant( const cFieldDef& field_def ) const
+Variant cRawBuffer::ReadVariant( const cFieldDef& field_def ) const
 {
     if ( IsNull( field_def ) )
         return Variant();
@@ -109,7 +109,7 @@ Variant FASTCALL cRawBuffer::ReadVariant( const cFieldDef& field_def ) const
     }
 }
 
-void FASTCALL cRawBuffer::WriteVariant( const cFieldDef& field_def, const Variant& value )
+void cRawBuffer::WriteVariant( const cFieldDef& field_def, const Variant& value )
 {
     if ( value.IsNull() )
         Nullify( field_def );
@@ -132,7 +132,7 @@ void FASTCALL cRawBuffer::WriteVariant( const cFieldDef& field_def, const Varian
     }
 }
 
-ds_string& FASTCALL cRawBuffer::empty_string()
+ds_string& cRawBuffer::empty_string()
 {
     static  ds_string   empty;
 
@@ -142,18 +142,18 @@ ds_string& FASTCALL cRawBuffer::empty_string()
 //***********************************************************************
 //******    DoubleBuffer
 //***********************************************************************
-CDFASTCALL DoubleBuffer::DoubleBuffer( cFieldDefs *field_defs, bool unmodified )
+DoubleBuffer::DoubleBuffer( cFieldDefs *field_defs, bool unmodified )
     : mOriginalData( field_defs, unmodified ),
       mModifiedData( field_defs, ! unmodified ),
       mUpdateStatus( unmodified ? usUnmodified : usInserted ), mFieldDefs(field_defs)
 {
 }
 
-CDFASTCALL DoubleBuffer::~DoubleBuffer()
+DoubleBuffer::~DoubleBuffer()
 {
 }
 
-void FASTCALL DoubleBuffer::CommitUpdates()
+void DoubleBuffer::CommitUpdates()
 {
     if ( mUpdateStatus != usUnmodified )
     {
@@ -167,19 +167,19 @@ void FASTCALL DoubleBuffer::CommitUpdates()
 //******    Data
 //***********************************************************************
 #if defined(SM_DS_ENABLE_NOTIFY)
-CDFASTCALL Data::Data( IDataNotify *i_notify )
+Data::Data( IDataNotify *i_notify )
     : mData(), mFieldDefs( new cFieldDefs() ), mDeleted( new container ),
       mLockCount( new int(0) ), mRelatedData(this), mTableNotify(i_notify)
 {
 }
 
-CDFASTCALL Data::Data( const cFieldDefs_& field_defs, IDataNotify *i_notify )
+Data::Data( const cFieldDefs_& field_defs, IDataNotify *i_notify )
     : mData(), mFieldDefs( new cFieldDefs( field_defs ) ), mDeleted( new container ),
       mLockCount( new int(0) ), mRelatedData(this), mTableNotify(i_notify)
 {
 }
 
-CDFASTCALL Data::Data( const spFieldDefs& field_defs, const deleted_container& deleted,
+Data::Data( const spFieldDefs& field_defs, const deleted_container& deleted,
                        lock_counter lock_count, IDataNotify *i_notify )
     : mData(), mFieldDefs( field_defs ), mDeleted(deleted),
       mLockCount(lock_count), mRelatedData(this), mTableNotify(i_notify)
@@ -187,23 +187,23 @@ CDFASTCALL Data::Data( const spFieldDefs& field_defs, const deleted_container& d
 }
 
 #else
-CDFASTCALL Data::Data()
+Data::Data()
     : mData(), mFieldDefs( new cFieldDefs() ), mDeleted( new container )
 {
 }
 
-CDFASTCALL Data::Data( const cFieldDefs_& field_defs )
+Data::Data( const cFieldDefs_& field_defs )
     : mData(), mFieldDefs( new cFieldDefs( field_defs ) ), mDeleted( new container )
 {
 }
 
-CDFASTCALL Data::Data( const spFieldDefs& field_defs, const deleted_container& deleted )
+Data::Data( const spFieldDefs& field_defs, const deleted_container& deleted )
     : mData(), mFieldDefs( field_defs ), mDeleted(deleted)
 {
 }
 #endif
 
-CDFASTCALL Data::~Data()
+Data::~Data()
 {
 #if defined(SM_DS_ENABLE_NOTIFY)
     RemoveRelation( this );
@@ -211,7 +211,7 @@ CDFASTCALL Data::~Data()
 }
 
 #if defined(SM_DS_ENABLE_NOTIFY)
-void FASTCALL Data::NotifyRecordAdded( const value_type& value )
+void Data::NotifyRecordAdded( const value_type& value )
 {
     Data    *relation = mRelatedData;
     bool    lock = *mLockCount != 0;
@@ -223,7 +223,7 @@ void FASTCALL Data::NotifyRecordAdded( const value_type& value )
     }
 }
 
-void FASTCALL Data::NotifyRecordDeleted( const value_type& value )
+void Data::NotifyRecordDeleted( const value_type& value )
 {
     Data    *relation = mRelatedData;
 
@@ -234,7 +234,7 @@ void FASTCALL Data::NotifyRecordDeleted( const value_type& value )
     }
 }
 
-void FASTCALL Data::NotifyOpened()
+void Data::NotifyOpened()
 {
     std::vector<IDataNotify *>  notifies;
 
@@ -243,7 +243,7 @@ void FASTCALL Data::NotifyOpened()
         (*it)->DataOpened( *this );
 }
 
-void FASTCALL Data::NotifyClosed()
+void Data::NotifyClosed()
 {
     std::vector<IDataNotify *>  notifies;
 
@@ -252,7 +252,7 @@ void FASTCALL Data::NotifyClosed()
         (*it)->DataClosed();
 }
 
-void FASTCALL Data::NotifyUpdateLockReleased()
+void Data::NotifyUpdateLockReleased()
 {
     Data    *relation = mRelatedData;
 
@@ -263,7 +263,7 @@ void FASTCALL Data::NotifyUpdateLockReleased()
     }
 }
 
-void FASTCALL Data::GetNotifies( std::vector<IDataNotify *>& notifies )
+void Data::GetNotifies( std::vector<IDataNotify *>& notifies )
 {
     Data                        *relation = mRelatedData;
 
@@ -277,12 +277,12 @@ void FASTCALL Data::GetNotifies( std::vector<IDataNotify *>& notifies )
 #endif
 
 #if defined(SM_DS_ENABLE_NOTIFY)
-void FASTCALL Data::LockUpdates()
+void Data::LockUpdates()
 {
     ++(*mLockCount);
 }
 
-void FASTCALL Data::UnlockUpdates()
+void Data::UnlockUpdates()
 {
     int     *count = mLockCount.get();
 
@@ -292,36 +292,36 @@ void FASTCALL Data::UnlockUpdates()
 }
 #endif
 
-void FASTCALL Data::Clear()
+void Data::Clear()
 {
     mData = container();
 }
 
-void FASTCALL Data::CommitUpdates()
+void Data::CommitUpdates()
 {
     for ( iterator n = mData.begin(), eend = mData.end() ; n != eend ; ++n )
         (*n)->CommitUpdates();
 }
 
 // returns a ref counted double buffer, in usUnmodified state, **not** inserted in the container
-Data::value_type FASTCALL Data::NewBuffer_usUnmodified()
+Data::value_type Data::NewBuffer_usUnmodified()
 {
     return Data::value_type( new DoubleBuffer( mFieldDefs.get(), true ) );
 }
 
 // returns a ref counted double buffer, in usInserted state, **not** inserted in the container
-Data::value_type FASTCALL Data::NewBuffer_usInserted()
+Data::value_type Data::NewBuffer_usInserted()
 {
     return Data::value_type( new DoubleBuffer( mFieldDefs.get(), false ) );
 }
 
-int FASTCALL Data::AddBuffer_ptr( const value_type& value )
+int Data::AddBuffer_ptr( const value_type& value )
 {
     mData.push_back( value );
     return ( size() - 1 );
 }
 
-int FASTCALL Data::AddBuffer( const value_type& value )
+int Data::AddBuffer( const value_type& value )
 {
     mData.push_back( value );
 #if defined(SM_DS_ENABLE_NOTIFY)
@@ -331,7 +331,7 @@ int FASTCALL Data::AddBuffer( const value_type& value )
 }
 
 // assume a sorted container and insert it in the right position
-void FASTCALL Data::InsertBuffer_ptr( const value_type& value, spSortCompare& compare )
+void Data::InsertBuffer_ptr( const value_type& value, spSortCompare& compare )
 {
     SortControler       cc = SortControler( compare );
     Data::iterator      rslt = std::lower_bound( mData.begin(), mData.end(), value, cc );
@@ -339,7 +339,7 @@ void FASTCALL Data::InsertBuffer_ptr( const value_type& value, spSortCompare& co
     mData.insert( rslt, value );
 }
 
-void FASTCALL Data::DeleteBuffer_ptr( const value_type& value )
+void Data::DeleteBuffer_ptr( const value_type& value )
 {
     DoubleBuffer    *tmp = value.get();
 
@@ -353,7 +353,7 @@ void FASTCALL Data::DeleteBuffer_ptr( const value_type& value )
     }
 }
 
-void FASTCALL Data::Delete( int idx )
+void Data::Delete( int idx )
 {
     iterator        tmp( mData.begin() + idx );
 
@@ -365,15 +365,15 @@ void FASTCALL Data::Delete( int idx )
     mData.erase( tmp );
 }
 
-void FASTCALL Data::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
+void Data::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
 {
     mFieldDefs->AddField( name, kind, data_type, size );
 }
 
 #if defined(SM_DS_ENABLE_NOTIFY)
-spData FASTCALL Data::Clone_All( IDataNotify *i_notify )
+spData Data::Clone_All( IDataNotify *i_notify )
 #else
-spData FASTCALL Data::Clone_All()
+spData Data::Clone_All()
 #endif
 {
 #if defined(SM_DS_ENABLE_NOTIFY)
@@ -389,12 +389,12 @@ spData FASTCALL Data::Clone_All()
     return result;
 }
 
-void FASTCALL Data::Sort( const SortControler& cmp )
+void Data::Sort( const SortControler& cmp )
 {
     std::sort( mData.begin(), mData.end(), cmp );
 }
 
-void FASTCALL Data::Locate( const OpenValues& values, const OpenFindFields& fields,
+void Data::Locate( const OpenValues& values, const OpenFindFields& fields,
                              iterator begin, iterator end, locate_result& result )
 {
     Data::value_type   tmp_rec = NewBuffer_usInserted();
@@ -417,18 +417,18 @@ void FASTCALL Data::Locate( const OpenValues& values, const OpenFindFields& fiel
         result.second = mData.size();
 }
 
-void FASTCALL Data::Locate( const OpenValues& values, const OpenFindFields& fields, locate_result& result )
+void Data::Locate( const OpenValues& values, const OpenFindFields& fields, locate_result& result )
 {
     Locate( values, fields, mData.begin(), mData.end(), result );
 }
 
-void FASTCALL Data::Locate( const OpenValues& values, const OpenFindFields& fields,
+void Data::Locate( const OpenValues& values, const OpenFindFields& fields,
                              size_type start, size_type end, locate_result& result )
 {
     Locate( values, fields, mData.begin() + start, mData.begin() + end, result );
 }
 
-void FASTCALL Data::Find_0( const Data::value_type& double_buffer, spSortCompare& compare,
+void Data::Find_0( const Data::value_type& double_buffer, spSortCompare& compare,
                              iterator begin, iterator end, locate_result& result )
 {
     SortControler       cc = SortControler( compare );
@@ -441,7 +441,7 @@ void FASTCALL Data::Find_0( const Data::value_type& double_buffer, spSortCompare
         result.second = mData.size();
 }
 
-void FASTCALL Data::Find( const OpenValues& values, spSortCompare& compare,
+void Data::Find( const OpenValues& values, spSortCompare& compare,
                            iterator begin, iterator end, locate_result& result )
 {
     // the comparizon function must be FieldSortCompare. There is no other way to do a Find
@@ -467,18 +467,18 @@ void FASTCALL Data::Find( const OpenValues& values, spSortCompare& compare,
     }
 }
 
-void FASTCALL Data::Find( const OpenValues& values, spSortCompare& compare, locate_result& result )
+void Data::Find( const OpenValues& values, spSortCompare& compare, locate_result& result )
 {
     Find( values, compare, mData.begin(), mData.end(), result );
 }
 
-void FASTCALL Data::Find( const OpenValues& values, spSortCompare& compare,
+void Data::Find( const OpenValues& values, spSortCompare& compare,
                            size_type start, size_type end, locate_result& result )
 {
     Find( values, compare, mData.begin() + start, mData.begin() + end, result );
 }
 
-void FASTCALL Data::GetRange( const OpenRangeValues& values, spSortCompare& compare, range_result& result )
+void Data::GetRange( const OpenRangeValues& values, spSortCompare& compare, range_result& result )
 {
     // the comparizon function must be FieldSortCompare. There is no other way to do a Find
     if ( dynamic_cast<FieldSortCompare *>(compare.get()) == 0 )

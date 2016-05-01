@@ -34,12 +34,12 @@ namespace smds
 //***********************************************************************
 //******    dbGUID
 //***********************************************************************
-CDFASTCALL dbGUID::dbGUID()
+dbGUID::dbGUID()
 {
     std::memset( &mValue, 0, sizeof(detail::dbGUID_Internal) );
 }
 
-CDFASTCALL dbGUID::dbGUID( const detail::dbGUID_Internal& date )
+dbGUID::dbGUID( const detail::dbGUID_Internal& date )
     : mValue(date)
 {
 }

@@ -35,9 +35,9 @@ namespace detail
 
 typedef SQLGUID     dbGUID_Internal;
 
-dbGUID FASTCALL CreateDbGUID( const dbGUID_Internal& guid );
+dbGUID CreateDbGUID( const dbGUID_Internal& guid );
 
-}; // detail
+} // detail
 
 //***********************************************************************
 //******    dbGUID
@@ -45,29 +45,29 @@ dbGUID FASTCALL CreateDbGUID( const dbGUID_Internal& guid );
 class dbGUID
 {
 private:
-    //friend cStream& FASTCALL operator << ( cStream& st, const dbGUID a );
-    //friend cStream& FASTCALL operator >> ( cStream& st, dbGUID& a );
-    friend dbGUID FASTCALL detail::CreateDbGUID( const detail::dbGUID_Internal& guid );
+    //friend cStream& operator << ( cStream& st, const dbGUID a );
+    //friend cStream& operator >> ( cStream& st, dbGUID& a );
+    friend dbGUID detail::CreateDbGUID( const detail::dbGUID_Internal& guid );
 
     detail::dbGUID_Internal     mValue;
 
-    explicit CDFASTCALL dbGUID( const detail::dbGUID_Internal& guid );
+    explicit dbGUID( const detail::dbGUID_Internal& guid );
 public:
-    CDFASTCALL dbGUID();
-    const detail::dbGUID_Internal& FASTCALL AsInternal() const                  { return mValue; }
+    dbGUID();
+    const detail::dbGUID_Internal& AsInternal() const                   { return mValue; }
 };
 
 namespace detail
 {
 
-inline dbGUID FASTCALL CreateDbGUID( const dbGUID_Internal& guid )
+inline dbGUID CreateDbGUID( const dbGUID_Internal& guid )
 {
     return dbGUID( guid );
 }
 
-}; // detail
+} // detail
 
-}; // smds
+} // smds
 //---------------------------------------------------------------------------
 #endif
 

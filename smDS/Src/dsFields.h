@@ -81,7 +81,7 @@ struct cFieldDefs_
     //const cFieldDef     *mBlobFieldDefs;
 };
 
-}; // namespace detail
+} // namespace detail
 
 //***********************************************************************
 //******    cFieldDef
@@ -147,7 +147,7 @@ public:
     const cFieldDef& FASTCALL FieldDef() const       { return ( *mFieldDef ); }
 };
 
-}; // namespace detail
+} // namespace detail
 
 class cFieldDefs
 #ifdef SM_DS_USE_SMALL_SHARED_PTR
@@ -194,7 +194,7 @@ public:
 
 typedef shared_ptr<cFieldDefs>      spFieldDefs;
 
-}; // namespace smds
+} // namespace smds
 
 //---------------------------------------------------------------------------
 #endif
