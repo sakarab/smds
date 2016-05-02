@@ -36,6 +36,7 @@
 #include <boost/smart_ptr.hpp>
 #include "dsConn_Intf.h"
 #include "ODBC_Sub.h"
+#include "odbc_conn_global.h"
 //---------------------------------------------------------------------------
 
 using namespace smds;
@@ -250,12 +251,12 @@ void STDCALL cDataProvider::ExecSql( const char *sql )
 {
 }
 
-}; // end namespace
+} // end namespace
 
 extern "C"
 {
 
-IDatabase * CreateDataConnection( const char *connection_string )
+Q_DECL_EXPORT IDatabase * CreateDataConnection( const char *connection_string )
 {
     if ( Engine.get() == 0 )
     {
@@ -265,12 +266,12 @@ IDatabase * CreateDataConnection( const char *connection_string )
     return ( new cDataConnection( *Engine.get(), connection_string ) );
 }
 
-void DeleteDataConnection( IDatabase *connection )
+Q_DECL_EXPORT void DeleteDataConnection( IDatabase *connection )
 {
     delete connection;
 }
 
-}; // extern "C"
+} // extern "C"
 
 #if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
 int WINAPI DllEntryPoint( HINSTANCE /*hinst*/, unsigned long /*reason*/, void* /*lpReserved*/ )
