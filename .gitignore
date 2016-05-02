@@ -8,8 +8,7 @@ OutC*
 /DataSetOther/SmDS_Gen/OutC6
 *.res
 *.suo
-/smDS/Prj/vs*/*.user
-*.csproj.user
+*.user
 *.bpi
 *.ods
 *.xls
