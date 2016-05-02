@@ -19,8 +19,10 @@ OBJECTS_DIR = $$_PRO_FILE_PWD_/$$PATH_SUFFIX/$$TARGET-obj
 
 LIBS += -L$$_PRO_FILE_PWD_/$$PATH_SUFFIX -lsmds
 
-INCLUDEPATH += ../../Src \
-               ../../Test
+INCLUDEPATH += ../../Test \
+               ../../Src \
+               /home/sam/src/boost \
+               /home/sam/src/libs/ccLib/Src
 
 SOURCES += ../../Test/main_exe.cpp \
            ../../Test/uCompileTest.cpp \

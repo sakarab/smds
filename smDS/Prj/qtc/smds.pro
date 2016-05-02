@@ -23,6 +23,8 @@ CONFIG(debug, debug|release) {
 OBJECTS_DIR = $$_PRO_FILE_PWD_/$$PATH_SUFFIX/$$TARGET-obj
 
 INCLUDEPATH += ../../Src \
+               /home/sam/src/boost \
+               /home/sam/src/libs/ccLib/Src \
                /home/usr/include
 
 SOURCES += ../../Src/dsBuffer.cpp \
