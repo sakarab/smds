@@ -29,25 +29,25 @@
 namespace smds
 {
 
-inline int FASTCALL StringCompare( const char *str1, const char *str2 );
+inline int StringCompare( const char *str1, const char *str2 );
 
 #if defined ( __BORLANDC__ )
-inline int FASTCALL StringCompare( const char *str1, const char *str2 )     { return stricmp( str1, str2 ); }
+inline int StringCompare( const char *str1, const char *str2 )     { return stricmp( str1, str2 ); }
 #endif
 
 #if defined ( _MSC_VER )
-inline int FASTCALL StringCompare( const char *str1, const char *str2 )     { return _stricmp( str1, str2 ); }
+inline int StringCompare( const char *str1, const char *str2 )     { return _stricmp( str1, str2 ); }
 #endif
 
 #if defined ( __GNUG__ )
     #if defined (__WIN32__)
-inline int FASTCALL StringCompare( const char *str1, const char *str2 )     { return stricmp( str1, str2 ); }
+inline int StringCompare( const char *str1, const char *str2 )     { return stricmp( str1, str2 ); }
     #endif
     #if defined (__linux__)
-inline int FASTCALL StringCompare( const char *str1, const char *str2 )     { return strcasecmp( str1, str2 ); }
+inline int StringCompare( const char *str1, const char *str2 )     { return strcasecmp( str1, str2 ); }
     #endif
 #endif
 
-}; // namespace smds
+} // namespace smds
 //---------------------------------------------------------------------------
 #endif

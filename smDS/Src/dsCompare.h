@@ -54,16 +54,16 @@ private:
     friend class smds::Index;
     friend class Data;
     // non copyable
-    CDFASTCALL SortCompare( const SortCompare& src );
-    SortCompare& FASTCALL operator=( const SortCompare& src );
-    virtual bool FASTCALL compare( cRawBuffer *item1, cRawBuffer *item2 ) = 0;
+    SortCompare( const SortCompare& src );
+    SortCompare& operator=( const SortCompare& src );
+    virtual bool compare( cRawBuffer *item1, cRawBuffer *item2 ) = 0;
 protected:
     cFieldDefs              *mFieldDefs;
-    virtual void FASTCALL Initialize( const spFieldDefs& field_defs );
+    virtual void Initialize( const spFieldDefs& field_defs );
 public:
-    CDFASTCALL SortCompare() : mFieldDefs(0)                                    {}  // empty
-    virtual CDFASTCALL ~SortCompare();
-    bool FASTCALL internal_compare( cRawBuffer& item1, cRawBuffer& item2 )
+    SortCompare() : mFieldDefs(0)                                    {}  // empty
+    virtual ~SortCompare();
+    bool internal_compare( cRawBuffer& item1, cRawBuffer& item2 )
     {
 #if defined SM_DS_DEBUG
         ++CompareInvocationCount;
@@ -78,9 +78,9 @@ public:
 //***********************************************************************
 //******    cCompareStd
 //***********************************************************************
-typedef int (FASTCALL *CompareFunction)( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field );
+typedef int (*CompareFunction)( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field );
 
-}; // namespace detail
+} // namespace detail
 
 //***********************************************************************
 //******    FieldSortCompare
@@ -96,7 +96,7 @@ private:
         cIndexField                 *mIndexField;
         const cFieldDef             *mField;
         detail::CompareFunction     mCmpFunc;
-        CDFASTCALL cFieldMapItem( cIndexField *index_field, const cFieldDef& field, detail::CompareFunction cmp_func )
+        cFieldMapItem( cIndexField *index_field, const cFieldDef& field, detail::CompareFunction cmp_func )
             : mIndexField(index_field), mField(&field), mCmpFunc(cmp_func)
         {
         }
@@ -106,8 +106,8 @@ private:
     std::vector<cFieldMapItem>              mFieldMap;
     std::vector<cIndexField>::size_type     mCompareFieldCount;
     // non copyable
-    CDFASTCALL FieldSortCompare( const FieldSortCompare& src );
-    FieldSortCompare& FASTCALL operator=( const FieldSortCompare& src );
+    FieldSortCompare( const FieldSortCompare& src );
+    FieldSortCompare& operator=( const FieldSortCompare& src );
 public:
     class CompareFieldCountGuard
     {
@@ -115,12 +115,12 @@ public:
         FieldSortCompare                        *mIndexSortCompareStd;
         std::vector<cIndexField>::size_type     mOldCompareFieldCount;
     public:
-        CDFASTCALL CompareFieldCountGuard( FieldSortCompare& guarded, std::vector<cIndexField>::size_type new_count )
+        CompareFieldCountGuard( FieldSortCompare& guarded, std::vector<cIndexField>::size_type new_count )
             : mIndexSortCompareStd(&guarded), mOldCompareFieldCount(guarded.mCompareFieldCount)
         {
             guarded.mCompareFieldCount = new_count;
         }
-        CDFASTCALL ~CompareFieldCountGuard()
+        ~CompareFieldCountGuard()
         {
             mIndexSortCompareStd->mCompareFieldCount = mOldCompareFieldCount;
         }
@@ -129,13 +129,13 @@ public:
     friend class CompareFieldCountGuard;
 
 protected:
-    virtual void FASTCALL Initialize( const spFieldDefs& field_defs );
-    virtual bool FASTCALL compare( detail::cRawBuffer *item1, detail::cRawBuffer *item2 );
+    virtual void Initialize( const spFieldDefs& field_defs );
+    virtual bool compare( detail::cRawBuffer *item1, detail::cRawBuffer *item2 );
 public:
-    CDFASTCALL FieldSortCompare( const cIndexField& index_field );
-    CDFASTCALL FieldSortCompare( const OpenIndexFields& index_fields );
-    virtual CDFASTCALL ~FieldSortCompare();
-    const std::vector<cIndexField>& FASTCALL GetIndexFields() const             { return ( mIndexFields ); }
+    FieldSortCompare( const cIndexField& index_field );
+    FieldSortCompare( const OpenIndexFields& index_fields );
+    virtual ~FieldSortCompare();
+    const std::vector<cIndexField>& GetIndexFields() const             { return ( mIndexFields ); }
 };
 
 namespace detail
@@ -153,7 +153,7 @@ private:
         cFindField          *mFindField;
         const cFieldDef     *mField;
         CompareFunction     mCmpFunc;
-        CDFASTCALL cFieldMapItem( cFindField *find_field, const cFieldDef& field, CompareFunction cmp_func )
+        cFieldMapItem( cFindField *find_field, const cFieldDef& field, CompareFunction cmp_func )
             : mFindField(find_field), mField(&field), mCmpFunc(cmp_func)
         {
         }
@@ -161,12 +161,12 @@ private:
     std::vector<cFindField>         mFindFields;
     std::vector<cFieldMapItem>      mFieldMap;
 protected:
-    virtual void FASTCALL Initialize( const spFieldDefs& field_defs );
-    virtual bool FASTCALL compare( cRawBuffer *item1, cRawBuffer *item2 );
+    virtual void Initialize( const spFieldDefs& field_defs );
+    virtual bool compare( cRawBuffer *item1, cRawBuffer *item2 );
 public:
-    CDFASTCALL cFindCompareStd( const cFindField& find_field );
-    CDFASTCALL cFindCompareStd( const OpenFindFields& find_fields );
-    virtual CDFASTCALL ~cFindCompareStd();
+    cFindCompareStd( const cFindField& find_field );
+    cFindCompareStd( const OpenFindFields& find_fields );
+    virtual ~cFindCompareStd();
 };
 
 //***********************************************************************
@@ -181,26 +181,26 @@ private:
     friend class Tablebase;
     friend class Index;
     // non copyable
-    CDFASTCALL cFilterCompareBase( const cFilterCompareBase& src );
-    cFilterCompareBase& FASTCALL operator=( const cFilterCompareBase& src );
+    cFilterCompareBase( const cFilterCompareBase& src );
+    cFilterCompareBase& operator=( const cFilterCompareBase& src );
 protected:
     cFieldDefs              *mFieldDefs;
 
-    virtual void FASTCALL Initialize( const spFieldDefs& );         // no_op
-    virtual bool FASTCALL compare( cRawBuffer *item1 ) = 0;
+    virtual void Initialize( const spFieldDefs& );          // no_op
+    virtual bool compare( cRawBuffer *item1 ) = 0;
 public:
-    CDFASTCALL cFilterCompareBase() : mFieldDefs(0)                 {} // empty
-    virtual CDFASTCALL ~cFilterCompareBase();
-    bool FASTCALL compare( cRawBuffer& item1 )                      { return compare( &item1 ); }
+    cFilterCompareBase() : mFieldDefs(0)                    {} // empty
+    virtual ~cFilterCompareBase();
+    bool compare( cRawBuffer& item1 )                       { return compare( &item1 ); }
 };
 
-}; // namespace detail
+} // namespace detail
 
 //---------------------------------------------------------------------------
 typedef shared_ptr<detail::SortCompare>             spSortCompare;
 typedef shared_ptr<detail::cFilterCompareBase>      cFilterCompareBase_ptr;
 //---------------------------------------------------------------------------
 
-}; // namespace smds
+} // namespace smds
 //---------------------------------------------------------------------------
 #endif

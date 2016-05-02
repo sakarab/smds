@@ -31,7 +31,7 @@ namespace smds
 //***********************************************************************
 //******    WinDllML
 //***********************************************************************
-CDFASTCALL LinuxSoML::LinuxSoML( const char *so_name )
+LinuxSoML::LinuxSoML( const char *so_name )
     : mSo_Guard(so_name)
 {
     mDatabase_Ctor = reinterpret_cast<Database_Ctor>(mSo_Guard.GetProcAddress( "_CreateDataConnection" ));
@@ -40,16 +40,16 @@ CDFASTCALL LinuxSoML::LinuxSoML( const char *so_name )
         throw eDllLoadError();
 }
 
-Database_Ctor FASTCALL LinuxSoML::GetCreateDataConnection()
+Database_Ctor LinuxSoML::GetCreateDataConnection()
 {
     return mDatabase_Ctor;
 }
 
-Database_Dtor FASTCALL LinuxSoML::GetDeleteDataConnection()
+Database_Dtor LinuxSoML::GetDeleteDataConnection()
 {
     return mDatabase_Dtor;
 }
 
-}; // namespace smds
+} // namespace smds
 //---------------------------------------------------------------------------
 

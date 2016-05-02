@@ -38,11 +38,11 @@ namespace detail
 //***********************************************************************
 //******    SortCompare
 //***********************************************************************
-CDFASTCALL SortCompare::~SortCompare()
+SortCompare::~SortCompare()
 {
 }
 
-void FASTCALL SortCompare::Initialize( const spFieldDefs& field_defs )
+void SortCompare::Initialize( const spFieldDefs& field_defs )
 {
 #if defined SM_DS_DEBUG
     CompareInvocationCount = 0;
@@ -58,27 +58,27 @@ int SortCompare::CompareInvocationCount = 0;
 //******    Comparison functions
 //***********************************************************************
 
-int FASTCALL CmpBool( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+int CmpBool( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
     return mItem1->ReadBoolNN( field ) - mItem2->ReadBoolNN( field );
 }
 
-int FASTCALL CmpByte( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+int CmpByte( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
     return mItem1->ReadByteNN( field ) - mItem2->ReadByteNN( field );
 }
 
-int FASTCALL CmpShort( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+int CmpShort( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
     return mItem1->ReadShortNN( field ) - mItem2->ReadShortNN( field );
 }
 
-int FASTCALL CmpInteger( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+int CmpInteger( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
     return mItem1->ReadIntegerNN( field ) - mItem2->ReadIntegerNN( field );
 }
 
-int FASTCALL CmpLongLong( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+int CmpLongLong( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
     long long   val = mItem1->ReadLongLongNN( field ) - mItem2->ReadLongLongNN( field );
     int         result = 0;
@@ -90,7 +90,7 @@ int FASTCALL CmpLongLong( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDe
     return result;
 }
 
-int FASTCALL CmpFloat( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+int CmpFloat( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
     double  val = mItem1->ReadFloatNN( field ) - mItem2->ReadFloatNN( field );
     int     result = 0;
@@ -102,7 +102,7 @@ int FASTCALL CmpFloat( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& 
     return result;
 }
 
-int FASTCALL CmpDate( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+int CmpDate( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
     const detail::dbDate_Internal&      val_one = mItem1->ReadDateNNref( field );
     const detail::dbDate_Internal&      val_two = mItem2->ReadDateNNref( field );
@@ -115,7 +115,7 @@ int FASTCALL CmpDate( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& f
     return result;
 }
 
-int FASTCALL CmpTime( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+int CmpTime( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
     const detail::dbTime_Internal&      val_one = mItem1->ReadTimeNNref( field );
     const detail::dbTime_Internal&      val_two = mItem2->ReadTimeNNref( field );
@@ -128,7 +128,7 @@ int FASTCALL CmpTime( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& f
     return result;
 }
 
-int FASTCALL CmpDateTime( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+int CmpDateTime( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
     const detail::dbDateTime_Internal&      val_one = mItem1->ReadDateTimeNNref( field );
     const detail::dbDateTime_Internal&      val_two = mItem2->ReadDateTimeNNref( field );
@@ -148,7 +148,7 @@ int FASTCALL CmpDateTime( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDe
     return result;
 }
 
-int FASTCALL CmpGUID( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+int CmpGUID( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
     const dbGUID&   val_one = mItem1->ReadGUIDNN( field );
     const dbGUID&   val_two = mItem2->ReadGUIDNN( field );
@@ -156,17 +156,17 @@ int FASTCALL CmpGUID( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& f
     return std::memcmp( &val_one.AsInternal(), &val_two.AsInternal(), sizeof(detail::dbGUID_Internal) );
 }
 
-int FASTCALL CmpString( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+int CmpString( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
     return strcmp( mItem1->ReadStringNN( field ).c_str(), mItem2->ReadStringNN( field ).c_str() );
 }
 
-int FASTCALL CmpString_i( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
+int CmpString_i( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
 {
     return StringCompare( mItem1->ReadStringNN( field ), mItem2->ReadStringNN( field ) );
 }
 
-CompareFunction FASTCALL GetCompareFunction( const cFieldDef& field, cFindField::CaseOption case_option )
+CompareFunction GetCompareFunction( const cFieldDef& field, cFindField::CaseOption case_option )
 {
     switch ( field.DataType() )
     {
@@ -187,18 +187,18 @@ CompareFunction FASTCALL GetCompareFunction( const cFieldDef& field, cFindField:
     }
 }
 
-}; // namespace detail
+} // namespace detail
 
 //***********************************************************************
 //******    FieldSortCompare
 //***********************************************************************
-CDFASTCALL FieldSortCompare::FieldSortCompare( const cIndexField& index_field )
+FieldSortCompare::FieldSortCompare( const cIndexField& index_field )
     : mIndexFields(), mFieldMap(), mCompareFieldCount(1)
 {
     mIndexFields.push_back( index_field );
 }
 
-CDFASTCALL FieldSortCompare::FieldSortCompare( const OpenIndexFields& index_fields )
+FieldSortCompare::FieldSortCompare( const OpenIndexFields& index_fields )
     : mIndexFields(), mFieldMap(), mCompareFieldCount(index_fields.GetCount())
 {
     const cIndexField     **ptr = index_fields.GetArray();
@@ -210,11 +210,11 @@ CDFASTCALL FieldSortCompare::FieldSortCompare( const OpenIndexFields& index_fiel
     }
 }
 
-CDFASTCALL FieldSortCompare::~FieldSortCompare()
+FieldSortCompare::~FieldSortCompare()
 {
 }
 
-void FASTCALL FieldSortCompare::Initialize( const spFieldDefs& field_defs )
+void FieldSortCompare::Initialize( const spFieldDefs& field_defs )
 {
     inherited::Initialize( field_defs );
     mFieldMap.clear();
@@ -227,7 +227,7 @@ void FASTCALL FieldSortCompare::Initialize( const spFieldDefs& field_defs )
     }
 }
 
-bool FASTCALL FieldSortCompare::compare( detail::cRawBuffer *item1, detail::cRawBuffer *item2 )
+bool FieldSortCompare::compare( detail::cRawBuffer *item1, detail::cRawBuffer *item2 )
 {
     std::vector<cFieldMapItem>::value_type  *first = &mFieldMap[0];
     std::vector<cFieldMapItem>::value_type  *last  = first + mCompareFieldCount;
@@ -254,13 +254,13 @@ namespace detail
 //***********************************************************************
 //******    cFindCompareStd
 //***********************************************************************
-CDFASTCALL cFindCompareStd::cFindCompareStd( const cFindField& find_field )
+cFindCompareStd::cFindCompareStd( const cFindField& find_field )
     : mFindFields(), mFieldMap()
 {
     mFindFields.push_back( find_field );
 }
 
-CDFASTCALL cFindCompareStd::cFindCompareStd( const OpenFindFields& find_fields )
+cFindCompareStd::cFindCompareStd( const OpenFindFields& find_fields )
     : mFindFields(), mFieldMap()
 {
     const cFindField        **ptr = find_fields.GetArray();
@@ -272,11 +272,11 @@ CDFASTCALL cFindCompareStd::cFindCompareStd( const OpenFindFields& find_fields )
     }
 }
 
-CDFASTCALL cFindCompareStd::~cFindCompareStd()
+cFindCompareStd::~cFindCompareStd()
 {
 }
 
-void FASTCALL cFindCompareStd::Initialize( const spFieldDefs& field_defs )
+void cFindCompareStd::Initialize( const spFieldDefs& field_defs )
 {
     SortCompare::Initialize( field_defs );
     mFieldMap.clear();
@@ -289,7 +289,7 @@ void FASTCALL cFindCompareStd::Initialize( const spFieldDefs& field_defs )
     }
 }
 
-bool FASTCALL cFindCompareStd::compare( cRawBuffer *item1, cRawBuffer *item2 )
+bool cFindCompareStd::compare( cRawBuffer *item1, cRawBuffer *item2 )
 {
     std::vector<cFieldMapItem>::iterator    first = mFieldMap.begin();
     std::vector<cFieldMapItem>::iterator    last  = mFieldMap.end();
@@ -311,16 +311,16 @@ bool FASTCALL cFindCompareStd::compare( cRawBuffer *item1, cRawBuffer *item2 )
 //***********************************************************************
 //******    cFilterCompareBase
 //***********************************************************************
-CDFASTCALL cFilterCompareBase::~cFilterCompareBase()
+cFilterCompareBase::~cFilterCompareBase()
 {
 }
 
-void FASTCALL cFilterCompareBase::Initialize( const spFieldDefs& )
+void cFilterCompareBase::Initialize( const spFieldDefs& )
 {
 }
 
 //---------------------------------------------------------------------------
-}; // namespace detail
+} // namespace detail
 
-}; // namespace smds
+} // namespace smds
 //---------------------------------------------------------------------------

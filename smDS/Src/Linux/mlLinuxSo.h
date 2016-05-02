@@ -43,13 +43,13 @@ private:
         So_Guard( const So_Guard& src );
         So_Guard& operator = ( const So_Guard& src );
     public:
-        CDFASTCALL So_Guard( const char *so_name )
+        So_Guard( const char * /*so_name*/ )
         {
         }
-        CDFASTCALL ~So_Guard()
+        ~So_Guard()
         {
         }
-        void * FASTCALL GetProcAddress( const char * proc_name )
+        void * GetProcAddress( const char * /*proc_name*/ )
         {
             return 0;
         }
@@ -59,16 +59,16 @@ private:
     Database_Ctor           mDatabase_Ctor;
     Database_Dtor           mDatabase_Dtor;
 
-    virtual Database_Ctor FASTCALL GetCreateDataConnection();
-    virtual Database_Dtor FASTCALL GetDeleteDataConnection();
+    virtual Database_Ctor GetCreateDataConnection();
+    virtual Database_Dtor GetDeleteDataConnection();
 
     // noncpyable
     LinuxSoML( const LinuxSoML& src );
     LinuxSoML& operator = ( const LinuxSoML& src );
 public:
-    CDFASTCALL LinuxSoML( const char *so_name );
+    LinuxSoML( const char *so_name );
 };
 
-}; // namespace smds
+} // namespace smds
 //---------------------------------------------------------------------------
 #endif
