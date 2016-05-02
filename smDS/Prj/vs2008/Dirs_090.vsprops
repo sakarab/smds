@@ -16,7 +16,7 @@
 	/>
 	<UserMacro
 		Name="BOOST_DIR"
-		Value="G:\Src\boost_1_56_0"
+		Value="G:\Src\boost_1_59_0"
 		PerformEnvironmentSet="true"
 	/>
 	<UserMacro
@@ -47,6 +47,21 @@
 	<UserMacro
 		Name="OPENSSL_LIB"
 		Value="$(OPENSSL_DIR)\vs2008\$(ConfigurationName)"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="OPENSSL_DIR_2"
+		Value="G:\Src\Libs\openssl_new\w32"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="OPENSSL_INC_2"
+		Value="$(OPENSSL_DIR_2)\inc32"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="OPENSSL_LIB_2"
+		Value="$(OPENSSL_DIR_2)\vs2008\$(ConfigurationName)"
 		PerformEnvironmentSet="true"
 	/>
 	<UserMacro
@@ -252,6 +267,36 @@
 	<UserMacro
 		Name="SCI_INC"
 		Value="$(QSCI_DIR)\Sci\include"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="CCLIB_DIR"
+		Value="G:\Src\Libs\ccLib"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="CCLIB_INC"
+		Value="$(CCLIB_DIR)\Src"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="CCLIB_LIB_T"
+		Value="$(CCLIB_DIR)\vs2008"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="CCLIB_LIB"
+		Value="$(CCLIB_DIR)\vs2008\$(ConfigurationName)"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="CCLIB_RTL_LIB"
+		Value="$(CCLIB_DIR)\vs2008\$(ConfigurationName)_RTL"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="CCLIB_LIB_LIB"
+		Value="$(CCLIB_DIR)\vs2008\$(ConfigurationName)_Static"
 		PerformEnvironmentSet="true"
 	/>
 </VisualStudioPropertySheet>

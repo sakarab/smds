@@ -23,6 +23,7 @@
 #pragma hdrstop
 #endif
 
+#include "pre_test.h"
 #include "uProfile.h"
 #include <dsTypedData.h>
 #include <boost/timer.hpp>

@@ -23,6 +23,7 @@
 #pragma hdrstop
 #endif
 
+#include "pre_test.h"
 #include "uUntypedTest.h"
 //---------------------------------------------------------------------------
 

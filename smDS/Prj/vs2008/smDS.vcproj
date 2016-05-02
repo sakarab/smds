@@ -18,11 +18,11 @@
 	<Configurations>
 		<Configuration
 			Name="Debug_RTL|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
+			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			InheritedPropertySheets=".\Dbg_090.vsprops;.\Dirs_090.vsprops"
-			CharacterSet="2"
+			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -44,6 +44,8 @@
 				AdditionalIncludeDirectories="..\..\Src;&quot;$(BOOST_INC)&quot;;&quot;$(LOKI_INC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				RuntimeLibrary="3"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="pre_smDS.h"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -76,8 +78,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release_RTL|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
+			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			InheritedPropertySheets=".\Rel_090.vsprops;.\Dirs_090.vsprops"
 			CharacterSet="0"
@@ -103,7 +105,8 @@
 				AdditionalIncludeDirectories="..\..\Src;&quot;$(BOOST_INC)&quot;;&quot;$(LOKI_INC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
-				DebugInformationFormat="3"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="pre_smDS.h"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -136,11 +139,11 @@
 		</Configuration>
 		<Configuration
 			Name="Debug_Static|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
+			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			InheritedPropertySheets=".\Dbg_090.vsprops;.\Dirs_090.vsprops"
-			CharacterSet="2"
+			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -162,6 +165,8 @@
 				AdditionalIncludeDirectories="..\..\Src;&quot;$(BOOST_INC)&quot;;&quot;$(LOKI_INC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				RuntimeLibrary="1"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="pre_smDS.h"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -194,8 +199,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release_Static|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
+			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			InheritedPropertySheets=".\Rel_090.vsprops;.\Dirs_090.vsprops"
 			CharacterSet="0"
@@ -221,7 +226,8 @@
 				AdditionalIncludeDirectories="..\..\Src;&quot;$(BOOST_INC)&quot;;&quot;$(LOKI_INC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
-				DebugInformationFormat="3"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="pre_smDS.h"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -333,6 +339,42 @@
 				RelativePath="..\..\Src\Win32\mlWinDll.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\Src\pre_smDS.cpp"
+				>
+				<FileConfiguration
+					Name="Debug_RTL|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_RTL|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug_Static|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_Static|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -441,6 +483,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Src\Win32\mlWinDll.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Src\pre_smDS.h"
 				>
 			</File>
 			<File

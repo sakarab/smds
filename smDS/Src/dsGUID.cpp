@@ -23,6 +23,7 @@
 #pragma hdrstop
 #endif
 
+#include "pre_smDS.h"
 #include "dsGUID.h"
 #include <memory>
 #include <cstring>

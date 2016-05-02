@@ -97,7 +97,7 @@ private:
     class cIndexSortCompare : public detail::SortCompare
     {
     private:
-        virtual bool FASTCALL compare( detail::cRawBuffer *item1, detail::cRawBuffer *item2 )
+        virtual bool compare( detail::cRawBuffer *item1, detail::cRawBuffer *item2 )
         {
 #ifdef __BORLANDC__
             return typed_compare( RECORD::raw( *item1 ), RECORD::raw( *item2 ) );

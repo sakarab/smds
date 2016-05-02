@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="smDS_ODBCConn_v9"
+	Name="smDS_ODBCConn"
 	ProjectGUID="{B0133E44-982D-4B3F-BD61-BA985385E8F5}"
 	RootNamespace="smDS_ODBCConn_v8"
 	Keyword="Win32Proj"
@@ -18,11 +18,11 @@
 	<Configurations>
 		<Configuration
 			Name="Debug_RTL|Win32"
-			OutputDirectory="$(SolutionDir)..\..\Bin\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
 			InheritedPropertySheets=".\Dbg_090.vsprops;.\Dirs_090.vsprops"
-			CharacterSet="2"
+			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -86,8 +86,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release_RTL|Win32"
-			OutputDirectory="$(SolutionDir)..\..\Bin\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
 			InheritedPropertySheets=".\Rel_090.vsprops;.\Dirs_090.vsprops"
 			CharacterSet="0"
@@ -155,11 +155,11 @@
 		</Configuration>
 		<Configuration
 			Name="Debug_Static|Win32"
-			OutputDirectory="$(SolutionDir)..\..\Bin\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
 			InheritedPropertySheets=".\Dbg_090.vsprops;.\Dirs_090.vsprops"
-			CharacterSet="2"
+			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -223,8 +223,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release_Static|Win32"
-			OutputDirectory="$(SolutionDir)..\..\Bin\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
 			InheritedPropertySheets=".\Rel_090.vsprops;.\Dirs_090.vsprops"
 			CharacterSet="0"

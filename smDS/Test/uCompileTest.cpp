@@ -23,6 +23,7 @@
 #pragma hdrstop
 #endif
 
+#include "pre_test.h"
 #include "uCompileTest.h"
 #include <dsData.h>
 #include <dsIndex.h>

@@ -22,6 +22,7 @@
 #pragma hdrstop
 #endif
 
+#include "pre_smDS.h"
 #include "dsData.h"
 #include "dsExceptions.h"
 #include "dsIndex.h"

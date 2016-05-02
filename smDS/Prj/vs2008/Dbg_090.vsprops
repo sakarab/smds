@@ -7,7 +7,7 @@
 	<Tool
 		Name="VCCLCompilerTool"
 		Optimization="0"
-		PreprocessorDefinitions="_SCL_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;NO_CDFASTCALL"
+		PreprocessorDefinitions="_SCL_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_CRT_NON_CONFORMING_SWPRINTFS;NO_CDFASTCALL;NOMINMAX"
 		StringPooling="true"
 		BasicRuntimeChecks="3"
 		RuntimeLibrary="3"
@@ -26,6 +26,16 @@
 	<UserMacro
 		Name="D"
 		Value="d"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="DV"
+		Value="G:"
+		PerformEnvironmentSet="true"
+	/>
+	<UserMacro
+		Name="BUILD"
+		Value="Debug"
 		PerformEnvironmentSet="true"
 	/>
 </VisualStudioPropertySheet>

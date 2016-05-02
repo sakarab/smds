@@ -22,6 +22,8 @@
 #ifndef __GNUG__
 #pragma hdrstop
 #endif
+
+#include "pre_smDS.h"
 #include "dsExceptions.h"
 //---------------------------------------------------------------------------
 namespace smds

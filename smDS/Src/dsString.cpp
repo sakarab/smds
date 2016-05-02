@@ -23,6 +23,7 @@
 #pragma hdrstop
 #endif
 
+#include "pre_smDS.h"
 #include "dsString.h"
 #include <boost/scoped_array.hpp>
 //---------------------------------------------------------------------------

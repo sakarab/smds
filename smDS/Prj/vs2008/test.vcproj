@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="test_v9"
+	Name="test"
 	ProjectGUID="{FE9B361B-A52B-4C7C-B05B-0BF5B3C662CA}"
 	RootNamespace="smDS_v8exe"
 	Keyword="Win32Proj"
@@ -18,11 +18,11 @@
 	<Configurations>
 		<Configuration
 			Name="Debug_RTL|Win32"
-			OutputDirectory="$(SolutionDir)..\..\Bin\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			InheritedPropertySheets=".\Dbg_090.vsprops;.\Dirs_090.vsprops"
-			CharacterSet="2"
+			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -44,6 +44,8 @@
 				AdditionalIncludeDirectories="..\..\Test;..\..\Src;&quot;$(LOKI_INC)&quot;;&quot;$(BOOST_INC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				RuntimeLibrary="3"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="pre_test.h"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -86,8 +88,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release_RTL|Win32"
-			OutputDirectory="$(SolutionDir)..\..\Bin\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			InheritedPropertySheets=".\Rel_090.vsprops;.\Dirs_090.vsprops"
 			CharacterSet="0"
@@ -113,7 +115,8 @@
 				AdditionalIncludeDirectories="..\..\Src;&quot;$(LOKI_INC)&quot;;&quot;$(BOOST_INC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
-				DebugInformationFormat="3"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="pre_test.h"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -128,7 +131,6 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="Loki.lib"
 				AdditionalLibraryDirectories="$(LOKI_LIB)"
-				GenerateDebugInformation="true"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				TargetMachine="1"
@@ -158,11 +160,11 @@
 		</Configuration>
 		<Configuration
 			Name="Debug_Static|Win32"
-			OutputDirectory="$(SolutionDir)..\..\Bin\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			InheritedPropertySheets=".\Dbg_090.vsprops;.\Dirs_090.vsprops"
-			CharacterSet="2"
+			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -184,6 +186,8 @@
 				AdditionalIncludeDirectories="..\..\Test;..\..\Src;&quot;$(LOKI_INC)&quot;;&quot;$(BOOST_INC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				RuntimeLibrary="1"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="pre_test.h"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -226,8 +230,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release_Static|Win32"
-			OutputDirectory="$(SolutionDir)..\..\Bin\$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			InheritedPropertySheets=".\Rel_090.vsprops;.\Dirs_090.vsprops"
 			CharacterSet="0"
@@ -253,7 +257,8 @@
 				AdditionalIncludeDirectories="..\..\Src;&quot;$(LOKI_INC)&quot;;&quot;$(BOOST_INC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="0"
-				DebugInformationFormat="3"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="pre_test.h"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -268,7 +273,6 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="Loki.lib"
 				AdditionalLibraryDirectories="$(LOKI_LIB)"
-				GenerateDebugInformation="true"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				TargetMachine="1"
@@ -310,6 +314,42 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Test\pre_test.cpp"
+				>
+				<FileConfiguration
+					Name="Debug_RTL|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_RTL|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug_Static|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release_Static|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\Test\uCompileTest.cpp"
 				>
 			</File>
@@ -343,6 +383,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\..\Test\pre_test.h"
+				>
+			</File>
 			<File
 				RelativePath="..\..\Test\uCompileTest.h"
 				>
