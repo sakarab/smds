@@ -41,7 +41,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\Src;&quot;$(BOOST_INC)&quot;;&quot;$(LOKI_INC)&quot;"
+				AdditionalIncludeDirectories="..\..\Src;&quot;$(CCLIB_INC)&quot;;&quot;$(BOOST_INC)&quot;;&quot;$(LOKI_INC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
@@ -102,7 +102,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\Src;&quot;$(BOOST_INC)&quot;;&quot;$(LOKI_INC)&quot;"
+				AdditionalIncludeDirectories="..\..\Src;&quot;$(CCLIB_INC)&quot;;&quot;$(BOOST_INC)&quot;;&quot;$(LOKI_INC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -162,7 +162,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\Src;&quot;$(BOOST_INC)&quot;;&quot;$(LOKI_INC)&quot;"
+				AdditionalIncludeDirectories="..\..\Src;&quot;$(CCLIB_INC)&quot;;&quot;$(BOOST_INC)&quot;;&quot;$(LOKI_INC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
@@ -223,7 +223,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\Src;&quot;$(BOOST_INC)&quot;;&quot;$(LOKI_INC)&quot;"
+				AdditionalIncludeDirectories="..\..\Src;&quot;$(CCLIB_INC)&quot;;&quot;$(BOOST_INC)&quot;;&quot;$(LOKI_INC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"

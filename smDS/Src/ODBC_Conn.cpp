@@ -27,6 +27,7 @@
     #include <windows.h>
 #endif
 
+#include <predef_cc.h>
 #include <memory>
 #include <string>
 #include <vector>
@@ -98,10 +99,10 @@ protected:
     virtual bool STDCALL Eof();
     virtual void STDCALL Next();
 
-    virtual std::size_t STDCALL GetFieldCount() override;
+    virtual std::size_t STDCALL GetFieldCount() CC_OVERRIDE;
     virtual void STDCALL GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
                                              std::size_t& name_buffer_required_length,
-                                             unsigned int& field_data_size, int& field_data_type ) override;
+                                             unsigned int& field_data_size, int& field_data_type ) CC_OVERRIDE;
 
     virtual bool STDCALL GetFieldValues( IFieldValuesAcceptor *values_acceptor );
 

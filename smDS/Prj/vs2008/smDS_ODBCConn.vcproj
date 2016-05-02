@@ -41,7 +41,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(BOOST_INC)&quot;"
+				AdditionalIncludeDirectories="&quot;$(CCLIB_INC)&quot;;&quot;$(BOOST_INC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V8_EXPORTS"
 				RuntimeLibrary="3"
 			/>
@@ -110,7 +110,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(BOOST_INC)&quot;"
+				AdditionalIncludeDirectories="&quot;$(CCLIB_INC)&quot;;&quot;$(BOOST_INC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V8_EXPORTS"
 				RuntimeLibrary="2"
 			/>
@@ -178,7 +178,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(BOOST_INC)&quot;"
+				AdditionalIncludeDirectories="&quot;$(CCLIB_INC)&quot;;&quot;$(BOOST_INC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V8_EXPORTS"
 				RuntimeLibrary="1"
 			/>
@@ -247,7 +247,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(BOOST_INC)&quot;"
+				AdditionalIncludeDirectories="&quot;$(CCLIB_INC)&quot;;&quot;$(BOOST_INC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V8_EXPORTS"
 				RuntimeLibrary="0"
 			/>
