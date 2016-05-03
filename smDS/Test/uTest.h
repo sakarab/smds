@@ -24,24 +24,29 @@
 //---------------------------------------------------------------------------
 #include <dsData.h>
 #include "uTables.h"
+#include <boost/predef.h>
 //---------------------------------------------------------------------------
-#if defined(__BORLANDC__)
-    #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn_b6.dll"
-#elif ( _MSC_VER == 1310 )
-    #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn_v7.dll"
-#elif ( _MSC_VER == 1400 )
-    #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn_v8.dll"
-#elif ( _MSC_VER == 1500 )
-    #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn_v9.dll"
-#elif ( _MSC_VER == 1600 )
-    #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn_v10.dll"
-#elif ( _MSC_VER == 1800 )
-    #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn.dll"
-#elif ( _MSC_VER == 1900 )
-    #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn.dll"
-#elif defined (__GNUG__ )
-    //#define SM_DS_TEST_BACKEND      "ODBC_Conn_gcc.dll"
-    #define SM_DS_TEST_BACKEND      "smDS_ODBCConn_cbx.dll"
+#if (BOOST_OS_WINDOWS == BOOST_VERSION_NUMBER_AVAILABLE)
+
+    #if defined(__BORLANDC__)
+        #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn_b6.dll"
+    #elif ( _MSC_VER == 1310 )
+        #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn_v7.dll"
+    #elif ( _MSC_VER == 1400 )
+        #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn_v8.dll"
+    #elif ( _MSC_VER == 1500 )
+        #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn_v9.dll"
+    #elif ( _MSC_VER == 1600 )
+        #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn_v10.dll"
+    #elif ( _MSC_VER == 1800 )
+        #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn.dll"
+    #elif ( _MSC_VER == 1900 )
+        #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn.dll"
+    #endif
+
+#elif (BOOST_OS_LINUX == BOOST_VERSION_NUMBER_AVAILABLE)
+    #define SM_DS_TEST_BACKEND          "./libODBC_Conn.so"
+    //#define SM_DS_TEST_BACKEND      "smDS_ODBCConn_cbx.dll"
 #endif
 
 typedef void (FASTCALL *ErrorReporter)( void *user_data, const char *error );

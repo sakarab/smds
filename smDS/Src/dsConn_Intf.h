@@ -106,7 +106,7 @@ public:
 typedef IDatabase * (*Database_Ctor)( const char *connection_string );
 typedef void        (*Database_Dtor)( IDatabase *db_engine );
 //---------------------------------------------------------------------------
-};
+}
 
 #endif
 

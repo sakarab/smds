@@ -44,6 +44,7 @@ public:
 
     const char *MessageChars() const                            { return ( mMessage.c_str() ); }
     const ds_string& Message() const                            { return ( mMessage ); }
+    const char *what() const noexcept override                  { return mMessage.c_str(); }
 };
 
 class eDebug : public eExceptionBase

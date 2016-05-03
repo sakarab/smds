@@ -11,6 +11,14 @@
 
 #include <fstream>
 
+#if (BOOST_OS_LINUX == BOOST_VERSION_NUMBER_AVAILABLE)
+    #define TEST_CONNECTION_STRING      ODBC_Access_DirData_Conn
+#elif (BOOST_OS_WINDOWS == BOOST_VERSION_NUMBER_AVAILABLE)
+    #define TEST_CONNECTION_STRING      ODBC_Access_DirData_Conn
+#else
+    #error "Unkown operating system"
+#endif
+
 using namespace smds;
 
 //--------------------------------------------------------------------
@@ -165,7 +173,7 @@ void FASTCALL ErrorReporter_( void *user_data, const char *error )
 {
 }
 
-};
+}
 
 int main()
 {
@@ -181,7 +189,7 @@ int main()
         try
         {
             DbEngine                engine( module_loader );
-            Database                database = engine.NewConnection( ODBC_Access_DirData_Conn );
+            Database                database = engine.NewConnection( TEST_CONNECTION_STRING );
 
             TestAlign();
 

@@ -25,6 +25,7 @@
 #include "dsConfig.h"
 #include "dsModuleLoad.h"
 #include "dsExceptions.h"
+#include <dlfcn.h>
 //---------------------------------------------------------------------------
 
 namespace smds
@@ -39,19 +40,35 @@ private:
     class So_Guard
     {
     private:
+        void    *mHandle;
         // noncpyable
         So_Guard( const So_Guard& src );
         So_Guard& operator = ( const So_Guard& src );
     public:
-        So_Guard( const char * /*so_name*/ )
+        So_Guard( const char *so_name )
+            : mHandle(dlopen( so_name, RTLD_NOW ))
         {
+            if ( mHandle == 0 )
+            {
+                const char  *aa = dlerror();
+
+                if ( aa == 0 )
+                    throw eDllLoadError( "Unable to load ODBC_Conn" );
+                else
+                    throw eDllLoadError( aa );
+            }
         }
         ~So_Guard()
         {
+            dlclose( mHandle );
         }
-        void * GetProcAddress( const char * /*proc_name*/ )
+        void * GetProcAddress( const char *proc_name )
         {
-            return 0;
+            void    *result = dlsym( mHandle, proc_name );
+
+            if ( result == 0 )
+                throw eDllLoadError( "function not found in ODBC_Conn" );
+            return result;
         }
     };
 

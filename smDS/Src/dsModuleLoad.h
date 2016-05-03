@@ -44,7 +44,7 @@ public:
     virtual CDFASTCALL ~IModuleLoader()                                 {} // empty
 };
 
-}; // namespace smds
+} // namespace smds
 
 #if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
     #include "Win32/mlWinDll.h"
@@ -67,10 +67,10 @@ namespace smds
     #error "No platform specified"
 #endif
 
-typedef shared_ptr<OsModuleLoader>  spModuleLoader;
+typedef shared_ptr<OsModuleLoader>      spModuleLoader;
 spModuleLoader FASTCALL GetOsModuleLoader( const char *dll_name );
 
-}; // namespace smds
+} // namespace smds
 
 //---------------------------------------------------------------------------
 #endif

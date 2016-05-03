@@ -17,7 +17,7 @@ CONFIG(debug, debug|release) {
 
 OBJECTS_DIR = $$_PRO_FILE_PWD_/$$PATH_SUFFIX/$$TARGET-obj
 
-LIBS += -L$$_PRO_FILE_PWD_/$$PATH_SUFFIX -lsmds
+LIBS += -L$$_PRO_FILE_PWD_/$$PATH_SUFFIX -lsmds -ldl
 
 INCLUDEPATH += ../../Test \
                ../../Src \
@@ -39,5 +39,6 @@ HEADERS += ../../Test/uCompileTest.h \
            ../../Test/uProfile1.h \
            ../../Test/uTables.h \
            ../../Test/uTest.h \
-           ../../Test/uUntypedTest.h
+           ../../Test/uUntypedTest.h \
+           ../../Test/pre_test.h
 

@@ -34,4 +34,4 @@ spModuleLoader FASTCALL GetOsModuleLoader( const char *dll_name )
     return spModuleLoader( new OsModuleLoader( dll_name ) );
 }
 
-}; // namespace smds
+} // namespace smds

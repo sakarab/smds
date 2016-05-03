@@ -8,12 +8,16 @@ QT       -= gui
 
 TARGET = ODBC_Conn
 TEMPLATE = lib
+CONFIG += dll
 
 DEFINES += ODBC_CONN_LIBRARY
 DEFINES += LINUX
 DEFINES += NO_FASTCALL
 DEFINES += NO_CDFASTCALL
 DEFINES += NO_STDCALL
+
+#QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden
+#QMAKE_LFLAGS_SHLIB += -fvisibility=hidden -fvisibility-inlines-hidden
 
 CONFIG(debug, debug|release) {
     PATH_SUFFIX = Debug
@@ -22,6 +26,8 @@ CONFIG(debug, debug|release) {
 }
 
 OBJECTS_DIR = $$_PRO_FILE_PWD_/$$PATH_SUFFIX/$$TARGET-obj
+
+LIBS += -liodbc
 
 INCLUDEPATH += ../../Src \
                /home/sam/src/boost \

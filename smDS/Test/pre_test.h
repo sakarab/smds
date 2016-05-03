@@ -31,5 +31,6 @@
 #include <algorithm>
 #include <boost/smart_ptr.hpp>
 #include <boost/variant.hpp>
+#include <boost/predef.h>
 //---------------------------------------------------------------------------
 #endif

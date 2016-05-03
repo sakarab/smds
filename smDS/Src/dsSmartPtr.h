@@ -78,7 +78,7 @@ public:
     template<class Y> shared_ptr(shared_ptr<Y> const & r) : inherited( r )      {} // empty
 };
 
-};
+}
 
 #if ! defined ( __BORLANDC__ )
 namespace std

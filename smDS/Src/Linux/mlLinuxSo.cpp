@@ -29,15 +29,13 @@ namespace smds
 {
 
 //***********************************************************************
-//******    WinDllML
+//******    LinuxSoML
 //***********************************************************************
 LinuxSoML::LinuxSoML( const char *so_name )
     : mSo_Guard(so_name)
 {
-    mDatabase_Ctor = reinterpret_cast<Database_Ctor>(mSo_Guard.GetProcAddress( "_CreateDataConnection" ));
-    mDatabase_Dtor = reinterpret_cast<Database_Dtor>(mSo_Guard.GetProcAddress( "_DeleteDataConnection" ));
-    if ( mDatabase_Ctor == 0 || mDatabase_Dtor == 0 )
-        throw eDllLoadError();
+    mDatabase_Ctor = reinterpret_cast<Database_Ctor>(mSo_Guard.GetProcAddress( "CreateDataConnection" ));
+    mDatabase_Dtor = reinterpret_cast<Database_Dtor>(mSo_Guard.GetProcAddress( "DeleteDataConnection" ));
 }
 
 Database_Ctor LinuxSoML::GetCreateDataConnection()
@@ -52,4 +50,3 @@ Database_Dtor LinuxSoML::GetDeleteDataConnection()
 
 } // namespace smds
 //---------------------------------------------------------------------------
-
