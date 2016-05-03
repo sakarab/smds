@@ -314,6 +314,7 @@
     <ClCompile Include="..\..\Src\ODBC_Sub.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Src\odbc_conn_global.h" />
     <ClInclude Include="..\..\Src\ODBC_Sub.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

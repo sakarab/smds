@@ -1,12 +1,14 @@
 #ifndef ODBC_CONN_GLOBAL_H
 #define ODBC_CONN_GLOBAL_H
 
-//#include <QtCore/qglobal.h>
 #include <boost/predef.h>
 
 #if (BOOST_OS_WINDOWS == BOOST_VERSION_NUMBER_AVAILABLE)
-#    define Q_DECL_EXPORT     __declspec(dllexport)
-#    define Q_DECL_IMPORT     __declspec(dllimport)
+// USE def file on Windows
+//#    define Q_DECL_EXPORT     __declspec(dllexport)
+//#    define Q_DECL_IMPORT     __declspec(dllimport)
+#    define Q_DECL_EXPORT
+#    define Q_DECL_IMPORT
 #elif (BOOST_OS_LINUX == BOOST_VERSION_NUMBER_AVAILABLE)
 #    define Q_DECL_EXPORT     __attribute__((visibility("default")))
 #    define Q_DECL_IMPORT     __attribute__((visibility("default")))
