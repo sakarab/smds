@@ -24,3 +24,6 @@ insert.sql
 *.ico
 *.ncb
 /odb
+vs2017.props
+Dbg_100.props
+Rel_100.props

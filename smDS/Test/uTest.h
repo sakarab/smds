@@ -42,7 +42,9 @@
         #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn.dll"
     #elif ( _MSC_VER == 1900 )
         #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn.dll"
-    #endif
+    #elif ( _MSC_VER > 1900 )
+        #define SM_DS_TEST_BACKEND      "SmDS_ODBCConn.dll"
+#endif
 
 #elif (BOOST_OS_LINUX == BOOST_VERSION_NUMBER_AVAILABLE)
     #define SM_DS_TEST_BACKEND          "./libODBC_Conn.so"
