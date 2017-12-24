@@ -1,4 +1,0 @@
-{TODO -osakarab : Predefined fields must be default aligned. Added fields must have alignment one (1)}
-{DONE -osakarab : make cRawBuffer::raw_data() non public}
-
- 
