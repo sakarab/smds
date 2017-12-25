@@ -39,6 +39,7 @@
     <ProjectGuid>{B0133E44-982D-4B3F-BD61-BA985385E8F5}</ProjectGuid>
     <RootNamespace>smDS_ODBCConn_v8</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'" Label="Configuration">
@@ -92,53 +93,53 @@
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Rel_100.props" />
+    <Import Project="smDS_ODBCConn.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'" Label="PropertySheets">
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Rel_100.props" />
+    <Import Project="smDS_ODBCConn.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'" Label="PropertySheets">
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Dbg_100.props" />
+    <Import Project="smDS_ODBCConn.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'" Label="PropertySheets">
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Dbg_100.props" />
+    <Import Project="smDS_ODBCConn.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|Win32'" Label="PropertySheets">
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Rel_100.props" />
+    <Import Project="smDS_ODBCConn.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|x64'" Label="PropertySheets">
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Rel_100.props" />
+    <Import Project="smDS_ODBCConn.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'" Label="PropertySheets">
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Dbg_100.props" />
+    <Import Project="smDS_ODBCConn.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|x64'" Label="PropertySheets">
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Dbg_100.props" />
+    <Import Project="smDS_ODBCConn.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_RTL|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_RTL|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'" />
@@ -164,25 +165,12 @@
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'" />
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|x64'">
-    <OutDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|x64'">
-    <OutDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">
-    <OutDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">
-    <OutDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
-  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(BOOST_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V8_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
@@ -197,7 +185,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(BOOST_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V8_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
@@ -212,7 +199,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(BOOST_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V8_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
@@ -227,7 +213,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(BOOST_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V8_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
@@ -242,7 +227,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(BOOST_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V8_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -257,7 +241,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(BOOST_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V8_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -272,7 +255,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(BOOST_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V8_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -287,7 +269,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(BOOST_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SMDS_ODBCCONN_V8_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>

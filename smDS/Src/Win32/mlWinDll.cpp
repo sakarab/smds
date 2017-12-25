@@ -24,7 +24,7 @@
 #endif
 
 #include "pre_smDS.h"
-#include "mlWinDll.h"
+#include "Win32/mlWinDll.h"
 //---------------------------------------------------------------------------
 namespace smds
 {

@@ -38,6 +38,7 @@
     <ProjectGuid>{F50B2B2E-2D19-4045-A560-36F69C34C0D1}</ProjectGuid>
     <RootNamespace>smDSv8lib</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'" Label="Configuration">
@@ -91,53 +92,53 @@
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Rel_100.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'" Label="PropertySheets">
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Rel_100.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'" Label="PropertySheets">
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Dbg_100.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'" Label="PropertySheets">
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Dbg_100.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|Win32'" Label="PropertySheets">
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Rel_100.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|x64'" Label="PropertySheets">
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Rel_100.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'" Label="PropertySheets">
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Dbg_100.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|x64'" Label="PropertySheets">
     <Import Project=".\vs2017.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Dbg_100.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_RTL|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_RTL|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'" />
@@ -163,25 +164,12 @@
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'" />
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|x64'">
-    <OutDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|x64'">
-    <OutDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">
-    <OutDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">
-    <OutDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\</OutDir>
-    <IntDir>$(SolutionDir)$(Configuration)_$(PlatformArchitecture)\$(ProjectName)\</IntDir>
-  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\Src;$(BOOST_INC);$(LOKI_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -193,7 +181,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\Src;$(BOOST_INC);$(LOKI_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -205,10 +192,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\Src;$(BOOST_INC);$(LOKI_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pre_smDS.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -218,10 +203,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\Src;$(BOOST_INC);$(LOKI_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pre_smDS.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -231,7 +214,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\Src;$(BOOST_INC);$(LOKI_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -243,7 +225,6 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\Src;$(BOOST_INC);$(LOKI_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -255,10 +236,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\Src;$(BOOST_INC);$(LOKI_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pre_smDS.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -268,10 +247,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\Src;$(BOOST_INC);$(LOKI_INC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pre_smDS.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -310,34 +287,34 @@
     <ClCompile Include="..\..\Src\Win32\mlWinDll.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Src\dsBuffer.h" />
-    <ClInclude Include="..\..\Src\dsCommon.h" />
-    <ClInclude Include="..\..\Src\dsCompare.h" />
-    <ClInclude Include="..\..\Src\dsCompareControlers.h" />
-    <ClInclude Include="..\..\Src\dsConfig.h" />
-    <ClInclude Include="..\..\Src\dsConn.h" />
-    <ClInclude Include="..\..\Src\dsConn_Intf.h" />
-    <ClInclude Include="..\..\Src\dsData.h" />
-    <ClInclude Include="..\..\Src\dsDateTime.h" />
-    <ClInclude Include="..\..\Src\dsExceptions.h" />
-    <ClInclude Include="..\..\Src\dsFields.h" />
-    <ClInclude Include="..\..\Src\dsGUID.h" />
-    <ClInclude Include="..\..\Src\dsIndex.h" />
-    <ClInclude Include="..\..\Src\dsModuleLoad.h" />
-    <ClInclude Include="..\..\Src\dsODBCtypes.h" />
-    <ClInclude Include="..\..\Src\dsRecord.h" />
-    <ClInclude Include="..\..\Src\dsSerialization.h" />
-    <ClInclude Include="..\..\Src\dsSmartPtr.h" />
-    <ClInclude Include="..\..\Src\dsStream.h" />
-    <ClInclude Include="..\..\Src\dsString.h" />
-    <ClInclude Include="..\..\Src\dsSysOpen.h" />
-    <ClInclude Include="..\..\Src\dsTypedData.h" />
-    <ClInclude Include="..\..\Src\dsTypes.h" />
-    <ClInclude Include="..\..\Src\dsUtils.h" />
-    <ClInclude Include="..\..\Src\dsVariant.h" />
+    <ClInclude Include="..\..\include\dsBuffer.h" />
+    <ClInclude Include="..\..\include\dsCommon.h" />
+    <ClInclude Include="..\..\include\dsCompare.h" />
+    <ClInclude Include="..\..\include\dsCompareControlers.h" />
+    <ClInclude Include="..\..\include\dsConfig.h" />
+    <ClInclude Include="..\..\include\dsConn.h" />
+    <ClInclude Include="..\..\include\dsConn_Intf.h" />
+    <ClInclude Include="..\..\include\dsData.h" />
+    <ClInclude Include="..\..\include\dsDateTime.h" />
+    <ClInclude Include="..\..\include\dsExceptions.h" />
+    <ClInclude Include="..\..\include\dsFields.h" />
+    <ClInclude Include="..\..\include\dsGUID.h" />
+    <ClInclude Include="..\..\include\dsIndex.h" />
+    <ClInclude Include="..\..\include\dsModuleLoad.h" />
+    <ClInclude Include="..\..\include\dsODBCtypes.h" />
+    <ClInclude Include="..\..\include\dsRecord.h" />
+    <ClInclude Include="..\..\include\dsSerialization.h" />
+    <ClInclude Include="..\..\include\dsSmartPtr.h" />
+    <ClInclude Include="..\..\include\dsStream.h" />
+    <ClInclude Include="..\..\include\dsString.h" />
+    <ClInclude Include="..\..\include\dsSysOpen.h" />
+    <ClInclude Include="..\..\include\dsTypedData.h" />
+    <ClInclude Include="..\..\include\dsTypes.h" />
+    <ClInclude Include="..\..\include\dsUtils.h" />
+    <ClInclude Include="..\..\include\dsVariant.h" />
+    <ClInclude Include="..\..\include\shared_in_ptr.hpp" />
+    <ClInclude Include="..\..\include\Win32\mlWinDll.h" />
     <ClInclude Include="..\..\Src\pre_smDS.h" />
-    <ClInclude Include="..\..\Src\Win32\mlWinDll.h" />
-    <ClInclude Include="..\..\Src\shared_in_ptr.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
