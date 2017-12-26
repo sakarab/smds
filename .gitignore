@@ -28,3 +28,5 @@ insert.sql
 vs2017.props
 Dbg_100.props
 Rel_100.props
+/smDS/Prj/qtc-Release
+/smDS/Prj/qtc-Debug

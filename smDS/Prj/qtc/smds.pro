@@ -17,9 +17,9 @@ DEFINES += NO_STDCALL
 include (user_config.pri)
 
 CONFIG(debug, debug|release) {
-    PATH_SUFFIX = Debug
+    PATH_SUFFIX = ../qtc-Debug
 } else {
-    PATH_SUFFIX = Release
+    PATH_SUFFIX = ../qtc-Release
 }
 
 OBJECTS_DIR = $$_PRO_FILE_PWD_/$$PATH_SUFFIX/$$TARGET-obj
@@ -27,8 +27,12 @@ OBJECTS_DIR = $$_PRO_FILE_PWD_/$$PATH_SUFFIX/$$TARGET-obj
 INCLUDEPATH += ../../Src \
                ../../include \
                $$ROOT_BOOST \
-               $$ROOT_CCLIB/Src \
-               ~/usr/include
+               $$ROOT_LOKI\include \
+               $$ROOT_CCLIB/Src
+
+unix {
+    INCLUDEPATH += ~/usr/include
+}
 
 SOURCES += ../../Src/dsBuffer.cpp \
            ../../Src/dsCompare.cpp \
@@ -46,8 +50,14 @@ SOURCES += ../../Src/dsBuffer.cpp \
            ../../Src/dsStream.cpp \
            ../../Src/dsString.cpp \
            ../../Src/dsUtils.cpp \
-           ../../Src/Linux/mlLinuxSo.cpp \
            ../../Src/dsVariant.cpp
+
+unix {
+    SOURCES += ../../Src/Linux/mlLinuxSo.cpp
+}
+win32 {
+    SOURCES += ../../Src/Win32/mlWinDll.cpp
+}
 
 HEADERS += ../../include/dsBuffer.h \
            ../../include/dsCommon.h \

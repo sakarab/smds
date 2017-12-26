@@ -32,7 +32,7 @@ namespace smds
 //***********************************************************************
 //******    WinDllML
 //***********************************************************************
-CDFASTCALL WinDllML::WinDllML( const char *dll_name )
+CDFASTCALL WinDllML::WinDllML( const wchar_t *dll_name )
     : mDll_Guard(dll_name)
 {
     mDatabase_Ctor = reinterpret_cast<Database_Ctor>(mDll_Guard.GetProcAddress( "_CreateDataConnection" ));
@@ -51,6 +51,6 @@ Database_Dtor FASTCALL WinDllML::GetDeleteDataConnection()
     return mDatabase_Dtor;
 }
 
-}; // namespace smds
+} // namespace smds
 //---------------------------------------------------------------------------
 

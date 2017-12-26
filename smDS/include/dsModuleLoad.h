@@ -68,7 +68,7 @@ namespace smds
 #endif
 
 typedef shared_ptr<OsModuleLoader>      spModuleLoader;
-spModuleLoader FASTCALL GetOsModuleLoader( const char *dll_name );
+spModuleLoader FASTCALL GetOsModuleLoader( const wchar_t *dll_name );
 
 } // namespace smds
 
