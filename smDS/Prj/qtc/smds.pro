@@ -9,7 +9,6 @@ QT       -= gui
 TARGET = smds
 TEMPLATE = lib
 CONFIG += staticlib
-DEFINES += LINUX
 DEFINES += NO_FASTCALL
 DEFINES += NO_CDFASTCALL
 DEFINES += NO_STDCALL
@@ -31,7 +30,11 @@ INCLUDEPATH += ../../Src \
                $$ROOT_CCLIB/Src
 
 unix {
+    DEFINES += LINUX
     INCLUDEPATH += ~/usr/include
+}
+win32 {
+    DEFINES -= UNICODE
 }
 
 SOURCES += ../../Src/dsBuffer.cpp \
