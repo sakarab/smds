@@ -23,7 +23,7 @@
 #pragma hdrstop
 #endif
 
-#include "mlLinuxSo.h"
+#include "Linux/mlLinuxSo.h"
 //---------------------------------------------------------------------------
 namespace smds
 {

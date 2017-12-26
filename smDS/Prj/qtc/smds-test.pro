@@ -28,6 +28,7 @@ INCLUDEPATH += ../../Test \
 
 unix {
     DEFINES += LINUX
+    INCLUDEPATH += /usr/include/iodbc
 }
 win32 {
     DEFINES -= UNICODE

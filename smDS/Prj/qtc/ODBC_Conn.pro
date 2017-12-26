@@ -35,7 +35,8 @@ INCLUDEPATH += ../../Src \
 
 unix {
     DEFINES += LINUX
-    INCLUDEPATH += ~/usr/include
+    INCLUDEPATH += /usr/include
+    INCLUDEPATH += /usr/include/iodbc
     LIBS += -liodbc
 }
 win32 {
