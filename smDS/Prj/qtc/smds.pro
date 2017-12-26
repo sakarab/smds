@@ -14,6 +14,8 @@ DEFINES += NO_FASTCALL
 DEFINES += NO_CDFASTCALL
 DEFINES += NO_STDCALL
 
+include (user_config.pri)
+
 CONFIG(debug, debug|release) {
     PATH_SUFFIX = Debug
 } else {
@@ -23,9 +25,10 @@ CONFIG(debug, debug|release) {
 OBJECTS_DIR = $$_PRO_FILE_PWD_/$$PATH_SUFFIX/$$TARGET-obj
 
 INCLUDEPATH += ../../Src \
-               /home/sam/src/boost \
-               /home/sam/src/libs/ccLib/Src \
-               /home/usr/include
+               ../../include \
+               $$ROOT_BOOST \
+               $$ROOT_CCLIB/Src \
+               ~/usr/include
 
 SOURCES += ../../Src/dsBuffer.cpp \
            ../../Src/dsCompare.cpp \
@@ -46,32 +49,32 @@ SOURCES += ../../Src/dsBuffer.cpp \
            ../../Src/Linux/mlLinuxSo.cpp \
            ../../Src/dsVariant.cpp
 
-HEADERS += ../../Src/dsBuffer.h \
-           ../../Src/dsCommon.h \
-           ../../Src/dsCompare.h \
-           ../../Src/dsCompareControlers.h \
-           ../../Src/dsConfig.h \
-           ../../Src/dsConn.h \
-           ../../Src/dsConn_Intf.h \
-           ../../Src/dsData.h \
-           ../../Src/dsDateTime.h \
-           ../../Src/dsExceptions.h \
-           ../../Src/dsFields.h \
-           ../../Src/dsGUID.h \
-           ../../Src/dsIndex.h \
-           ../../Src/dsModuleLoad.h \
-           ../../Src/dsODBCtypes.h \
-           ../../Src/dsRecord.h \
-           ../../Src/dsSerialization.h \
-           ../../Src/dsSmartPtr.h \
-           ../../Src/dsStream.h \
-           ../../Src/dsString.h \
-           ../../Src/dsSysOpen.h \
-           ../../Src/dsTypedData.h \
-           ../../Src/dsTypes.h \
-           ../../Src/dsUtils.h \
-           ../../Src/Linux/mlLinuxSo.h \
-           ../../Src/dsVariant.h
+HEADERS += ../../include/dsBuffer.h \
+           ../../include/dsCommon.h \
+           ../../include/dsCompare.h \
+           ../../include/dsCompareControlers.h \
+           ../../include/dsConfig.h \
+           ../../include/dsConn.h \
+           ../../include/dsConn_Intf.h \
+           ../../include/dsData.h \
+           ../../include/dsDateTime.h \
+           ../../include/dsExceptions.h \
+           ../../include/dsFields.h \
+           ../../include/dsGUID.h \
+           ../../include/dsIndex.h \
+           ../../include/dsModuleLoad.h \
+           ../../include/dsODBCtypes.h \
+           ../../include/dsRecord.h \
+           ../../include/dsSerialization.h \
+           ../../include/dsSmartPtr.h \
+           ../../include/dsStream.h \
+           ../../include/dsString.h \
+           ../../include/dsSysOpen.h \
+           ../../include/dsTypedData.h \
+           ../../include/dsTypes.h \
+           ../../include/dsUtils.h \
+           ../../include/Linux/mlLinuxSo.h \
+           ../../include/dsVariant.h
 
 unix {
     target.path = /usr/lib

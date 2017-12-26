@@ -15,6 +15,7 @@ OutC*
 *.zip
 /smDS/Prj/qtc/Debug
 /smDS/Prj/qtc/Release
+/smDS/Prj/qtc/user_config.pri
 .vs
 *.opendb
 *.db
