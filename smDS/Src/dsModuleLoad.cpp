@@ -19,17 +19,13 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_smDS.h"
 #include "dsModuleLoad.h"
 //---------------------------------------------------------------------------
 namespace smds
 {
 
-spModuleLoader FASTCALL GetOsModuleLoader( const char *dll_name )
+spModuleLoader FASTCALL GetOsModuleLoader( const std_char *dll_name )
 {
     return spModuleLoader( new OsModuleLoader( dll_name ) );
 }

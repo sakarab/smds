@@ -19,10 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_test.h"
 #include "uProfile1.h"
 //---------------------------------------------------------------------------
@@ -45,7 +41,7 @@ void FASTCALL FillTable( Database& database, tblFiles_ptr& ds )
 //******************************************************
 tblFiles::index_ptr FASTCALL CreateIndex_OneInt( tblFiles_ptr& ds )
 {
-    return ds->NewIndex( cIndexField( "PathID", cIndexField::Descending ) );
+    return ds->NewIndex( cIndexField( CCLIB_STRING( "PathID" ), cIndexField::Descending ) );
 }
 
 //******************************************************
@@ -53,7 +49,7 @@ tblFiles::index_ptr FASTCALL CreateIndex_OneInt( tblFiles_ptr& ds )
 //******************************************************
 tblFiles::index_ptr FASTCALL CreateIndex_TwoInts( tblFiles_ptr& ds )
 {
-    return ds->NewIndex( OpenIndexFields( cIndexField( "fSize" ), cIndexField( "PathID", cIndexField::Descending ) ) );
+    return ds->NewIndex( OpenIndexFields( cIndexField( CCLIB_STRING( "fSize" ) ), cIndexField( CCLIB_STRING( "PathID" ), cIndexField::Descending ) ) );
 }
 
 tblFiles::index_ptr FASTCALL CreateIndex_TwoInts_Other( tblFiles_ptr& ds )
@@ -61,7 +57,7 @@ tblFiles::index_ptr FASTCALL CreateIndex_TwoInts_Other( tblFiles_ptr& ds )
 #if defined ( _MSC_VER )
     tblFiles::iterator  it = ds->GetIterator();
 #endif
-    return ds->NewIndex( OpenIndexFields( cIndexField( "fSize" ), cIndexField( "PathID", cIndexField::Descending ) ) );
+    return ds->NewIndex( OpenIndexFields( cIndexField( CCLIB_STRING( "fSize" ) ), cIndexField( CCLIB_STRING( "PathID" ), cIndexField::Descending ) ) );
 }
 
 //******************************************************
@@ -149,7 +145,7 @@ void FASTCALL AddRecords_OneIndex( tblFiles_ptr& ds, const ds_string& descr )
 bool FASTCALL LocateRecord_Two( tblFiles_ptr& ds )
 {
     tblFiles::iterator  iter = ds->Locate( OpenValues( 19998, 19998 ),
-                                           OpenFindFields( "FileID", "PathID" ) );
+                                           OpenFindFields( CCLIB_STRING( "FileID" ), CCLIB_STRING( "PathID" ) ) );
     return ! iter.eof();
 }
 

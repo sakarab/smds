@@ -45,7 +45,7 @@ private:
         Dll_Guard( const Dll_Guard& src );
         Dll_Guard& operator = ( const Dll_Guard& src );
     public:
-        CDFASTCALL Dll_Guard( const char *dll_name )
+        CDFASTCALL Dll_Guard( const std_char *dll_name )
             : mDLL(::LoadLibrary( dll_name ))
         {
             if ( mDLL == 0 )
@@ -73,7 +73,7 @@ private:
     WinDllML( const WinDllML& src );
     WinDllML& operator = ( const WinDllML& src );
 public:
-    CDFASTCALL WinDllML( const char *dll_name );
+    CDFASTCALL WinDllML( const std_char *dll_name );
 };
 
 }; // namespace smds

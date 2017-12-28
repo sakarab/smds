@@ -25,6 +25,7 @@
 #include "dsConfig.h"
 #include "dsSmartPtr.h"
 #include "dsConn_Intf.h"
+#include <cpp_string.h>
 //---------------------------------------------------------------------------
 namespace smds
 {
@@ -68,7 +69,7 @@ namespace smds
 #endif
 
 typedef shared_ptr<OsModuleLoader>      spModuleLoader;
-spModuleLoader FASTCALL GetOsModuleLoader( const char *dll_name );
+spModuleLoader FASTCALL GetOsModuleLoader( const std_char *dll_name );
 
 } // namespace smds
 

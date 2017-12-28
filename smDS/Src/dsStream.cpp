@@ -19,10 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_smDS.h"
 #include "dsStream.h"
 #include "dsExceptions.h"
@@ -206,7 +202,17 @@ cStream& FASTCALL operator << ( cStream& st, const char *a )
     st << size;
     if ( size != 0 )
         st.WriteBuffer( a, size );
-    return ( st );
+    return st;
+}
+
+cStream& FASTCALL operator << ( cStream& st, const std_string& a )
+{
+    unsigned int    size = a.size();
+
+    st << size;
+    if ( size != 0 )
+        st.WriteBuffer( a.c_str(), size * sizeof( std_char ) );
+    return st;
 }
 
 //--    Read    ----
@@ -214,6 +220,22 @@ cStream& FASTCALL operator << ( cStream& st, const char *a )
 //{
 //    return ( st );
 //}
+
+cStream& FASTCALL operator >> ( cStream& st, std_string& a )
+{
+    unsigned int    size;
+
+    st >> size;
+    if ( size != 0 )
+    {
+        boost::scoped_array<std_char>       buffer( new std_char[size + 1] );
+
+        st.ReadBuffer( buffer.get(), size * sizeof( std_char ) );
+        buffer[size] = 0;
+        a = buffer.get();
+    }
+    return st;
+}
 
 //***********************************************************************
 //******    cMemoryStream

@@ -19,10 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_test.h"
 #include "uUntypedTest.h"
 //---------------------------------------------------------------------------
@@ -54,7 +50,7 @@ void FASTCALL ForLoop( record_iterator ptr )
 int FASTCALL CountNulls_1( record_iterator ptr )
 {
     int                 result = 0;
-    const cFieldDef&    zipID_field = ptr.GetFieldDefs()->FieldByName( "zipID" );
+    const cFieldDef&    zipID_field = ptr.GetFieldDefs()->FieldByName( CCLIB_STRING( "zipID" ) );
 
     ptr.First();
     for ( int n = 0, end = ptr.RecordCount() ; n < end ; ++n, ++ptr )
@@ -72,7 +68,7 @@ int FASTCALL CountNulls_2( record_iterator ptr )
 
     ptr.First();
     for ( int n = 0, end = ptr.RecordCount() ; n < end ; ++n, ++ptr )
-        if ( ptr.FieldByName( "zipID" )->IsNull() )
+        if ( ptr.FieldByName( CCLIB_STRING( "zipID" ) )->IsNull() )
             ++result;
     return result;
 }
@@ -82,9 +78,9 @@ int FASTCALL CountNulls_2( record_iterator ptr )
 //***********************************************************************
 void FASTCALL dsDatasetModify_1( record_iterator ds, const ds_string& descr )
 {
-    const cFieldDef&    FileID_field = ds.GetFieldDefs()->FieldByName( "FileID" );
-    const cFieldDef&    fSize_field = ds.GetFieldDefs()->FieldByName( "fSize" );
-    const cFieldDef&    Description_field = ds.GetFieldDefs()->FieldByName( "Description" );
+    const cFieldDef&    FileID_field = ds.GetFieldDefs()->FieldByName( CCLIB_STRING( "FileID" ) );
+    const cFieldDef&    fSize_field = ds.GetFieldDefs()->FieldByName( CCLIB_STRING( "fSize" ) );
+    const cFieldDef&    Description_field = ds.GetFieldDefs()->FieldByName( CCLIB_STRING( "Description" ) );
     const Variant       vdescr( descr );
 
     ds.First();
@@ -109,15 +105,15 @@ using namespace untyped;
 
 void FASTCALL UntypedTest( Database& database )
 {
-    spTable     table( new Table( "tblFiles" ) );
+    spTable     table( new Table( CCLIB_STRING( "tblFiles" ) ) );
 
-    table->AddField( "FileID",       fkData, ftInteger,  4 );
-    table->AddField( "PathID",       fkData, ftInteger,  4 );
-    table->AddField( "LongFileName", fkData, ftString,   255 );
-    table->AddField( "fSize",        fkData, ftInteger,  4 );
-    table->AddField( "fDate",        fkData, ftDateTime, 8 );
-    table->AddField( "Description",  fkData, ftString,   255 );
-    table->AddField( "zipID",        fkData, ftInteger,  4 );
+    table->AddField( CCLIB_STRING( "FileID" ),       fkData, ftInteger,  4 );
+    table->AddField( CCLIB_STRING( "PathID" ),       fkData, ftInteger,  4 );
+    table->AddField( CCLIB_STRING( "LongFileName" ), fkData, ftString,   255 );
+    table->AddField( CCLIB_STRING( "fSize" ),        fkData, ftInteger,  4 );
+    table->AddField( CCLIB_STRING( "fDate" ),        fkData, ftDateTime, 8 );
+    table->AddField( CCLIB_STRING( "Description" ),  fkData, ftString,   255 );
+    table->AddField( CCLIB_STRING( "zipID" ),        fkData, ftInteger,  4 );
 
     table->Open( database, 0 );
 

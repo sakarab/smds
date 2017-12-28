@@ -19,10 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_test.h"
 #include "uCompileTest.h"
 #include <dsData.h>
@@ -45,7 +41,7 @@ void Tutorial()
     DbEngine                engine( module_loader );
 
     // connect to database
-    Database        database = engine.NewConnection( "" );
+    Database        database = engine.NewConnection( CCLIB_STRING( "" ) );
 
     // Create and open the dataset
     tblFiles_ptr    ds( new tblFiles() );
@@ -71,7 +67,7 @@ void Tutorial()
     }
 
     // Create an index on "PathID" and "fSize" fields
-    tblFiles::index_ptr     idx = ds->NewIndex( OpenIndexFields( cIndexField( "PathID" ), cIndexField( "fSize" ) ) );
+    tblFiles::index_ptr     idx = ds->NewIndex( OpenIndexFields( cIndexField( CCLIB_STRING( "PathID" ) ), cIndexField( CCLIB_STRING( "fSize" ) ) ) );
 
     // find - binary search - a record with PathID == 27 and fSize == 45000
     tblFiles::index::iterator   idx_it = idx->Find( OpenValues( 27, 45000 ) );

@@ -19,10 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
     #include <windows.h>
 #endif
@@ -31,6 +27,7 @@
 #include <boost/smart_ptr.hpp>
 #include "dsConn_Intf.h"
 #include "dsCommon.h"
+#include <cpp_lpstr.h>
 //---------------------------------------------------------------------------
 
 using namespace smds;
@@ -140,7 +137,7 @@ const TypeRaw * FASTCALL TypeRawFromODBCtype( SWORD odbc_data_type )
 //***********************************************************************
 //******    ODBC_Field
 //***********************************************************************
-CDFASTCALL ODBC_Field::ODBC_Field( const std::string name, const TypeRaw *data_type, UDWORD precision, SWORD scale, SWORD nullable )
+CDFASTCALL ODBC_Field::ODBC_Field( const std_string& name, const TypeRaw *data_type, UDWORD precision, SWORD scale, SWORD nullable )
     : m_ODBC_type(data_type->OdbcType), mPrecision(precision), mScale(scale), mNullable(nullable), mIndicator(0),
       mName(name), mVecBuff() // mVecBuff( precision <= BUFFER_SWITCH ? 0 : data_size )
 {
@@ -165,6 +162,11 @@ CDFASTCALL ODBC_Field::ODBC_Field( const std::string name, const TypeRaw *data_t
         mDataSize = precision;
     if ( mDataSize > BUFFER_SWITCH )
         mVecBuff.resize( mDataSize <= LONG_DATA ? mDataSize : LONG_DATA_BUFFER );
+}
+
+CDFASTCALL ODBC_Field::ODBC_Field( const std_char *name, const TypeRaw *data_type, UDWORD precision, SWORD scale, SWORD nullable )
+    : ODBC_Field( std_string( name ), data_type, precision, scale, nullable )
+{
 }
 
 CDFASTCALL ODBC_Field::~ODBC_Field()
@@ -218,16 +220,18 @@ CDFASTCALL ODBC_Connection::~ODBC_Connection()
     SQLFreeHandle( SQL_HANDLE_DBC, mConnection );
 }
 
-void FASTCALL ODBC_Connection::Connect( const char *connection_string )
-{
-    short                               len = static_cast<short>(strlen(connection_string));
-    short                               new_len;
-    boost::scoped_ptr<unsigned char>    tmp_conn_str( new unsigned char[len + 1] );
-    unsigned char                       conn_str_out[1024];
+#if ! defined (ARRAY_COUNT)
+    #define ARRAY_COUNT(a)      (sizeof(a)/sizeof(a[0]))
+#endif
 
-    std::strcpy( reinterpret_cast<char *>(tmp_conn_str.get()), connection_string );
-    CheckReturn( SQLDriverConnect( mConnection, 0, tmp_conn_str.get(), len,
-                 conn_str_out,  sizeof(conn_str_out)-1, &new_len, SQL_DRIVER_NOPROMPT ) );
+void FASTCALL ODBC_Connection::Connect( const std_char *connection_string )
+{
+    std_string      tmp_conn_str_2( connection_string );
+    short           new_len;
+    std_char        conn_str_out[1024];
+
+    CheckReturn( SQLDriverConnect( mConnection, 0, const_cast<std_char *>(tmp_conn_str_2.c_str()), tmp_conn_str_2.length(),
+                                   conn_str_out, ARRAY_COUNT( conn_str_out ) - 1, &new_len, SQL_DRIVER_NOPROMPT ) );
     mConnected = true;
 }
 
@@ -254,41 +258,36 @@ CDFASTCALL ODBC_Statement::~ODBC_Statement()
     SQLFreeHandle( SQL_HANDLE_STMT, mStatement );
 }
 
-void FASTCALL ODBC_Statement::GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+void FASTCALL ODBC_Statement::GetFieldAttributes( int idx, std_char *name, unsigned int name_buffer_length,
                                                   std::size_t& name_buffer_required_length,
                                                   unsigned int& field_data_size, int& field_data_type )
 {
-    ODBC_Field&     field = mFields[idx];
-    std::size_t     copy_len;
+    ODBC_Field&                 field = mFields[idx];
+    std_string::const_iterator  it = field.GetName().begin();
 
     if ( name_buffer_length > field.GetName().length() )
-        copy_len = field.GetName().length();
+        it = field.GetName().end();
     else
-        copy_len = name_buffer_length - 1;
+        std::advance( it, name_buffer_length - 1 );
 
-    std::strncpy( name, field.GetName().c_str(), copy_len );
-    name[name_buffer_length - 1] = '\0';
+    *std::copy( field.GetName().begin(), it, name ) = '\0';
     name_buffer_required_length = field.GetName().length() + 1;
     field_data_size = field.GetDataSize();
     field_data_type = field.DS_Type();
 }
 
-void FASTCALL ODBC_Statement::ExecSql( const char *sql )
+void FASTCALL ODBC_Statement::ExecSql( const std_char *sql )
 {
     mIsEof = false;
 
-    boost::scoped_array<unsigned char>  tmp_sql( new unsigned char[strlen(sql) + 1] );
-
-    std::strcpy( reinterpret_cast<char *>(tmp_sql.get()), sql );
-
-    CheckReturn( SQLExecDirect( mStatement, tmp_sql.get(), SQL_NTS ) );
+    CheckReturn( SQLExecDirect( mStatement, cclib::LPSTR( sql ).get(), SQL_NTS ) );
 
     SWORD    nCols;                      // # of result columns
 
     CheckReturn( SQLNumResultCols( mStatement, &nCols ) );
 
-    std::vector<char>   field_name( 50 );
-    SWORD               field_name_size = static_cast<SWORD>(field_name.size());
+    std::vector<std_char>   field_name( 50 );
+    SWORD                   field_name_size = static_cast<SWORD>(field_name.size());
 
     for ( SWORD n = 1 ; n <= nCols ; ++n )
     {
@@ -298,14 +297,14 @@ void FASTCALL ODBC_Statement::ExecSql( const char *sql )
         SWORD   nullable;                   // nullable column ?
         SWORD   name_length;                // column data length
 
-        SQLRETURN   ret = CheckReturn( SQLDescribeCol( mStatement, n, reinterpret_cast<unsigned char *>(&field_name.front()),
+        SQLRETURN   ret = CheckReturn( SQLDescribeCol( mStatement, n, reinterpret_cast<std_char *>(&field_name.front()),
                                                        field_name_size, &name_length, &data_type, &precision, &scale,
                                                        &nullable ) );
         if ( ret == SQL_SUCCESS_WITH_INFO )
         {
             field_name.resize( name_length + 1 + (name_length + 1) / 2 );
             field_name_size = static_cast<SWORD>(field_name.size());
-            CheckReturn( SQLDescribeCol( mStatement, n, reinterpret_cast<unsigned char *>(&field_name.front()), field_name_size,
+            CheckReturn( SQLDescribeCol( mStatement, n, reinterpret_cast<std_char *>(&field_name.front()), field_name_size,
                                          &name_length, &data_type, &precision, &scale, &nullable ) );
         }
         mFields.push_back( ODBC_Field( &field_name.front(), TypeRawFromODBCtype( data_type ), precision, scale, nullable ) );
@@ -336,7 +335,7 @@ void FASTCALL ODBC_Statement::Next()
     mIsEof = nReturn != SQL_SUCCESS;
 }
 
-ODBC_Field * FASTCALL ODBC_Statement::FieldByName( const char *field_name )
+ODBC_Field * FASTCALL ODBC_Statement::FieldByName( const std_char *field_name )
 {
     for ( std::vector<ODBC_Field>::iterator it = mFields.begin(), eend = mFields.end() ; it != eend ; ++it )
         if ( StringCompare( it->GetName().c_str(), field_name ) == 0 )

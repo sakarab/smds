@@ -19,10 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_smDS.h"
 #include "Win32/mlWinDll.h"
 //---------------------------------------------------------------------------
@@ -32,7 +28,7 @@ namespace smds
 //***********************************************************************
 //******    WinDllML
 //***********************************************************************
-CDFASTCALL WinDllML::WinDllML( const char *dll_name )
+CDFASTCALL WinDllML::WinDllML( const std_char *dll_name )
     : mDll_Guard(dll_name)
 {
     mDatabase_Ctor = reinterpret_cast<Database_Ctor>(mDll_Guard.GetProcAddress( "_CreateDataConnection" ));

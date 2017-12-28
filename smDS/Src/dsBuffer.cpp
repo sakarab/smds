@@ -19,10 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_smDS.h"
 #include "dsBuffer.h"
 #include "dsExceptions.h"
@@ -366,7 +362,7 @@ void Data::Delete( int idx )
     mData.erase( tmp );
 }
 
-void Data::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
+void Data::AddField( const std_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
 {
     mFieldDefs->AddField( name, kind, data_type, size );
 }
@@ -398,7 +394,7 @@ void Data::Sort( const SortControler& cmp )
 void Data::Locate( const OpenValues& values, const OpenFindFields& fields,
                              iterator begin, iterator end, locate_result& result )
 {
-    Data::value_type   tmp_rec = NewBuffer_usInserted();
+    Data::value_type    tmp_rec = NewBuffer_usInserted();
     cRawBuffer&         raw_buffer = tmp_rec->GetActiveData();
 
     for ( int n = 0 ; n < values.GetCount() ; ++n )

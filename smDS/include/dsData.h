@@ -139,12 +139,12 @@ typedef shared_ptr<FieldSortCompare>        spFieldSortCompare;
 class Table : public Tablebase
 {
 private:
-    ds_string               mSql;
-    ds_string               mTableName;
+    std_string              mSql;
+    std_string              mTableName;
     // methods
-    ds_string FASTCALL ConstructSelectFromFields( const char *where_clause );
-    ds_string FASTCALL ConstructSelectFromSql( const char *where_clause );
-    ds_string FASTCALL ConstructSelect( const char *where_clause );
+    std_string FASTCALL ConstructSelectFromFields( const std_char *where_clause );
+    std_string FASTCALL ConstructSelectFromSql( const std_char *where_clause );
+    std_string FASTCALL ConstructSelect( const std_char *where_clause );
     detail::Data::value_type FASTCALL NewBuffer_usUnmodified();
     // noncopyable
     CDFASTCALL Table( const Table& src );
@@ -158,15 +158,15 @@ protected:
     CDFASTCALL Table( const detail::cFieldDefs_& field_defs );
 public:
     CDFASTCALL Table();
-    CDFASTCALL Table( const ds_string& table_name );
-    CDFASTCALL Table( const char * table_name );
+    CDFASTCALL Table( const std_string& table_name );
+    CDFASTCALL Table( const std_char * table_name );
     virtual CDFASTCALL ~Table();
 
-    const ds_string& GetTableName()                     { return ( mTableName ); }
+    const std_string& GetTableName()                    { return ( mTableName ); }
 
-    void FASTCALL AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size );
-    void FASTCALL AddField( const char *name, cFieldKind kind, cFieldDataType data_type, unsigned int size );
-    void FASTCALL Open( const Database& database, const char *where_clause );
+    void FASTCALL AddField( const std_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size );
+    void FASTCALL AddField( const std_char *name, cFieldKind kind, cFieldDataType data_type, unsigned int size );
+    void FASTCALL Open( const Database& database, const std_char *where_clause );
     void FASTCALL Close();
 
     // sort only

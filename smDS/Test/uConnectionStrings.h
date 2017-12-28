@@ -22,13 +22,15 @@
 #ifndef uConnectionStringsH
 #define uConnectionStringsH
 //---------------------------------------------------------------------------
-extern const char *BDE_DirData_Conn;
-extern const char *ODBC_Access_DirData_Conn;
-extern const char *ODBC_MsSql_DirData_Conn;
-extern const char *ODBC_SEn_Conn;
-extern const char *ODBC_Marine_Conn;
-extern const char *BDE_SENDATA_Conn;
-extern const char *ADO_Dirdata_Conn;
-extern const char *DAO_Dirdata_Conn;
+#include <cpp_string.h>
+//---------------------------------------------------------------------------
+extern const std_char *BDE_DirData_Conn;
+extern const std_char *ODBC_Access_DirData_Conn;
+extern const std_char *ODBC_MsSql_DirData_Conn;
+extern const std_char *ODBC_SEn_Conn;
+extern const std_char *ODBC_Marine_Conn;
+extern const std_char *BDE_SENDATA_Conn;
+extern const std_char *ADO_Dirdata_Conn;
+extern const std_char *DAO_Dirdata_Conn;
 //---------------------------------------------------------------------------
 #endif

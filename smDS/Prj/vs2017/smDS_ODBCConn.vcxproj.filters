@@ -23,10 +23,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Src\ODBC_Sub.h">
+    <ClInclude Include="..\..\include\odbc_conn_global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\odbc_conn_global.h">
+    <ClInclude Include="..\..\include\ODBC_Sub.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

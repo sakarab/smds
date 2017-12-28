@@ -19,10 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_smDS.h"
 #include "dsRecord.h"
 #include "dsExceptions.h"
@@ -216,14 +212,14 @@ cRecordIterator FASTCALL cRecordIterator::operator-( int num )
     return tmp;
 }
 
-cRecordIterator::cFieldProxy FASTCALL cRecordIterator::FieldByName( const ds_string& field_name )
+cRecordIterator::cFieldProxy FASTCALL cRecordIterator::FieldByName( const std_string& field_name )
 {
     return cFieldProxy( *GetDoubleBuffer(), mContainer->FieldByName( field_name ) );
 }
 
-cRecordIterator::cFieldProxy FASTCALL cRecordIterator::FieldByName( const char *field_name )
+cRecordIterator::cFieldProxy FASTCALL cRecordIterator::FieldByName( const std_char *field_name )
 {
-    return FieldByName( ds_string( field_name ) );
+    return FieldByName( std_string( field_name ) );
 }
 
 bool FASTCALL cRecordIterator::Locate( const Variant& value, const cFindField& field )
@@ -296,14 +292,14 @@ CDFASTCALL cRecord::~cRecord()
 {
 }
 
-cRecord::cFieldProxy cRecord::FieldByName( const ds_string& field_name )
+cRecord::cFieldProxy cRecord::FieldByName( const std_string& field_name )
 {
     return cFieldProxy( *mRecord, mFieldDefs->FieldByName( field_name ) );
 }
 
-cRecord::cFieldProxy cRecord::FieldByName( const char *field_name )
+cRecord::cFieldProxy cRecord::FieldByName( const std_char *field_name )
 {
-    return FieldByName( ds_string( field_name ) );
+    return FieldByName( std_string( field_name ) );
 }
 
 namespace detail

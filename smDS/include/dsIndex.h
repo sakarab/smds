@@ -117,8 +117,8 @@ public:
         void FASTCALL GotoMark( void *mark )    { SetIndex( reinterpret_cast<detail::Data::size_type>(mark) ); }
 
         const OldValuesProxy FASTCALL OldValues()                           { return iterator::OldValues(); }
-        cFieldProxy FieldByName( const ds_string& field_name )              { return iterator::FieldByName( field_name ); }
-        cFieldProxy FieldByName( const char *field_name )                   { return iterator::FieldByName( field_name ); }
+        cFieldProxy FieldByName( const std_string& field_name )             { return iterator::FieldByName( field_name ); }
+        cFieldProxy FieldByName( const std_char *field_name )               { return iterator::FieldByName( field_name ); }
         bool FASTCALL Find( const Variant& value );
         bool FASTCALL Find( const OpenValues& values );
     };

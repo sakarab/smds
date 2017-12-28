@@ -18,10 +18,6 @@
   Please read the "Doc\License.txt" for more copyright and license
   information.
 ****************************************************************************/
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_smDS.h"
 #include "dsData.h"
 #include "dsExceptions.h"
@@ -30,6 +26,7 @@
 #include <sstream>
 #include <stdexcept>
 #include "dsString.h"
+#include "dsCommon.h"
 
 namespace smds
 {
@@ -141,12 +138,12 @@ CDFASTCALL Table::Table()
 {
 }
 
-CDFASTCALL Table::Table( const ds_string& table_name )
+CDFASTCALL Table::Table( const std_string& table_name )
     : Tablebase(), mSql(), mTableName(table_name)
 {
 }
 
-CDFASTCALL Table::Table( const char * table_name )
+CDFASTCALL Table::Table( const std_char * table_name )
     : Tablebase(), mSql(), mTableName(table_name)
 {
 }
@@ -155,9 +152,9 @@ CDFASTCALL Table::~Table()
 {
 }
 
-ds_string FASTCALL Table::ConstructSelectFromFields( const char *where_clause )
+std_string FASTCALL Table::ConstructSelectFromFields( const std_char *where_clause )
 {
-    std::ostringstream      qstr;
+    StringBuilder           qstr;
     const spFieldDefs&      field_defs = GetData()->GetFieldDefs();
     bool                    first_field = true;
 
@@ -177,21 +174,21 @@ ds_string FASTCALL Table::ConstructSelectFromFields( const char *where_clause )
     if ( where_clause )
         qstr << " WHERE " << where_clause;
 
-    return ( ds_string( qstr.str().c_str() ) );
+    return qstr.str();
 }
 
-ds_string FASTCALL Table::ConstructSelectFromSql( const char *where_clause )
+std_string FASTCALL Table::ConstructSelectFromSql( const std_char *where_clause )
 {
-    std::ostringstream      qstr;
+    StringBuilder       qstr;
 
     // qstr << "SELECT " << mSql.c_str() << " FROM " << mTableName.c_str();
     qstr << mSql.c_str();
     if ( where_clause )
         qstr << " WHERE " << where_clause;
-    return ( ds_string( qstr.str().c_str() ) );
+    return qstr.str();
 }
 
-ds_string FASTCALL Table::ConstructSelect( const char *where_clause )
+std_string FASTCALL Table::ConstructSelect( const std_char *where_clause )
 {
     if ( mSql.empty() )
         return ( ConstructSelectFromFields( where_clause ) );
@@ -234,14 +231,14 @@ cIndex_ptr FASTCALL Table::NewIndex( const spFieldSortCompare& cmp_func )
     return cIndex_ptr( new Index( GetData(), cmp_func ) );
 }
 
-void FASTCALL Table::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
+void FASTCALL Table::AddField( const std_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
 {
     GetData()->AddField( name, kind, data_type, size );
 }
 
-void FASTCALL Table::AddField( const char *name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
+void FASTCALL Table::AddField( const std_char *name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
 {
-    AddField( ds_string( name ), kind, data_type, size );
+    AddField( std_string( name ), kind, data_type, size );
 }
 
 namespace
@@ -344,9 +341,9 @@ struct DriverField
 
 }; // namespace
 
-void FASTCALL Table::Open( const Database& database, const char *where_clause )
+void FASTCALL Table::Open( const Database& database, const std_char *where_clause )
 {
-    ds_string   sql( ConstructSelect( where_clause ) );
+    std_string      sql( ConstructSelect( where_clause ) );
 
     if ( sql[0] == 0 )
         return;
@@ -361,7 +358,7 @@ void FASTCALL Table::Open( const Database& database, const char *where_clause )
     int                             provider_field_count = provider->GetFieldCount();
 
     unsigned int                    name_buffer_length = 100;
-    boost::scoped_array<char>       name_buffer( new char[name_buffer_length] );
+    boost::scoped_array<std_char>   name_buffer( new std_char[name_buffer_length] );
     std::size_t                     name_buffer_required_length;
     unsigned int                    field_data_size;
     int                             field_data_type;
@@ -375,14 +372,14 @@ void FASTCALL Table::Open( const Database& database, const char *where_clause )
         if ( name_buffer_required_length > name_buffer_length )
         {
             name_buffer_length = name_buffer_required_length + name_buffer_required_length / 2;
-            name_buffer.reset( new char[name_buffer_length] );
+            name_buffer.reset( new std_char[name_buffer_length] );
             provider->GetFieldAttributes( n, name_buffer.get(), name_buffer_length, name_buffer_required_length,
                                           field_data_size, field_data_type );
         }
         name_buffer[name_buffer_required_length - 1] = 0;
         if ( ! have_fields )
         {
-            ds_field = &sp_field_defs->AddField( ds_string( name_buffer.get() ), fkData,
+            ds_field = &sp_field_defs->AddField( std_string( name_buffer.get() ), fkData,
                                                  static_cast<cFieldDataType>(field_data_type), field_data_size );
         }
         else
@@ -564,7 +561,7 @@ void FASTCALL cTableWriter::ReadFieldDefs( cStream& st, Table& table, bool is_ty
 
 spTable FASTCALL cTableWriter::CreateTemporaryTable()
 {
-    return spTable( new Table( "__TMP__" ) );
+    return spTable( new Table( CCLIB_STRING( "__TMP__" ) ) );
 }
 
 void FASTCALL cTableWriter::ReadFieldValue( cStream& st, detail::cRawBuffer& rb, const cFieldDef& field )
