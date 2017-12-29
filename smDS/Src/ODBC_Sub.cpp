@@ -226,11 +226,12 @@ CDFASTCALL ODBC_Connection::~ODBC_Connection()
 
 void FASTCALL ODBC_Connection::Connect( const std_char *connection_string )
 {
-    std_string      tmp_conn_str_2( connection_string );
+    std_string      cs( connection_string );
+    auto            str = cclib::LPSTR( cs );
     short           new_len;
-    std_char        conn_str_out[1024];
+    SQLCHAR         conn_str_out[1024];
 
-    CheckReturn( SQLDriverConnect( mConnection, 0, const_cast<std_char *>(tmp_conn_str_2.c_str()), tmp_conn_str_2.length(),
+    CheckReturn( SQLDriverConnect( mConnection, 0, reinterpret_cast<SQLCHAR *>(str.get()), cs.size(),
                                    conn_str_out, ARRAY_COUNT( conn_str_out ) - 1, &new_len, SQL_DRIVER_NOPROMPT ) );
     mConnected = true;
 }
@@ -280,13 +281,13 @@ void FASTCALL ODBC_Statement::ExecSql( const std_char *sql )
 {
     mIsEof = false;
 
-    CheckReturn( SQLExecDirect( mStatement, cclib::LPSTR( sql ).get(), SQL_NTS ) );
+    CheckReturn( SQLExecDirect( mStatement, reinterpret_cast<SQLCHAR *>(cclib::LPSTR( sql ).get()), SQL_NTS ) );
 
     SWORD    nCols;                      // # of result columns
 
     CheckReturn( SQLNumResultCols( mStatement, &nCols ) );
 
-    std::vector<std_char>   field_name( 50 );
+    std::vector<SQLCHAR>    field_name( 50 );
     SWORD                   field_name_size = static_cast<SWORD>(field_name.size());
 
     for ( SWORD n = 1 ; n <= nCols ; ++n )
@@ -297,17 +298,17 @@ void FASTCALL ODBC_Statement::ExecSql( const std_char *sql )
         SWORD   nullable;                   // nullable column ?
         SWORD   name_length;                // column data length
 
-        SQLRETURN   ret = CheckReturn( SQLDescribeCol( mStatement, n, reinterpret_cast<std_char *>(&field_name.front()),
+        SQLRETURN   ret = CheckReturn( SQLDescribeCol( mStatement, n, &field_name.front(),
                                                        field_name_size, &name_length, &data_type, &precision, &scale,
                                                        &nullable ) );
         if ( ret == SQL_SUCCESS_WITH_INFO )
         {
             field_name.resize( name_length + 1 + (name_length + 1) / 2 );
             field_name_size = static_cast<SWORD>(field_name.size());
-            CheckReturn( SQLDescribeCol( mStatement, n, reinterpret_cast<std_char *>(&field_name.front()), field_name_size,
+            CheckReturn( SQLDescribeCol( mStatement, n, &field_name.front(), field_name_size,
                                          &name_length, &data_type, &precision, &scale, &nullable ) );
         }
-        mFields.push_back( ODBC_Field( &field_name.front(), TypeRawFromODBCtype( data_type ), precision, scale, nullable ) );
+        mFields.push_back( ODBC_Field( reinterpret_cast<std_char *>(&field_name.front()), TypeRawFromODBCtype( data_type ), precision, scale, nullable ) );
     }
     for ( SWORD n = 1 ; n <= nCols ; ++n )
     {

@@ -42,7 +42,7 @@ namespace
 
 class DbEngine;
 
-std::auto_ptr<ODBC_Env>     Engine;
+std::unique_ptr<ODBC_Env>       Engine;
 
 //***********************************************************************
 //******    cDataConnection
