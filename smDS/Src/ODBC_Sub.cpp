@@ -229,9 +229,9 @@ void FASTCALL ODBC_Connection::Connect( const std_char *connection_string )
     std_string      cs( connection_string );
     auto            str = cclib::LPSTR( cs );
     short           new_len;
-    SQLCHAR         conn_str_out[1024];
+    SQLTCHAR        conn_str_out[1024];
 
-    CheckReturn( SQLDriverConnect( mConnection, 0, reinterpret_cast<SQLCHAR *>(str.get()), cs.size(),
+    CheckReturn( SQLDriverConnect( mConnection, 0, reinterpret_cast<SQLTCHAR *>(str.get()), cs.size(),
                                    conn_str_out, ARRAY_COUNT( conn_str_out ) - 1, &new_len, SQL_DRIVER_NOPROMPT ) );
     mConnected = true;
 }
@@ -281,13 +281,13 @@ void FASTCALL ODBC_Statement::ExecSql( const std_char *sql )
 {
     mIsEof = false;
 
-    CheckReturn( SQLExecDirect( mStatement, reinterpret_cast<SQLCHAR *>(cclib::LPSTR( sql ).get()), SQL_NTS ) );
+    CheckReturn( SQLExecDirect( mStatement, reinterpret_cast<SQLTCHAR *>(cclib::LPSTR( sql ).get()), SQL_NTS ) );
 
     SWORD    nCols;                      // # of result columns
 
     CheckReturn( SQLNumResultCols( mStatement, &nCols ) );
 
-    std::vector<SQLCHAR>    field_name( 50 );
+    std::vector<SQLTCHAR>   field_name( 50 );
     SWORD                   field_name_size = static_cast<SWORD>(field_name.size());
 
     for ( SWORD n = 1 ; n <= nCols ; ++n )
