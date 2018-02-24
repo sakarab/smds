@@ -40,11 +40,11 @@ struct tblLocation_map
 
 const cFieldDef_     tblLocation_data::tblLocation_Fields[] =
 {
-    { 0, offsetof(tblLocation_map,LocationID_), CCLIB_STRING( "LocationID" ), fkData, ftInteger,  4 },
-    { 1, offsetof(tblLocation_map,LocTypeID_),  CCLIB_STRING( "LocTypeID" ),  fkData, ftShort,    2 },
-    { 2, offsetof(tblLocation_map,IsUser_),     CCLIB_STRING( "IsUser" ),     fkData, ftShort,    2 },
-    { 3, offsetof(tblLocation_map,SerialNo_),   CCLIB_STRING( "SerialNo" ),   fkData, ftInteger,  4 },
-    { 4, offsetof(tblLocation_map,Drive_),      CCLIB_STRING( "Drive" ),      fkData, ftString,   4 }
+    { 0, offsetof(tblLocation_map,LocationID_), CCTEXT( "LocationID" ), fkData, ftInteger,  4 },
+    { 1, offsetof(tblLocation_map,LocTypeID_),  CCTEXT( "LocTypeID" ),  fkData, ftShort,    2 },
+    { 2, offsetof(tblLocation_map,IsUser_),     CCTEXT( "IsUser" ),     fkData, ftShort,    2 },
+    { 3, offsetof(tblLocation_map,SerialNo_),   CCTEXT( "SerialNo" ),   fkData, ftInteger,  4 },
+    { 4, offsetof(tblLocation_map,Drive_),      CCTEXT( "Drive" ),      fkData, ftString,   4 }
 };
 
 const cFieldDefs_    tblLocation_data::tblLocation_FieldDef =
@@ -52,8 +52,8 @@ const cFieldDefs_    tblLocation_data::tblLocation_FieldDef =
     sizeof(tblLocation_map),
     sizeof(tblLocation_Fields)/sizeof(tblLocation_Fields[0]),
     //"SELECT LocationID, LocTypeID, IsUser, SerialNo, Drive FROM %s %s",
-    CCLIB_STRING( "LocationID, LocTypeID, IsUser, SerialNo, Drive" ),
-    CCLIB_STRING( "tblLocation" ),
+    CCTEXT( "LocationID, LocTypeID, IsUser, SerialNo, Drive" ),
+    CCTEXT( "tblLocation" ),
     tblLocation_Fields
 };
 
@@ -75,13 +75,13 @@ struct tblFiles_map
 
 const cFieldDef_     tblFiles_data::tblFiles_Fields[] =
 {
-    { 0, offsetof(tblFiles_map,FileID_),       CCLIB_STRING( "FileID" ),       fkData, ftInteger,    4 },
-    { 1, offsetof(tblFiles_map,PathID_),       CCLIB_STRING( "PathID" ),       fkData, ftInteger,    4 },
-    { 2, offsetof(tblFiles_map,LongFileName_), CCLIB_STRING( "LongFileName" ), fkData, ftString,   255 },
-    { 3, offsetof(tblFiles_map,fSize_),        CCLIB_STRING( "fSize" ),        fkData, ftInteger,    4 },
-    { 4, offsetof(tblFiles_map,fDate_),        CCLIB_STRING( "fDate" ),        fkData, ftDateTime,   8 },
-    { 5, offsetof(tblFiles_map,Description_),  CCLIB_STRING( "Description" ),  fkData, ftString,   255 },
-    { 6, offsetof(tblFiles_map,zipID_),        CCLIB_STRING( "zipID" ),        fkData, ftInteger,    4 },
+    { 0, offsetof(tblFiles_map,FileID_),       CCTEXT( "FileID" ),       fkData, ftInteger,    4 },
+    { 1, offsetof(tblFiles_map,PathID_),       CCTEXT( "PathID" ),       fkData, ftInteger,    4 },
+    { 2, offsetof(tblFiles_map,LongFileName_), CCTEXT( "LongFileName" ), fkData, ftString,   255 },
+    { 3, offsetof(tblFiles_map,fSize_),        CCTEXT( "fSize" ),        fkData, ftInteger,    4 },
+    { 4, offsetof(tblFiles_map,fDate_),        CCTEXT( "fDate" ),        fkData, ftDateTime,   8 },
+    { 5, offsetof(tblFiles_map,Description_),  CCTEXT( "Description" ),  fkData, ftString,   255 },
+    { 6, offsetof(tblFiles_map,zipID_),        CCTEXT( "zipID" ),        fkData, ftInteger,    4 },
 };
 
 const cFieldDefs_    tblFiles_data::tblFiles_FieldDef =
@@ -89,8 +89,8 @@ const cFieldDefs_    tblFiles_data::tblFiles_FieldDef =
     sizeof(tblFiles_map),
     sizeof(tblFiles_Fields)/sizeof(tblFiles_Fields[0]),
     //"SELECT FileID, PathID, LongFileName, fSize, fDate, Description, zipID FROM %s %s",
-    CCLIB_STRING( "SELECT FileID, PathID, LongFileName, fSize, fDate, Description, zipID FROM tblFiles" ),
-    CCLIB_STRING( "tblFiles" ),
+    CCTEXT( "SELECT FileID, PathID, LongFileName, fSize, fDate, Description, zipID FROM tblFiles" ),
+    CCTEXT( "tblFiles" ),
     tblFiles_Fields
 };
 

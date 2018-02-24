@@ -41,7 +41,7 @@ void FASTCALL FillTable( Database& database, tblFiles_ptr& ds )
 //******************************************************
 tblFiles::index_ptr FASTCALL CreateIndex_OneInt( tblFiles_ptr& ds )
 {
-    return ds->NewIndex( cIndexField( CCLIB_STRING( "PathID" ), cIndexField::Descending ) );
+    return ds->NewIndex( cIndexField( CCTEXT( "PathID" ), cIndexField::Descending ) );
 }
 
 //******************************************************
@@ -49,7 +49,7 @@ tblFiles::index_ptr FASTCALL CreateIndex_OneInt( tblFiles_ptr& ds )
 //******************************************************
 tblFiles::index_ptr FASTCALL CreateIndex_TwoInts( tblFiles_ptr& ds )
 {
-    return ds->NewIndex( OpenIndexFields( cIndexField( CCLIB_STRING( "fSize" ) ), cIndexField( CCLIB_STRING( "PathID" ), cIndexField::Descending ) ) );
+    return ds->NewIndex( OpenIndexFields( cIndexField( CCTEXT( "fSize" ) ), cIndexField( CCTEXT( "PathID" ), cIndexField::Descending ) ) );
 }
 
 tblFiles::index_ptr FASTCALL CreateIndex_TwoInts_Other( tblFiles_ptr& ds )
@@ -57,7 +57,7 @@ tblFiles::index_ptr FASTCALL CreateIndex_TwoInts_Other( tblFiles_ptr& ds )
 #if defined ( _MSC_VER )
     tblFiles::iterator  it = ds->GetIterator();
 #endif
-    return ds->NewIndex( OpenIndexFields( cIndexField( CCLIB_STRING( "fSize" ) ), cIndexField( CCLIB_STRING( "PathID" ), cIndexField::Descending ) ) );
+    return ds->NewIndex( OpenIndexFields( cIndexField( CCTEXT( "fSize" ) ), cIndexField( CCTEXT( "PathID" ), cIndexField::Descending ) ) );
 }
 
 //******************************************************
@@ -145,7 +145,7 @@ void FASTCALL AddRecords_OneIndex( tblFiles_ptr& ds, const ds_string& descr )
 bool FASTCALL LocateRecord_Two( tblFiles_ptr& ds )
 {
     tblFiles::iterator  iter = ds->Locate( OpenValues( 19998, 19998 ),
-                                           OpenFindFields( CCLIB_STRING( "FileID" ), CCLIB_STRING( "PathID" ) ) );
+                                           OpenFindFields( CCTEXT( "FileID" ), CCTEXT( "PathID" ) ) );
     return ! iter.eof();
 }
 

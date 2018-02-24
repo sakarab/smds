@@ -154,11 +154,11 @@ int cc = field_trait<ftShort,0>::size;
 
 const detail::cFieldDef_     tblDummy_Fields[] =
 {
-    { 0, 0, CCLIB_STRING( "LocationID" ), fkData, ftInteger,  4 },
-    { 1, tblDummy_Fields[0].mOffset + 5,  CCLIB_STRING( "LocTypeID" ),  fkData, ftShort,    2 },
-    { 2, tblDummy_Fields[1].mOffset + 5,  CCLIB_STRING( "IsUser" ),     fkData, ftShort,    2 },
-    { 3, tblDummy_Fields[2].mOffset + 5,  CCLIB_STRING( "SerialNo" ),   fkData, ftInteger,  4 },
-    { 4, tblDummy_Fields[3].mOffset + 5,  CCLIB_STRING( "Drive" ),      fkData, ftString,   4 }
+    { 0, 0, CCTEXT( "LocationID" ), fkData, ftInteger,  4 },
+    { 1, tblDummy_Fields[0].mOffset + 5,  CCTEXT( "LocTypeID" ),  fkData, ftShort,    2 },
+    { 2, tblDummy_Fields[1].mOffset + 5,  CCTEXT( "IsUser" ),     fkData, ftShort,    2 },
+    { 3, tblDummy_Fields[2].mOffset + 5,  CCTEXT( "SerialNo" ),   fkData, ftInteger,  4 },
+    { 4, tblDummy_Fields[3].mOffset + 5,  CCTEXT( "Drive" ),      fkData, ftString,   4 }
 };
 
 struct tblFiles_mapmap
@@ -174,13 +174,13 @@ struct tblFiles_mapmap
 
 const detail::cFieldDef_     tblFiles_Fields[] =
 {
-    { 0, offsetof(tblFiles_mapmap,FileID_),       CCLIB_STRING( "FileID" ),       fkData, ftInteger,    4 },
-    { 1, offsetof(tblFiles_mapmap,PathID_),       CCLIB_STRING( "PathID" ),       fkData, ftInteger,    4 },
-    { 2, offsetof(tblFiles_mapmap,LongFileName_), CCLIB_STRING( "LongFileName" ), fkData, ftString,   255 },
-    { 3, offsetof(tblFiles_mapmap,fSize_),        CCLIB_STRING( "fSize" ),        fkData, ftInteger,    4 },
-    { 4, offsetof(tblFiles_mapmap,fDate_),        CCLIB_STRING( "fDate" ),        fkData, ftDateTime,   8 },
-    { 5, offsetof(tblFiles_mapmap,Description_),  CCLIB_STRING( "Description" ),  fkData, ftString,   255 },
-    { 6, offsetof(tblFiles_mapmap,zipID_),        CCLIB_STRING( "zipID" ),        fkData, ftInteger,    4 },
+    { 0, offsetof(tblFiles_mapmap,FileID_),       CCTEXT( "FileID" ),       fkData, ftInteger,    4 },
+    { 1, offsetof(tblFiles_mapmap,PathID_),       CCTEXT( "PathID" ),       fkData, ftInteger,    4 },
+    { 2, offsetof(tblFiles_mapmap,LongFileName_), CCTEXT( "LongFileName" ), fkData, ftString,   255 },
+    { 3, offsetof(tblFiles_mapmap,fSize_),        CCTEXT( "fSize" ),        fkData, ftInteger,    4 },
+    { 4, offsetof(tblFiles_mapmap,fDate_),        CCTEXT( "fDate" ),        fkData, ftDateTime,   8 },
+    { 5, offsetof(tblFiles_mapmap,Description_),  CCTEXT( "Description" ),  fkData, ftString,   255 },
+    { 6, offsetof(tblFiles_mapmap,zipID_),        CCTEXT( "zipID" ),        fkData, ftInteger,    4 },
 };
 
 /*
@@ -261,7 +261,7 @@ int FASTCALL CountNulls( tblFiles::iterator ptr )
 cIndex_ptr FASTCALL CreateIndex_g1( spTable uds )
 //ds::cIndex_ptr FASTCALL CreateIndex_g1( tblFiles_ptr uds )
 {
-    return ( uds->NewIndex( cIndexField( CCLIB_STRING( "PathID" ), cIndexField::Descending ) ) );
+    return ( uds->NewIndex( cIndexField( CCTEXT( "PathID" ), cIndexField::Descending ) ) );
 }
 
 int AdjusentCount( Index::iterator ptr1 )
@@ -278,7 +278,7 @@ int AdjusentCount( Index::iterator ptr1 )
     ptr2.Next();
     while ( ! ptr2.eof() )
     {
-        if ( ptr1.FieldByName( CCLIB_STRING( "PathID" ) )->AsInteger() == ptr2.FieldByName( CCLIB_STRING( "PathID" ) )->AsInteger() )
+        if ( ptr1.FieldByName( CCTEXT( "PathID" ) )->AsInteger() == ptr2.FieldByName( CCTEXT( "PathID" ) )->AsInteger() )
             ++result;
         ++ptr1;
         ++ptr2;
@@ -297,7 +297,7 @@ int FASTCALL Check_Order_g1( Index::iterator ptr1 )
     ptr2.Next();
     while ( ! ptr2.eof() )
     {
-        if ( ptr1.FieldByName( CCLIB_STRING( "PathID" ) )->AsInteger() < ptr2.FieldByName( CCLIB_STRING( "PathID" ) )->AsInteger() )
+        if ( ptr1.FieldByName( CCTEXT( "PathID" ) )->AsInteger() < ptr2.FieldByName( CCTEXT( "PathID" ) )->AsInteger() )
             ++result;
         ++ptr1;
         ++ptr2;
@@ -307,13 +307,13 @@ int FASTCALL Check_Order_g1( Index::iterator ptr1 )
 
 tblFiles::index_ptr FASTCALL CreateIndex_g2( tblFiles_ptr uds )
 {
-    return ( uds->NewIndex( OpenIndexFields( cIndexField( CCLIB_STRING( "PathID" ) ), cIndexField( CCLIB_STRING( "fSize" ) ) ) ) );
+    return ( uds->NewIndex( OpenIndexFields( cIndexField( CCTEXT( "PathID" ) ), cIndexField( CCTEXT( "fSize" ) ) ) ) );
 }
 
 cIndex_ptr FASTCALL CreateIndex_g22( tblFiles_ptr uds )
 {
     return ( uds->NewIndex( spFieldSortCompare( new FieldSortCompare(
-        OpenIndexFields( cIndexField( CCLIB_STRING( "PathID" ) ), cIndexField( CCLIB_STRING( "fSize" ) ) ) ) ) ) );
+        OpenIndexFields( cIndexField( CCTEXT( "PathID" ) ), cIndexField( CCTEXT( "fSize" ) ) ) ) ) ) );
 }
 
 int FASTCALL Check_Order_g2( Index::iterator ptr1 )
@@ -328,10 +328,10 @@ int FASTCALL Check_Order_g2( Index::iterator ptr1 )
 
     while ( ! ptr2.eof() )
     {
-        if ( ptr1.FieldByName( CCLIB_STRING( "PathID" ) )->AsInteger() > ptr2.FieldByName( CCLIB_STRING( "PathID" ) )->AsInteger() )
+        if ( ptr1.FieldByName( CCTEXT( "PathID" ) )->AsInteger() > ptr2.FieldByName( CCTEXT( "PathID" ) )->AsInteger() )
             ++result;
-        else if ( ptr1.FieldByName( CCLIB_STRING( "PathID" ) )->AsInteger() == ptr2.FieldByName( CCLIB_STRING( "PathID" ) )->AsInteger() )
-            if ( ptr1.FieldByName( CCLIB_STRING( "fSize" ) )->AsInteger() >= ptr2.FieldByName( CCLIB_STRING( "fSize" ) )->AsInteger() )
+        else if ( ptr1.FieldByName( CCTEXT( "PathID" ) )->AsInteger() == ptr2.FieldByName( CCTEXT( "PathID" ) )->AsInteger() )
+            if ( ptr1.FieldByName( CCTEXT( "fSize" ) )->AsInteger() >= ptr2.FieldByName( CCTEXT( "fSize" ) )->AsInteger() )
                 ++result;
         ++ptr1;
         ++ptr2;
@@ -443,7 +443,7 @@ void FASTCALL AddRecords( tblFiles_ptr ds )
 void FASTCALL LocateRecord( tblFiles_ptr ds )
 {
     tblFiles::iterator  iter = ds->Locate( OpenValues( 19999, 19998 ),
-                                           OpenFindFields( CCLIB_STRING( "FileID" ), CCLIB_STRING( "PathID" ) ) );
+                                           OpenFindFields( CCTEXT( "FileID" ), CCTEXT( "PathID" ) ) );
 }
 
 //***********************************************************************
@@ -467,8 +467,8 @@ void FASTCALL CompileTest( tblFiles_ptr ds )
         data_iter->SetFileID( 5 );
         data_iter.OldValues()->GetFileID();
 
-        data_iter.OldValues().FieldByName( CCLIB_STRING( "fSize" ) )->AsBoolean();
-        data_iter.FieldByName( CCLIB_STRING( "fSize" ) )->AsBoolean( true );
+        data_iter.OldValues().FieldByName( CCTEXT( "fSize" ) )->AsBoolean();
+        data_iter.FieldByName( CCTEXT( "fSize" ) )->AsBoolean( true );
     }
 }
 
@@ -499,7 +499,7 @@ int FASTCALL foo( Index::iterator iter )
     Table::iterator     cc = ++bb;
 
     if ( ! iter.eof() )
-        return ( iter.FieldByName( CCLIB_STRING( "PathID" ) )->AsInteger() + iter.FieldByName( CCLIB_STRING( "fSize" ) )->AsInteger() );
+        return ( iter.FieldByName( CCTEXT( "PathID" ) )->AsInteger() + iter.FieldByName( CCTEXT( "fSize" ) )->AsInteger() );
     else
         return ( 0 );
 }
@@ -510,7 +510,7 @@ int FASTCALL foo1( tblFiles::iterator iter )
     tblFiles::iterator   bb = iter + 1;
 
     if ( ! iter.eof() )
-        return ( iter.FieldByName( CCLIB_STRING( "PathID" ) )->AsInteger() + iter.FieldByName( CCLIB_STRING( "fSize" ) )->AsInteger() );
+        return ( iter.FieldByName( CCTEXT( "PathID" ) )->AsInteger() + iter.FieldByName( CCTEXT( "fSize" ) )->AsInteger() );
     else
         return ( 0 );
 }
@@ -523,7 +523,7 @@ int FASTCALL foo2( tblFiles::index::iterator iter )
     // tblFiles::iterator          dd = cc + 1;
 
     if ( ! iter.eof() )
-        return ( iter.FieldByName( CCLIB_STRING( "PathID" ) )->AsInteger() + iter.FieldByName( CCLIB_STRING( "fSize" ) )->AsInteger() );
+        return ( iter.FieldByName( CCTEXT( "PathID" ) )->AsInteger() + iter.FieldByName( CCTEXT( "fSize" ) )->AsInteger() );
     else
         return ( 0 );
 }

@@ -41,7 +41,7 @@ void Tutorial()
     DbEngine                engine( module_loader );
 
     // connect to database
-    Database        database = engine.NewConnection( CCLIB_STRING( "" ) );
+    Database        database = engine.NewConnection( CCTEXT( "" ) );
 
     // Create and open the dataset
     tblFiles_ptr    ds( new tblFiles() );
@@ -67,7 +67,7 @@ void Tutorial()
     }
 
     // Create an index on "PathID" and "fSize" fields
-    tblFiles::index_ptr     idx = ds->NewIndex( OpenIndexFields( cIndexField( CCLIB_STRING( "PathID" ) ), cIndexField( CCLIB_STRING( "fSize" ) ) ) );
+    tblFiles::index_ptr     idx = ds->NewIndex( OpenIndexFields( cIndexField( CCTEXT( "PathID" ) ), cIndexField( CCTEXT( "fSize" ) ) ) );
 
     // find - binary search - a record with PathID == 27 and fSize == 45000
     tblFiles::index::iterator   idx_it = idx->Find( OpenValues( 27, 45000 ) );

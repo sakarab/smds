@@ -118,8 +118,8 @@ void Output( tblFiles_ptr ds ) // const ds::cFieldDefs_& field_defs, tblFiles::r
 
     tblFiles::iterator      rec = ds->GetIterator();
 
-    rec.OldValues().FieldByName( CCLIB_STRING( "fSize" ) )->AsBoolean();
-    rec.FieldByName( CCLIB_STRING( "fSize" ) )->AsBoolean( true );
+    rec.OldValues().FieldByName( CCTEXT( "fSize" ) )->AsBoolean();
+    rec.FieldByName( CCTEXT( "fSize" ) )->AsBoolean( true );
     dsDatasetModify( rec, ds_string( "File" ) );
 
     rec.First();

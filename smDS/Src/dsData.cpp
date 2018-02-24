@@ -561,7 +561,7 @@ void FASTCALL cTableWriter::ReadFieldDefs( cStream& st, Table& table, bool is_ty
 
 spTable FASTCALL cTableWriter::CreateTemporaryTable()
 {
-    return spTable( new Table( CCLIB_STRING( "__TMP__" ) ) );
+    return spTable( new Table( CCTEXT( "__TMP__" ) ) );
 }
 
 void FASTCALL cTableWriter::ReadFieldValue( cStream& st, detail::cRawBuffer& rb, const cFieldDef& field )
