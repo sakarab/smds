@@ -31,7 +31,7 @@ OBJECTS_DIR = $$_PRO_FILE_PWD_/$$PATH_SUFFIX/$$TARGET-obj
 INCLUDEPATH += ../../Src \
                ../../include \
                $$ROOT_BOOST \
-               $$ROOT_CCLIB/Src
+               $$ROOT_CCLIB/include
 
 unix {
     DEFINES += LINUX
