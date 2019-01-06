@@ -312,7 +312,7 @@ public:
                 mRawBuffer.WriteDateTime( *field_def, LongEncodeDateTime( *reinterpret_cast<TIMESTAMP_STRUCT *>(buff) ) );
                 break;
             case cFieldDataType_ftGUID     :
-                mRawBuffer.WriteGUID( *field_def, *reinterpret_cast<SQLGUID *>(buff) );
+                mRawBuffer.WriteGUID( *field_def, *reinterpret_cast<detail::dbGUID_Internal *>(buff) );
                 break;
             case cFieldDataType_ftString   :
                 mRawBuffer.WriteString( *field_def, reinterpret_cast<char *>(buff) );

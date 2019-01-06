@@ -590,7 +590,7 @@ public:
     }
     dbGUID ReadGUIDNN( const cFieldDef& field_def ) const
     {
-        return CreateDbGUID( *(buffer_field_cast<dbGUID_Internal *>(field_def.Offset())) );
+        return dbGUID( *(buffer_field_cast<dbGUID_Internal *>(field_def.Offset())) );
     }
     const dbGUID_Internal& ReadGUIDNNref( const cFieldDef& field_def ) const
     {
