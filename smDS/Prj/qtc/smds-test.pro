@@ -24,7 +24,7 @@ INCLUDEPATH += ../../Test \
                ../../include \
                $$ROOT_BOOST \
                $$ROOT_LOKI\include \
-               $$ROOT_CCLIB/Src
+               $$ROOT_CCLIB/include
 
 unix {
     DEFINES += LINUX
