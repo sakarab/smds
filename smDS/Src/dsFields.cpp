@@ -128,10 +128,10 @@ CDFASTCALL cFieldDefs::cFieldDefs()
 {
 }
 
-class cSortByFieldName : public std::binary_function< const detail::cFieldNameMap&, const detail::cFieldNameMap&, bool>
+class cSortByFieldName
 {
 public:
-    result_type operator() ( first_argument_type name1, second_argument_type name2 )
+    bool operator() ( const detail::cFieldNameMap& name1, const detail::cFieldNameMap& name2 )
     {
         return ( StringCompare( name1.FieldName(), name2.FieldName() ) < 0 );
     }

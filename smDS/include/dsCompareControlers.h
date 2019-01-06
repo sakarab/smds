@@ -36,14 +36,14 @@ namespace detail
 //***********************************************************************
 //******    SortControler
 //***********************************************************************
-class SortControler : public std::binary_function<const Data::value_type&, const Data::value_type&, bool>
+class SortControler
 {
 private:
     SortCompare     *mCompare;
 public:
     CDFASTCALL SortControler( spSortCompare& cmp_func )
         : mCompare(cmp_func.get())                                                          {} // empty
-    result_type FASTCALL operator()( first_argument_type item1, second_argument_type item2 ) const
+    bool FASTCALL operator()( const Data::value_type& item1, const Data::value_type& item2 ) const
     {
         return mCompare->internal_compare( item1->GetActiveData(), item2->GetActiveData() );
     };
@@ -52,7 +52,7 @@ public:
 //***********************************************************************
 //******    FindControler
 //***********************************************************************
-class FindControler : public std::unary_function<const Data::value_type&, bool>
+class FindControler
 {
 private:
     SortCompare     *mCompare;
@@ -60,7 +60,7 @@ private:
 public:
     CDFASTCALL FindControler( spSortCompare& cmp_func, cRawBuffer& item2 )
         : mCompare(cmp_func.get()), mItem2(&item2)                                          {} // empty
-    result_type FASTCALL operator()( argument_type item ) const
+    bool FASTCALL operator()( const Data::value_type& item ) const
     {
         return mCompare->internal_compare( item->GetActiveData(), *mItem2 );
     };
@@ -69,7 +69,7 @@ public:
 ////***********************************************************************
 ////******    FilterControler
 ////***********************************************************************
-class FilterControler : public std::unary_function<const Data::value_type&, bool>
+class FilterControler
 {
 private:
     cFilterCompareBase      *mCompare;
@@ -78,7 +78,7 @@ public:
         : mCompare(cmp_func.get())
     {
     }
-    result_type FASTCALL operator()( argument_type item ) const
+    bool FASTCALL operator()( const Data::value_type& item ) const
     {
         return ( mCompare->compare( item->GetActiveData() ) );
     };
