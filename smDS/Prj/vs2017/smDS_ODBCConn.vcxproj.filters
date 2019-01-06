@@ -30,4 +30,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Src\smDS_ODBCConn_vc.def">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

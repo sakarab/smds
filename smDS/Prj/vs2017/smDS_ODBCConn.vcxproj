@@ -289,6 +289,9 @@
     <ClInclude Include="..\..\include\odbc_conn_global.h" />
     <ClInclude Include="..\..\include\ODBC_Sub.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Src\smDS_ODBCConn_vc.def" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
