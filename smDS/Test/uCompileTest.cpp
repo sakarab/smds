@@ -37,7 +37,7 @@ void ConvertTypedData( tblFiles::index_ptr& idx )
 void Tutorial()
 {
     // Select engine
-    spModuleLoader          module_loader( new OsModuleLoader( SM_DS_TEST_BACKEND ) );
+    spModuleLoader          module_loader = GetOsModuleLoader( SM_DS_TEST_BACKEND );
     DbEngine                engine( module_loader );
 
     // connect to database

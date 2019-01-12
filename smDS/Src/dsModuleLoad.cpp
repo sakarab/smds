@@ -24,10 +24,29 @@
 //---------------------------------------------------------------------------
 namespace smds
 {
+    //***********************************************************************
+    //******    ModuleLoader
+    //***********************************************************************
+    ModuleLoader::ModuleLoader( const spSharedLibrary& dll )
+        : mDll_Guard(dll)
+    {
+        mDatabase_Ctor = mDll_Guard->GetProcAddressT<Database_Ctor>( "_CreateDataConnection" );
+        mDatabase_Dtor = mDll_Guard->GetProcAddressT<Database_Dtor>( "_DeleteDataConnection" );
+    }
 
-spModuleLoader FASTCALL GetOsModuleLoader( const std_char *dll_name )
-{
-    return spModuleLoader( new OsModuleLoader( dll_name ) );
-}
+    Database_Ctor ModuleLoader::GetCreateDataConnection()
+    {
+        return mDatabase_Ctor;
+    }
+
+    Database_Dtor ModuleLoader::GetDeleteDataConnection()
+    {
+        return mDatabase_Dtor;
+    }
+
+    spModuleLoader GetOsModuleLoader( const std_char *dll_name )
+    {
+        return spModuleLoader( new ModuleLoader( LoadDll( dll_name ) ) );
+    }
 
 } // namespace smds

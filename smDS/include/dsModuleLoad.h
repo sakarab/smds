@@ -26,28 +26,28 @@
 #include "dsSmartPtr.h"
 #include "dsConn_Intf.h"
 #include <cpp_string.h>
+#include <predef_cc.h>
+
 //---------------------------------------------------------------------------
 namespace smds
 {
+    //***********************************************************************
+    //******    IModuleLoader
+    //***********************************************************************
+    class IModuleLoader
+    #ifdef SM_DS_USE_SMALL_SHARED_PTR
+        : public boost::shared_in_base<long>
+    #endif
+    {
+    public:
+        virtual Database_Ctor GetCreateDataConnection() = 0;
+        virtual Database_Dtor GetDeleteDataConnection() = 0;
 
-//***********************************************************************
-//******    IModuleLoader
-//***********************************************************************
-class IModuleLoader
-#ifdef SM_DS_USE_SMALL_SHARED_PTR
-    : public boost::shared_in_base<long>
-#endif
-{
-public:
-    virtual Database_Ctor FASTCALL GetCreateDataConnection() = 0;
-    virtual Database_Dtor FASTCALL GetDeleteDataConnection() = 0;
+        virtual ~IModuleLoader()                                 {} // empty
+    };
+}
 
-    virtual CDFASTCALL ~IModuleLoader()                                 {} // empty
-};
-
-} // namespace smds
-
-#if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
+#if defined( BOOST_OS_WINDOWS )
     #include "Win32/mlWinDll.h"
 #elif defined (LINUX)
     #include "Linux/mlLinuxSo.h"
@@ -57,19 +57,25 @@ public:
 
 namespace smds
 {
+    class ModuleLoader : public IModuleLoader
+    {
+    private:
+        spSharedLibrary         mDll_Guard;
+        Database_Ctor           mDatabase_Ctor;
+        Database_Dtor           mDatabase_Dtor;
 
-#if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
-    class WinDllML;
-    typedef WinDllML        OsModuleLoader;
-#elif defined (LINUX)
-    class LinuxSoML;
-    typedef LinuxSoML       OsModuleLoader;
-#else
-    #error "No platform specified"
-#endif
+        virtual Database_Ctor GetCreateDataConnection();
+        virtual Database_Dtor GetDeleteDataConnection();
 
-typedef shared_ptr<OsModuleLoader>      spModuleLoader;
-spModuleLoader FASTCALL GetOsModuleLoader( const std_char *dll_name );
+        // noncpyable
+        ModuleLoader( const ModuleLoader& src ) CC_EQ_DELETE;
+        ModuleLoader& operator = ( const ModuleLoader& src ) CC_EQ_DELETE;
+    public:
+        ModuleLoader( const spSharedLibrary& dll );
+    };
+
+    typedef shared_ptr<ModuleLoader>      spModuleLoader;
+    spModuleLoader GetOsModuleLoader( const std_char *dll_name );
 
 } // namespace smds
 

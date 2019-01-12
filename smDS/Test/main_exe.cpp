@@ -183,7 +183,7 @@ int main()
 
 	try
 	{
-        spModuleLoader          module_loader = GetOsModuleLoader( SM_DS_TEST_BACKEND );
+        spModuleLoader          module_loader = smds::GetOsModuleLoader( SM_DS_TEST_BACKEND );
 
         // catch exceptions while module is alive
         try

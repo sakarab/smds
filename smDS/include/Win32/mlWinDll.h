@@ -24,57 +24,79 @@
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
 #include <windows.h>
-#include "dsModuleLoad.h"
 #include "dsExceptions.h"
+#include <cpp_string.h>
 //---------------------------------------------------------------------------
 
 namespace smds
 {
-
-//***********************************************************************
-//******    WinDllML
-//***********************************************************************
-class WinDllML : public IModuleLoader
-{
-private:
-    class Dll_Guard
+    //=======================================================================
+    //======    LoadLibraryImpl (for windows)
+    //=======================================================================
+    class SharedLibraryImpl
     {
+    private:
+        typedef void ( * procedure )();
     private:
         HMODULE                 mDLL;
         // noncpyable
-        Dll_Guard( const Dll_Guard& src );
-        Dll_Guard& operator = ( const Dll_Guard& src );
+        SharedLibraryImpl( const SharedLibraryImpl& src ) CC_EQ_DELETE;
+        SharedLibraryImpl& operator = ( const SharedLibraryImpl& src ) CC_EQ_DELETE;
+        procedure GetProcAddressImpl( const char * proc_name )
+        {
+            procedure   result = reinterpret_cast<procedure>(GetProcAddress( mDLL, proc_name ));
+
+            if ( ! result )
+                throw eDllLoadError();
+            return result;
+        }
     public:
-        CDFASTCALL Dll_Guard( const std_char *dll_name )
-            : mDLL(::LoadLibrary( dll_name ))
+        SharedLibraryImpl( const std_char *dll_name )
+            : mDLL(LoadLibrary( dll_name ))
         {
             if ( mDLL == 0 )
                 throw eDllLoadError();
         }
-        CDFASTCALL ~Dll_Guard()
+        
+        ~SharedLibraryImpl()
         {
             if ( mDLL != 0 )
-                ::FreeLibrary( mDLL );
+                FreeLibrary( mDLL );
         }
-        FARPROC FASTCALL GetProcAddress( const char * proc_name )
+
+        template <class T> T GetProcAddressT( const char * proc_name )
         {
-            return ::GetProcAddress( mDLL, proc_name );
+            return reinterpret_cast<T>(GetProcAddressImpl( proc_name ));
         }
+
     };
 
-    Dll_Guard               mDll_Guard;
-    Database_Ctor           mDatabase_Ctor;
-    Database_Dtor           mDatabase_Dtor;
+    typedef std::shared_ptr<SharedLibraryImpl>      spSharedLibrary;
 
-    virtual Database_Ctor FASTCALL GetCreateDataConnection();
-    virtual Database_Dtor FASTCALL GetDeleteDataConnection();
+    inline spSharedLibrary LoadDll( const std_char *dll_name )
+    {
+        return std::make_shared<SharedLibraryImpl>( dll_name );
+    }
 
-    // noncpyable
-    WinDllML( const WinDllML& src );
-    WinDllML& operator = ( const WinDllML& src );
-public:
-    CDFASTCALL WinDllML( const std_char *dll_name );
-};
+    //=======================================================================
+    //======    WinDllML (for windows)
+    //=======================================================================
+    //class WinDllML : public IModuleLoader
+    //{
+    //private:
+    //    spSharedLibrary         mDll_Guard;
+    //    Database_Ctor           mDatabase_Ctor;
+    //    Database_Dtor           mDatabase_Dtor;
+
+    //    virtual Database_Ctor GetCreateDataConnection();
+    //    virtual Database_Dtor GetDeleteDataConnection();
+
+    //    // noncpyable
+    //    WinDllML( const WinDllML& src ) CC_EQ_DELETE;
+    //    WinDllML& operator = ( const WinDllML& src ) CC_EQ_DELETE;
+    //public:
+    //    WinDllML( const spSharedLibrary& dll );
+    //};
 
 }; // namespace smds
 //---------------------------------------------------------------------------
