@@ -57,6 +57,46 @@ namespace smds
 
 namespace smds
 {
+    //=======================================================================
+    //======    DbDriver
+    //=======================================================================
+    class DbDriver
+    {
+    private:
+        spSharedLibrary         mDll_Guard;
+        Database_Ctor           mCreateDataConnection;
+        Database_Dtor           mDeleteDataConnection;
+        // noncpyable
+        DbDriver( const DbDriver& src ) CC_EQ_DELETE;
+        DbDriver& operator = ( const DbDriver& src ) CC_EQ_DELETE;
+    public:
+        explicit DbDriver( const spSharedLibrary& dll );
+        explicit DbDriver( const std_char *dll_name );
+
+        IDatabase *CreateDataConnection( const std_char *connection_string )        { return mCreateDataConnection( connection_string ); }
+        void DeleteDataConnection( IDatabase *db_engine )                           { mDeleteDataConnection( db_engine ); }
+    };
+
+    typedef shared_ptr<DbDriver>    spDbDriver;
+
+    //=======================================================================
+    //======    DbConnection
+    //=======================================================================
+    class DbConnection
+    {
+    private:
+        spDbDriver      mDriver;
+        IDatabase       *mDatabase;
+        // noncpyable
+        DbConnection( const DbConnection& src ) CC_EQ_DELETE;
+        DbConnection& operator = ( const DbConnection& src ) CC_EQ_DELETE;
+    public:
+        DbConnection( const spDbDriver& driver, const std_char *connection_string );
+        DbConnection( const spSharedLibrary& dll, const std_char *connection_string );
+        DbConnection( const std_char *dll_name, const std_char *connection_string );
+        ~DbConnection();
+    };
+
     class ModuleLoader : public IModuleLoader
     {
     private:

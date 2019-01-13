@@ -49,4 +49,42 @@ namespace smds
         return spModuleLoader( new ModuleLoader( LoadDll( dll_name ) ) );
     }
 
+    //=======================================================================
+    //======    DbDriver
+    //=======================================================================
+    DbDriver::DbDriver( const spSharedLibrary& dll )
+        : mDll_Guard( dll )
+    {
+        mCreateDataConnection = dll->GetProcAddressT<Database_Ctor>( "_CreateDataConnection" );
+        mDeleteDataConnection = dll->GetProcAddressT<Database_Dtor>( "_DeleteDataConnection" );
+    }
+
+    DbDriver::DbDriver( const std_char *dll_name )
+        : DbDriver( LoadDll( dll_name ) )
+    {
+    }
+
+    //=======================================================================
+    //======    DbConnection
+    //=======================================================================
+    DbConnection::DbConnection( const spDbDriver& driver, const std_char* connection_string )
+        : mDriver( driver ), mDatabase( driver->CreateDataConnection( connection_string ) )
+    {
+    }
+
+    DbConnection::DbConnection( const spSharedLibrary& dll, const std_char* connection_string )
+        : DbConnection( std::make_shared<DbDriver>( dll ), connection_string )
+    {
+    }
+
+    DbConnection::DbConnection( const std_char* dll_name, const std_char* connection_string )
+        : DbConnection( LoadDll( dll_name ), connection_string )
+    {
+    }
+
+    DbConnection::~DbConnection()
+    {
+        mDriver->DeleteDataConnection( mDatabase );
+    }
+
 } // namespace smds
