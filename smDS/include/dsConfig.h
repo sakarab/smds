@@ -22,18 +22,6 @@
 #define SM_DS_CONFIG_H
 
 /**********************************************************************************
-** Comment this to disable default shared_ptr selection ...
-***********************************************************************************/
-#define SM_DS_DEFAULT_SHARED_PTR
-
-/**********************************************************************************
-** ... or Uncomment one of the following to make shared_ptr selection
-***********************************************************************************/
-//#define SM_DS_USE_BOOST_SMART_PTR
-//#define SM_DS_USE_SMALL_SHARED_PTR
-//#define SM_DS_USE_LOKI_SHARED_PTR
-
-/**********************************************************************************
 ** Uncomment this to make C++Builder 6 use the Rogue Wave STL
 ***********************************************************************************/
 //#define _USE_OLD_RW_STL
@@ -124,34 +112,6 @@
     #if defined ( SM_DS_FAST_ITERATORS )
         #define SM_DS_FAST_ITERATORS_INTERNAL
     #endif
-#endif
-
-/**********************************************************************************
-** Smart pointer selection
-***********************************************************************************/
-
-#if defined(SM_DS_DEFAULT_SHARED_PTR) && (defined(SM_DS_USE_BOOST_SMART_PTR) || defined(SM_DS_USE_SMALL_SHARED_PTR) || defined(SM_DS_USE_LOKI_SHARED_PTR))
-    #error  "Error in smart pointer selection"
-#endif
-
-#ifdef SM_DS_DEFAULT_SHARED_PTR
-
-    #ifdef _MSC_VER
-        #define SM_DS_USE_LOKI_SHARED_PTR
-    #endif
-
-    #ifdef __BORLANDC__
-        #define SM_DS_USE_SMALL_SHARED_PTR
-    #endif
-
-    #ifdef __GNUG__
-        #define SM_DS_USE_BOOST_SMART_PTR
-    #endif
-
-#endif
-
-#if !defined( SM_DS_USE_BOOST_SMART_PTR ) && !defined( SM_DS_USE_SMALL_SHARED_PTR ) && !defined( SM_DS_USE_LOKI_SHARED_PTR )
-    #error  "No smart pointer selection"
 #endif
 
 /**********************************************************************************

@@ -25,28 +25,29 @@
 #include "dsConfig.h"
 #include "dsSmartPtr.h"
 #include "dsConn_Intf.h"
+#include <cpp_string.h>
+#include <predef_cc.h>
+
 //---------------------------------------------------------------------------
 namespace smds
 {
+    //***********************************************************************
+    //******    IModuleLoader
+    //***********************************************************************
+    class IModuleLoader
+    #ifdef SM_DS_USE_SMALL_SHARED_PTR
+        : public boost::shared_in_base<long>
+    #endif
+    {
+    public:
+        virtual Database_Ctor GetCreateDataConnection() = 0;
+        virtual Database_Dtor GetDeleteDataConnection() = 0;
 
-//***********************************************************************
-//******    IModuleLoader
-//***********************************************************************
-class IModuleLoader
-#ifdef SM_DS_USE_SMALL_SHARED_PTR
-    : public boost::shared_in_base<long>
-#endif
-{
-public:
-    virtual Database_Ctor FASTCALL GetCreateDataConnection() = 0;
-    virtual Database_Dtor FASTCALL GetDeleteDataConnection() = 0;
+        virtual ~IModuleLoader()                                 {} // empty
+    };
+}
 
-    virtual CDFASTCALL ~IModuleLoader()                                 {} // empty
-};
-
-} // namespace smds
-
-#if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
+#if defined( BOOST_OS_WINDOWS )
     #include "Win32/mlWinDll.h"
 #elif defined (LINUX)
     #include "Linux/mlLinuxSo.h"
@@ -56,19 +57,65 @@ public:
 
 namespace smds
 {
+    //=======================================================================
+    //======    DbDriver
+    //=======================================================================
+    class DbDriver
+    {
+    private:
+        spSharedLibrary         mDll_Guard;
+        Database_Ctor           mCreateDataConnection;
+        Database_Dtor           mDeleteDataConnection;
+        // noncpyable
+        DbDriver( const DbDriver& src ) CC_EQ_DELETE;
+        DbDriver& operator = ( const DbDriver& src ) CC_EQ_DELETE;
+    public:
+        explicit DbDriver( const spSharedLibrary& dll );
+        explicit DbDriver( const std_char *dll_name );
 
-#if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
-    class WinDllML;
-    typedef WinDllML        OsModuleLoader;
-#elif defined (LINUX)
-    class LinuxSoML;
-    typedef LinuxSoML       OsModuleLoader;
-#else
-    #error "No platform specified"
-#endif
+        IDatabase *CreateDataConnection( const std_char *connection_string )        { return mCreateDataConnection( connection_string ); }
+        void DeleteDataConnection( IDatabase *db_engine )                           { mDeleteDataConnection( db_engine ); }
+    };
 
-typedef shared_ptr<OsModuleLoader>      spModuleLoader;
-spModuleLoader FASTCALL GetOsModuleLoader( const wchar_t *dll_name );
+    typedef shared_ptr<DbDriver>    spDbDriver;
+
+    //=======================================================================
+    //======    DbConnection
+    //=======================================================================
+    class DbConnection
+    {
+    private:
+        spDbDriver      mDriver;
+        IDatabase       *mDatabase;
+        // noncpyable
+        DbConnection( const DbConnection& src ) CC_EQ_DELETE;
+        DbConnection& operator = ( const DbConnection& src ) CC_EQ_DELETE;
+    public:
+        DbConnection( const spDbDriver& driver, const std_char *connection_string );
+        DbConnection( const spSharedLibrary& dll, const std_char *connection_string );
+        DbConnection( const std_char *dll_name, const std_char *connection_string );
+        ~DbConnection();
+    };
+
+    class ModuleLoader : public IModuleLoader
+    {
+    private:
+        spSharedLibrary         mDll_Guard;
+        Database_Ctor           mDatabase_Ctor;
+        Database_Dtor           mDatabase_Dtor;
+
+        virtual Database_Ctor GetCreateDataConnection();
+        virtual Database_Dtor GetDeleteDataConnection();
+
+        // noncpyable
+        ModuleLoader( const ModuleLoader& src ) CC_EQ_DELETE;
+        ModuleLoader& operator = ( const ModuleLoader& src ) CC_EQ_DELETE;
+    public:
+        ModuleLoader( const spSharedLibrary& dll );
+    };
+
+    typedef shared_ptr<ModuleLoader>      spModuleLoader;
+    spModuleLoader GetOsModuleLoader( const std_char *dll_name );
 
 } // namespace smds
 

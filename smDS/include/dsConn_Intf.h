@@ -23,6 +23,7 @@
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
 #include <cstddef>
+#include <cpp_string.h>
 //---------------------------------------------------------------------------
 namespace smds
 {
@@ -82,14 +83,14 @@ class IDataProvider
 #endif
 {
 public:
-    virtual void STDCALL OpenSql( const char *sql ) = 0;
+    virtual void STDCALL OpenSql( const std_char *sql ) = 0;
     virtual void STDCALL CloseSql() = 0;
 
     virtual bool STDCALL Eof() = 0;
     virtual void STDCALL Next() = 0;
 
     virtual std::size_t STDCALL GetFieldCount() = 0;
-    virtual void STDCALL GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+    virtual void STDCALL GetFieldAttributes( int idx, std_char *name, unsigned int name_buffer_length,
                                              std::size_t& name_buffer_required_length,
                                              unsigned int& field_data_size, int& field_data_type ) = 0;
 
@@ -98,12 +99,12 @@ public:
     virtual void STDCALL StartTransaction() = 0;
     virtual void STDCALL Commit() = 0;
     virtual void STDCALL RollBack() = 0;
-    virtual void STDCALL ExecSql( const char *sql ) = 0;
+    virtual void STDCALL ExecSql( const std_char *sql ) = 0;
 
     virtual ~IDataProvider()                                                                    {} // empty;
 };
 
-typedef IDatabase * (*Database_Ctor)( const char *connection_string );
+typedef IDatabase * (*Database_Ctor)( const std_char *connection_string );
 typedef void        (*Database_Dtor)( IDatabase *db_engine );
 //---------------------------------------------------------------------------
 }

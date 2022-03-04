@@ -46,7 +46,7 @@ public:
     Database_Ctor FASTCALL Database_Constructor() const     { return ( mData->GetCreateDataConnection() ); }
     Database_Dtor FASTCALL Database_Destructor() const      { return ( mData->GetDeleteDataConnection() ); }
 
-    Database FASTCALL NewConnection( const ds_string& connection_string );
+    Database FASTCALL NewConnection( const std_string& connection_string );
 };
 
 //***********************************************************************
@@ -66,10 +66,10 @@ private:
         cDatabase_impl& operator = ( const cDatabase_impl& src );
     public:
         IDatabase           *mDatabase;
-        DbEngine           mDbEngine;
-        ds_string           mConnectionString;
+        DbEngine            mDbEngine;
+        std_string          mConnectionString;
 
-        CDFASTCALL cDatabase_impl( const DbEngine& transport_code, const ds_string& connection_string )
+        CDFASTCALL cDatabase_impl( const DbEngine& transport_code, const std_string& connection_string )
             : mDatabase(0), mDbEngine(transport_code), mConnectionString(connection_string)
         {
         }
@@ -81,7 +81,7 @@ private:
 
     shared_ptr<cDatabase_impl>       mData;
 public:
-    CDFASTCALL Database( const DbEngine& transport_code, const ds_string& connection_string );
+    CDFASTCALL Database( const DbEngine& transport_code, const std_string& connection_string );
     CDFASTCALL ~Database();
 
     IDatabase * FASTCALL GetDatabase() const           { return ( mData->mDatabase ); }

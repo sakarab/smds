@@ -590,7 +590,7 @@ public:
     }
     dbGUID ReadGUIDNN( const cFieldDef& field_def ) const
     {
-        return CreateDbGUID( *(buffer_field_cast<dbGUID_Internal *>(field_def.Offset())) );
+        return dbGUID( *(buffer_field_cast<dbGUID_Internal *>(field_def.Offset())) );
     }
     const dbGUID_Internal& ReadGUIDNNref( const cFieldDef& field_def ) const
     {
@@ -963,11 +963,11 @@ public:
     void Clear();
     void CommitUpdates();
 
-    void AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size );
+    void AddField( const std_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size );
 
-    const spFieldDefs& GetFieldDefs() const                { return mFieldDefs; }
-    const cFieldDef& FieldByName( const ds_string& field_name )     { return mFieldDefs->FieldByName( field_name ); }
-    const cFieldDef& FieldByName( const char *field_name )          { return mFieldDefs->FieldByName( field_name ); }
+    const spFieldDefs& GetFieldDefs() const                         { return mFieldDefs; }
+    const cFieldDef& FieldByName( const std_string& field_name )    { return mFieldDefs->FieldByName( field_name ); }
+    const cFieldDef& FieldByName( const std_char *field_name )      { return mFieldDefs->FieldByName( field_name ); }
 
     void Locate( const OpenValues& values, const OpenFindFields& fields, locate_result& result );
     void Locate( const OpenValues& values, const OpenFindFields& fields, size_type start, size_type end, locate_result& result );

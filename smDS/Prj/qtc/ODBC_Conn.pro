@@ -11,28 +11,38 @@ TEMPLATE = lib
 CONFIG += dll
 
 DEFINES += ODBC_CONN_LIBRARY
-DEFINES += LINUX
 DEFINES += NO_FASTCALL
 DEFINES += NO_CDFASTCALL
 DEFINES += NO_STDCALL
+
+include (user_config.pri)
 
 #QMAKE_CXXFLAGS += -fvisibility=hidden -fvisibility-inlines-hidden
 #QMAKE_LFLAGS_SHLIB += -fvisibility=hidden -fvisibility-inlines-hidden
 
 CONFIG(debug, debug|release) {
-    PATH_SUFFIX = Debug
+    PATH_SUFFIX = ../qtc-Debug
 } else {
-    PATH_SUFFIX = Release
+    PATH_SUFFIX = ../qtc-Release
 }
 
 OBJECTS_DIR = $$_PRO_FILE_PWD_/$$PATH_SUFFIX/$$TARGET-obj
 
-LIBS += -liodbc
-
 INCLUDEPATH += ../../Src \
-               /home/sam/src/boost \
-               /home/sam/src/libs/ccLib/Src \
-               /home/usr/include
+               ../../include \
+               $$ROOT_BOOST \
+               $$ROOT_CCLIB/include
+
+unix {
+    DEFINES += LINUX
+    INCLUDEPATH += /usr/include
+    INCLUDEPATH += /usr/include/iodbc
+    LIBS += -liodbc
+}
+win32 {
+    DEFINES -= UNICODE
+    LIBS += -lodbc32
+}
 
 SOURCES += ../../Src/ODBC_Conn.cpp \
            ../../Src/ODBC_Sub.cpp

@@ -19,38 +19,30 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_smDS.h"
 #include "Win32/mlWinDll.h"
 //---------------------------------------------------------------------------
 namespace smds
 {
+    ////***********************************************************************
+    ////******    WinDllML
+    ////***********************************************************************
+    //WinDllML::WinDllML( const spSharedLibrary& dll )
+    //    : mDll_Guard(dll)
+    //{
+    //    mDatabase_Ctor = mDll_Guard->GetProcAddressT<Database_Ctor>( "_CreateDataConnection" );
+    //    mDatabase_Dtor = mDll_Guard->GetProcAddressT<Database_Dtor>( "_DeleteDataConnection" );
+    //}
 
-//***********************************************************************
-//******    WinDllML
-//***********************************************************************
-CDFASTCALL WinDllML::WinDllML( const wchar_t *dll_name )
-    : mDll_Guard(dll_name)
-{
-    mDatabase_Ctor = reinterpret_cast<Database_Ctor>(mDll_Guard.GetProcAddress( "_CreateDataConnection" ));
-    mDatabase_Dtor = reinterpret_cast<Database_Dtor>(mDll_Guard.GetProcAddress( "_DeleteDataConnection" ));
-    if ( mDatabase_Ctor == 0 || mDatabase_Dtor == 0 )
-        throw eDllLoadError();
-}
+    //Database_Ctor WinDllML::GetCreateDataConnection()
+    //{
+    //    return mDatabase_Ctor;
+    //}
 
-Database_Ctor FASTCALL WinDllML::GetCreateDataConnection()
-{
-    return mDatabase_Ctor;
-}
-
-Database_Dtor FASTCALL WinDllML::GetDeleteDataConnection()
-{
-    return mDatabase_Dtor;
-}
-
-} // namespace smds
+    //Database_Dtor WinDllML::GetDeleteDataConnection()
+    //{
+    //    return mDatabase_Dtor;
+    //}
+}; // namespace smds
 //---------------------------------------------------------------------------
 

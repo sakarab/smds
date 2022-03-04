@@ -19,10 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_smDS.h"
 #include "dsGUID.h"
 #include <memory>
@@ -31,19 +27,23 @@
 
 namespace smds
 {
+    //***********************************************************************
+    //******    dbGUID
+    //***********************************************************************
+    dbGUID::dbGUID()
+        : mValue{}
+    {
+    }
 
-//***********************************************************************
-//******    dbGUID
-//***********************************************************************
-dbGUID::dbGUID()
-{
-    std::memset( &mValue, 0, sizeof(detail::dbGUID_Internal) );
-}
+    dbGUID::dbGUID( const detail::dbGUID_Internal& guid )
+        : mValue(guid)
+    {
+    }
 
-dbGUID::dbGUID( const detail::dbGUID_Internal& date )
-    : mValue(date)
-{
-}
+    dbGUID::dbGUID( const GUID& guid )
+    {
+        memcpy( &mValue, &guid, sizeof(mValue) );
+    }
 
 };
 //---------------------------------------------------------------------------

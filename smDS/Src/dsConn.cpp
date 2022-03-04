@@ -19,10 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_smDS.h"
 #include "dsConn.h"
 //---------------------------------------------------------------------------
@@ -37,7 +33,7 @@ CDFASTCALL DbEngine::DbEngine( shared_ptr<IModuleLoader> module_loader )
 {
 }
 
-Database FASTCALL DbEngine::NewConnection( const ds_string& connection_string )
+Database FASTCALL DbEngine::NewConnection( const std_string& connection_string )
 {
     return ( Database( *this, connection_string ) );
 }
@@ -45,7 +41,7 @@ Database FASTCALL DbEngine::NewConnection( const ds_string& connection_string )
 //***********************************************************************
 //******    Database
 //***********************************************************************
-CDFASTCALL Database::Database( const DbEngine& transport_code, const ds_string& connection_string )
+CDFASTCALL Database::Database( const DbEngine& transport_code, const std_string& connection_string )
     : mData( new cDatabase_impl( transport_code, connection_string ) )
 {
     mData->mDatabase = transport_code.Database_Constructor()( connection_string.c_str() );

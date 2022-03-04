@@ -19,10 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_test.h"
 #include "uCompileTest.h"
 #include <dsData.h>
@@ -41,11 +37,11 @@ void ConvertTypedData( tblFiles::index_ptr& idx )
 void Tutorial()
 {
     // Select engine
-    spModuleLoader          module_loader( new OsModuleLoader( SM_DS_TEST_BACKEND ) );
+    spModuleLoader          module_loader = GetOsModuleLoader( SM_DS_TEST_BACKEND );
     DbEngine                engine( module_loader );
 
     // connect to database
-    Database        database = engine.NewConnection( "" );
+    Database        database = engine.NewConnection( CCTEXT( "" ) );
 
     // Create and open the dataset
     tblFiles_ptr    ds( new tblFiles() );
@@ -71,7 +67,7 @@ void Tutorial()
     }
 
     // Create an index on "PathID" and "fSize" fields
-    tblFiles::index_ptr     idx = ds->NewIndex( OpenIndexFields( cIndexField( "PathID" ), cIndexField( "fSize" ) ) );
+    tblFiles::index_ptr     idx = ds->NewIndex( OpenIndexFields( cIndexField( CCTEXT( "PathID" ) ), cIndexField( CCTEXT( "fSize" ) ) ) );
 
     // find - binary search - a record with PathID == 27 and fSize == 45000
     tblFiles::index::iterator   idx_it = idx->Find( OpenValues( 27, 45000 ) );

@@ -25,6 +25,7 @@
 #include "dsConfig.h"
 #include "dsBuffer.h"
 #include "dsVariant.h"
+#include <predef_cc.h>
 //---------------------------------------------------------------------------
 namespace smds
 {
@@ -290,19 +291,19 @@ public:
     const RESULT_TYPE FASTCALL operator*() const                { return RESULT_TYPE( *mRawBuffer ); }
     const RESULT_TYPE FASTCALL operator->() const               { return RESULT_TYPE( *mRawBuffer ); }
 
-    cRawFieldProxy FieldByName( const ds_string& field_name )
+    cRawFieldProxy FieldByName( const std_string& field_name )
     {
         return cRawFieldProxy( *mRawBuffer, mFieldDefs->FieldByName( field_name ) );
     }
-    cRawFieldProxy FieldByName( const char *field_name )
+    cRawFieldProxy FieldByName( const std_char *field_name )
     {
         return cRawFieldProxy( *mRawBuffer, mFieldDefs->FieldByName( field_name ) );
     }
-    const cRawFieldProxy FieldByName( const ds_string& field_name ) const
+    const cRawFieldProxy FieldByName( const std_string& field_name ) const
     {
         return cRawFieldProxy( *mRawBuffer, mFieldDefs->FieldByName( field_name ) );
     }
-    const cRawFieldProxy FieldByName( const char *field_name ) const
+    const cRawFieldProxy FieldByName( const std_char *field_name ) const
     {
         return cRawFieldProxy( *mRawBuffer, mFieldDefs->FieldByName( field_name ) );
     }
@@ -402,8 +403,8 @@ public:
         return OldValuesProxy( GetDoubleBuffer()->GetOriginalData(), *mContainer->GetFieldDefs().get() );
     }
 
-    cFieldProxy FASTCALL FieldByName( const ds_string& field_name );
-    cFieldProxy FASTCALL FieldByName( const char *field_name );
+    cFieldProxy FASTCALL FieldByName( const std_string& field_name );
+    cFieldProxy FASTCALL FieldByName( const std_char *field_name );
     bool FASTCALL Locate( const Variant& value, const cFindField& field );
     bool FASTCALL Locate( const OpenValues& values, const OpenFindFields& fields );
 
@@ -555,8 +556,8 @@ public:
     CDFASTCALL cRecord( const detail::Data::value_type& container, const spFieldDefs& field_defs );
     CDFASTCALL ~cRecord();
     void FASTCALL CommitUpdates()                                       { mRecord->CommitUpdates(); }
-    cFieldProxy FieldByName( const ds_string& field_name );
-    cFieldProxy FieldByName( const char *field_name );
+    cFieldProxy FieldByName( const std_string& field_name );
+    cFieldProxy FieldByName( const std_char *field_name );
 };
 
 //***********************************************************************

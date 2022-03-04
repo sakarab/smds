@@ -19,10 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_smDS.h"
 #include "dsCompare.h"
 #include "dsExceptions.h"
@@ -154,7 +150,7 @@ int CmpGUID( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )
     const dbGUID&   val_one = mItem1->ReadGUIDNN( field );
     const dbGUID&   val_two = mItem2->ReadGUIDNN( field );
 
-    return std::memcmp( &val_one.AsInternal(), &val_two.AsInternal(), sizeof(detail::dbGUID_Internal) );
+    return std::memcmp( &val_one.AsInternal(), &val_two.AsInternal(), sizeof(dbGUID_Internal) );
 }
 
 int CmpString( cRawBuffer *mItem1, cRawBuffer *mItem2, const cFieldDef& field )

@@ -19,10 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_smDS.h"
 #include "dsUtils.h"
 //---------------------------------------------------------------------------
@@ -32,22 +28,22 @@ namespace smds
 //***********************************************************************
 //******    cFindField
 //***********************************************************************
-CDFASTCALL cFindField::cFindField( const ds_string& field_name )
+CDFASTCALL cFindField::cFindField( const std_string& field_name )
     : mFieldName(field_name), mCaseOption(CaseSensitive)
 {
 }
 
-CDFASTCALL cFindField::cFindField( const ds_string& field_name, CaseOption case_option )
+CDFASTCALL cFindField::cFindField( const std_string& field_name, CaseOption case_option )
     : mFieldName(field_name), mCaseOption(case_option)
 {
 }
 
-CDFASTCALL cFindField::cFindField( const char *field_name )
+CDFASTCALL cFindField::cFindField( const std_char *field_name )
     : mFieldName(field_name), mCaseOption(CaseSensitive)
 {
 }
 
-CDFASTCALL cFindField::cFindField( const char *field_name, CaseOption case_option )
+CDFASTCALL cFindField::cFindField( const std_char *field_name, CaseOption case_option )
     : mFieldName(field_name), mCaseOption(case_option)
 {
 }

@@ -28,6 +28,7 @@
 #include <list>
 #include "dsSmartPtr.h"
 #include "dsStream.h"
+#include <cpp_string.h>
 
 namespace smds
 {
@@ -58,7 +59,7 @@ class cFieldDef_
 public:
     unsigned short      mIndex;
     int                 mOffset;
-    const char *        mName;
+    const std_char *    mName;
     cFieldKind          mKind;
     cFieldDataType      mDataType;
     // unsigned short      mRawSize;
@@ -74,8 +75,8 @@ struct cFieldDefs_
 
     int                 mBufferSize;
     int                 mCount;
-    const char          *mSql;
-    const char          *mTableName;
+    const std_char      *mSql;
+    const std_char      *mTableName;
     const cFieldDef_    *mFieldDefs;
     //int                 mBlobCount;
     //const cFieldDef     *mBlobFieldDefs;
@@ -95,7 +96,7 @@ private:
 
     unsigned short      mIndex;
     int                 mOffset;
-    ds_string           mName;
+    std_string          mName;
     cFieldKind          mKind;
     cFieldDataType      mDataType;
     unsigned short      mRawSize;
@@ -105,14 +106,14 @@ private:
     //FASTCALL cFieldDef( const cFieldDef& src );
     //cFieldDef& FASTCALL operator=( const cFieldDef& src );
 public:
-    CDFASTCALL cFieldDef( unsigned short idx, int offset, const ds_string& name,
+    CDFASTCALL cFieldDef( unsigned short idx, int offset, const std_string& name,
                           cFieldKind kind, cFieldDataType data_type, unsigned int size );
     CDFASTCALL ~cFieldDef();
     bool FASTCALL operator == ( const cFieldDef& other ) const;
     bool FASTCALL operator != ( const cFieldDef& other ) const          { return ( !(*this == other) ); }
     unsigned short FASTCALL Index() const                               { return ( mIndex ); }
     int FASTCALL Offset() const                                         { return ( mOffset ); }
-    const ds_string& FASTCALL Name() const                              { return ( mName ); }
+    const std_string& FASTCALL Name() const                             { return ( mName ); }
     cFieldKind FASTCALL Kind() const                                    { return ( mKind ); }
     cFieldDataType FASTCALL DataType() const                            { return ( mDataType ); }
     unsigned short FASTCALL RawSize() const                             { return ( mRawSize ); }
@@ -132,18 +133,18 @@ namespace detail
 class cFieldNameMap
 {
 private:
-    const ds_string     *mFieldName;
+    const std_string    *mFieldName;
     const cFieldDef     *mFieldDef;
 public:
-    CDFASTCALL cFieldNameMap( const ds_string& field_name )
+    CDFASTCALL cFieldNameMap( const std_string& field_name )
         : mFieldName(&field_name), mFieldDef(0)
     {
     }
-    CDFASTCALL cFieldNameMap( const ds_string& field_name, const cFieldDef& field_def )
+    CDFASTCALL cFieldNameMap( const std_string& field_name, const cFieldDef& field_def )
         : mFieldName(&field_name), mFieldDef(&field_def)
     {
     }
-    const ds_string& FASTCALL FieldName() const      { return ( *mFieldName ); }
+    const std_string& FASTCALL FieldName() const     { return ( *mFieldName ); }
     const cFieldDef& FASTCALL FieldDef() const       { return ( *mFieldDef ); }
 };
 
@@ -162,7 +163,7 @@ private:
     cFieldDefContainer          mFieldDefs;
     cFieldDefSortedContainer    mFieldDefSorted;
 
-    const cFieldDef FASTCALL MakeFieldDef( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size );
+    const cFieldDef FASTCALL MakeFieldDef( const std_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size );
     void FASTCALL ConstructSorted();
     // non copyable
     CDFASTCALL cFieldDefs( const cFieldDefs& src );
@@ -185,11 +186,11 @@ public:
 
     //bool FASTCALL equal( const cFieldDefs& field_defs ) const;
     //const cFieldDef& FASTCALL Fields( int idx ) const;
-    const cFieldDef& FASTCALL AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size );
-    const cFieldDef& FASTCALL FieldByName( const ds_string& field_name ) const;
-    const cFieldDef& FASTCALL FieldByName( const char *field_name ) const;
-    const cFieldDef * FASTCALL FindField( const ds_string& field_name ) const;
-    const cFieldDef * FASTCALL FindField( const char *field_name ) const;
+    const cFieldDef& FASTCALL AddField( const std_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size );
+    const cFieldDef& FASTCALL FieldByName( const std_string& field_name ) const;
+    const cFieldDef& FASTCALL FieldByName( const std_char *field_name ) const;
+    const cFieldDef * FASTCALL FindField( const std_string& field_name ) const;
+    const cFieldDef * FASTCALL FindField( const std_char *field_name ) const;
 };
 
 typedef shared_ptr<cFieldDefs>      spFieldDefs;

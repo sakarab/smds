@@ -24,50 +24,30 @@
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
 #include "dsODBCtypes.h"
+#include <boost/uuid/uuid.hpp>
 
 namespace smds
 {
+    namespace detail
+    {
+        typedef boost::uuids::uuid      dbGUID_Internal;
+    }
 
-class dbGUID;
-
-namespace detail
-{
-
-typedef SQLGUID     dbGUID_Internal;
-
-dbGUID CreateDbGUID( const dbGUID_Internal& guid );
-
-} // detail
-
-//***********************************************************************
-//******    dbGUID
-//***********************************************************************
-class dbGUID
-{
-private:
-    //friend cStream& operator << ( cStream& st, const dbGUID a );
-    //friend cStream& operator >> ( cStream& st, dbGUID& a );
-    friend dbGUID detail::CreateDbGUID( const detail::dbGUID_Internal& guid );
-
-    detail::dbGUID_Internal     mValue;
-
-    explicit dbGUID( const detail::dbGUID_Internal& guid );
-public:
-    dbGUID();
-    const detail::dbGUID_Internal& AsInternal() const                   { return mValue; }
-};
-
-namespace detail
-{
-
-inline dbGUID CreateDbGUID( const dbGUID_Internal& guid )
-{
-    return dbGUID( guid );
-}
-
-} // detail
-
+    //***********************************************************************
+    //******    dbGUID
+    //***********************************************************************
+    class dbGUID
+    {
+    private:
+        //friend cStream& operator << ( cStream& st, const dbGUID a );
+        //friend cStream& operator >> ( cStream& st, dbGUID& a );
+        detail::dbGUID_Internal     mValue;
+    public:
+        dbGUID();
+        explicit dbGUID( const detail::dbGUID_Internal& guid );
+        explicit dbGUID( const GUID& guid );
+        const detail::dbGUID_Internal& AsInternal() const               { return mValue; }
+    };
 } // smds
 //---------------------------------------------------------------------------
 #endif
-

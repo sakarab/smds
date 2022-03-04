@@ -35,107 +35,105 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>test</ProjectName>
-    <ProjectGuid>{FE9B361B-A52B-4C7C-B05B-0BF5B3C662CA}</ProjectGuid>
-    <RootNamespace>smDS_v8exe</RootNamespace>
+    <ProjectGuid>{F50B2B2E-2D19-4045-A560-36F69C34C0D1}</ProjectGuid>
+    <RootNamespace>smDSv8lib</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'" Label="PropertySheets">
-    <Import Project=".\vs2017.props" />
+    <Import Project=".\vs2019.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Rel_100.props" />
-    <Import Project="test.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'" Label="PropertySheets">
-    <Import Project=".\vs2017.props" />
+    <Import Project=".\vs2019.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Rel_100.props" />
-    <Import Project="test.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'" Label="PropertySheets">
-    <Import Project=".\vs2017.props" />
+    <Import Project=".\vs2019.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Dbg_100.props" />
-    <Import Project="test.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'" Label="PropertySheets">
-    <Import Project=".\vs2017.props" />
+    <Import Project=".\vs2019.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Dbg_100.props" />
-    <Import Project="test.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|Win32'" Label="PropertySheets">
-    <Import Project=".\vs2017.props" />
+    <Import Project=".\vs2019.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Rel_100.props" />
-    <Import Project="test.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|x64'" Label="PropertySheets">
-    <Import Project=".\vs2017.props" />
+    <Import Project=".\vs2019.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Rel_100.props" />
-    <Import Project="test.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'" Label="PropertySheets">
-    <Import Project=".\vs2017.props" />
+    <Import Project=".\vs2019.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Dbg_100.props" />
-    <Import Project="test.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|x64'" Label="PropertySheets">
-    <Import Project=".\vs2017.props" />
+    <Import Project=".\vs2019.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project=".\Dbg_100.props" />
-    <Import Project="test.props" />
+    <Import Project="smDS.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -171,145 +169,105 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pre_test.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pre_smDS.h</PrecompiledHeaderFile>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>Loki.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(LOKI_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-    </Link>
     <Bscmake>
       <OutputFile>$(IntDir)$(ProjectName).bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|x64'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pre_test.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pre_smDS.h</PrecompiledHeaderFile>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>Loki.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(LOKI_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-    </Link>
     <Bscmake>
       <OutputFile>$(IntDir)$(ProjectName).bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pre_test.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pre_smDS.h</PrecompiledHeaderFile>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>Loki.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(LOKI_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
     <Bscmake>
       <OutputFile>$(IntDir)$(ProjectName).bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_RTL|x64'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pre_test.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pre_smDS.h</PrecompiledHeaderFile>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>Loki.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(LOKI_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-    </Link>
     <Bscmake>
       <OutputFile>$(IntDir)$(ProjectName).bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pre_test.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pre_smDS.h</PrecompiledHeaderFile>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>Loki.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(LOKI_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-    </Link>
     <Bscmake>
       <OutputFile>$(IntDir)$(ProjectName).bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pre_test.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pre_smDS.h</PrecompiledHeaderFile>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>Loki.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(LOKI_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-    </Link>
     <Bscmake>
       <OutputFile>$(IntDir)$(ProjectName).bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pre_test.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pre_smDS.h</PrecompiledHeaderFile>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>Loki.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(LOKI_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <TargetMachine>MachineX86</TargetMachine>
-    </Link>
     <Bscmake>
       <OutputFile>$(IntDir)$(ProjectName).bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Static|x64'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pre_test.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pre_smDS.h</PrecompiledHeaderFile>
     </ClCompile>
-    <Link>
-      <AdditionalDependencies>Loki.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(LOKI_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <SubSystem>Console</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-    </Link>
     <Bscmake>
       <OutputFile>$(IntDir)$(ProjectName).bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Test\main_exe.cpp" />
-    <ClCompile Include="..\..\Test\pre_test.cpp">
+    <ClCompile Include="..\..\Src\dsBuffer.cpp" />
+    <ClCompile Include="..\..\Src\dsCompare.cpp" />
+    <ClCompile Include="..\..\Src\dsConn.cpp" />
+    <ClCompile Include="..\..\Src\dsData.cpp" />
+    <ClCompile Include="..\..\Src\dsDateTime.cpp" />
+    <ClCompile Include="..\..\Src\dsExceptions.cpp" />
+    <ClCompile Include="..\..\Src\dsFields.cpp" />
+    <ClCompile Include="..\..\Src\dsGUID.cpp" />
+    <ClCompile Include="..\..\Src\dsIndex.cpp" />
+    <ClCompile Include="..\..\Src\dsModuleLoad.cpp" />
+    <ClCompile Include="..\..\Src\dsRecord.cpp" />
+    <ClCompile Include="..\..\Src\dsStream.cpp" />
+    <ClCompile Include="..\..\Src\dsString.cpp" />
+    <ClCompile Include="..\..\Src\dsUtils.cpp" />
+    <ClCompile Include="..\..\Src\dsVariant.cpp" />
+    <ClCompile Include="..\..\Src\pre_smDS.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Static|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_RTL|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|Win32'">Create</PrecompiledHeader>
@@ -319,29 +277,37 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_RTL|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Static|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\Test\uCompileTest.cpp" />
-    <ClCompile Include="..\..\Test\uConnectionStrings.cpp" />
-    <ClCompile Include="..\..\Test\uProfile.cpp" />
-    <ClCompile Include="..\..\Test\uProfile1.cpp" />
-    <ClCompile Include="..\..\Test\uTables.cpp" />
-    <ClCompile Include="..\..\Test\uTest.cpp" />
-    <ClCompile Include="..\..\Test\uUntypedTest.cpp" />
+    <ClCompile Include="..\..\Src\Win32\mlWinDll.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Test\pre_test.h" />
-    <ClInclude Include="..\..\Test\uCompileTest.h" />
-    <ClInclude Include="..\..\Test\uConnectionStrings.h" />
-    <ClInclude Include="..\..\Test\uProfile.h" />
-    <ClInclude Include="..\..\Test\uProfile1.h" />
-    <ClInclude Include="..\..\Test\uTables.h" />
-    <ClInclude Include="..\..\Test\uTest.h" />
-    <ClInclude Include="..\..\Test\uUntypedTest.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="smDS.vcxproj">
-      <Project>{f50b2b2e-2d19-4045-a560-36f69c34c0d1}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
+    <ClInclude Include="..\..\include\dsBuffer.h" />
+    <ClInclude Include="..\..\include\dsCommon.h" />
+    <ClInclude Include="..\..\include\dsCompare.h" />
+    <ClInclude Include="..\..\include\dsCompareControlers.h" />
+    <ClInclude Include="..\..\include\dsConfig.h" />
+    <ClInclude Include="..\..\include\dsConn.h" />
+    <ClInclude Include="..\..\include\dsConn_Intf.h" />
+    <ClInclude Include="..\..\include\dsData.h" />
+    <ClInclude Include="..\..\include\dsDateTime.h" />
+    <ClInclude Include="..\..\include\dsExceptions.h" />
+    <ClInclude Include="..\..\include\dsFields.h" />
+    <ClInclude Include="..\..\include\dsGUID.h" />
+    <ClInclude Include="..\..\include\dsIndex.h" />
+    <ClInclude Include="..\..\include\dsModuleLoad.h" />
+    <ClInclude Include="..\..\include\dsODBCtypes.h" />
+    <ClInclude Include="..\..\include\dsRecord.h" />
+    <ClInclude Include="..\..\include\dsSerialization.h" />
+    <ClInclude Include="..\..\include\dsSmartPtr.h" />
+    <ClInclude Include="..\..\include\dsStream.h" />
+    <ClInclude Include="..\..\include\dsString.h" />
+    <ClInclude Include="..\..\include\dsSysOpen.h" />
+    <ClInclude Include="..\..\include\dsTypedData.h" />
+    <ClInclude Include="..\..\include\dsTypes.h" />
+    <ClInclude Include="..\..\include\dsUtils.h" />
+    <ClInclude Include="..\..\include\dsVariant.h" />
+    <ClInclude Include="..\..\include\shared_in_ptr.hpp" />
+    <ClInclude Include="..\..\include\Win32\mlWinDll.h" />
+    <ClInclude Include="..\..\Src\pre_smDS.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

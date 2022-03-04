@@ -25,6 +25,7 @@
 #include "dsConfig.h"
 #include "dsSmartPtr.h"
 #include <vector>
+#include <cpp_string.h>
 //---------------------------------------------------------------------------
 namespace smds
 {
@@ -148,6 +149,7 @@ inline cStream& FASTCALL operator << ( cStream& st, const long long a )         
 inline cStream& FASTCALL operator << ( cStream& st, const unsigned long long a )    { return st.WriteBuffer( &a, sizeof(unsigned long long) ); }
 inline cStream& FASTCALL operator << ( cStream& st, const double a )                { return st.WriteBuffer( &a, sizeof(double) ); }
 cStream& FASTCALL operator << ( cStream& st, const char *a );
+cStream& FASTCALL operator << ( cStream& st, const std_string& a );
 
 inline cStream& FASTCALL operator >> ( cStream& st, bool& a )               { return st.ReadBuffer( &a, sizeof(bool) ); }
 inline cStream& FASTCALL operator >> ( cStream& st, char& a )               { return st.ReadBuffer( &a, sizeof(char) ); }
@@ -163,6 +165,7 @@ inline cStream& FASTCALL operator >> ( cStream& st, long long& a )          { re
 inline cStream& FASTCALL operator >> ( cStream& st, unsigned long long& a ) { return st.ReadBuffer( &a, sizeof(unsigned long long) ); }
 inline cStream& FASTCALL operator >> ( cStream& st, double& a )             { return st.ReadBuffer( &a, sizeof(double) ); }
 // cStream& FASTCALL operator >> ( cStream& st, const char *a );
+cStream& FASTCALL operator >> ( cStream& st, std_string& a );
 
 //***********************************************************************
 //******    cMemoryStream

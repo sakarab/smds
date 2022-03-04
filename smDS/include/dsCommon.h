@@ -24,19 +24,26 @@
 //---------------------------------------------------------------------------
 #include "dsConfig.h"
 #include <cstring>
+#include <cpp_string.h>
+#include <boost/algorithm/string.hpp>
 //---------------------------------------------------------------------------
 
 namespace smds
 {
 
 inline int StringCompare( const char *str1, const char *str2 );
+inline int StringCompare( const wchar_t *str1, const wchar_t *str2 );
 
 #if defined ( __BORLANDC__ )
 inline int StringCompare( const char *str1, const char *str2 )     { return stricmp( str1, str2 ); }
 #endif
 
 #if defined ( _MSC_VER )
-inline int StringCompare( const char *str1, const char *str2 )     { return _stricmp( str1, str2 ); }
+inline int StringCompare( const char *str1, const char *str2 )              { return _stricmp( str1, str2 ); }
+inline int StringCompare( const wchar_t *str1, const wchar_t *str2 )        { return _wcsicmp( str1, str2 ); }
+inline int StringCompare( const std_string& str1, const std_string& str2 )  { return _wcsicmp( str1.c_str(), str2.c_str() ); }
+
+typedef std::wostringstream     StringBuilder;
 #endif
 
 #if defined ( __GNUG__ )
@@ -46,6 +53,8 @@ inline int StringCompare( const char *str1, const char *str2 )     { return stri
     #if defined (__linux__)
 inline int StringCompare( const char *str1, const char *str2 )     { return strcasecmp( str1, str2 ); }
     #endif
+
+typedef std::ostringstream     StringBuilder;
 #endif
 
 } // namespace smds

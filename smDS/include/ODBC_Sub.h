@@ -30,6 +30,7 @@
 #include <sqlext.h>
 #include <vector>
 #include <string>
+#include <cpp_string.h>
 //---------------------------------------------------------------------------
 
 struct TypeRaw
@@ -55,20 +56,21 @@ private:
     SWORD               mScale;
     SWORD               mNullable;
     SQLLEN              mIndicator;
-    std::string         mName;
+    std_string          mName;
     std::vector<char>   mVecBuff;
     char                mCharBuff[BUFFER_SWITCH];
     SWORD               m_C_type;
     int                 m_DS_type;
     UDWORD              mDataSize;
 public:
-    CDFASTCALL ODBC_Field( const std::string name, const TypeRaw *data_type, UDWORD precision, SWORD scale, SWORD nullable );
+    CDFASTCALL ODBC_Field( const std_string& name, const TypeRaw *data_type, UDWORD precision, SWORD scale, SWORD nullable );
+    CDFASTCALL ODBC_Field( const std_char *name, const TypeRaw *data_type, UDWORD precision, SWORD scale, SWORD nullable );
     CDFASTCALL ~ODBC_Field();
     SWORD FASTCALL ODBC_Type() const                        { return m_ODBC_type; }
     SWORD FASTCALL C_Type() const                           { return m_C_type; }
     int FASTCALL DS_Type() const                            { return m_DS_type; }
     UDWORD FASTCALL GetDataSize() const                     { return mDataSize; }
-    const std::string& GetName() const                      { return mName; }
+    const std_string& GetName() const                       { return mName; }
     SQLPOINTER FASTCALL GetBuffer();
     SQLLEN FASTCALL GetBufferLength();
     SQLLEN * FASTCALL GetIndicatorAddress()                 { return &mIndicator; }
@@ -109,7 +111,7 @@ public:
     CDFASTCALL ODBC_Connection( ODBC_Env& env );
     CDFASTCALL ~ODBC_Connection();
     SQLHANDLE GetHandle() const                                     { return mConnection; }
-    void FASTCALL Connect( const char *connection_string );
+    void FASTCALL Connect( const std_char *connection_string );
     void FASTCALL Disconnect();
 };
 
@@ -130,15 +132,15 @@ public:
     CDFASTCALL ~ODBC_Statement();
 
     std::size_t FASTCALL GetFieldCount()                            { return mFields.size(); }
-    void FASTCALL GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+    void FASTCALL GetFieldAttributes( int idx, std_char *name, unsigned int name_buffer_length,
                                       std::size_t& name_buffer_required_length, unsigned int& field_data_size, int& field_data_type );
 
-    void FASTCALL ExecSql( const char *sql );
+    void FASTCALL ExecSql( const std_char *sql );
     void FASTCALL CloseSql();
     void FASTCALL Next();
     bool FASTCALL Eof() const                                       { return mIsEof; }
 
-    ODBC_Field * FASTCALL FieldByName( const char *field_name );
+    ODBC_Field * FASTCALL FieldByName( const std_char *field_name );
     ODBC_Field * FASTCALL FieldByIndex( int idx )                   { return &mFields[idx]; }
 };
 

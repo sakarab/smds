@@ -25,6 +25,7 @@
 #include "dsTypes.h"
 #include "dsSysOpen.h"
 #include "dsVariant.h"
+#include <cpp_string.h>
 
 //#if ! defined (ARRAY_COUNT)
 //    #define ARRAY_COUNT(a)      (sizeof(a)/sizeof(a[0]))
@@ -41,15 +42,15 @@ class cFindField
 public:
     enum CaseOption { CaseSensitive, CaseInsensitive };
 private:
-    ds_string       mFieldName;
+    std_string      mFieldName;
     CaseOption      mCaseOption;
 public:
-    CDFASTCALL cFindField( const ds_string& field_name );
-    CDFASTCALL cFindField( const ds_string& field_name, CaseOption case_option );
-    CDFASTCALL cFindField( const char *field_name );
-    CDFASTCALL cFindField( const char *field_name, CaseOption case_option );
+    CDFASTCALL cFindField( const std_string& field_name );
+    CDFASTCALL cFindField( const std_string& field_name, CaseOption case_option );
+    CDFASTCALL cFindField( const std_char *field_name );
+    CDFASTCALL cFindField( const std_char *field_name, CaseOption case_option );
 
-    const ds_string& GetFieldName() const               { return ( mFieldName ); }
+    const std_string& GetFieldName() const              { return ( mFieldName ); }
     CaseOption GetCaseOption() const                    { return ( mCaseOption ); }
 };
 
@@ -63,21 +64,21 @@ public:
 private:
     OrderOptions    mOrderOptions;
 public:
-    CDFASTCALL cIndexField( const ds_string& field_name )
+    CDFASTCALL cIndexField( const std_string& field_name )
         : cFindField( field_name ), mOrderOptions(Ascending)                        {}  // empty
-    CDFASTCALL cIndexField( const ds_string& field_name, CaseOption case_option )
+    CDFASTCALL cIndexField( const std_string& field_name, CaseOption case_option )
         : cFindField( field_name, case_option ), mOrderOptions(Ascending)           {}  // empty
-    CDFASTCALL cIndexField( const ds_string& field_name, OrderOptions order_options )
+    CDFASTCALL cIndexField( const std_string& field_name, OrderOptions order_options )
         : cFindField( field_name ), mOrderOptions(order_options)                    {}  // empty
-    CDFASTCALL cIndexField( const ds_string& field_name, OrderOptions order_options, CaseOption case_option )
+    CDFASTCALL cIndexField( const std_string& field_name, OrderOptions order_options, CaseOption case_option )
         : cFindField( field_name, case_option ), mOrderOptions(order_options)       {}  // empty
-    CDFASTCALL cIndexField( const char *field_name )
+    CDFASTCALL cIndexField( const std_char *field_name )
         : cFindField( field_name ), mOrderOptions(Ascending)                        {}  // empty
-    CDFASTCALL cIndexField( const char *field_name, CaseOption case_option )
+    CDFASTCALL cIndexField( const std_char *field_name, CaseOption case_option )
         : cFindField( field_name, case_option ), mOrderOptions(Ascending)           {}  // empty
-    CDFASTCALL cIndexField( const char *field_name, OrderOptions order_options )
+    CDFASTCALL cIndexField( const std_char *field_name, OrderOptions order_options )
         : cFindField( field_name ), mOrderOptions(order_options)                    {}  // empty
-    CDFASTCALL cIndexField( const char *field_name, OrderOptions order_options, CaseOption case_option )
+    CDFASTCALL cIndexField( const std_char *field_name, OrderOptions order_options, CaseOption case_option )
         : cFindField( field_name, case_option ), mOrderOptions(order_options)       {}  // empty
 
     OrderOptions GetOrderOptions() const                { return ( mOrderOptions ); }

@@ -19,98 +19,93 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_test.h"
 #include "uConnectionStrings.h"
 //---------------------------------------------------------------------------
 
-const char *BDE_DirData_Conn = "DirData"                                "\r\n"
-                               "DATABASE NAME=G:\\Data\\Dirdata82.mdb"  "\r\n"
-                               "USER NAME=Admin"                        "\r\n"
-                               "OPEN MODE=READ/WRITE"                   "\r\n"
-                               "LANGDRIVER="                            "\r\n"
-                               "SYSTEM DATABASE="                       "\r\n"
-                               "PASSWORD=";
+const std_char *BDE_DirData_Conn = CCTEXT( "DirData"                                "\r\n" )
+                                   CCTEXT( "DATABASE NAME=G:\\Data\\Dirdata82.mdb"  "\r\n" )
+                                   CCTEXT( "USER NAME=Admin"                        "\r\n" )
+                                   CCTEXT( "OPEN MODE=READ/WRITE"                   "\r\n" )
+                                   CCTEXT( "LANGDRIVER="                            "\r\n" )
+                                   CCTEXT( "SYSTEM DATABASE="                       "\r\n" )
+                                   CCTEXT( "PASSWORD=" );
 
-const char *ODBC_Access_DirData_Conn =  "DBQ=G:\\Data\\Dirdata82.mdb;"
-                                        "DefaultDir=G:\\Data;"
-                                        "Driver={Microsoft Access Driver (*.mdb)};"
-                                        "DriverId=281;"
-                                        "FIL=MS Access;"
-                                        "MaxBufferSize=2048;"
-                                        "MaxScanRows=8;"
-                                        "PageTimeout=5;"
-                                        "SafeTransactions=0;"
-                                        "Threads=3;"
-                                        "UID=admin;"
-                                        "UserCommitSync=Yes;";
+const std_char *ODBC_Access_DirData_Conn = CCTEXT( "DBQ=G:\\Data\\Dirdata82.mdb;" )
+                                           CCTEXT( "DefaultDir=G:\\Data;" )
+                                           CCTEXT( "Driver={Microsoft Access Driver (*.mdb)};" )
+                                           CCTEXT( "DriverId=281;" )
+                                           CCTEXT( "FIL=MS Access;" )
+                                           CCTEXT( "MaxBufferSize=2048;" )
+                                           CCTEXT( "MaxScanRows=8;" )
+                                           CCTEXT( "PageTimeout=5;" )
+                                           CCTEXT( "SafeTransactions=0;" )
+                                           CCTEXT( "Threads=3;" )
+                                           CCTEXT( "UID=admin;" )
+                                           CCTEXT( "UserCommitSync=Yes;" );
 
-const char *ODBC_MsSql_DirData_Conn =   "DRIVER=SQL Native Client;"
-                                        "UID=sa;"
-                                        "PWD=123456;"
-                                        "DATABASE=DirData;"
-                                        "WSID=SAM2KFAST;"
-                                        "APP=Microsoft® Windows® Operating System;"
-                                        "SERVER=Web2kS;"
-                                        "Description=Dir-Data;";
+const std_char *ODBC_MsSql_DirData_Conn = CCTEXT( "DRIVER=SQL Native Client;" )
+                                          CCTEXT( "UID=sa;" )
+                                          CCTEXT( "PWD=123456;" )
+                                          CCTEXT( "DATABASE=DirData;" )
+                                          CCTEXT( "WSID=SAM2KFAST;" )
+                                          CCTEXT( "APP=Microsoft® Windows® Operating System;" )
+                                          CCTEXT( "SERVER=Web2kS;" )
+                                          CCTEXT( "Description=Dir-Data;" );
 
-const char *ODBC_SEn_Conn = "DRIVER={Microsoft ODBC for Oracle};"
-                            "UID=s01999;"
-                            "PWD=s01999;"
-                            "SERVER=sen9i.world;";
+const std_char *ODBC_SEn_Conn = CCTEXT( "DRIVER={Microsoft ODBC for Oracle};" )
+                                CCTEXT( "UID=s01999;" )
+                                CCTEXT( "PWD=s01999;" )
+                                CCTEXT( "SERVER=sen9i.world;"; )
 
-const char *ODBC_Marine_Conn = "DSN=Marine;"
-                               "UID=dba;"
-                               "PWD=sql;"
-                               "Start=C:\\SqlAny50\\Win32\\DbEng50;"
-                               "DatabaseFile=G:\\Data\\Marine;"
-                               "DatabaseName=Marine;"
-                               "EngineName=DbLocal;"
-                               "AutoStop=yes;"
-                               "KeysInSQLStatistics=1;"
-                               "PreventNotCapable=0;"
-                               "Driver={Sybase SQL Anywhere 5.0};"
-                               "LazyAutocommit=0;"
-                               "Delphi=0";
+const std_char *ODBC_Marine_Conn = CCTEXT( "DSN=Marine;" )
+                                   CCTEXT( "UID=dba;" )
+                                   CCTEXT( "PWD=sql;" )
+                                   CCTEXT( "Start=C:\\SqlAny50\\Win32\\DbEng50;" )
+                                   CCTEXT( "DatabaseFile=G:\\Data\\Marine;" )
+                                   CCTEXT( "DatabaseName=Marine;" )
+                                   CCTEXT( "EngineName=DbLocal;" )
+                                   CCTEXT( "AutoStop=yes;" )
+                                   CCTEXT( "KeysInSQLStatistics=1;" )
+                                   CCTEXT( "PreventNotCapable=0;" )
+                                   CCTEXT( "Driver={Sybase SQL Anywhere 5.0};" )
+                                   CCTEXT( "LazyAutocommit=0;" )
+                                   CCTEXT( "Delphi=0"; )
 
+const std_char *BDE_SENDATA_Conn = CCTEXT( "SENDATA"                            "\r\n" )
+                                   CCTEXT( "SERVER NAME=SEN9I.WORLD"            "\r\n" )
+                                   CCTEXT( "USER NAME=s01000"                   "\r\n" )
+                                   CCTEXT( "NET PROTOCOL=TNS"                   "\r\n" )
+                                   CCTEXT( "OPEN MODE=READ/WRITE"               "\r\n" )
+                                   CCTEXT( "SCHEMA CACHE SIZE=8"                "\r\n" )
+                                   CCTEXT( "LANGDRIVER="                        "\r\n" )
+                                   CCTEXT( "SQLQRYMODE="                        "\r\n" )
+                                   CCTEXT( "SQLPASSTHRU MODE=SHARED AUTOCOMMIT" "\r\n" )
+                                   CCTEXT( "SCHEMA CACHE TIME=-1"               "\r\n" )
+                                   CCTEXT( "MAX ROWS=-1"                        "\r\n" )
+                                   CCTEXT( "BATCH COUNT=200"                    "\r\n" )
+                                   CCTEXT( "ENABLE SCHEMA CACHE=FALSE"          "\r\n" )
+                                   CCTEXT( "SCHEMA CACHE DIR="                  "\r\n" )
+                                   CCTEXT( "ENABLE BCD=FALSE"                   "\r\n" )
+                                   CCTEXT( "ENABLE INTEGERS=TRUE"               "\r\n" )
+                                   CCTEXT( "LIST SYNONYMS=NONE"                 "\r\n" )
+                                   CCTEXT( "ROWSET SIZE=20"                     "\r\n" )
+                                   CCTEXT( "BLOBS TO CACHE=64"                  "\r\n" )
+                                   CCTEXT( "BLOB SIZE=32"                       "\r\n" )
+                                   CCTEXT( "OBJECT MODE=TRUE"                   "\r\n" )
+                                   CCTEXT( "PASSWORD=s01000" );
 
-const char *BDE_SENDATA_Conn = "SENDATA"                            "\r\n"
-                               "SERVER NAME=SEN9I.WORLD"            "\r\n"
-                               "USER NAME=s01000"                   "\r\n"
-                               "NET PROTOCOL=TNS"                   "\r\n"
-                               "OPEN MODE=READ/WRITE"               "\r\n"
-                               "SCHEMA CACHE SIZE=8"                "\r\n"
-                               "LANGDRIVER="                        "\r\n"
-                               "SQLQRYMODE="                        "\r\n"
-                               "SQLPASSTHRU MODE=SHARED AUTOCOMMIT" "\r\n"
-                               "SCHEMA CACHE TIME=-1"               "\r\n"
-                               "MAX ROWS=-1"                        "\r\n"
-                               "BATCH COUNT=200"                    "\r\n"
-                               "ENABLE SCHEMA CACHE=FALSE"          "\r\n"
-                               "SCHEMA CACHE DIR="                  "\r\n"
-                               "ENABLE BCD=FALSE"                   "\r\n"
-                               "ENABLE INTEGERS=TRUE"               "\r\n"
-                               "LIST SYNONYMS=NONE"                 "\r\n"
-                               "ROWSET SIZE=20"                     "\r\n"
-                               "BLOBS TO CACHE=64"                  "\r\n"
-                               "BLOB SIZE=32"                       "\r\n"
-                               "OBJECT MODE=TRUE"                   "\r\n"
-                               "PASSWORD=s01000";
+const std_char *ADO_Dirdata_Conn = CCTEXT( "Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;" )
+                                   CCTEXT( "Data Source=G:\\Data\\Dirdata82.mdb;Mode=Share Deny None;" )
+                                   CCTEXT( "Extended Properties="""";Persist Security Info=False;" )
+                                   CCTEXT( "Jet OLEDB:System database="""";Jet OLEDB:Registry Path="""";" )
+                                   CCTEXT( "Jet OLEDB:Database Password="""";Jet OLEDB:Engine Type=5;" )
+                                   CCTEXT( "Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;" )
+                                   CCTEXT( "Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Password="""";" )
+                                   CCTEXT( "Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;" )
+                                   CCTEXT( "Jet OLEDB:Don't Copy Locale on Compact=False;" )
+                                   CCTEXT( "Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False" );
 
-const char *ADO_Dirdata_Conn =  "Provider=Microsoft.Jet.OLEDB.4.0;User ID=Admin;"
-                                "Data Source=G:\\Data\\Dirdata82.mdb;Mode=Share Deny None;"
-                                "Extended Properties="""";Persist Security Info=False;"
-                                "Jet OLEDB:System database="""";Jet OLEDB:Registry Path="""";"
-                                "Jet OLEDB:Database Password="""";Jet OLEDB:Engine Type=5;"
-                                "Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Partial Bulk Ops=2;"
-                                "Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Password="""";"
-                                "Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;"
-                                "Jet OLEDB:Don't Copy Locale on Compact=False;"
-                                "Jet OLEDB:Compact Without Replica Repair=False;Jet OLEDB:SFP=False";
-
-const char *DAO_Dirdata_Conn =  "G:\\Data\\DirData82.mdb";
+const std_char *DAO_Dirdata_Conn = CCTEXT( "G:\\Data\\DirData82.mdb" );
 
 //---------------------------------------------------------------------------

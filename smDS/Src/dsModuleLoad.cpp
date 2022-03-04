@@ -19,19 +19,72 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_smDS.h"
 #include "dsModuleLoad.h"
 //---------------------------------------------------------------------------
 namespace smds
 {
+    //***********************************************************************
+    //******    ModuleLoader
+    //***********************************************************************
+    ModuleLoader::ModuleLoader( const spSharedLibrary& dll )
+        : mDll_Guard(dll)
+    {
+        mDatabase_Ctor = mDll_Guard->GetProcAddressT<Database_Ctor>( "_CreateDataConnection" );
+        mDatabase_Dtor = mDll_Guard->GetProcAddressT<Database_Dtor>( "_DeleteDataConnection" );
+    }
 
-spModuleLoader FASTCALL GetOsModuleLoader( const wchar_t *dll_name )
-{
-    return spModuleLoader( new OsModuleLoader( dll_name ) );
-}
+    Database_Ctor ModuleLoader::GetCreateDataConnection()
+    {
+        return mDatabase_Ctor;
+    }
+
+    Database_Dtor ModuleLoader::GetDeleteDataConnection()
+    {
+        return mDatabase_Dtor;
+    }
+
+    spModuleLoader GetOsModuleLoader( const std_char *dll_name )
+    {
+        return spModuleLoader( new ModuleLoader( LoadDll( dll_name ) ) );
+    }
+
+    //=======================================================================
+    //======    DbDriver
+    //=======================================================================
+    DbDriver::DbDriver( const spSharedLibrary& dll )
+        : mDll_Guard( dll )
+    {
+        mCreateDataConnection = dll->GetProcAddressT<Database_Ctor>( "_CreateDataConnection" );
+        mDeleteDataConnection = dll->GetProcAddressT<Database_Dtor>( "_DeleteDataConnection" );
+    }
+
+    DbDriver::DbDriver( const std_char *dll_name )
+        : DbDriver( LoadDll( dll_name ) )
+    {
+    }
+
+    //=======================================================================
+    //======    DbConnection
+    //=======================================================================
+    DbConnection::DbConnection( const spDbDriver& driver, const std_char* connection_string )
+        : mDriver( driver ), mDatabase( driver->CreateDataConnection( connection_string ) )
+    {
+    }
+
+    DbConnection::DbConnection( const spSharedLibrary& dll, const std_char* connection_string )
+        : DbConnection( std::make_shared<DbDriver>( dll ), connection_string )
+    {
+    }
+
+    DbConnection::DbConnection( const std_char* dll_name, const std_char* connection_string )
+        : DbConnection( LoadDll( dll_name ), connection_string )
+    {
+    }
+
+    DbConnection::~DbConnection()
+    {
+        mDriver->DeleteDataConnection( mDatabase );
+    }
 
 } // namespace smds

@@ -4,15 +4,16 @@ CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
-DEFINES += LINUX
 DEFINES += NO_FASTCALL
 DEFINES += NO_CDFASTCALL
 DEFINES += NO_STDCALL
 
+include (user_config.pri)
+
 CONFIG(debug, debug|release) {
-    PATH_SUFFIX = Debug
+    PATH_SUFFIX = ../qtc-Debug
 } else {
-    PATH_SUFFIX = Release
+    PATH_SUFFIX = ../qtc-Release
 }
 
 OBJECTS_DIR = $$_PRO_FILE_PWD_/$$PATH_SUFFIX/$$TARGET-obj
@@ -20,9 +21,18 @@ OBJECTS_DIR = $$_PRO_FILE_PWD_/$$PATH_SUFFIX/$$TARGET-obj
 LIBS += -L$$_PRO_FILE_PWD_/$$PATH_SUFFIX -lsmds -ldl
 
 INCLUDEPATH += ../../Test \
-               ../../Src \
-               /home/sam/src/boost \
-               /home/sam/src/libs/ccLib/Src
+               ../../include \
+               $$ROOT_BOOST \
+               $$ROOT_LOKI\include \
+               $$ROOT_CCLIB/include
+
+unix {
+    DEFINES += LINUX
+    INCLUDEPATH += /usr/include/iodbc
+}
+win32 {
+    DEFINES -= UNICODE
+}
 
 SOURCES += ../../Test/main_exe.cpp \
            ../../Test/uCompileTest.cpp \

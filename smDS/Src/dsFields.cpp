@@ -18,10 +18,6 @@
   Please read the "Doc\License.txt" for more copyright and license
   information.
 ****************************************************************************/
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #include "pre_smDS.h"
 #include "dsFields.h"
 #include "dsExceptions.h"
@@ -85,7 +81,7 @@ template <class T> int FASTCALL aligned_offset( std::size_t end_offset )
 //***********************************************************************
 //******    cFieldDef
 //***********************************************************************
-CDFASTCALL cFieldDef::cFieldDef( unsigned short idx, int offset, const ds_string& name,
+CDFASTCALL cFieldDef::cFieldDef( unsigned short idx, int offset, const std_string& name,
                                  cFieldKind kind, cFieldDataType data_type, unsigned int size )
     : mIndex(idx), mOffset(offset), mName(name), mKind(kind), mDataType(data_type),
       mRawSize(GetFieldRawSize( data_type )),
@@ -132,10 +128,10 @@ CDFASTCALL cFieldDefs::cFieldDefs()
 {
 }
 
-class cSortByFieldName : public std::binary_function< const detail::cFieldNameMap&, const detail::cFieldNameMap&, bool>
+class cSortByFieldName
 {
 public:
-    result_type operator() ( first_argument_type name1, second_argument_type name2 )
+    bool operator() ( const detail::cFieldNameMap& name1, const detail::cFieldNameMap& name2 )
     {
         return ( StringCompare( name1.FieldName(), name2.FieldName() ) < 0 );
     }
@@ -208,7 +204,7 @@ void FASTCALL cFieldDefs::ConstructSorted()
     std::sort( mFieldDefSorted.begin(), mFieldDefSorted.end(), cSortByFieldName() );
 }
 
-const cFieldDef FASTCALL cFieldDefs::MakeFieldDef( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
+const cFieldDef FASTCALL cFieldDefs::MakeFieldDef( const std_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
 {
     int     offset;
 
@@ -247,7 +243,7 @@ const cFieldDef FASTCALL cFieldDefs::MakeFieldDef( const ds_string& name, cField
 //    mBufferSize = 0;
 //}
 
-const cFieldDef& FASTCALL cFieldDefs::AddField( const ds_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
+const cFieldDef& FASTCALL cFieldDefs::AddField( const std_string& name, cFieldKind kind, cFieldDataType data_type, unsigned int size )
 {
     cFieldDef   field = MakeFieldDef( name, kind, data_type, size );
 
@@ -266,7 +262,7 @@ const cFieldDef& FASTCALL cFieldDefs::AddField( const ds_string& name, cFieldKin
     return result;
 }
 
-const cFieldDef& FASTCALL cFieldDefs::FieldByName( const ds_string& field_name ) const
+const cFieldDef& FASTCALL cFieldDefs::FieldByName( const std_string& field_name ) const
 {
     const cFieldDef     *result = FindField( field_name );
 
@@ -275,12 +271,12 @@ const cFieldDef& FASTCALL cFieldDefs::FieldByName( const ds_string& field_name )
     return *result;
 }
 
-const cFieldDef& FASTCALL cFieldDefs::FieldByName( const char *field_name ) const
+const cFieldDef& FASTCALL cFieldDefs::FieldByName( const std_char *field_name ) const
 {
-    return FieldByName( ds_string( field_name ) );
+    return FieldByName( std_string( field_name ) );
 }
 
-const cFieldDef * FASTCALL cFieldDefs::FindField( const ds_string& field_name ) const
+const cFieldDef * FASTCALL cFieldDefs::FindField( const std_string& field_name ) const
 {
     const detail::cFieldNameMap     field_map( field_name );            // only "field_name" is relevant
 
@@ -292,9 +288,9 @@ const cFieldDef * FASTCALL cFieldDefs::FindField( const ds_string& field_name ) 
     return &pos->FieldDef();
 }
 
-const cFieldDef * FASTCALL cFieldDefs::FindField( const char *field_name ) const
+const cFieldDef * FASTCALL cFieldDefs::FindField( const std_char *field_name ) const
 {
-    return FindField( ds_string( field_name ) );
+    return FindField( std_string( field_name ) );
 }
 
 //---------------------------------------------------------------------------

@@ -19,10 +19,6 @@
   information.
 ****************************************************************************/
 //---------------------------------------------------------------------------
-#ifndef __GNUG__
-#pragma hdrstop
-#endif
-
 #if defined (WIN32) || defined (__WIN32__) || defined (_WIN32)
     #include <windows.h>
 #endif
@@ -46,7 +42,7 @@ namespace
 
 class DbEngine;
 
-std::auto_ptr<ODBC_Env>     Engine;
+std::unique_ptr<ODBC_Env>       Engine;
 
 //***********************************************************************
 //******    cDataConnection
@@ -69,7 +65,7 @@ protected:
     virtual IDataProvider *     STDCALL CreateDataProvider();
     virtual void                STDCALL DestroyDataProvider( IDataProvider *connection );
 public:
-    cDataConnection( ODBC_Env& env, const char *connection_string );
+    cDataConnection( ODBC_Env& env, const std_char *connection_string );
     ~cDataConnection();
     ODBC_Connection& GetConnection()                  { return mConnection; }
 };
@@ -95,22 +91,22 @@ protected:
     virtual ULONG STDCALL Release();
 #endif
     // IDataTransfer
-    virtual void STDCALL OpenSql( const char *sql );
-    virtual void STDCALL CloseSql();
-    virtual bool STDCALL Eof();
-    virtual void STDCALL Next();
+    virtual void STDCALL OpenSql( const std_char *sql ) CC_OVERRIDE;
+    virtual void STDCALL CloseSql() CC_OVERRIDE;
+    virtual bool STDCALL Eof() CC_OVERRIDE;
+    virtual void STDCALL Next() CC_OVERRIDE;
 
     virtual std::size_t STDCALL GetFieldCount() CC_OVERRIDE;
-    virtual void STDCALL GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+    virtual void STDCALL GetFieldAttributes( int idx, std_char *name, unsigned int name_buffer_length,
                                              std::size_t& name_buffer_required_length,
                                              unsigned int& field_data_size, int& field_data_type ) CC_OVERRIDE;
 
-    virtual bool STDCALL GetFieldValues( IFieldValuesAcceptor *values_acceptor );
+    virtual bool STDCALL GetFieldValues( IFieldValuesAcceptor *values_acceptor ) CC_OVERRIDE;
 
-    virtual void STDCALL StartTransaction();
-    virtual void STDCALL Commit();
-    virtual void STDCALL RollBack();
-    virtual void STDCALL ExecSql( const char *sql );
+    virtual void STDCALL StartTransaction() CC_OVERRIDE;
+    virtual void STDCALL Commit() CC_OVERRIDE;
+    virtual void STDCALL RollBack() CC_OVERRIDE;
+    virtual void STDCALL ExecSql( const std_char *sql ) CC_OVERRIDE;
 public:
     cDataProvider( cDataConnection *conn );
     ~cDataProvider();
@@ -119,7 +115,7 @@ public:
 //***********************************************************************
 //******    cDataConnection
 //***********************************************************************
-cDataConnection::cDataConnection( ODBC_Env& env, const char *connection_string )
+cDataConnection::cDataConnection( ODBC_Env& env, const std_char *connection_string )
     : mConnection( env )
 {
     mConnection.Connect( connection_string );
@@ -186,7 +182,7 @@ ULONG STDCALL cDataProvider::Release()
 }
 #endif
 
-void STDCALL cDataProvider::OpenSql( const char *sql )
+void STDCALL cDataProvider::OpenSql( const std_char *sql )
 {
     mStatement.ExecSql( sql );
 }
@@ -211,7 +207,7 @@ std::size_t STDCALL cDataProvider::GetFieldCount()
     return mStatement.GetFieldCount();
 }
 
-void STDCALL cDataProvider::GetFieldAttributes( int idx, char *name, unsigned int name_buffer_length,
+void STDCALL cDataProvider::GetFieldAttributes( int idx, std_char *name, unsigned int name_buffer_length,
                                                 std::size_t& name_buffer_required_length,
                                                 unsigned int& field_data_size, int& field_data_type )
 {
@@ -247,7 +243,7 @@ void STDCALL cDataProvider::RollBack()
 {
 }
 
-void STDCALL cDataProvider::ExecSql( const char *sql )
+void STDCALL cDataProvider::ExecSql( const std_char *sql )
 {
 }
 
@@ -256,7 +252,7 @@ void STDCALL cDataProvider::ExecSql( const char *sql )
 extern "C"
 {
 
-Q_DECL_EXPORT IDatabase * CreateDataConnection( const char *connection_string )
+Q_DECL_EXPORT IDatabase * CreateDataConnection( const std_char *connection_string )
 {
     if ( Engine.get() == 0 )
     {
